@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>诉讼保 · 小程序 PRD 原型</title>
+<title>诉讼保 · 机构端小程序 PRD 原型 V8</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <style>
@@ -198,10 +198,27 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .doc-mat-meta{flex:1;min-width:0}
 .doc-mat-name{font-size:12px;font-weight:600;color:#1C2E36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .doc-mat-type{font-size:10px;color:#6F8FAA;margin-top:2px}
+.upload-file-list{margin-top:12px}
+.upload-file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border-radius:14px;margin-bottom:8px;border:1px solid #EDF2F9;font-size:12px}
+.upload-file-item i.file-ico{width:22px;text-align:center;font-size:16px;flex-shrink:0}
+.upload-file-meta{flex:1;min-width:0}
+.upload-file-meta strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upload-file-meta span{font-size:10px;color:#94A3B8}
+.upload-file-rm{border:none;background:#FEE2E2;color:#B91C1C;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;cursor:pointer;flex-shrink:0}
+.upload-file-item.new{animation:syncFlash 1.2s ease}
+@keyframes syncFlash{50%{background:#D1FAE5;border-color:#6EE7B7}}
+.upload-hint{font-size:11px;color:#6F8FAA;text-align:center;margin-top:8px;line-height:1.5}
+.sp-btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.preview-type-label{font-size:12px;color:#5E6F8D;font-weight:600;margin-bottom:8px;display:block}
 .sync-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
 .sync-tab{flex-shrink:0;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D}
 .sync-tab.on{background:#0F766E;color:#fff}
 .sync-panel{display:none}.sync-panel.on{display:block}
+.sync-login-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;background:#FFFBEB;color:#B45309;margin-bottom:12px}
+.sync-login-badge.on{background:#ECFDF5;color:#059669}
+.sync-pair-input{font-size:20px;font-weight:800;letter-spacing:4px;text-align:center;text-transform:uppercase}
+.sync-lan-url{font-family:Consolas,monospace;font-size:12px;font-weight:700;color:#047857;background:#ECFDF5;padding:12px 14px;border-radius:12px;word-break:break-all;margin:10px 0;line-height:1.5;border:1px solid #86EFAC}
+.sync-file-cb{width:18px;height:18px;flex-shrink:0;accent-color:#0F766E;cursor:pointer}
 .chrome-tip{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:16px;padding:12px 14px;margin-bottom:12px;font-size:11px;color:#1E40AF;line-height:1.7}
 .chrome-tip strong{color:#1D4ED8}
 .sp-modal-mask{position:absolute;inset:0;background:rgba(15,23,42,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;border-radius:48px}
@@ -212,6 +229,77 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sub-crumb{font-size:10px;color:#1A6B7C;background:#EFF8FC;padding:5px 12px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;border:1px solid #D4EDE8}
 .sub-crumb i{font-size:9px;opacity:.7}
 .sync-arch-diagram{font-size:10px;line-height:1.8;color:#475569;background:#F8FAFC;border-radius:14px;padding:14px;border:1px solid #E2E8F0;font-family:Consolas,monospace}
+.sync-pair-code{font-size:22px;font-weight:800;letter-spacing:4px;color:#0F4C5C;text-align:center;padding:14px;background:#EFF8FC;border-radius:14px;border:1px dashed #1A6B7C;margin:12px 0}
+.sync-lan-url{font-family:Consolas,monospace;font-size:12px;font-weight:700;color:#047857;background:#ECFDF5;padding:10px 12px;border-radius:10px;word-break:break-all;margin:10px 0;line-height:1.5}
+.sync-tab.lock{opacity:.45;cursor:not-allowed}
+.sync-file-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+@keyframes syncFlash{50%{background:#D1FAE5;border-color:#6EE7B7}}
+.sync-file-new{animation:syncFlash 1.2s ease}
+/* 文件空间站 V8 · 小程序专用排版（独立于旧 sync-* 样式） */
+.fs-station{margin:-4px -2px 0;font-family:'Inter',system-ui,sans-serif}
+.fs-top{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(145deg,#312E81 0%,#4F46E5 55%,#6366F1 100%);border-radius:20px;color:#fff;margin-bottom:14px;box-shadow:0 8px 24px rgba(79,70,229,.28)}
+.fs-top-icon{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fs-top-text{flex:1;min-width:0}
+.fs-top-text h3{font-size:16px;font-weight:800;letter-spacing:.3px}
+.fs-top-text p{font-size:11px;opacity:.88;margin-top:3px;line-height:1.45}
+.fs-top-badge{flex-shrink:0;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.25)}
+.fs-top-badge.is-on{background:rgba(167,243,208,.25);border-color:rgba(167,243,208,.5);color:#D1FAE5}
+.fs-seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;background:#EEF2FF;border-radius:16px;margin-bottom:14px}
+.fs-seg-btn{border:none;background:transparent;padding:10px 4px;border-radius:12px;font-size:10px;font-weight:700;color:#6366F1;cursor:pointer;line-height:1.25;transition:background .15s,color .15s;position:relative}
+.fs-seg-btn i{display:block;font-size:15px;margin-bottom:4px;opacity:.85}
+.fs-seg-btn.is-active{background:#fff;color:#4338CA;box-shadow:0 2px 8px rgba(79,70,229,.12)}
+.fs-seg-btn.is-locked{opacity:.42;cursor:not-allowed}
+.fs-seg-btn.is-locked::after{content:"\f023";font-family:"Font Awesome 6 Free";font-weight:900;font-size:8px;position:absolute;top:4px;right:4px;opacity:.6}
+.fs-body{min-height:280px}
+.fs-pane{display:none;animation:fsFadeIn .25s ease}
+.fs-pane.is-active{display:block}
+@keyframes fsFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fs-card{background:#fff;border-radius:18px;padding:14px 16px;border:1px solid #E0E7FF;margin-bottom:12px}
+.fs-card-hd{font-size:13px;font-weight:700;color:#1E1B4B;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.fs-card-hd i{color:#6366F1;width:18px;text-align:center}
+.fs-hint{font-size:11px;color:#64748B;line-height:1.65;margin-bottom:12px}
+.fs-file-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;max-height:200px;overflow-y:auto}
+.fs-file-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#F8FAFC;border-radius:14px;border:1px solid #E2E8F0}
+.fs-file-row.is-new{animation:fsRowFlash 1.1s ease}
+@keyframes fsRowFlash{50%{background:#EEF2FF;border-color:#A5B4FC}}
+.fs-file-row input[type=checkbox]{width:18px;height:18px;accent-color:#4F46E5;flex-shrink:0}
+.fs-file-ico{width:36px;height:36px;border-radius:10px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.fs-file-meta{flex:1;min-width:0}
+.fs-file-meta strong{display:block;font-size:12px;font-weight:600;color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fs-file-meta span{font-size:10px;color:#94A3B8;margin-top:2px;display:block}
+.fs-file-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;background:#ECFDF5;color:#059669;flex-shrink:0}
+.fs-upload-tap{display:flex;align-items:center;gap:12px;padding:14px;border:2px dashed #C7D2FE;border-radius:16px;background:linear-gradient(180deg,#FAFAFF,#F5F3FF);cursor:pointer;margin-bottom:12px}
+.fs-upload-tap:active{transform:scale(.99)}
+.fs-upload-tap .fs-upload-ico{width:48px;height:48px;border-radius:14px;background:#4F46E5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.fs-upload-tap strong{display:block;font-size:13px;color:#312E81}
+.fs-upload-tap span{font-size:10px;color:#64748B;margin-top:3px;display:block}
+.fs-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fs-btn{border:none;border-radius:14px;padding:12px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.fs-btn-primary{background:linear-gradient(135deg,#4F46E5,#6366F1);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.25)}
+.fs-btn-ghost{background:#F1F5F9;color:#4338CA}
+.fs-btn-block{width:100%;margin-top:8px}
+.fs-scan-wrap{text-align:center;padding:8px 0 4px}
+.fs-scan-frame{width:168px;height:168px;margin:0 auto 14px;border-radius:20px;background:#0F172A;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fs-scan-frame::before,.fs-scan-frame::after{content:"";position:absolute;width:28px;height:28px;border:3px solid #818CF8}
+.fs-scan-frame::before{top:12px;left:12px;border-right:none;border-bottom:none;border-radius:6px 0 0 0}
+.fs-scan-frame::after{bottom:12px;right:12px;border-left:none;border-top:none;border-radius:0 0 6px 0}
+.fs-scan-line{position:absolute;left:16px;right:16px;height:2px;background:linear-gradient(90deg,transparent,#818CF8,transparent);animation:fsScan 2.2s ease-in-out infinite}
+@keyframes fsScan{0%,100%{top:20%}50%{top:75%}}
+.fs-scan-frame>i{font-size:56px;color:#818CF8;opacity:.9}
+.fs-pair-display{font-size:24px;font-weight:800;letter-spacing:5px;text-align:center;padding:16px;background:#F5F3FF;border-radius:16px;border:2px solid #C7D2FE;color:#4338CA;margin:12px 0;font-family:Consolas,monospace}
+.fs-input{width:100%;border:2px solid #E0E7FF;border-radius:14px;padding:14px;font-size:18px;font-weight:700;text-align:center;letter-spacing:3px;text-transform:uppercase;color:#312E81;background:#FAFAFF;font-family:inherit;margin-bottom:10px}
+.fs-input:focus{outline:none;border-color:#6366F1;box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.fs-lan-chip{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;background:#ECFDF5;color:#047857;border:1px solid #86EFAC;margin-bottom:10px}
+.fs-lan-url{font-family:Consolas,monospace;font-size:11px;font-weight:600;color:#047857;background:#F0FDF4;padding:12px;border-radius:12px;border:1px solid #BBF7D0;word-break:break-all;line-height:1.5;margin:10px 0}
+.fs-lan-qr{width:120px;height:120px;margin:12px auto;border-radius:14px;border:2px solid #4F46E5;background:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;color:#4F46E5}
+.fs-dock{display:flex;gap:8px;margin-top:14px}
+.fs-dock-item{flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border:1px solid #E0E7FF;border-radius:14px;font-size:10px;font-weight:600;color:#475569}
+.fs-dock-item i{font-size:18px;color:#6366F1}
+.fs-dock-item span{display:block;font-size:9px;color:#94A3B8;font-weight:500;margin-top:2px}
+.fs-empty{text-align:center;padding:24px 12px;color:#94A3B8;font-size:11px}
+.fs-countdown{font-size:12px;color:#D97706;font-weight:700;text-align:center;margin:10px 0}
+.fs-status-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:#FFFBEB;color:#B45309;margin-top:10px}
+.fs-status-pill.is-ok{background:#ECFDF5;color:#059669}
 .prd-pc-wrap{flex-shrink:0;display:none;flex-direction:column;gap:8px;padding:8px 0}
 .prd-pc-wrap.visible{display:flex}
 .prd-pc-label{font-size:11px;font-weight:700;color:#94A3B8;text-align:center;letter-spacing:.5px}
@@ -291,14 +379,15 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 <button type="button" class="pc-page-tab" data-pc-tab="download">PC 下发材料</button>
 <button type="button" class="pc-page-tab" data-pc-tab="chromeQr">Chrome 二维码</button>
 <button type="button" class="pc-page-tab" data-pc-tab="pair">扫码配对</button>
+<button type="button" class="pc-page-tab" data-pc-tab="lan">内网直连</button>
 </div>
 <div class="pc-toast-bar" id="pcToastBar"></div>
 <div class="pc-main" id="pcMain"></div>
 </div>
 </div>
-<aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 诉讼保机构端小程序 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR归类·结构化预览·机构匹配·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V1.4</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
+<aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 诉讼保机构端小程序 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR归类·结构化预览·机构匹配·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V8</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
 </div>
-<div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V1.4 · 工具助手 · 手机+PC · Chrome 扫码 · 内网直连 · <a href="诉讼保-Tools.html" target="_blank" style="color:#A5F3FC">诉讼保-Tools.html</a></div>
+<div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V8 · 文件空间站（小程序）· 四 Tab 交互 · <a href="version/诉讼保-文件助手.html" target="_blank" style="color:#A5F3FC">诉讼保-文件助手.html</a></div>
 <div class="prd-tooltip" id="prdTooltip"></div>
 <div class="prd-pending-hint" id="prdPendingHint">停留中… 1 秒后显示需求</div>
 <div class="sp-toast" id="spToast"></div>
@@ -344,11 +433,102 @@ const MATERIAL_FILES={
 {icon:'fa-file-pdf',color:'#64748B',name:'执行依据文书.pdf',type:'执行依据'}]}
 let currentPreviewType='财产保全';
 let syncQrCountdown=null;
+let syncLoggedIn=false,syncMobileTab='scanLogin',syncSpaceId='MS_a8f3',syncLanOn=false,syncLoginTimer=null;
+let syncMobileFiles=[
+{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E',from:'PC',time:'09:15',sel:true},
+{name:'保全申请书.pdf',icon:'fa-file-pdf',color:'#2563EB',from:'PC',time:'09:18',sel:true},
+{name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED',from:'手机',time:'09:32',sel:false}];
 let pcTab='workbench',pcPaired=false,pcUploadToken='uTk8m2K9x';
 let pcFiles=[
 {name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E',from:'PC',time:'09:15'},
 {name:'保全申请书.pdf',icon:'fa-file-pdf',color:'#2563EB',from:'PC',time:'09:18'},
 {name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED',from:'手机',time:'09:32'}];
+let rarUploadedFiles=[],structUploadedFiles=[],smartUploadedFiles=[];
+let smartAnalysisType='财产保全';
+const REQUIRED_EVIDENCE_BY_TYPE={
+'财产保全':[
+{label:'起诉状',patterns:['起诉','诉状'],required:true},
+{label:'保全申请书',patterns:['保全申请','申请书'],required:true},
+{label:'营业执照/主体资格',patterns:['营业执照','主体资格'],required:true},
+{label:'法人身份证',patterns:['身份证','法人'],required:true},
+{label:'财产线索说明',patterns:['财产线索','线索'],required:false},
+{label:'担保函/保函申请书',patterns:['担保','保函'],required:true}],
+'证据保全':[
+{label:'证据清单',patterns:['证据清单','清单'],required:true},
+{label:'情况说明',patterns:['情况说明','说明'],required:true},
+{label:'保全申请书',patterns:['保全申请','申请书'],required:true},
+{label:'主体资格证明',patterns:['主体资格','营业执照'],required:true},
+{label:'担保函/保函申请书',patterns:['担保','保函'],required:true}],
+'行为保全':[
+{label:'起诉状',patterns:['起诉','诉状'],required:true},
+{label:'行为保全说明',patterns:['行为保全','保全说明'],required:true},
+{label:'营业执照/主体资格',patterns:['营业执照','主体资格'],required:true},
+{label:'担保函/保函申请书',patterns:['担保','保函'],required:true}],
+'继续执行':[
+{label:'原裁定书',patterns:['裁定书','原裁定'],required:true},
+{label:'继续执行申请书',patterns:['继续执行','申请书'],required:true},
+{label:'执行依据文书',patterns:['执行依据','依据文书'],required:true},
+{label:'担保函/保函申请书',patterns:['担保','保函'],required:true}]};
+
+function formatFileSize(b){if(!b)return'—';if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB'}
+function getFileIconInfo(name){
+const n=(name||'').toLowerCase();
+if(/\.(rar|zip|7z)$/.test(n))return{icon:'fa-file-archive',color:'#2563EB'};
+if(/\.pdf$/.test(n))return{icon:'fa-file-pdf',color:'#E53E3E'};
+if(/\.(doc|docx)$/.test(n))return{icon:'fa-file-word',color:'#2B6CB0'};
+if(/\.(jpg|jpeg|png|gif|webp)$/.test(n))return{icon:'fa-file-image',color:'#7C3AED'};
+return{icon:'fa-file',color:'#64748B'};
+}
+function renderUploadFileListHTML(files,listId){
+if(!files.length)return'<p class="upload-hint" id="'+listId+'Hint">尚未上传文件，请先选择材料</p>';
+return files.map((f,i)=>{
+const ic=getFileIconInfo(f.name);
+return`<div class="upload-file-item" data-upload-idx="${i}" data-upload-list="${listId}"><i class="fas ${ic.icon} file-ico" style="color:${ic.color}"></i><div class="upload-file-meta"><strong>${f.name}</strong><span>${formatFileSize(f.size)} · 已就绪</span></div><button type="button" class="upload-file-rm" data-action="upload-remove" data-list="${listId}" data-idx="${i}">移除</button></div>`;
+}).join('');
+}
+function refreshUploadListUI(listId,files){
+const el=document.getElementById(listId);
+if(el)el.innerHTML=renderUploadFileListHTML(files,listId);
+const btnMap={rarFileList:'rarStartBtn',structFileList:'structStartBtn',smartFileList:'smartStartBtn'};
+const btn=document.getElementById(btnMap[listId]);
+if(btn)btn.disabled=!files.length;
+}
+function addFilesToList(arr,fileList){
+Array.from(fileList||[]).forEach(f=>{if(!arr.some(x=>x.name===f.name&&x.size===f.size))arr.push({name:f.name,size:f.size});});
+}
+function fileMatchesEvidence(name,patterns){const n=name.toLowerCase();return patterns.some(p=>n.includes(p.toLowerCase()))}
+function buildSmartMissHtml(type,uploaded){
+const req=REQUIRED_EVIDENCE_BY_TYPE[type]||REQUIRED_EVIDENCE_BY_TYPE['财产保全'];
+const names=uploaded.map(f=>f.name);
+return req.map(ev=>{
+const ok=names.some(n=>fileMatchesEvidence(n,ev.patterns));
+const icon=ok?'✓':'⚠';
+const color=ok?'#1D7A6E':(ev.required?'#E9A23B':'#94A3B8');
+const hint=ok?'已上传匹配':'未检测到对应材料';
+const weight=ev.required&&!ok?'（必填缺件）':'（建议补充）';
+return`<div class="mat-miss-item"><span style="color:${color};">${icon}</span><div><strong>${ev.label}</strong><p style="font-size:11px;color:#6F8FAA;">${hint}${!ok?weight:''}</p></div></div>`;
+}).join('');
+}
+function buildSmartEvidenceTags(type,uploaded){
+const req=REQUIRED_EVIDENCE_BY_TYPE[type]||[];
+const names=uploaded.map(f=>f.name);
+let html=req.filter(ev=>names.some(n=>fileMatchesEvidence(n,ev.patterns))).map(ev=>`<span class="sp-tag selected">${ev.label}</span>`).join('');
+const missing=req.filter(ev=>ev.required&&!names.some(n=>fileMatchesEvidence(n,ev.patterns)));
+missing.forEach(ev=>{html+=`<span class="sp-tag" style="background:#FEE2E2;color:#B91C1C;">缺：${ev.label}</span>`});
+return html||'<span class="sp-tag" style="background:#FEE2E2;color:#B91C1C;">请先上传材料后分析</span>';
+}
+function openEmailModal(ctx){
+ctx=ctx||'案件清单 PDF';
+showModal(`<h3><i class="fas fa-envelope" style="color:#1A6B7C"></i> 发送邮件</h3>
+<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 14px;">将 ${ctx} 发送至机构业务员邮箱（企微邮件网关 / SMTP 演示）</p>
+<span class="sp-label">收件人</span><input class="sp-input" id="emailTo" value="zhang.yewu@yongan-ins.com" placeholder="业务员邮箱">
+<span class="sp-label">抄送</span><input class="sp-input" id="emailCc" value="hebao@yongan-ins.com" placeholder="核保组（可选）">
+<span class="sp-label">邮件主题</span><input class="sp-input" id="emailSub" value="【诉讼保】${ctx} · SS20250529001">
+<span class="sp-label">正文</span><textarea class="sp-textarea" id="emailBody" style="min-height:100px;">您好，\n\n附件为批量收案归类后的案件清单 PDF，共 2 个案件、6 份材料，请查收并跟进业务员确认。\n\n— 诉讼保机构端 · 工具助手</textarea>
+<div class="sp-card" style="padding:12px;margin:10px 0;text-align:left;"><div class="sp-list-item" style="padding:8px 0;border:none"><i class="fas fa-paperclip" style="color:#1A6B7C"></i><div style="flex:1"><strong style="font-size:12px">批量案件清单.pdf</strong><p style="font-size:10px;color:#94A3B8">约 248 KB · 含案号目录</p></div></div></div>
+<button class="sp-btn-primary" data-action="email-send-confirm" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 确认发送</button>
+<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`);
+}
 
 function showToast(msg){spToast.textContent=msg;spToast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>spToast.classList.remove('show'),2200)}
 function hero(grad,icon,title,sub){return`<div class="sp-card" style="background:${grad};color:#fff;border:none;"><div style="font-size:32px;margin-bottom:8px">${icon}</div><h2 style="font-size:18px;font-weight:800;margin-bottom:6px">${title}</h2><p style="font-size:12px;opacity:.9;line-height:1.5">${sub}</p></div>`}
@@ -369,11 +549,7 @@ return`
 ${fieldsHtml}
 <div class="doc-preview-divider"></div>
 ${renderMaterialFileList(type)}
-<div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-copy">发送邮件</button></div></div>
-
-</div>
-<div class="doc-preview-divider"></div>
-`
+<div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
 }
 function showModal(html){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
@@ -381,7 +557,7 @@ if(!mask||!inner)return;inner.innerHTML=html;mask.classList.add('show');
 mask.onclick=e=>{if(e.target===mask)closeModal()};
 inner.querySelector('[data-action="modal-close"]')?.addEventListener('click',closeModal)}
 function closeModal(){document.getElementById('spModalMask')?.classList.remove('show');if(syncQrCountdown)clearInterval(syncQrCountdown)}
-function getPcUrl(tab){const u={workbench:'https://inst.workbench.ssbao.cn/material?order=SS20250529001',upload:'https://upload.ssbao.cn/inst/'+pcUploadToken,download:'https://inst.workbench.ssbao.cn/push?order=SS20250529001',chromeQr:'https://upload.ssbao.cn/inst/'+pcUploadToken,pair:'https://inst.workbench.ssbao.cn/auth/qr?s=MS_a8f3'};return u[tab]||u.workbench}
+function getPcUrl(tab){const u={workbench:'https://inst.workbench.ssbao.cn/material?order=SS20250529001',upload:'https://upload.ssbao.cn/inst/'+pcUploadToken,download:'https://inst.workbench.ssbao.cn/push?order=SS20250529001',chromeQr:'https://upload.ssbao.cn/inst/'+pcUploadToken,pair:'https://inst.workbench.ssbao.cn/auth/qr?s='+syncSpaceId,lan:'http://192.168.1.88:8765/upload?space='+syncSpaceId};return u[tab]||u.workbench}
 function pcShowToast(msg){const bar=document.getElementById('pcToastBar');if(!bar)return;bar.textContent=msg;bar.classList.add('show');clearTimeout(pcShowToast._t);pcShowToast._t=setTimeout(()=>bar.classList.remove('show'),2800)}
 function renderPcFileRows(highlightNew){
 return pcFiles.map((f,i)=>`<div class="pc-file-row ${highlightNew&&i===pcFiles.length-1?'new':''}"><i class="fas ${f.icon}" style="color:${f.color}"></i><div class="pc-file-meta"><strong>${f.name}</strong><span>${f.from}上传 · ${f.time} · 已同步</span></div><span class="pc-status">✓</span></div>`).join('')}
@@ -390,7 +566,7 @@ const main=document.getElementById('pcMain');if(!main)return;
 const urlEl=document.getElementById('pcUrlText');if(urlEl)urlEl.textContent=getPcUrl(pcTab);
 main.innerHTML=
 '<div class="pc-content'+(pcTab==='workbench'?' on':'')+'" data-pc-content="workbench">'+
-'<div class="pc-hero"><h2>机构核保工作台 · 材料空间</h2><p>订单 SS20250529001 · （2025）京0105民初12345号 · MaterialSpace MS_a8f3'+(pcPaired?' · 已配对':'')+'</p></div>'+
+'<div class="pc-hero"><h2>机构核保工作台 · 材料空间</h2><p>订单 SS20250529001 · （2025）京0105民初12345号 · MaterialSpace '+syncSpaceId+(pcPaired?' · 已配对':'')+'</p></div>'+
 '<div class="pc-card"><div class="pc-card-title"><i class="fas fa-folder-open"></i> 材料树（WebSocket 实时刷新）<span class="pc-status" style="margin-left:auto">在线</span></div>'+
 '<div class="pc-file-tree" id="pcFileTree">'+renderPcFileRows(false)+'</div>'+
 '<button class="pc-btn pc-btn-secondary" data-pc-action="refresh-tree"><i class="fas fa-sync-alt"></i> 刷新</button>'+
@@ -416,10 +592,19 @@ main.innerHTML=
 '<div class="pc-card"><div class="pc-card-title"><i class="fas fa-link"></i> 扫码配对 · 绑定同一 MaterialSpace</div>'+
 '<p style="font-size:12px;color:#64748B;margin-bottom:12px;line-height:1.7">小程序展示登录二维码，PC 本页扫码后两端写入同一 spaceId，材料实时互通。</p>'+
 '<div class="pc-qr-panel"><div class="pc-qr-box"><i class="fas fa-qrcode"></i></div><div>'+
-'<p style="font-size:11px;color:#6F8FAA;margin-bottom:8px">会话 ID</p><div class="pc-pair-code" id="pcPairCode">MS_a8f3</div>'+
+'<p style="font-size:11px;color:#6F8FAA;margin-bottom:8px">会话 ID</p><div class="pc-pair-code" id="pcPairCode">'+syncSpaceId+'</div>'+
 '<p id="pcPairStatus" class="pc-status waiting" style="margin-top:12px;display:inline-flex">等待手机/PC 扫码…</p></div></div>'+
 '<button class="pc-btn pc-btn-primary" data-pc-action="sim-pc-scan"><i class="fas fa-check"></i> 模拟 PC 扫码成功</button>'+
-'<button class="pc-btn pc-btn-secondary" data-pc-action="regen-pair">重新生成配对码</button></div></div>'}
+'<button class="pc-btn pc-btn-secondary" data-pc-action="regen-pair">重新生成配对码</button></div></div>'+
+'<div class="pc-content'+(pcTab==='lan'?' on':'')+'" data-pc-content="lan">'+
+'<div class="pc-hero" style="background:linear-gradient(135deg,#047857,#10B981)"><h2>内网直连 · 无外网可用</h2><p>手机与 PC 同一 WiFi/有线局域网 · LAN Relay 0.0.0.0:8765 · 不经公网 OSS</p></div>'+
+'<div class="pc-card"><div class="pc-card-title"><i class="fas fa-network-wired"></i> 内网上传地址</div>'+
+'<p style="font-size:12px;color:#64748B;line-height:1.7;margin-bottom:8px">手机浏览器或小程序 WebView 打开下方 URL，HTTP 分片上传至 PC <code>./inbox/</code></p>'+
+'<p style="font-size:13px;font-weight:600;color:#0F4C5C">当前 PC 内网地址（演示）：</p>'+
+'<div class="sync-lan-url" id="pcLanUrl">'+getPcUrl('lan')+'</div>'+
+'<div class="pc-qr-box" style="margin:16px auto"><i class="fas fa-qrcode"></i></div>'+
+'<button class="pc-btn pc-btn-primary" data-pc-action="start-lan"><i class="fas fa-play"></i> 启动内网中继</button>'+
+'<button class="pc-btn pc-btn-secondary" data-pc-action="sim-lan-upload"><i class="fas fa-mobile-alt"></i> 模拟手机内网上传</button></div></div>'}
 let pcEventsInited=false;
 function bindPcEvents(){
 if(pcEventsInited)return;pcEventsInited=true;
@@ -435,8 +620,10 @@ const act=e.target.closest('[data-pc-action]')?.dataset.pcAction;if(!act)return;
 if(act==='sim-h5-upload'){pcAddFile('外勤拍照_'+Date.now().toString().slice(-4)+'.jpg','fa-file-image','#7C3AED','H5扫码');showToast('手机 H5 已上传 · PC 材料树已更新');pcShowToast('收到 file.added · 新材料已入库')}
 if(act==='push-to-phone'){showToast('案件清单 PDF 已推送到小程序');pcShowToast('已推送：批量案件清单.pdf → 手机消息中心')}
 if(act==='gen-chrome-qr'){pcUploadToken='uTk'+Math.random().toString(36).slice(2,9);renderPcMain();pcShowToast('Chrome 二维码已更新 · token='+pcUploadToken);showToast('请用手机扫描右侧 PC 页二维码')}
-if(act==='sim-pc-scan'){pcPaired=true;renderPcMain();pcShowToast('PC 已登录 · 与小程序共享材料空间');showToast('扫码配对成功')}
-if(act==='regen-pair'){pcPaired=false;pcShowToast('已生成新配对码');renderPcMain();showToast('已生成新配对码')}
+if(act==='sim-pc-scan'){syncDoLogin('scan');}
+if(act==='regen-pair'){syncSpaceId='MS_'+Math.random().toString(36).slice(2,7);pcPaired=false;pcShowToast('已生成新配对码：'+syncSpaceId);renderPcMain();showToast('新配对码：'+syncSpaceId)}
+if(act==='start-lan'){syncLanOn=true;pcShowToast('内网中继已启动 · 0.0.0.0:8765');showToast('内网中继已启动（演示）')}
+if(act==='sim-lan-upload'){pcAddFile('起诉状_内网.jpg','fa-file-image','#E53E3E','内网LAN');syncAddMobileFile('起诉状_内网.jpg','fa-file-image','#E53E3E','内网LAN');pcShowToast('内网直连上传成功');showToast('内网上传成功 · 无需外网')}
 if(act==='refresh-tree'){renderPcMain();pcShowToast('材料树已刷新')}
 if(act==='continue-review'){showToast('已在 PC 打开核保 — SS20250529001');openSubPage('orderReview')}
 });
@@ -448,11 +635,76 @@ const tree=document.getElementById('pcFileTree');if(tree)tree.innerHTML=renderPc
 if(pcTab!=='workbench'){pcTab='workbench';document.querySelectorAll('.pc-page-tab').forEach(b=>b.classList.toggle('on',b.dataset.pcTab==='workbench'));renderPcMain()}
 }
 function syncMobilePcTab(mobileTab){
-const map={phone2pc:'upload',pc2phone:'download',chromeQr:'chromeQr',pair:'pair',lan:'workbench'};
+const map={files:'workbench',scanLogin:'upload',pairCode:'pair',lan:'lan'};
 const t=map[mobileTab]||mobileTab;
-if(!['workbench','upload','download','chromeQr','pair'].includes(t))return;
+if(!['workbench','upload','download','chromeQr','pair','lan'].includes(t))return;
 pcTab=t;
 document.querySelectorAll('.pc-page-tab').forEach(b=>b.classList.toggle('on',b.dataset.pcTab===t));
+renderPcMain();
+}
+function renderFsFileListHTML(highlightNew){
+if(!syncMobileFiles.length)return'<div class="fs-empty"><i class="fas fa-inbox" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>暂无材料<br>上传文件或与 PC 配对后同步</div>';
+return syncMobileFiles.map((f,i)=>{
+const ic=f.icon?{icon:f.icon,color:f.color}:getFileIconInfo(f.name);
+const rowCls='fs-file-row'+(highlightNew&&i===syncMobileFiles.length-1?' is-new':'');
+return`<div class="${rowCls}"><input type="checkbox" class="sync-file-cb" data-sync-idx="${i}" ${f.sel!==false?'checked':''}><div class="fs-file-ico"><i class="fas ${ic.icon}" style="color:${ic.color}"></i></div><div class="fs-file-meta"><strong>${f.name}</strong><span>${f.from} · ${f.time}</span></div><span class="fs-file-tag">已同步</span></div>`;
+}).join('');
+}
+function renderSyncMobileFileListHTML(highlightNew){return renderFsFileListHTML(highlightNew)}
+function renderSyncFileListHTML(highlightNew){return renderFsFileListHTML(highlightNew)}
+function refreshSyncFileList(highlightNew){
+const html=renderFsFileListHTML(highlightNew);
+const el=document.getElementById('fsFileList')||document.getElementById('syncFileList');
+if(el)el.innerHTML=html;
+const el2=document.getElementById('syncMobileFileList');if(el2)el2.innerHTML=html;
+const cnt=document.getElementById('syncPhoneCount')||document.getElementById('fsPhoneCount');
+if(cnt)cnt.textContent=syncLoggedIn?'已同步 '+syncMobileFiles.length+' 个':'待连接';
+}
+function fsUpdateConnUI(){
+const badge=document.getElementById('fsConnBadge');
+const st=document.getElementById('fsStatusText');
+if(badge){badge.textContent=syncLoggedIn?'已连接':'未连接';badge.classList.toggle('is-on',syncLoggedIn)}
+if(st)st.textContent=syncLoggedIn?syncSpaceId+' · 手机⇄PC 材料互通':'扫码或配对码连接 PC 工作台';
+const ps=document.getElementById('syncPairStatus');
+if(ps){ps.textContent=pcPaired?'已配对 · '+syncSpaceId:'等待输入配对码…';ps.className='fs-status-pill'+(pcPaired?' is-ok':'');}
+}
+function syncAddMobileFile(name,icon,color,from){
+let ic,src;
+if(typeof icon==='string'&&icon.startsWith('fa-')&&color){ic={icon,color};src=from||'手机'}
+else{ic=getFileIconInfo(name);src=icon||'手机'}
+const now=new Date(),time=now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();
+syncMobileFiles.push({name,icon:ic.icon,color:ic.color,from:src,time,sel:true});
+refreshSyncFileList(true);
+}
+function startSyncLoginCountdown(){
+const el=document.getElementById('syncLoginCountdown');
+let sec=300;
+clearInterval(syncLoginTimer);
+syncLoginTimer=setInterval(()=>{
+sec--;
+if(el)el.textContent='二维码有效 '+Math.floor(sec/60)+':'+(sec%60).toString().padStart(2,'0');
+if(sec<=0){clearInterval(syncLoginTimer);showToast('二维码已过期，请重新生成');}
+},1000);
+}
+function syncDoLogin(via){
+syncLoggedIn=true;pcPaired=true;
+document.getElementById('syncLoginPairCode')&&(document.getElementById('syncLoginPairCode').textContent=syncSpaceId);
+document.getElementById('pcPairCode')&&(document.getElementById('pcPairCode').textContent=syncSpaceId);
+const msg=via==='pair'?'配对成功 · 已绑定 '+syncSpaceId:'扫码登录成功 · 手机⇄PC 材料互通';
+showToast(msg);pcShowToast(msg);
+syncMobileTab='files';
+const seg=document.getElementById('fsSegNav');
+if(seg){
+seg.querySelectorAll('.fs-seg-btn').forEach(b=>{
+const t=b.dataset.fsTab;
+b.classList.toggle('is-active',t==='files');
+if(t==='files'||t==='lan')b.classList.remove('is-locked');
+});
+subBody.querySelectorAll('.fs-pane').forEach(p=>p.classList.toggle('is-active',p.dataset.fsPanel==='files'));
+}
+fsUpdateConnUI();
+syncMobilePcTab('files');
+refreshSyncFileList(false);
 renderPcMain();
 }
 function showPcPanel(tab){
@@ -464,84 +716,62 @@ renderPcMain();
 }
 function hidePcPanel(){document.getElementById('prdPcWrap')?.classList.remove('visible')}
 function renderCrossDeviceSyncPage(){
-return hero('linear-gradient(125deg,#0F766E,#14B8A6)','🔄','手机与 PC 材料互通','机构端小程序与 PC 核保工作台共享同一 MaterialSpace，外勤拍照、办公室大屏核保零拷贝')+
-'<div class="sync-flow">'+
-'<div class="sync-flow-box"><i class="fas fa-mobile-alt"></i><br>机构小程序<br><small>拍照/传文件</small></div><span>⇄</span>'+
-'<div class="sync-flow-box"><i class="fas fa-cloud"></i><br>云端材料空间<br><small>OSS+WS</small></div><span>⇄</span>'+
-'<div class="sync-flow-box"><i class="fas fa-desktop"></i><br>PC 工作台<br><small>核保大屏</small></div></div>'+
-'<div class="sp-card"><div class="sp-card-title">四种便捷传输方式（可切换体验）</div>'+
-'<div class="sync-tabs" id="syncTabs">'+
-'<button type="button" class="sync-tab on" data-sync-tab="phone2pc">手机→PC</button>'+
-'<button type="button" class="sync-tab" data-sync-tab="pc2phone">PC→手机</button>'+
-'<button type="button" class="sync-tab" data-sync-tab="chromeQr">Chrome 扫码</button>'+
-'<button type="button" class="sync-tab" data-sync-tab="pair">扫码配对</button>'+
-'<button type="button" class="sync-tab" data-sync-tab="lan">内网直连</button></div>'+
-'<div class="sync-panel on" data-sync-panel="phone2pc">'+
-'<p style="font-size:12px;color:#334155;line-height:1.75;margin-bottom:10px;"><strong>场景：</strong>外勤用手机拍照上传，办公室 PC 自动出现材料。</p>'+
-'<div class="sp-steps"><div class="sp-step done">选订单</div><div class="sp-step done">拍照上传</div><div class="sp-step active">PC 刷新</div><div class="sp-step">核保</div></div>'+
-'<button class="sp-btn-primary" data-action="sync-demo-phone-upload">模拟：手机上传起诉状.jpg</button></div>'+
-'<div class="sync-panel" data-sync-panel="pc2phone">'+
-'<p style="font-size:12px;color:#334155;line-height:1.75;margin-bottom:10px;"><strong>场景：</strong>PC 归类 RAR、生成清单 PDF，业务员手机收到通知并预览。</p>'+
-'<button class="sp-btn-primary" data-action="sync-demo-pc-push">模拟：PC 推送案件清单 PDF</button></div>'+
-'<div class="sync-panel" data-sync-panel="chromeQr">'+
-'<div class="chrome-tip"><strong>可借鉴：Chrome「为此页面创建二维码」</strong><br>PC 打开 <code style="font-size:10px;">upload.ssbao.cn/inst/{token}</code> → 右键/分享 → 创建二维码 → 手机微信扫一扫直达 H5 上传页（无需装插件）。亦可自建短链二维码。</div>'+
-'<p style="font-size:11px;color:#6F8FAA;line-height:1.65;margin-bottom:10px;">与小程序共用 uploadToken，上传完成 WebSocket 通知 PC 材料树刷新。</p>'+
-'<button class="sp-btn-primary" data-action="sync-chrome-qr-demo"><i class="fab fa-chrome"></i> 模拟 Chrome 生成上传二维码</button></div>'+
-'<div class="sync-panel" data-sync-panel="pair">'+
-'<p style="font-size:12px;color:#334155;line-height:1.75;margin-bottom:10px;"><strong>场景：</strong>小程序展示配对码，PC 扫码登录同一 MaterialSpaceId。</p>'+
-'<button class="sp-btn-primary" data-action="sync-pc-qr">生成 PC 登录二维码（5 分钟）</button></div>'+
-'<div class="sync-panel" data-sync-panel="lan">'+
-'<p style="font-size:12px;color:#334155;line-height:1.75;margin-bottom:10px;"><strong>场景（仅内网）：</strong>手机与 PC 在同一 WiFi/有线局域网，无外网时仍可互传材料。</p>'+
-'<div class="chrome-tip" style="background:#F0FDF4;border-color:#86EFAC;color:#166534"><strong style="color:#15803D">内网技术路径</strong><br>① PC 启动局域网中继 <code style="font-size:10px">tools.ssbao.cn/lan</code> 或打开本地 <strong>诉讼保-Tools.html</strong><br>② 手机扫局域网二维码（URL 含 PC 内网 IP:端口）<br>③ WebSocket 直连 PC（ws://192.168.x.x:8765）或 HTTP 分片上传至 PC 临时目录<br>④ 传完后 PC 一键同步至机构 MaterialSpace（有网时）</div>'+
-'<button class="sp-btn-primary" data-action="open-tools-html"><i class="fas fa-network-wired"></i> 打开 PC 端诉讼保-Tools.html</button>'+
-'<button class="sp-btn-secondary" data-action="sync-lan-demo" style="margin-top:8px;width:100%">模拟：内网直连传起诉状.jpg</button></div></div>'+
-'<div class="sp-card"><div class="mat-sync-device"><div><span class="mat-sync-dot"></span><strong>本机（机构端小程序）</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;" id="syncPhoneCount">已同步 12 个文件</p></div><i class="fas fa-mobile-alt" style="font-size:24px;color:#1A6B7C;"></i></div>'+
-'<div class="mat-sync-device"><div><span class="mat-sync-dot"></span><strong>PC 机构核保工作台</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">在线 · inst.workbench.ssbao.cn</p></div><i class="fas fa-desktop" style="font-size:24px;color:#1A6B7C;"></i></div>'+
-'<div class="sp-grid-2" style="margin-top:10px;"><button class="sp-btn-secondary" data-action="sync-refresh"><i class="fas fa-sync-alt"></i> 立即同步</button>'+
-'<button class="sp-btn-secondary" data-action="sync-open-upload-page"><i class="fas fa-external-link-alt"></i> 打开 H5 上传页</button></div></div>'+
-'<div class="sync-conv-card"><strong>✨ 面向核保/业务员的便捷功能</strong>'+
-'<p style="font-size:11px;color:#78716C;line-height:1.7;">① <b>Chrome/Edge 页面二维码</b>：PC 上传页一键生成，手机扫码即传<br>'+
-'② <b>小程序码</b>：工作台固定入口 wxacode → 材料空间<br>'+
-'③ <b>续办深链</b>：手机上传后 PC 推送「继续核保」<br>'+
-'④ <b>案号剪贴板</b>：长按复制，PC 粘贴定位订单<br>'+
-'⑤ <b>大文件分片</b>：RAR&gt;50MB 断点续传 · 双端进度一致</p></div>'+
-'<div class="sp-card"><div class="sp-card-title">快捷操作</div>'+
-'<div class="sp-list-item" style="cursor:pointer;" data-action="sync-copy-case"><i class="fas fa-copy" style="color:#1A6B7C;"></i><div style="flex:1;"><strong>复制案号到 PC</strong><p style="font-size:11px;color:#6F8FAA;">（2025）京0105民初12345号</p></div></div>'+
-'<div class="sp-list-item" style="cursor:pointer;" data-action="sync-continue-pc"><i class="fas fa-laptop" style="color:#1A6B7C;"></i><div style="flex:1;"><strong>在 PC 继续核保</strong><p style="font-size:11px;color:#6F8FAA;">订单 SS20250529001 · 材料已就绪</p></div></div></div>'+
-'<div class="sp-card"><div class="sp-card-title">最近同步记录</div><div id="syncRecordList">'+
-'<div class="sp-list-item"><div><strong>起诉状.pdf</strong><p style="font-size:11px;color:#6F8FAA;">手机上传 → PC 可见 · 09:32</p></div><span style="font-size:11px;color:#1D7A6E;">✓</span></div>'+
-'<div class="sp-list-item"><div><strong>批量案件.rar</strong><p style="font-size:11px;color:#6F8FAA;">PC 归类 → 小程序清单 PDF · 09:28</p></div><span style="font-size:11px;color:#1D7A6E;">✓</span></div></div></div>'+
-'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-code"></i> 技术实现方案（详解）</div>'+
-'<div class="mat-tech-stack">'+
-'<div class="layer"><strong style="color:#7DD3FC;">① 统一材料空间</strong><br>MaterialSpaceId = SHA256(instId + userId + session)<br>小程序 / H5 / PC Web 共用 spaceId，机构数据隔离<span class="api">Header: X-Material-Space</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">② 身份绑定</strong><br>微信 OAuth + PC 扫码轮询；H5 uploadToken 15min 单次有效<span class="api">GET /api/inst/auth/qrcode · POST /auth/poll</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">③ Chrome 扫码上传（借鉴）</strong><br>PC 页 window.location = upload.ssbao.cn/inst/{token}<br>Chrome 右键「为此页面创建二维码」或 Edge「共享→二维码」<br>手机扫码打开同一 token 的 H5（Vue/React），wx.chooseMessageFile / input capture<span class="api">token 绑定 spaceId，无需二次登录</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">④ 存储与分片</strong><br>OSS multipart；小程序 wx.uploadFile chunk；PC @aws-sdk lib-storage STS<span class="api">POST /api/inst/material/upload/init|complete</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">⑤ 实时同步</strong><br>WebSocket wss://api/ws/material?spaceId=…<br>Redis Pub/Sub：file.added | pack.classified | extract.done<span class="api">PC 材料树增量 merge；小程序列表 pull</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">⑥ 离线续传</strong><br>小程序 IndexedDB 队列重试；PC Service Worker 缓存待传清单<span class="api">弱网 courthouse 场景不丢件</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">⑦ 冲突与安全</strong><br>文件 version + LWW；RAR/AI 任务 POST /material/task/lock<br>HTTPS · AES-256 · signed URL 15min · 审计日志<span class="api">符合保函材料留存要求</span></div>'+
-'<div class="layer"><strong style="color:#7DD3FC;">⑧ 内网同源传输（无外网）</strong><br>PC 端 <b>诉讼保-Tools.html</b> 启动 LAN Relay：绑定 0.0.0.0:8765，生成含内网 IP 的二维码<br>手机 H5/小程序 WebView 访问 http://{lanIp}:8765/upload?space=MS_xxx<br>协议：WebSocket 信令 + HTTP multipart 分片（或 WebRTC DataChannel 大文件二期）<br>mDNS/Bonjour 可选发现 PC 节点 · 传完写入本地 inbox 目录<span class="api">POST /lan/upload · WS ws://{ip}:8765/material</span></div></div></div>'+
-'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-project-diagram"></i> 用户交互时序（手机⇄PC）</div>'+
-'<div class="sync-arch-diagram">'+
-'<b>A. Chrome 扫码上传</b><br>'+
-'PC 核保员打开上传页 → 浏览器生成二维码 → 手机扫码 → H5 选文件上传 OSS → WS file.added → PC 树刷新<br><br>'+
-'<b>B. 小程序拍照</b><br>'+
-'外勤小程序「工具助手-上传」→ wx.uploadFile → complete API → PC Toast「新材料」→ 点击继续核保深链<br><br>'+
-'<b>C. PC→手机</b><br>'+
-'PC RAR 归类完成 → 推送企微/站内信 → 手机打开清单 PDF → 业务员现场确认<br><br>'+
-'<b>D. 配对登录</b><br>'+
-'小程序展示 QR(sessionId) → PC 扫码 → 两端 JWT 写入同一 spaceId</div></div>'+
-'<div class="sp-card" style="text-align:center;"><div class="sync-qr-mini" id="inlineSyncQr"><i class="fas fa-qrcode"></i></div>'+
-'<p style="font-size:11px;color:#6F8FAA;">工作台固定域名 <strong>inst.workbench.ssbao.cn</strong></p>'+
-'<button class="sp-btn-primary" data-action="sync-pc-qr" style="margin-top:12px;">生成 PC 登录二维码</button></div>'+
-'<div class="sp-card" style="background:#EFF8FC;border-color:#1A6B7C;"><div class="sp-card-title"><i class="fas fa-desktop"></i> PC 端交互演示</div>'+
-'<p style="font-size:12px;color:#334155;line-height:1.75;margin-bottom:12px;">进入本页后，<strong>中间 PC 浏览器面板</strong>自动展开，可与左侧小程序联动体验上传、下发、Chrome 二维码、配对登录。</p>'+
-'<div class="sp-grid-2"><button class="sp-btn-primary" data-action="open-pc-upload">打开 PC 上传页</button>'+
-'<button class="sp-btn-primary" data-action="open-pc-workbench">打开 PC 工作台</button></div>'+
-'<p style="font-size:11px;color:#6F8FAA;margin-top:10px;text-align:center">独立 PC 全功能页：<a href="诉讼保-Tools.html" target="_blank" style="color:#1A6B7C;font-weight:700">诉讼保-Tools.html</a>（扫码登录·上传下载·内网直连）</p></div>'}
-function previewTypeSelector(selected){
+const segCls=t=>{let c='fs-seg-btn';if(syncMobileTab===t)c+=' is-active';if((t==='files'||t==='lan')&&!syncLoggedIn)c+=' is-locked';return c};
+const paneCls=t=>'fs-pane'+(syncMobileTab===t?' is-active':'');
+return'<div class="fs-station" data-prd-zone="file-space-station">'+
+'<div class="fs-top"><div class="fs-top-icon"><i class="fas fa-satellite-dish"></i></div>'+
+'<div class="fs-top-text"><h3>文件空间站</h3><p id="fsStatusText">'+(syncLoggedIn?syncSpaceId+' · 手机⇄PC 材料互通':'扫码或配对码连接 PC 工作台')+'</p></div>'+
+'<span class="fs-top-badge'+(syncLoggedIn?' is-on':'')+'" id="fsConnBadge">'+(syncLoggedIn?'已连接':'未连接')+'</span></div>'+
+'<nav class="fs-seg" id="fsSegNav">'+
+'<button type="button" class="'+segCls('files')+'" data-fs-tab="files"><i class="fas fa-folder-open"></i>文件列表</button>'+
+'<button type="button" class="'+segCls('scanLogin')+'" data-fs-tab="scanLogin"><i class="fas fa-qrcode"></i>扫描登录</button>'+
+'<button type="button" class="'+segCls('pairCode')+'" data-fs-tab="pairCode"><i class="fas fa-key"></i>配对码</button>'+
+'<button type="button" class="'+segCls('lan')+'" data-fs-tab="lan"><i class="fas fa-wifi"></i>内网直连</button></nav>'+
+'<div class="fs-body">'+
+'<div class="'+paneCls('files')+'" data-fs-panel="files">'+
+'<div class="fs-card"><div class="fs-card-hd"><i class="fas fa-list"></i>材料文件</div>'+
+'<p class="fs-hint">上传后 WebSocket 同步至 PC 材料树；勾选后支持打包下载。</p>'+
+'<div class="fs-file-list" id="fsFileList">'+renderFsFileListHTML(false)+'</div>'+
+'<div class="fs-upload-tap" id="fsUploadTap"><div class="fs-upload-ico"><i class="fas fa-plus"></i></div><div><strong>上传文件</strong><span>拍照 / 相册 / 微信文件</span></div></div>'+
+'<input type="file" id="syncFileInput" class="v1-hidden-input" multiple accept="image/*,.pdf,.doc,.docx,.rar,.zip">'+
+'<div class="fs-actions">'+
+'<button type="button" class="fs-btn fs-btn-ghost" data-action="sync-refresh-files"><i class="fas fa-sync-alt"></i> 刷新</button>'+
+'<button type="button" class="fs-btn fs-btn-primary" data-action="sync-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button></div>'+
+'<button type="button" class="fs-btn fs-btn-ghost fs-btn-block" data-action="sync-demo-phone-upload"><i class="fas fa-camera"></i> 模拟拍照上传</button></div></div>'+
+'<div class="'+paneCls('scanLogin')+'" data-fs-panel="scanLogin">'+
+'<div class="fs-card"><div class="fs-card-hd"><i class="fas fa-mobile-alt"></i>扫描登录</div>'+
+'<p class="fs-hint"><strong>手机⇄PC 材料互通</strong>：使用机构端小程序扫描 PC 工作台登录码，两端进入同一 MaterialSpace。</p>'+
+'<div class="fs-scan-wrap"><div class="fs-scan-frame"><span class="fs-scan-line"></span><i class="fas fa-qrcode"></i></div>'+
+'<p style="font-size:11px;color:#64748B;line-height:1.65;text-align:center">对准 PC 端「扫码配对」页二维码<br>登录后解锁<strong>文件列表</strong>与<strong>内网直连</strong></p>'+
+'<div class="fs-pair-display" id="syncLoginPairCode">'+syncSpaceId+'</div>'+
+'<p class="fs-countdown" id="syncLoginCountdown">二维码有效 5:00</p>'+
+'<button type="button" class="fs-btn fs-btn-primary fs-btn-block" data-action="sync-sim-login"><i class="fas fa-check-circle"></i> 扫码登录</button></div></div>'+
+'<div class="'+paneCls('pairCode')+'" data-fs-panel="pairCode">'+
+'<div class="fs-card"><div class="fs-card-hd"><i class="fas fa-link"></i>配对码</div>'+
+'<p class="fs-hint">PC 工作台展示的 <strong>MS 码</strong> 输入下方，与 PC 绑定同一材料空间。</p>'+
+'<input class="fs-input" id="syncPairInput" placeholder="MS_a8f3" value="'+syncSpaceId+'" autocomplete="off">'+
+'<div class="fs-actions">'+
+'<button type="button" class="fs-btn fs-btn-primary" data-action="sync-pair-submit"><i class="fas fa-check"></i> 确认配对</button>'+
+'<button type="button" class="fs-btn fs-btn-ghost" data-action="sync-regen-pair"><i class="fas fa-redo"></i> 重新生成</button></div>'+
+'<p id="syncPairStatus" class="fs-status-pill'+(pcPaired?' is-ok':'')+'">'+(pcPaired?'已配对 · '+syncSpaceId:'等待输入配对码…')+'</p></div></div>'+
+'<div class="'+paneCls('lan')+'" data-fs-panel="lan">'+
+'<div class="fs-card"><div class="fs-card-hd"><i class="fas fa-shield-alt"></i>内网直连</div>'+
+'<span class="fs-lan-chip"><i class="fas fa-check-circle"></i> 无外网可用</span>'+
+'<p class="fs-hint">手机与 PC 在同一局域网时，经 LAN Relay 互传材料，不经公网 OSS。</p>'+
+'<p style="font-size:11px;font-weight:700;color:#312E81">内网地址（演示）</p>'+
+'<div class="fs-lan-url" id="syncLanUrl">http://192.168.1.88:8765/upload?space='+syncSpaceId+'</div>'+
+'<div class="fs-lan-qr"><i class="fas fa-qrcode"></i></div>'+
+'<button type="button" class="fs-btn fs-btn-primary fs-btn-block" data-action="sync-lan-start"><i class="fas fa-play"></i> 启动内网中继</button>'+
+'<button type="button" class="fs-btn fs-btn-ghost fs-btn-block" data-action="sync-lan-demo"><i class="fas fa-upload"></i> 模拟内网上传</button></div></div></div>'+
+'<div class="fs-dock">'+
+'<div class="fs-dock-item"><i class="fas fa-mobile-alt"></i><div>本机小程序<span id="fsPhoneCount">'+(syncLoggedIn?'已同步 '+syncMobileFiles.length+' 个':'待连接')+'</span></div></div>'+
+'<div class="fs-dock-item"><i class="fas fa-desktop"></i><div>PC 工作台<span>inst.workbench</span></div></div></div></div>';
+}
+function previewTypeSelector(selected,attr){
+attr=attr||'data-preview-type';
 const types=['财产保全','证据保全','行为保全','继续执行'];
-return``}
+return'<span class="sp-label">保全类型（切换预览格式）</span><div class="sp-tag-row" id="previewTypeRow">'+types.map(tp=>'<span class="sp-tag '+(tp===selected?'selected':'')+'" '+attr+'="'+tp+'">'+tp+'</span>').join('')+'</div>';
+}
 function openSubPage(id,opts){
 opts=opts||{};const p=PAGES[id];if(!p){showToast('功能开发中');return}
 if(opts.fromHub&&TOOL_CHILD_PAGES.has(id)){subPageStack=[TOOL_HUB_ID]}else if(opts.pushStack&&currentSubId)subPageStack.push(currentSubId);
@@ -554,7 +784,7 @@ crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"><
 }else{crumbEl.style.display='none'}
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
-if(id==='crossDeviceSync')showPcPanel('workbench');else if(!TOOL_CHILD_PAGES.has(id))hidePcPanel();
+if(id==='crossDeviceSync'){syncMobileTab=syncLoggedIn?'files':'scanLogin';showPcPanel(syncLoggedIn?'workbench':'pair');}else if(!TOOL_CHILD_PAGES.has(id))hidePcPanel();
 bindSubEvents(id)}
 function closeSubPage(){closeModal();subOverlay.classList.remove('active');document.getElementById('bottomNav').style.display='flex';currentSubId=null;subPageStack=[];document.getElementById('subpageCrumb').style.display='none';hidePcPanel()}
 function subPageBack(){
@@ -606,7 +836,7 @@ const BUSINESS=`<div class="header-flex"><div class="greeting"><h2>💼 业务�
 <div class="inst-mat-tile" data-page="rarBatchPack"><i class="fas fa-file-archive"></i>批量打包</div>
 <div class="inst-mat-tile" data-page="structExtract"><i class="fas fa-table"></i>字段提取</div>
 <div class="inst-mat-tile" data-page="smartAnalysis"><i class="fas fa-brain"></i>智能分析</div>
-<div class="inst-mat-tile" data-page="crossDeviceSync"><i class="fas fa-sync-alt"></i>多端互通</div>
+<div class="inst-mat-tile" data-page="crossDeviceSync"><i class="fas fa-satellite-dish"></i>文件空间站<small>四 Tab</small></div>
 </div></div>
 <div class="quick-grid">
 <div class="quick-item" data-page="productList"><div class="quick-icon"><i class="fas fa-box"></i></div><span>产品管理</span></div>
@@ -724,79 +954,71 @@ trainingHelp:{title:'操作培训',sub:'机构端使用指南',render:()=>`
 searchPage:{title:'搜索',sub:'订单 · 客户 · 保函号',render:()=>`<input class="sp-input" placeholder="输入订单号/客户名/保函号…"><div class="sp-card"><p style="font-size:12px;color:#94A3B8;margin-bottom:8px">最近搜索</p><div class="sp-tag-row"><span class="sp-tag" data-page="orderDetail">SS20250529001</span><span class="sp-tag" data-page="customerDetail">张正源</span></div></div>`},
 profileInfo:{title:'个人信息',sub:'机构账号信息',render:()=>`<div class="sp-card"><span class="sp-label">姓名</span><input class="sp-input" value="王审核员"><span class="sp-label">所属机构</span><input class="sp-input" value="永安保险" readonly><span class="sp-label">角色</span><input class="sp-input" value="核保专员" readonly><button class="sp-btn-primary" data-action="toast" data-msg="信息已保存">保存</button></div>`},
 securityCenter:{title:'安全中心',sub:'密码 · 登录设备',render:()=>`<div class="settings-list"><div class="settings-item" data-action="toast" data-msg="修改密码页"><div class="setting-left"><i class="fas fa-key"></i><span>修改密码</span></div><div class="setting-right">></div></div><div class="settings-item"><div class="setting-left"><i class="fas fa-mobile-alt"></i><span>登录设备</span></div><div class="setting-right">2台 ></div></div></div>`},
-aboutInst:{title:'关于机构端',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">诉讼保 · 机构端</h3><p style="font-size:13px;color:#6F8FAA">版本 1.4.0 · 工具助手 · 诉讼保-Tools.html</p></div>`},
+aboutInst:{title:'关于机构端',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">诉讼保 · 机构端</h3><p style="font-size:13px;color:#6F8FAA">版本 6.0.0 · 工具助手 · 文件空间站</p></div>`},
 toolAssistantHub:{title:'工具助手',sub:'机构端材料智能处理 · 二级功能入口',render:()=>
 hero('linear-gradient(125deg,#0F4C5C,#1A6B7C)','🤖','机构端 · 工具助手','核保收案一站式：RAR 归类 · 字段提取 · 机构匹配 · 缺件分析 · 手机/PC 协同')+
 steps(['上传材料','AI 处理','分析输出','关联订单'],1)+
-'<div class="inst-mat-hub" style="margin-bottom:14px;cursor:default;"><h3 style="font-size:14px;">四大核心能力</h3><p style="font-size:10px;opacity:.85;">点击下方模块进入完整二级交互流程</p></div>'+
 '<div class="inst-mat-grid" style="margin-bottom:16px;">'+
 '<div class="inst-mat-tile" data-page="rarBatchPack" style="background:#F0F9FB;color:#1A6B7C;border:1px solid #D4EDE8;"><i class="fas fa-file-archive"></i>RAR 批量打包<small>清单 PDF</small></div>'+
 '<div class="inst-mat-tile" data-page="structExtract" style="background:#F0F9FB;color:#1A6B7C;border:1px solid #D4EDE8;"><i class="fas fa-table"></i>结构化提取<small>标准字段</small></div>'+
 '<div class="inst-mat-tile" data-page="smartAnalysis" style="background:#F0F9FB;color:#1A6B7C;border:1px solid #D4EDE8;"><i class="fas fa-brain"></i>智能分析<small>机构·缺件</small></div>'+
-'<div class="inst-mat-tile" data-page="crossDeviceSync" style="background:#F0F9FB;color:#1A6B7C;border:1px solid #D4EDE8;"><i class="fas fa-sync-alt"></i>多端互通<small>手机⇄PC</small></div></div>'+
+'<div class="inst-mat-tile" data-page="crossDeviceSync" style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;"><i class="fas fa-satellite-dish"></i>文件空间站<small>四 Tab</small></div></div>'+
 '<div class="sp-card"><div class="sp-card-title">典型场景</div>'+
 '<div class="sync-scenario" data-page="rarBatchPack"><i class="fas fa-briefcase"></i><div><strong style="font-size:13px;">业务员批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">客户微信 RAR → 按案号归类 → 清单 PDF 推送业务员</p></div></div>'+
 '<div class="sync-scenario" data-page="structExtract"><i class="fas fa-file-alt"></i><div><strong style="font-size:13px;">核保材料提取</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">起诉状/申请书 → 写入订单标准字段</p></div></div>'+
 '<div class="sync-scenario" data-page="crossDeviceSync"><i class="fas fa-laptop"></i><div><strong style="font-size:13px;">手机拍照 · PC 审核</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">外勤拍照上传，办公室 PC 大屏核保</p></div></div>'+
 '<button class="sp-btn-primary" data-action="demo-tool-flow">演示完整流程</button></div>'},
-rarBatchPack:{title:'RAR 批量打包',sub:'自动归类 · 案件清单 PDF',render:()=>
-hero('linear-gradient(125deg,#1E40AF,#3B82F6)','📦','RAR/ZIP 批量收案','解压→案号识别→材料归类→生成案件清单 PDF 给业务员')+
+rarBatchPack:{title:'RAR 批量打包',sub:'自动归类 · 案件清单 PDF',render:()=>{
+rarUploadedFiles=[];currentPreviewType='财产保全';
+return hero('linear-gradient(125deg,#1E40AF,#3B82F6)','📦','RAR/ZIP 批量收案','解压→案号识别→材料归类→生成案件清单 PDF 给业务员')+
 steps(['上传','解压归类','生成清单','推送业务员'],0)+
-'<div class="sp-card"><div class="v1-upload-zone" id="rarUploadZone" style="border-color:#93C5FD;background:#EFF6FF;"><i class="fas fa-file-archive" style="color:#2563EB;font-size:36px;"></i>'+
-'<p style="font-weight:700;color:#1D4ED8;">点击上传 RAR / ZIP 材料包</p>'+
-'<p style="font-size:11px;color:#6B7280;margin-top:6px;">多案件混包 · 单包≤500MB</p>'+
-'<input type="file" id="rarFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z"></div>'+
+'<div class="sp-card"><div class="sp-card-title">① 上传材料包（可多选）</div>'+
+'<div class="upload-file-list" id="rarFileList">'+renderUploadFileListHTML([],'rarFileList')+'</div>'+
 '<div class="mat-progress-bar" id="rarProgressWrap" style="display:none;"><div class="mat-progress-fill" id="rarProgressFill" style="width:0%;"></div></div>'+
-'<p id="rarStatusTxt" style="font-size:11px;color:#6F8FAA;margin-top:8px;text-align:center;"></p></div>'+
-''+
-''+
-''+
-''+
-''+
-previewTypeSelector('财产保全')+
-'<div id="rarPreviewMount"></div></div>'+
-''+
-''+
-''+
-'<button class="sp-btn-primary" id="rarStartBtn" data-action="rar-process">开始解压并归类</button>'},
-structExtract:{title:'结构化提取',sub:'Word/图/PDF → 标准字段 · 申请书预览',render:()=>
-hero('linear-gradient(125deg,#5B21B6,#7C3AED)','🧬','非结构化 → 结构化','OCR + NLP 写入保全/订单标准字段库，并生成申请书预览')+
-steps(['选材料','OCR识别','字段映射','写入订单'],1)+
-'<div class="sp-card"><span class="sp-label">材料类型</span><div class="sp-tag-row"><span class="sp-tag selected" data-select>起诉状 PDF</span><span class="sp-tag" data-select>Word 申请书</span><span class="sp-tag" data-select>图片/扫描件</span></div>'+
-'<div class="v1-upload-zone" id="structUploadZone"><i class="fas fa-cloud-upload-alt" style="font-size:36px;color:#1A6B7C;"></i><p style="font-weight:700;color:#0F4C5C;">上传 Word / 图片 / PDF</p></div>'+
-'<input type="file" id="structFileInput" class="v1-hidden-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></div>'+
-previewTypeSelector('财产保全')+
-renderDocPreview('财产保全')+
-'<div class="sp-card"><button class="sp-btn-primary" data-action="struct-extract">AI 提取标准字段</button></div>'+
-'<div class="sp-card" id="structResultCard" style="display:none;"><div class="sp-card-title"><i class="fas fa-table"></i> 提取结果 · 标准字段库</div>'+
-'<table class="mat-field-table"><thead><tr><th>标准字段</th><th>提取值</th><th>置信度</th></tr></thead><tbody>'+
-'<tr><td>保全类型</td><td>财产保全</td><td class="conf">99%</td></tr>'+
-'<tr><td>案号</td><td>（2025）京0105民初12345号</td><td class="conf">98%</td></tr>'+
-'<tr><td>受理法院</td><td>北京市朝阳区人民法院</td><td class="conf">96%</td></tr>'+
-'<tr><td>保全金额</td><td>8,500,000 元</td><td class="conf">94%</td></tr>'+
-'<tr><td>申请人</td><td>张正源</td><td class="conf">92%</td></tr>'+
-'<tr><td>被保全人</td><td>北京某某贸易有限公司</td><td class="conf">91%</td></tr>'+
-'<tr><td>财产线索</td><td>工商银行朝阳支行 6222021234567890</td><td class="conf">88%</td></tr></tbody></table>'+
-'<button class="sp-btn-primary" data-action="struct-apply-order" style="margin-top:12px;">一键写入订单审核</button></div>'},
-smartAnalysis:{title:'智能分析',sub:'机构匹配 · 缺件 · 证据分类',render:()=>
-hero('linear-gradient(125deg,#B45309,#D97706)','🧠','机构端智能分析','基于材料包输出承保机构/产品线匹配、缺件清单与证据分类')+
-'<div class="sp-card"><span class="sp-label">分析订单</span><input class="sp-input" value="SS20250529001 · 财产保全">'+
-'<button class="sp-btn-primary" data-action="smart-analyze-run">开始智能分析</button></div>'+
+'<p id="rarStatusTxt" style="font-size:11px;color:#6F8FAA;margin:8px 0px;text-align:center;"></p>'+
+'<div class="v1-upload-zone" id="rarUploadZone" style="border-color:#93C5FD;background:#EFF6FF;"><i class="fas fa-file-archive" style="color:#2563EB;font-size:36px;"></i>'+
+'<p style="font-weight:700;color:#1D4ED8;">点击上传 RAR / ZIP 材料包</p>'+
+'<p style="font-size:11px;color:#6B7280;margin-top:6px;">每选一个文件即显示在列表 · 全部上传完成后点击下方按钮处理</p>'+
+'<input type="file" id="rarFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z" multiple></div></div>'+
+'<button class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled>开始解压并归类</button>'+
+'<div id="rarPreviewMount" style="margin-top:20px;"></div></div>';
+}},
+structExtract:{title:'结构化提取',sub:'Word/图/PDF → 标准字段 · 申请书预览',render:()=>{
+structUploadedFiles=[];currentPreviewType='财产保全';
+return hero('linear-gradient(125deg,#5B21B6,#7C3AED)','🧬','非结构化 → 结构化','OCR + NLP 写入保全/订单标准字段库，并生成申请书预览')+
+steps(['选材料','OCR识别','字段映射','写入订单'],0)+
+'<div class="sp-card"><div class="sp-card-title">① 上传材料（可多选，逐条显示）</div>'+
+'<div class="upload-file-list" id="structFileList">'+renderUploadFileListHTML([],'structFileList')+'</div></div>'+
+'<div class="v1-upload-zone" id="structUploadZone"><i class="fas fa-cloud-upload-alt" style="font-size:36px;color:#1A6B7C;"></i><p style="font-weight:700;color:#0F4C5C;">上传 Word / 图片 / PDF</p>'+
+'<p style="font-size:11px;color:#6F8FAA;margin-top:6px;">全部上传完成后点击「结构化提取」</p></div>'+
+'<input type="file" id="structFileInput" class="v1-hidden-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple>'+
+'<button class="sp-btn-primary" id="structStartBtn" data-action="struct-extract" disabled>结构化提取</button>'+
+'<div id="structExtractOutput" style="display:none;margin-top:20px;">'+
+'<div id="structPreviewMount">'+renderDocPreview(currentPreviewType)+'</div></div>';
+}},
+smartAnalysis:{title:'智能分析',sub:'机构匹配 · 缺件 · 证据分类',render:()=>{
+smartUploadedFiles=[];smartAnalysisType='财产保全';
+return hero('linear-gradient(125deg,#B45309,#D97706)','🧠','机构端智能分析','先选保全类型并上传材料，全部就绪后点击「开始智能分析」才展示结果')+
+previewTypeSelector(smartAnalysisType,'data-smart-type')+
+'<div class="sp-card-title" style="margin-top:14px">上传待分析材料（可多选）</div>'+
+'<div class="upload-file-list" id="smartFileList">'+renderUploadFileListHTML([],'smartFileList')+'</div>'+
+'<p class="upload-hint" style="margin-bottom:10px;"></p></div>'+
+'<div class="v1-upload-zone" id="smartUploadZone"><i class="fas fa-folder-open" style="font-size:32px;color:#D97706;"></i><p style="font-weight:700;color:#92400E;">上传起诉状 / 申请书 / 主体资格等</p></div>'+
+'<input type="file" id="smartFileInput" class="v1-hidden-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.rar,.zip" multiple>'+
+'<button class="sp-btn-primary" id="smartStartBtn" data-action="smart-analyze-run" disabled>开始智能分析</button>'+
 '<div id="smartAnalyzeResult" style="display:none;">'+
-'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-building"></i> 机构匹配（承保产品线）</div>'+
+'<div class="sp-card" style="display:none;"><div class="sp-card-title"><i class="fas fa-building"></i> 机构匹配（承保产品线）</div>'+
 '<div class="mat-ins-card recommended"><div class="flex-between"><strong>永安保险 · 诉讼财产保全</strong><span style="font-size:11px;color:#1D7A6E;font-weight:700;">匹配 96%</span></div>'+
 '<p style="font-size:11px;color:#6F8FAA;margin-top:6px;">朝阳法院已接入 · 费率 0.85‰ · 核保专员：王审核员 · 建议 2h 出函</p></div>'+
 '<div class="mat-ins-card"><div class="flex-between"><strong>永安保险 · 继续执行专项</strong><span style="font-size:11px;color:#64748B;">匹配 72%</span></div>'+
 '<p style="font-size:11px;color:#6F8FAA;margin-top:6px;">需补充执行依据文书后方可切换产品线</p></div>'+
 '<div class="mat-ins-card"><div class="flex-between"><strong>合作渠道 · 太平洋财险</strong><span style="font-size:11px;color:#64748B;">转介 65%</span></div>'+
 '<p style="font-size:11px;color:#6F8FAA;margin-top:6px;">额度超限时可转介共保 · 需机构管理员审批</p></div></div>'+
-'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-exclamation-triangle" style="color:#E9A23B;"></i> 缺件清单</div>'+
-'<div class="mat-miss-item"><span style="color:#E9A23B;">⚠</span><div><strong>担保函/保函申请书</strong><p style="font-size:11px;color:#6F8FAA;">出函前必填</p></div></div>'+
-'<div class="mat-miss-item"><span style="color:#94A3B8;">○</span><div><strong>财产线索明细</strong><p style="font-size:11px;color:#6F8FAA;">建议补充</p></div></div></div>'+
-'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-tags"></i> 证据分类</div>'+
-'<div class="sp-tag-row"><span class="sp-tag selected">起诉状</span><span class="sp-tag selected">主体资格</span><span class="sp-tag">保全申请</span><span class="sp-tag" style="background:#FEE2E2;color:#B91C1C;">缺：担保材料</span></div></div>'+
-'<button class="sp-btn-primary" data-page="orderReview">带分析结果进入审核</button></div>'},
-crossDeviceSync:{title:'多端材料互通',sub:'机构小程序 ⇄ PC 工作台 · Chrome 扫码',render:()=>renderCrossDeviceSyncPage()}
+'<div class="sp-card" style="margin-top:10px;"><div class="sp-card-title"><i class="fas fa-exclamation-triangle" style="color:#E9A23B;"></i> 缺件清单 · <span id="smartMissTypeLabel">'+smartAnalysisType+'</span></div>'+
+'<div id="smartMissList"></div></div>'+
+'<button class="sp-btn-primary" data-page="orderReview">带分析结果进入审核</button></div>';
+}},
+crossDeviceSync:{title:'文件空间站',sub:'上传 · 扫码 · 配对 · 内网',render:()=>renderCrossDeviceSyncPage()}
 };
 
 function setActiveNav(id){
@@ -846,46 +1068,111 @@ if(sw&&!sw._bound){sw._bound=true;sw.addEventListener('click',e=>{e.stopPropagat
 }
 
 function runRarProcess(){
+if(!rarUploadedFiles.length){showToast('请先上传 RAR/ZIP 材料包');return}
 const wrap=document.getElementById('rarProgressWrap'),fill=document.getElementById('rarProgressFill'),txt=document.getElementById('rarStatusTxt'),btn=document.getElementById('rarStartBtn');
 if(!wrap)return;if(btn)btn.disabled=true;wrap.style.display='block';
 let p=0;const steps=['正在解压 RAR…','识别案号并建目录…','材料智能分类…','生成案件清单 PDF…'];
 const iv=setInterval(()=>{p+=25;if(fill)fill.style.width=p+'%';if(txt)txt.textContent=steps[Math.min(Math.floor(p/25)-1,3)]||'处理中…';
-if(p>=100){clearInterval(iv);if(txt)txt.textContent='✓ 处理完成';
-const cc=document.getElementById('rarClassifyCard'),pc=document.getElementById('rarPdfCard'),mount=document.getElementById('rarPreviewMount');
-if(cc)cc.style.display='block';if(pc)pc.style.display='block';
+if(p>=100){clearInterval(iv);if(txt)txt.textContent='✓ 已处理 '+rarUploadedFiles.length+' 个压缩包 · 2 案件 · 6 份材料';
+const cc=document.getElementById('rarClassifyCard'),pc=document.getElementById('rarPdfCard'),prev=document.getElementById('rarPreviewCard'),mount=document.getElementById('rarPreviewMount');
+if(cc)cc.style.display='block';if(pc)pc.style.display='block';if(prev)prev.style.display='block';
 if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
 bindPreviewTypeTags();
-if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast('已生成案件清单 PDF 与申请书预览');}},600);
+if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast('已生成案件清单 PDF · 可发送邮件或推送业务员');}},600);
+}
+function runStructExtract(){
+if(!structUploadedFiles.length){showToast('请先上传 Word/图/PDF 材料');return}
+const btn=document.getElementById('structStartBtn');if(btn)btn.disabled=true;
+showToast('正在 OCR + NLP 提取…');
+setTimeout(()=>{
+const out=document.getElementById('structExtractOutput');if(out)out.style.display='block';
+const fld=document.getElementById('structFldType');if(fld)fld.textContent=currentPreviewType;
+const mount=document.getElementById('structPreviewMount');if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
+bindPreviewTypeTags();
+if(btn){btn.disabled=false;btn.textContent='重新提取'}
+showToast('结构化提取完成 · 已生成 '+structUploadedFiles.length+' 份材料的字段与预览');
+},1200);
+}
+function runSmartAnalyze(){
+if(!smartUploadedFiles.length){showToast('请先上传待分析材料');return}
+const btn=document.getElementById('smartStartBtn');if(btn)btn.disabled=true;
+showToast('正在分析 '+smartAnalysisType+' 缺件与机构匹配…');
+setTimeout(()=>{
+const el=document.getElementById('smartAnalyzeResult');if(el)el.style.display='block';
+const miss=document.getElementById('smartMissList');if(miss)miss.innerHTML=buildSmartMissHtml(smartAnalysisType,smartUploadedFiles);
+const tags=document.getElementById('smartEvidenceTags');if(tags)tags.innerHTML=buildSmartEvidenceTags(smartAnalysisType,smartUploadedFiles);
+const lbl=document.getElementById('smartMissTypeLabel');if(lbl)lbl.textContent=smartAnalysisType;
+if(btn){btn.disabled=false;btn.textContent='重新分析'}
+const missCount=(REQUIRED_EVIDENCE_BY_TYPE[smartAnalysisType]||[]).filter(ev=>ev.required&&!smartUploadedFiles.some(f=>fileMatchesEvidence(f.name,ev.patterns))).length;
+showToast('智能分析完成 · '+smartAnalysisType+' · '+(missCount?'缺 '+missCount+' 项必填材料':'材料齐全'));
+},1400);
 }
 function bindPreviewTypeTags(){
 subBody.querySelectorAll('[data-preview-type]').forEach(tag=>{
+if(tag._pt)return;tag._pt=true;
 tag.addEventListener('click',()=>{
 currentPreviewType=tag.dataset.previewType;
 subBody.querySelectorAll('[data-preview-type]').forEach(t=>t.classList.toggle('selected',t===tag));
 const card=document.getElementById('docPreviewCard');
 if(card)card.outerHTML=renderDocPreview(currentPreviewType);
-const mount=document.getElementById('rarPreviewMount');
+const mount=document.getElementById('rarPreviewMount')||document.getElementById('structPreviewMount');
 if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
+const fld=document.getElementById('structFldType');if(fld)fld.textContent=currentPreviewType;
 bindPreviewTypeTags();
-subBody.querySelectorAll('[data-action="preview-doc-export"],[data-action="preview-doc-copy"]').forEach(b=>{
+});
+});
+subBody.querySelectorAll('[data-smart-type]').forEach(tag=>{
+if(tag._st)return;tag._st=true;
+tag.addEventListener('click',()=>{
+smartAnalysisType=tag.dataset.smartType;
+subBody.querySelectorAll('[data-smart-type]').forEach(t=>t.classList.toggle('selected',t===tag));
+const hint=subBody.querySelector('.upload-hint');if(hint)hint.textContent='依据所选「'+smartAnalysisType+'」类型，对照必备证据清单分析缺件';
+const res=document.getElementById('smartAnalyzeResult');if(res)res.style.display='none';
+showToast('已切换保全类型：'+smartAnalysisType);
+});
+});
+subBody.querySelectorAll('[data-action="preview-doc-export"],[data-action="preview-doc-email"]').forEach(b=>{
 if(b._pv)return;b._pv=true;b.addEventListener('click',()=>{
-showToast(b.dataset.action==='preview-doc-export'?'预览 PDF 已导出':'结构化文本已复制');
-});
-});
+if(b.dataset.action==='preview-doc-export')showToast('预览 PDF 已导出');
+else openEmailModal('申请书结构化预览');
 });
 });
 }
 function bindSyncTabs(){
-const tabs=document.getElementById('syncTabs');
-if(!tabs||tabs._bound)return;tabs._bound=true;
-tabs.querySelectorAll('.sync-tab').forEach(btn=>{
+const seg=document.getElementById('fsSegNav');
+if(!seg||seg._bound)return;seg._bound=true;
+seg.querySelectorAll('.fs-seg-btn').forEach(btn=>{
 btn.addEventListener('click',()=>{
-tabs.querySelectorAll('.sync-tab').forEach(b=>b.classList.remove('on'));
-btn.classList.add('on');
-subBody.querySelectorAll('.sync-panel').forEach(p=>p.classList.toggle('on',p.dataset.syncPanel===btn.dataset.syncTab));
-syncMobilePcTab(btn.dataset.syncTab);
+const tab=btn.dataset.fsTab;
+if((tab==='files'||tab==='lan')&&!syncLoggedIn){showToast('请先扫描登录或输入配对码');return;}
+seg.querySelectorAll('.fs-seg-btn').forEach(b=>b.classList.remove('is-active'));
+btn.classList.add('is-active');
+syncMobileTab=tab;
+subBody.querySelectorAll('.fs-pane').forEach(p=>p.classList.toggle('is-active',p.dataset.fsPanel===tab));
+syncMobilePcTab(tab);
+if(tab==='scanLogin')startSyncLoginCountdown();
 });
 });
+const zone=document.getElementById('fsUploadTap'),inp=document.getElementById('syncFileInput');
+zone?.addEventListener('click',e=>{e.preventDefault();if(!syncLoggedIn){showToast('请先扫描登录或输入配对码');return}inp?.click()});
+inp?.addEventListener('change',e=>{
+if(!syncLoggedIn)return;
+const n=e.target.files?.length||0;
+Array.from(e.target.files||[]).forEach(f=>{const ic=getFileIconInfo(f.name);syncAddMobileFile(f.name,ic.icon,ic.color,'本地上传');pcAddFile(f.name,ic.icon,ic.color,'手机');});
+if(n){showToast('已上传 '+n+' 个文件 · PC 已同步')}
+e.target.value='';
+});
+if(syncMobileTab==='scanLogin')startSyncLoginCountdown();
+fsUpdateConnUI();
+if(!subBody._syncCb){
+subBody._syncCb=true;
+subBody.addEventListener('change',e=>{
+const cb=e.target.closest('.sync-file-cb');
+if(!cb)return;
+const idx=parseInt(cb.dataset.syncIdx,10);
+if(syncMobileFiles[idx])syncMobileFiles[idx].sel=cb.checked;
+});
+}
 }
 function appendSyncRecord(name,desc){
 const list=document.getElementById('syncRecordList');if(!list)return;
@@ -895,7 +1182,7 @@ list.insertBefore(row,list.firstChild);
 }
 function openQrModal(mode){
 const isChrome=mode==='chrome';
-const url=isChrome?'https://upload.ssbao.cn/inst/uTk8m2K9x':'https://inst.workbench.ssbao.cn/auth/qr?s=MS_a8f3';
+const url=isChrome?'https://upload.ssbao.cn/inst/'+pcUploadToken:'https://inst.workbench.ssbao.cn/auth/qr?s='+syncSpaceId;
 showModal(`<div class="sync-qr-mini" style="margin:0 auto 12px;"><i class="fas fa-qrcode"></i></div>
 <h3>${isChrome?'Chrome 上传页二维码':'PC 工作台登录码'}</h3>
 <p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0;">${isChrome?'PC 在 Chrome 地址栏打开上传页 → 右键「为此页面创建二维码」→ 手机微信扫一扫上传':'小程序扫码后 PC 浏览器自动登录同一材料空间'}</p>
@@ -908,15 +1195,37 @@ syncQrCountdown=setInterval(()=>{sec--;if(el)el.textContent='有效 '+Math.floor
 document.querySelector('[data-action="sync-sim-scan"]')?.addEventListener('click',()=>{
 closeModal();
 if(isChrome){appendSyncRecord('外勤拍照.jpg','Chrome H5 扫码上传 → PC 可见 · 刚刚');pcAddFile('外勤拍照.jpg','fa-file-image','#7C3AED','H5扫码');showPcPanel('workbench');showToast('模拟：手机已通过扫码页上传 2 个文件');}
-else{pcPaired=true;showPcPanel('pair');showToast('PC 已登录 · 材料空间 MS_a8f3 已绑定');}
+else{syncDoLogin('scan');}
 const cnt=document.getElementById('syncPhoneCount');if(cnt)cnt.textContent='已同步 '+(parseInt(cnt.textContent.match(/\d+/)||12,10)+(isChrome?2:0))+' 个文件';
 });
 }
+function bindUploadRemoveDelegate(){
+if(subBody._uploadDel)return;subBody._uploadDel=true;
+subBody.addEventListener('click',e=>{
+const btn=e.target.closest('[data-action="upload-remove"]');
+if(!btn)return;
+e.stopPropagation();
+const list=btn.dataset.list,idx=parseInt(btn.dataset.idx,10);
+let arr=rarUploadedFiles;
+if(list==='structFileList')arr=structUploadedFiles;
+else if(list==='smartFileList')arr=smartUploadedFiles;
+arr.splice(idx,1);
+refreshUploadListUI(list,arr);
+showToast('已移除文件');
+const res=document.getElementById('smartAnalyzeResult');if(res&&list==='smartFileList')res.style.display='none';
+});
+}
 function bindMaterialEvents(id){
+bindUploadRemoveDelegate();
 if(id==='rarBatchPack'){const zone=document.getElementById('rarUploadZone'),inp=document.getElementById('rarFileInput');
-zone?.addEventListener('click',()=>inp?.click());inp?.addEventListener('change',e=>{const f=e.target.files?.[0];if(f)showToast('已选择：'+f.name);});}
+zone?.addEventListener('click',()=>inp?.click());
+inp?.addEventListener('change',e=>{addFilesToList(rarUploadedFiles,e.target.files);refreshUploadListUI('rarFileList',rarUploadedFiles);if(rarUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个文件 · 共 '+rarUploadedFiles.length+' 个');e.target.value='';});}
 if(id==='structExtract'){const zone=document.getElementById('structUploadZone'),inp=document.getElementById('structFileInput');
-zone?.addEventListener('click',()=>inp?.click());inp?.addEventListener('change',e=>{if(e.target.files?.length)showToast('已上传 '+e.target.files.length+' 个文件');});}
+zone?.addEventListener('click',()=>inp?.click());
+inp?.addEventListener('change',e=>{addFilesToList(structUploadedFiles,e.target.files);refreshUploadListUI('structFileList',structUploadedFiles);if(structUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个文件');e.target.value='';});}
+if(id==='smartAnalysis'){const zone=document.getElementById('smartUploadZone'),inp=document.getElementById('smartFileInput');
+zone?.addEventListener('click',()=>inp?.click());
+inp?.addEventListener('change',e=>{addFilesToList(smartUploadedFiles,e.target.files);refreshUploadListUI('smartFileList',smartUploadedFiles);document.getElementById('smartAnalyzeResult')&&(document.getElementById('smartAnalyzeResult').style.display='none');if(smartUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个材料');e.target.value='';});}
 if(id==='crossDeviceSync')bindSyncTabs();
 subBody.querySelectorAll('.inst-mat-tile[data-page],.sync-scenario[data-page]').forEach(el=>{
 el.addEventListener('click',e=>{e.stopPropagation();openSubPage(el.dataset.page,{fromHub:true});});
@@ -938,24 +1247,65 @@ if(act==='send-supplement'){showToast('补材料通知已发送');setTimeout(clo
 if(act==='rar-process')runRarProcess();
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
-if(act==='struct-extract'){const c=document.getElementById('structResultCard');if(c)c.style.display='block';const card=document.getElementById('docPreviewCard');if(card)card.outerHTML=renderDocPreview(currentPreviewType);bindPreviewTypeTags();showToast('AI 已提取 7 项标准字段，预览已更新');}
+if(act==='rar-open-email')openEmailModal('批量案件清单 PDF');
+if(act==='email-send-confirm'){closeModal();showToast('邮件已发送至业务员邮箱');}
+if(act==='struct-extract')runStructExtract();
 if(act==='struct-apply-order'){showToast('已写入订单 '+ORDER_STATE.id);setTimeout(()=>openSubPage('orderReview'),800)}
-if(act==='smart-analyze-run'){const el=document.getElementById('smartAnalyzeResult');if(el)el.style.display='block';showToast('智能分析完成：缺件 + 证据分类');}
+if(act==='smart-analyze-run')runSmartAnalyze();
+if(act==='upload-remove')return;
+if(act==='email-send-confirm')return;
 if(act==='sync-refresh')showToast('机构端与 PC 材料已同步完成');
+if(act==='sync-sim-login')syncDoLogin('scan');
+if(act==='sync-pair-submit'){
+const inp=document.getElementById('syncPairInput'),code=(inp?.value||'').trim();
+if(!code){showToast('请输入配对码');return}
+syncSpaceId=code;pcPaired=true;syncDoLogin('pair');
+}
+if(act==='sync-regen-pair'){
+syncSpaceId='MS_'+Math.random().toString(36).slice(2,7);
+pcPaired=false;
+const inp=document.getElementById('syncPairInput');if(inp)inp.value=syncSpaceId;
+document.getElementById('syncLoginPairCode')&&(document.getElementById('syncLoginPairCode').textContent=syncSpaceId);
+document.getElementById('syncLanUrl')&&(document.getElementById('syncLanUrl').textContent='http://192.168.1.88:8765/upload?space='+syncSpaceId);
+fsUpdateConnUI();
+showToast('新配对码：'+syncSpaceId);renderPcMain();
+}
+if(act==='sync-refresh-files'){const el=document.getElementById('syncFileList');if(el)el.innerHTML=renderSyncFileListHTML(false);showToast('材料列表已刷新')}
+if(act==='sync-pack-download'){
+if(!syncLoggedIn){showToast('请先扫描登录或输入配对码');return}
+const n=syncMobileFiles.filter(f=>f.sel!==false).length;
+if(!n){showToast('请至少勾选一个文件');return}
+showToast('已打包下载 '+n+' 个文件（演示）');
+}
+if(act==='sync-lan-start'){syncLanOn=true;showToast('内网中继已启动 · 0.0.0.0:8765（演示）');showPcPanel('lan')}
 if(act==='sync-pc-qr')openQrModal('pair');
 if(act==='sync-chrome-qr-demo')openQrModal('chrome');
 if(act==='sync-open-upload-page')showToast('已打开 upload.ssbao.cn/inst/{token}（PC 可右键生成二维码）');
-if(act==='sync-demo-phone-upload'){appendSyncRecord('起诉状.jpg','手机拍照上传 → PC 材料树刷新 · 刚刚');pcAddFile('起诉状.jpg','fa-file-image','#E53E3E','手机');showPcPanel('workbench');showToast('模拟完成：PC 端已收到 file.added 推送');}
+if(act==='sync-demo-phone-upload'){
+if(!syncLoggedIn){showToast('请先扫描登录或输入配对码');return}
+appendSyncRecord('起诉状.jpg','手机拍照上传 → PC 材料树刷新 · 刚刚');
+syncAddMobileFile('起诉状.jpg','fa-file-image','#E53E3E','手机拍照');
+pcAddFile('起诉状.jpg','fa-file-image','#E53E3E','手机');
+showPcPanel('workbench');
+showToast('模拟完成：PC 端已收到 file.added 推送');
+}
 if(act==='sync-demo-pc-push'){appendSyncRecord('案件清单.pdf','PC 生成 → 小程序通知 · 刚刚');showPcPanel('download');pcShowToast('已推送案件清单.pdf');showToast('案件清单 PDF 已推送到小程序消息中心');}
 if(act==='open-pc-upload'){showPcPanel('upload');showToast('PC H5 上传页已展开 · 可右键生成二维码')}
 if(act==='open-pc-workbench'){showPcPanel('workbench');showToast('PC 核保工作台已展开')}
-if(act==='open-tools-html'){window.open('诉讼保-Tools.html','_blank');showToast('已打开诉讼保-Tools.html · PC 端全功能页')}
-if(act==='sync-lan-demo'){appendSyncRecord('起诉状.jpg','内网 ws://192.168.1.88:8765 直连 → PC inbox · 刚刚');pcAddFile('起诉状.jpg','fa-file-image','#E53E3E','内网LAN');showPcPanel('workbench');showToast('模拟：内网直连上传成功（无外网可用）')}
+if(act==='open-tools-html'){window.open('version/诉讼保-文件助手.html','_blank');showToast('已打开诉讼保-文件助手.html · PC 端全功能页')}
+if(act==='sync-lan-demo'){
+if(!syncLoggedIn){showToast('请先扫描登录或输入配对码');return}
+appendSyncRecord('起诉状.jpg','内网 ws://192.168.1.88:8765 直连 → PC inbox · 刚刚');
+syncAddMobileFile('起诉状.jpg','fa-file-image','#E53E3E','内网LAN');
+pcAddFile('起诉状.jpg','fa-file-image','#E53E3E','内网LAN');
+showPcPanel('lan');
+showToast('模拟：内网直连上传成功（无外网可用）');
+}
 if(act==='sync-copy-case')showToast('案号已复制，PC 端可粘贴定位订单');
 if(act==='sync-continue-pc')showToast('已在 PC 打开核保工作台 — 材料包已就绪');
 if(act==='modal-close')closeModal();
 if(act==='preview-doc-export')showToast('申请书预览 PDF 已导出');
-if(act==='preview-doc-copy')showToast('结构化预览文本已复制到剪贴板');
+if(act==='preview-doc-email')openEmailModal('申请书结构化预览');
 if(act==='demo-tool-flow'){showToast('演示：RAR→提取→分析→审核');setTimeout(()=>openSubPage('rarBatchPack',{fromHub:true}),600)}
 });
 });
@@ -1003,16 +1353,17 @@ const PRD_SPECS={
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
 'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料智能处理总入口：批量 RAR 收案、结构化提取写入订单、智能缺件分析、手机与 PC 核保工作台材料互通。',logic:['工作台/业务 Tab 双入口','四宫格进入子功能','典型场景说明收案/核保/外勤路径','演示完整流程'],acceptance:['四入口可跳转','演示有 Toast'],api:'—'},
-'rar-batch-pack':{title:'RAR 批量打包',module:'工具助手',page:'rarBatchPack',priority:'P0',business:'上传 RAR/ZIP 混包，解压按案号归类，生成案件清单 PDF 推送给机构业务员；归类后可查看申请书结构化预览。',logic:['≤500MB','进度四步','归类 tag（起诉状/保全申请/主体资格）','按保全类型生成申请书预览','案件清单 PDF 预览+推送业务员'],acceptance:['处理完成展示归类、预览与 PDF','推送 Toast'],api:'POST /api/inst/material/rar/process'},
-'struct-extract':{title:'结构化提取',module:'工具助手',page:'structExtract',priority:'P0',business:'Word/图/PDF 转为订单标准字段；按保全类型生成「财产保全申请书预览」等结构化预览（字段随类型变化），置信度展示，一键写入订单审核。',logic:['OCR+NLP 提取案号/法院/金额/当事人/财产线索','保全类型切换预览格式（财产/证据/行为/继续执行）','标准字段表 + 申请书预览双输出','写入 orderReview'],acceptance:['四种保全类型预览可切换','提取表含财产线索','一键写入跳转审核'],api:'POST /api/inst/material/extract'},
-'smart-analysis':{title:'智能分析',module:'工具助手',page:'smartAnalysis',priority:'P0',business:'输出机构匹配（承保产品线/合作渠道）、缺件清单、证据分类，辅助核保决策。',logic:['绑定订单号','机构匹配推荐（本机构产品线+转介）','缺件必填/建议','带结果进 orderReview'],acceptance:['分析后机构匹配+缺件+证据三块展示'],api:'POST /api/inst/material/analyze'},
+'rar-batch-pack':{title:'RAR 批量打包',module:'工具助手',page:'rarBatchPack',priority:'P0',business:'上传 RAR/ZIP 混包，解压按案号归类，生成案件清单 PDF 推送给机构业务员；归类后可查看申请书结构化预览。',logic:['多文件上传逐条显示','全部上传后点击「开始解压并归类」','进度四步+归类结果','案件清单 PDF+发送邮件弹窗','推送业务员'],acceptance:['每文件列表可见','无文件时按钮禁用','处理完展示归类/PDF/邮件','邮件发送 Toast'],api:'POST /api/inst/material/rar/process'},
+'struct-extract':{title:'结构化提取',module:'工具助手',page:'structExtract',priority:'P0',business:'Word/图/PDF 转为订单标准字段；按保全类型生成申请书预览，点击「结构化提取」后才展示结果。',logic:['多文件上传逐条显示','全部上传后点击「结构化提取」','OCR+NLP 标准字段表','保全类型切换预览','一键写入 orderReview'],acceptance:['上传列表+提取按钮联动','结果区默认隐藏','四种类型预览可切换'],api:'POST /api/inst/material/extract'},
+'smart-analysis':{title:'智能分析',module:'工具助手',page:'smartAnalysis',priority:'P0',business:'先选保全类型并上传材料，点击「开始智能分析」后按类型规则输出机构匹配、缺件与证据分类。',logic:['保全类型四选一（影响缺件规则）','多文件上传列表','仅点击分析后展示结果','缺件对照上传文件名匹配','带结果进 orderReview'],acceptance:['未分析前结果隐藏','切换类型重置结果','缺件随类型与上传变化'],api:'POST /api/inst/material/analyze'},
 'doc-preview':{title:'申请书结构化预览',module:'工具助手',page:'structExtract',priority:'P0',business:'排版对齐申请书范本：居中标题、加粗标签字段、法条结语、右下签章日期；下方文件材料列表（图标+文件名+类型）。',logic:['财产保全标题「财产保全申请书」','字段：申请人/被申请人/案号/法院/金额/财产线索','法条结语段落 + 申请人签章/日期右对齐','文件材料（材料总数 N）列表','四种保全类型字段集不同'],acceptance:['范本版式：标题居中、签章右对齐','财产保全含 6 份材料','切换类型字段与附件同步'],api:'GET /api/inst/material/preview?type='},
 'quick-tool-assistant':{title:'工具助手快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'替换原「操作培训」，一键进入工具助手中枢及四大子能力（RAR、结构化、智能分析、多端互通）。',logic:['工作台快捷操作第 4 格','点击进入 toolAssistantHub','面包屑支持二级返回'],acceptance:['工作台显示工具助手非操作培训','可进入四子功能'],api:'—'},
-'cross-device-sync':{title:'多端材料互通',module:'工具助手',page:'crossDeviceSync',priority:'P0',business:'机构小程序、PC 工作台、Chrome H5 扫码上传页共享 MaterialSpace：外勤拍照、办公室核保、浏览器二维码传文件。',logic:['四种传输 Tab：手机→PC / PC→手机 / Chrome扫码 / 配对登录','中间 PC 浏览器面板五页：核保工作台/H5上传/PC下发/Chrome二维码/配对','借鉴 Chrome「为此页面创建二维码」+ 自建 upload.ssbao.cn token 页','WebSocket file.added 双端刷新','手机操作联动 PC 材料树高亮新增'],techArch:['Chrome/Edge：页面二维码 → H5 uploadToken → OSS → WS','小程序：wx.uploadFile + 拍照 + IndexedDB 续传','PC：inst.workbench.ssbao.cn STS 直传 + 材料树','配对：GET /auth/qrcode 轮询绑定 spaceId','同局域网可选 WebRTC/局域网发现（二期）'],interact:'① PC 打开上传页 → Chrome 右键生成二维码 → 手机扫码传文件；② 外勤小程序拍照 → PC 材料树 file.added；③ PC RAR 归类 → 推送清单 PDF 到手机；④ 扫码配对绑定 spaceId；⑤ 复制案号/深链继续核保。',acceptance:['四 Tab 切换联动 PC 对应页','PC 五 Tab 可点击交互','模拟上传后 PC 材料树闪绿','技术方案含 Chrome 借鉴'],api:'WSS /ws/material · POST /api/inst/material/upload/complete · GET /auth/qrcode'},
-'pc-upload-page':{title:'PC H5 扫码上传页',module:'多端互通',page:'PC upload',priority:'P0',business:'PC 浏览器打开的轻量上传页，与 Chrome「为此页面创建二维码」配合，手机扫码免登录传材料。',logic:['URL upload.ssbao.cn/inst/{token}','token 绑定 MaterialSpaceId 15min','点击上传区模拟 H5 上传','完成后工作台材料树刷新'],acceptance:['可模拟上传','URL 随 token 更新'],api:'POST /api/inst/material/upload/complete'},
-'pc-download-page':{title:'PC 下发材料页',module:'多端互通',page:'PC push',priority:'P0',business:'PC 将归类结果、案件清单 PDF 推送到机构小程序。',logic:['展示待推送文件','一键推送企微/站内信'],acceptance:['推送 Toast 双端提示'],api:'POST /api/inst/material/push'},
-'pc-chrome-qr':{title:'Chrome 页面二维码',module:'多端互通',page:'PC chromeQr',priority:'P0',business:'无需开发插件，复用 Chrome/Edge 原生「为此页面创建二维码」能力。',logic:['PC 展示当前 URL 与步骤说明','生成 token 刷新二维码区域'],acceptance:['步骤 5 条完整','刷新 token 可用'],api:'—'},
-'pc-pair-page':{title:'PC 扫码配对',module:'多端互通',page:'PC pair',priority:'P0',business:'小程序与 PC 登录同一 MaterialSpace，避免材料分端存放。',logic:['展示会话二维码与 MS 码','模拟扫码后状态变已配对'],acceptance:['配对成功双端 Toast'],api:'GET /api/inst/auth/qrcode · POST /auth/poll'}
+'cross-device-sync':{title:'文件空间站',module:'工具助手',page:'crossDeviceSync',priority:'P0',business:'机构小程序与 PC 工作台共享 MaterialSpace：扫码登录后手机⇄PC 材料互通，支持本地上传、打包下载、配对码绑定、内网无外网传输。',logic:['V8 小程序页：靛紫顶栏 + 四宫格 Seg 导航（文件/扫码/配对/内网）','未登录时「文件列表」「内网直连」Seg 带锁，扫码或配对码后解锁','文件列表：横向上传条 + 勾选打包下载 + 本地上传','扫描登录：取景框动效 + MS 码 + 5min 倒计时','内网直连：无外网徽章 + LAN URL + 中继启动','PC 演示面板六 Tab 与小程序 Tab 联动'],techArch:['扫码：GET /api/inst/auth/qrcode · POST /auth/poll','上传：wx.uploadFile / OSS multipart · WSS file.added','内网：LAN Relay 0.0.0.0:8765 · ws://{lanIp}:8765/material','打包：POST /api/inst/material/download/zip'],interact:'① 扫描登录绑定 spaceId；② 文件列表上传/打包下载；③ 配对码手动绑定 PC；④ 内网直连无外网传材料；⑤ PC 演示面板联动切换。',acceptance:['四 Tab 可切换且登录门禁正确','上传后双端列表与 PC 树闪绿','配对码确认后 Toast 双端提示','内网模拟上传成功','PC 六 Tab 可交互'],api:'WSS /ws/material · POST /api/inst/material/upload/complete · GET /auth/qrcode · POST /lan/upload'},
+'pc-lan-page':{title:'PC 内网直连',module:'文件空间站',page:'PC lan',priority:'P0',business:'PC 在法院/机构内网启动 LAN Relay，手机扫内网二维码传材料，无需公网。',logic:['展示内网 URL 与二维码','启动中继与模拟内网上传'],acceptance:['URL 含 spaceId','上传后材料树更新'],api:'POST /lan/upload · WS ws://{ip}:8765/material'},
+'pc-upload-page':{title:'PC H5 扫码上传页',module:'文件空间站',page:'PC upload',priority:'P0',business:'PC 浏览器打开的轻量上传页，与 Chrome「为此页面创建二维码」配合，手机扫码免登录传材料。',logic:['URL upload.ssbao.cn/inst/{token}','token 绑定 MaterialSpaceId 15min','点击上传区模拟 H5 上传','完成后工作台材料树刷新'],acceptance:['可模拟上传','URL 随 token 更新'],api:'POST /api/inst/material/upload/complete'},
+'pc-download-page':{title:'PC 下发材料页',module:'文件空间站',page:'PC push',priority:'P0',business:'PC 将归类结果、案件清单 PDF 推送到机构小程序。',logic:['展示待推送文件','一键推送企微/站内信'],acceptance:['推送 Toast 双端提示'],api:'POST /api/inst/material/push'},
+'pc-chrome-qr':{title:'Chrome 页面二维码',module:'文件空间站',page:'PC chromeQr',priority:'P0',business:'无需开发插件，复用 Chrome/Edge 原生「为此页面创建二维码」能力。',logic:['PC 展示当前 URL 与步骤说明','生成 token 刷新二维码区域'],acceptance:['步骤 5 条完整','刷新 token 可用'],api:'—'},
+'pc-pair-page':{title:'PC 扫码配对',module:'文件空间站',page:'PC pair',priority:'P0',business:'小程序与 PC 登录同一 MaterialSpace，避免材料分端存放。',logic:['展示会话二维码与 MS 码','模拟扫码后状态变已配对'],acceptance:['配对成功双端 Toast'],api:'GET /api/inst/auth/qrcode · POST /auth/poll'}
 };
 
 const ELEMENT_MAP=[
@@ -1032,13 +1383,22 @@ const ELEMENT_MAP=[
 {sel:'#docPreviewCard',id:'doc-preview'},
 {sel:'.doc-mat-item',id:'doc-preview'},
 {sel:'[data-preview-type]',id:'doc-preview'},
-{sel:'.sync-tab',id:'cross-device-sync'},
+{sel:'.fs-station',id:'cross-device-sync'},
+{sel:'.fs-seg-btn',id:'cross-device-sync'},
+{sel:'#fsUploadTap',id:'cross-device-sync'},
 {sel:'[data-action="sync-chrome-qr-demo"]',id:'cross-device-sync'},
 {sel:'.inst-mat-hub[data-page="toolAssistantHub"]',id:'tool-assistant-hub'},
 {sel:'.pc-page-tab[data-pc-tab="upload"]',id:'pc-upload-page'},
 {sel:'.pc-page-tab[data-pc-tab="download"]',id:'pc-download-page'},
 {sel:'.pc-page-tab[data-pc-tab="chromeQr"]',id:'pc-chrome-qr'},
 {sel:'.pc-page-tab[data-pc-tab="pair"]',id:'pc-pair-page'},
+{sel:'.pc-page-tab[data-pc-tab="lan"]',id:'pc-lan-page'},
+{sel:'[data-fs-tab="files"]',id:'cross-device-sync'},
+{sel:'[data-fs-tab="scanLogin"]',id:'cross-device-sync'},
+{sel:'[data-fs-tab="pairCode"]',id:'cross-device-sync'},
+{sel:'[data-fs-tab="lan"]',id:'cross-device-sync'},
+{sel:'[data-action="sync-pack-download"]',id:'cross-device-sync'},
+{sel:'[data-action="sync-sim-login"]',id:'cross-device-sync'},
 {sel:'[data-pc-action="sim-h5-upload"]',id:'pc-upload-page'},
 {sel:'[data-pc-action="push-to-phone"]',id:'pc-download-page'}
 ];
