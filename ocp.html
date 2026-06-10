@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一键发文 · 一次编辑 · 多平台同步</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0F4C5C;--primary-light:#1A6B7C;--primary-bg:#EFF8FC;
+  --text:#1C2E36;--text-muted:#5E6F8D;--border:#E2E8F0;--bg:#F4F7FB;
+  --success:#1D7A6E;--warning:#B45309;--danger:#B91C1C;
+  --sidebar-w:240px;
+}
+html{font-size:14px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+
+/* Shell: left sidebar + right content */
+.app-shell{display:flex;min-height:100vh}
+
+/* Left Sidebar */
+.sidebar{
+  width:var(--sidebar-w);background:#fff;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:300;
+  transition:transform .25s ease;
+}
+.sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid #F0F4FC}
+.sidebar-logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-bottom:12px}
+.sidebar-brand h1{font-size:16px;font-weight:800;color:var(--text)}
+.sidebar-brand p{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px}
+.sidebar-slogan{margin-top:10px;font-size:10px;color:var(--primary-light);background:var(--primary-bg);padding:5px 10px;border-radius:16px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.sidebar-nav{flex:1;padding:14px 12px;overflow-y:auto}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;
+  font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;
+  border:none;background:transparent;width:100%;text-align:left;font-family:inherit;
+  transition:all .15s;margin-bottom:4px;position:relative;
+}
+.nav-item i{width:18px;text-align:center;font-size:15px}
+.nav-item:hover{background:#F8FAFE;color:var(--primary-light)}
+.nav-item.active{background:var(--primary-bg);color:var(--primary-light)}
+.nav-item .nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700}
+.sidebar-foot{padding:14px 16px;border-top:1px solid #F0F4FC;font-size:11px;color:var(--text-muted);text-align:center}
+
+/* Right Main */
+.main-area{flex:1;margin-left:var(--sidebar-w);display:flex;flex-direction:column;min-width:0}
+.main-header{
+  background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  position:sticky;top:0;z-index:200;
+}
+.main-header h2{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
+.main-header h2 i{color:var(--primary-light)}
+.main-header-desc{font-size:12px;color:var(--text-muted);font-weight:500}
+.header-actions{display:flex;gap:8px;align-items:center}
+.sidebar-toggle{display:none;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--primary-light);cursor:pointer;font-size:16px;align-items:center;justify-content:center}
+.main-content{flex:1;width:100%}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn-ghost{background:#F1F5F9;color:var(--primary-light)}
+.btn-ghost:hover{background:#E2E8F0}
+.btn-outline{background:#fff;color:var(--primary-light);border:1.5px solid var(--primary-light)}
+.btn-outline:hover{background:var(--primary-bg)}
+.btn-primary{background:linear-gradient(95deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 14px rgba(15,76,92,.25)}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(15,76,92,.35)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-danger{background:#FEE2E2;color:var(--danger)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+
+/* Views */
+.view{display:none}
+.view.active{display:block}
+
+/* Cards */
+.card{background:#fff;border:0px solid var(--border);overflow:hidden}
+.card-head{padding:16px 18px 12px;border-bottom:1px solid #F0F4FC;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-head h3{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.card-head h3 i{color:var(--primary-light);font-size:15px}
+.card-head .badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--primary-bg);color:var(--primary-light)}
+.card-body{padding:16px 18px}
+
+/* Compose layout */
+.compose-layout{display:grid;grid-template-columns:280px 1fr 280px;align-items:start}
+.select-all-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.select-all-row label{font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:background .15s;border:1.5px solid transparent;margin-bottom:6px}
+.check-item:hover{background:#F8FAFE}
+.check-item.selected{background:var(--primary-bg);border-color:#B8D4E8}
+.check-item input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--primary-light);cursor:pointer;flex-shrink:0}
+.check-item-info{flex:1;min-width:0}
+.check-item-name{font-size:13px;font-weight:600;color:var(--text)}
+.check-item-desc{font-size:11px;color:var(--text-muted);margin-top:2px}
+.check-item-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.platform-icon{background:#EFF6FF;color:#1D4ED8}
+.channel-icon{background:#F0FDF4;color:#15803D}
+.section-divider{height:1px;background:var(--border);margin:14px 0}
+.channel-grid{display:grid;gap:6px}
+
+.form-row{padding:16px 18px;border-bottom:1px solid #F0F4FC}
+.form-label{font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:6px;display:block}
+.form-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;background:#FAFCFE;transition:border-color .15s}
+.form-input:focus{outline:none;border-color:var(--primary-light);background:#fff}
+.form-input::placeholder{color:#94A3B8}
+.cover-upload{display:flex;align-items:center;gap:14px}
+.cover-preview{width:120px;height:80px;border-radius:10px;border:2px dashed var(--border);background:#FAFCFE;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.cover-preview img{width:100%;height:100%;object-fit:cover}
+.cover-preview .placeholder{text-align:center;color:#94A3B8;font-size:11px}
+.cover-preview .placeholder i{font-size:22px;display:block;margin-bottom:4px;color:#CBD5E1}
+.cover-actions{display:flex;flex-direction:column;gap:6px}
+.cover-actions .hint{font-size:11px;color:var(--text-muted)}
+
+#editor-wrap{border:none}
+#editor-wrap .ql-toolbar{border:none;border-bottom:1px solid #F0F4FC;background:#FAFCFE;padding:10px 14px}
+#editor-wrap .ql-container{border:none;font-size:14px;font-family:inherit;min-height:320px}
+#editor-wrap .ql-editor{min-height:320px;padding:18px 20px;line-height:1.8;color:var(--text)}
+#editor-wrap .ql-editor.ql-blank::before{color:#94A3B8;font-style:normal;left:20px}
+.editor-footer{padding:10px 18px;border-top:1px solid #F0F4FC;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text-muted);flex-wrap:wrap;gap:8px}
+.word-count strong{color:var(--primary-light)}
+
+.summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-box{background:#F8FAFE;border-radius:12px;padding:12px;text-align:center;border:1px solid #EDF2F9}
+.stat-box .num{font-size:22px;font-weight:800;color:var(--primary)}
+.stat-box .lbl{font-size:10px;color:var(--text-muted);font-weight:600;margin-top:2px}
+.target-list{max-height:160px;overflow-y:auto}
+.target-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:0 4px 6px 0;background:#F1F5F9;color:#475569}
+.target-chip.platform{background:var(--primary-bg);color:var(--primary-light)}
+.target-chip.channel{background:#ECFDF5;color:#065F46}
+.target-chip i{font-size:10px}
+.empty-hint{text-align:center;padding:20px 10px;color:#94A3B8;font-size:12px}
+.empty-hint i{font-size:28px;display:block;margin-bottom:8px;color:#CBD5E1}
+.mini-preview{background:#FAFCFE;border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px;max-height:200px;overflow-y:auto;font-size:12px}
+.mini-preview .pv-title{font-size:14px;font-weight:700;margin-bottom:6px}
+
+/* Page shell — shared layout for dashboard / drafts / records */
+.page-shell{padding:24px 28px 32px;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.page-header-main h3{font-size:20px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.page-header-main h3 i{color:var(--primary-light)}
+.page-header-main p{font-size:13px;color:var(--text-muted);margin:0;line-height:1.5}
+.page-header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 14px;width:260px;box-shadow:0 1px 2px rgba(15,76,92,.04)}
+.search-box i{color:var(--text-muted)}
+.search-box input{border:none;outline:none;font-size:13px;flex:1;background:transparent;color:var(--text)}
+.search-box input::placeholder{color:#94A3B8}
+.filter-tabs{display:flex;background:#F1F5F9;border-radius:10px;padding:3px}
+.filter-tab{border:none;background:transparent;padding:6px 14px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:all .15s;font-family:inherit}
+.filter-tab.active{background:#fff;color:var(--primary-light);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* Stat cards row */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(15,76,92,.04);transition:transform .15s,box-shadow .15s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,76,92,.08)}
+.stat-card .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.stat-card .stat-icon.blue{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);color:#1D4ED8}
+.stat-card .stat-icon.green{background:linear-gradient(135deg,#ECFDF5,#D1FAE5);color:#059669}
+.stat-card .stat-icon.amber{background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#B45309}
+.stat-card .stat-icon.purple{background:linear-gradient(135deg,#EDE9FE,#DDD6FE);color:#7C3AED}
+.stat-card .stat-icon.teal{background:linear-gradient(135deg,#CCFBF1,#99F6E4);color:#0F766E}
+.stat-card .stat-num{font-size:24px;font-weight:800;line-height:1;color:var(--text)}
+.stat-card .stat-lbl{font-size:12px;color:var(--text-muted);margin-top:3px;font-weight:500}
+
+/* List page container */
+.list-panel{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(15,76,92,.05)}
+.list-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:linear-gradient(180deg,#FAFCFE,#fff);border-bottom:1px solid #F0F4FC;flex-wrap:wrap}
+.list-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.list-toolbar-right{font-size:12px;color:var(--text-muted);font-weight:500}
+.list-toolbar .count-badge{background:var(--primary-bg);color:var(--primary-light);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.sort-select{border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--text-muted);background:#fff;cursor:pointer;font-family:inherit}
+.list-table{width:100%}
+.list-thead{display:grid;align-items:center;padding:11px 20px;background:#F8FAFE;border-bottom:1px solid #E8EEF5;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
+.list-tbody{display:flex;flex-direction:column}
+.list-row{display:grid;align-items:center;padding:14px 20px;border-bottom:1px solid #F4F7FB;transition:background .12s;gap:12px}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:#FAFCFE}
+.list-row.empty-row{display:block;padding:0;border:none}
+.list-cell{min-width:0;font-size:13px}
+.list-cell-title{font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-cell-sub{font-size:11px;color:var(--text-muted);margin-top:3px}
+.list-cell-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.list-thumb{width:48px;height:48px;border-radius:10px;background:#F1F5F9;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:16px;border:1px solid #E2E8F0;flex-shrink:0}
+.list-thumb img{width:100%;height:100%;object-fit:cover}
+.list-thumb.lg{width:56px;height:56px;border-radius:12px}
+.tag-group{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;background:#F1F5F9;color:#475569;white-space:nowrap}
+.tag.platform{background:var(--primary-bg);color:var(--primary-light)}
+.tag.channel{background:#ECFDF5;color:#065F46}
+.tag.more{background:#E2E8F0;color:#64748B}
+.list-empty{padding:48px 24px;text-align:center}
+.list-empty i{font-size:40px;color:#CBD5E1;display:block;margin-bottom:12px}
+.list-empty h4{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.list-empty p{font-size:12px;color:var(--text-muted)}
+.list-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#FAFCFE;border-top:1px solid #F0F4FC;font-size:12px;color:var(--text-muted)}
+
+/* Draft list columns */
+.draft-cols{grid-template-columns:64px 1fr 140px 140px 160px 140px}
+.draft-title-wrap{display:flex;align-items:center;gap:12px;min-width:0}
+.draft-title-wrap .list-cell{flex:1;min-width:0}
+
+/* Record list columns */
+.record-cols{grid-template-columns:1fr 120px 130px 100px 120px 130px}
+.record-cols .list-thead,.record-cols.list-row{cursor:default}
+.record-row-wrap .list-row{cursor:pointer}
+.record-row-wrap.expanded .list-row{background:#FAFCFE}
+.record-expand{background:#F8FAFE;border-top:1px solid #EEF2F7;padding:16px 20px 18px;display:none}
+.record-row-wrap.expanded .record-expand{display:block}
+.record-expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.record-expand-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:14px 16px}
+.record-expand-card h5{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.record-summary{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--text-muted)}
+.record-summary strong{color:var(--text)}
+.record-matrix{display:flex;flex-wrap:wrap;gap:6px}
+.matrix-cell{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;font-size:11px;background:#fff;border:1px solid #E2E8F0;font-weight:500}
+.matrix-cell.ok{border-color:#A7F3D0;background:#ECFDF5;color:#166534}
+.matrix-cell.fail{border-color:#FECACA;background:#FEF2F2;color:#991B1B}
+.matrix-cell i{width:14px;font-size:10px}
+.record-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap}
+.record-status::before{content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.status-ok{background:#D4EDE8;color:var(--success)}
+.status-ok::before{background:var(--success)}
+.status-partial{background:#FEF3C7;color:var(--warning)}
+.status-partial::before{background:var(--warning)}
+.status-fail{background:#FEE2E2;color:var(--danger)}
+.status-fail::before{background:var(--danger)}
+.record-chevron{color:#94A3B8;font-size:12px;transition:transform .2s}
+.record-row-wrap.expanded .record-chevron{transform:rotate(180deg)}
+.progress-mini{height:4px;background:#E2E8F0;border-radius:4px;overflow:hidden;margin-top:6px}
+.progress-mini-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+
+/* Dashboard */
+.dash-hero{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 55%,#2A9D8F 100%);border-radius:20px;padding:28px 32px;margin-bottom:22px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(15,76,92,.25)}
+.dash-hero::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
+.dash-hero::before{content:"";position:absolute;right:80px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05)}
+.dash-hero-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.dash-hero h4{font-size:22px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.dash-hero p{font-size:13px;opacity:.88;max-width:480px;line-height:1.6}
+.dash-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.dash-hero .btn-primary{background:#fff;color:var(--primary);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.dash-hero .btn-primary:hover{box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.dash-hero .btn-outline{border-color:rgba(255,255,255,.6);color:#fff;background:rgba(255,255,255,.12)}
+.dash-hero .btn-outline:hover{background:rgba(255,255,255,.22)}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.dash-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(15,76,92,.04);transition:transform .15s,box-shadow .15s}
+.dash-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(15,76,92,.1)}
+.dash-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.dash-card.warn::before{background:linear-gradient(90deg,#B45309,#F59E0B)}
+.dash-card.green::before{background:linear-gradient(90deg,#1D7A6E,#34D399)}
+.dash-card.purple::before{background:linear-gradient(90deg,#4338CA,#818CF8)}
+.dash-card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.dash-card-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--primary-bg);color:var(--primary-light)}
+.dash-card.green .dash-card-icon{background:#ECFDF5;color:var(--success)}
+.dash-card.warn .dash-card-icon{background:#FEF3C7;color:var(--warning)}
+.dash-card.purple .dash-card-icon{background:#EDE9FE;color:#7C3AED}
+.dash-num{font-size:30px;font-weight:800;color:var(--primary);line-height:1.1}
+.dash-card.warn .dash-num{color:var(--warning)}
+.dash-card.green .dash-num{color:var(--success)}
+.dash-card.purple .dash-num{color:#4338CA}
+.dash-lbl{font-size:12px;color:var(--text-muted);font-weight:600;margin-top:4px}
+.dash-trend{font-size:11px;margin-top:10px;font-weight:600;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;background:#F8FAFE}
+.dash-trend.up{color:var(--success);background:#ECFDF5}
+.dash-trend.down{color:var(--danger);background:#FEE2E2}
+.dash-layout{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-bottom:18px}
+.dash-main-col{display:flex;flex-direction:column;gap:18px}
+.dash-side-col{display:flex;flex-direction:column;gap:18px}
+.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(15,76,92,.04)}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chart-title span{display:flex;align-items:center;gap:8px}
+.chart-title i{color:var(--primary-light)}
+.chart-sub{font-size:11px;color:var(--text-muted);font-weight:500}
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar-fill{width:100%;max-width:48px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--primary-light),var(--primary));min-height:4px;transition:height .5s ease}
+.bar-label{font-size:10px;color:var(--text-muted);font-weight:600;text-align:center}
+.bar-val{font-size:11px;font-weight:700;color:var(--primary-light)}
+.platform-rank{list-style:none}
+.platform-rank li{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #F0F4FC;font-size:12px}
+.platform-rank li:last-child{border-bottom:none}
+.rank-num{width:24px;height:24px;border-radius:8px;background:var(--primary-bg);color:var(--primary-light);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rank-num.top{background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#fff}
+.rank-bar{flex:1;height:8px;background:#E2E8F0;border-radius:8px;overflow:hidden}
+.rank-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:8px;transition:width .5s ease}
+.rank-val{font-size:11px;font-weight:700;color:var(--text-muted);width:40px;text-align:right}
+.dash-goal-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(15,76,92,.04)}
+.dash-goal-card h4{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.dash-goal-card h4 i{color:var(--primary-light)}
+.goal-progress{height:10px;background:#E2E8F0;border-radius:10px;overflow:hidden;margin-bottom:10px}
+.goal-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34D399);border-radius:10px;transition:width .6s ease}
+.goal-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)}
+.goal-meta strong{color:var(--text);font-weight:700}
+.dash-kpi-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.kpi-mini-item{background:#F8FAFE;border-radius:10px;padding:12px;text-align:center;border:1px solid #EDF2F9}
+.kpi-mini-item .val{font-size:16px;font-weight:800;color:var(--primary)}
+.kpi-mini-item .lbl{font-size:10px;color:var(--text-muted);margin-top:2px}
+.activity-feed{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(15,76,92,.04)}
+.activity-feed h4{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid #F0F4FC}
+.activity-feed h4 i{color:var(--primary-light)}
+.activity-timeline{position:relative;padding-left:20px}
+.activity-timeline::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--primary-light),#E2E8F0)}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;position:relative}
+.activity-item:last-child{padding-bottom:0}
+.activity-dot{width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--primary-light);margin-top:3px;flex-shrink:0;position:absolute;left:-20px;z-index:1}
+.activity-dot.success{border-color:var(--success)}
+.activity-dot.warn{border-color:var(--warning)}
+.activity-content{flex:1;font-size:13px;color:var(--text);line-height:1.5}
+.activity-content strong{font-weight:700}
+.activity-time{font-size:11px;color:var(--text-muted);margin-top:4px}
+.quick-links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quick-link{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#F8FAFE;border:1px solid #EDF2F9;border-radius:12px;cursor:pointer;transition:all .15s;font-size:12px;font-weight:600;color:var(--text);text-decoration:none}
+.quick-link:hover{background:var(--primary-bg);border-color:#B8D4E8;color:var(--primary-light)}
+.quick-link i{width:32px;height:32px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary-light);font-size:14px;box-shadow:0 1px 4px rgba(15,76,92,.08)}
+.channel-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.channel-pill{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:#F8FAFE;border:1px solid #E2E8F0}
+.channel-pill .dot{width:8px;height:8px;border-radius:50%}
+
+/* Split layout — drafts / records / channel mgmt */
+.page-split{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}
+.page-sub-sidebar{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(15,76,92,.04);position:sticky;top:76px}
+.page-sub-head{padding:14px 16px;border-bottom:1px solid #F0F4FC;font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.page-sub-head i{color:var(--primary-light)}
+.page-sub-nav{padding:8px}
+.page-sub-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:inherit;transition:all .15s;margin-bottom:2px}
+.page-sub-item i{width:16px;text-align:center;font-size:13px}
+.page-sub-item:hover{background:#F8FAFE;color:var(--primary-light)}
+.page-sub-item.active{background:var(--primary-bg);color:var(--primary-light)}
+.page-sub-item .sub-count{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#F1F5F9;color:#64748B}
+.page-sub-item.active .sub-count{background:rgba(15,76,92,.12);color:var(--primary-light)}
+.page-sub-divider{height:1px;background:#F0F4FC;margin:8px 12px}
+.page-sub-label{padding:8px 16px 4px;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em}
+.page-main-col{display:flex;flex-direction:column;gap:18px;min-width:0}
+
+/* Platform channel management */
+.mgmt-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.mgmt-tabs{display:flex;background:#F1F5F9;border-radius:12px;padding:4px}
+.mgmt-tab{border:none;background:transparent;padding:8px 18px;font-size:13px;font-weight:600;color:var(--text-muted);border-radius:9px;cursor:pointer;transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:8px}
+.mgmt-tab.active{background:#fff;color:var(--primary-light);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.mgmt-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px 20px;position:relative;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(15,76,92,.04)}
+.mgmt-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,76,92,.1)}
+.mgmt-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.mgmt-card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.mgmt-card-info{flex:1;min-width:0}
+.mgmt-card-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px}
+.mgmt-card-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+.mgmt-card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.mgmt-meta-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;background:#F8FAFE;color:var(--text-muted);border:1px solid #EDF2F9}
+.mgmt-card-actions{display:flex;gap:8px;padding-top:14px;border-top:1px solid #F0F4FC}
+.mgmt-card-actions .btn{flex:1}
+.mgmt-add-card{border:2px dashed var(--border);border-radius:16px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .15s;background:#FAFCFE;min-height:180px}
+.mgmt-add-card:hover{border-color:var(--primary-light);background:var(--primary-bg)}
+.mgmt-add-card i{font-size:28px;color:var(--primary-light)}
+.mgmt-add-card span{font-size:13px;font-weight:600;color:var(--text-muted)}
+.mgmt-empty{grid-column:1/-1;text-align:center;padding:48px 24px;background:#fff;border:1px solid var(--border);border-radius:16px}
+.mgmt-empty i{font-size:40px;color:#CBD5E1;display:block;margin-bottom:12px}
+.mgmt-empty h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.mgmt-empty p{font-size:12px;color:var(--text-muted)}
+.mgmt-cols{grid-template-columns:52px 1fr 90px 1.2fr 1fr 150px}
+.mgmt-cols .list-row.disabled{opacity:.62;background:#FAFBFD}
+.mgmt-cols .list-row.disabled .list-cell-title{color:var(--text-muted)}
+.status-dot{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.status-dot.on{background:#D4EDE8;color:var(--success)}
+.status-dot.off{background:#F1F5F9;color:#94A3B8}
+.status-dot::before{content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.status-dot.on::before{background:var(--success)}
+.status-dot.off::before{background:#CBD5E1}
+.url-cell{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.url-cell a{color:var(--primary-light);text-decoration:none}
+.url-cell a:hover{text-decoration:underline}
+.api-key-cell{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:#64748B;background:#F8FAFE;padding:4px 8px;border-radius:6px;border:1px solid #EDF2F9;display:inline-flex;align-items:center;gap:6px;max-width:100%}
+.api-key-cell .key-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:#CBD5E1;border-radius:22px;cursor:pointer;transition:background .2s}
+.toggle-slider::before{content:"";position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle-switch input:checked+.toggle-slider{background:var(--success)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px)}
+.form-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#F8FAFE;border:1px solid #EDF2F9;border-radius:12px;margin-bottom:14px}
+.form-toggle-row label{font-size:13px;font-weight:600;color:var(--text)}
+.form-toggle-row span{font-size:11px;color:var(--text-muted);display:block;margin-top:2px}
+.input-with-btn{display:flex;gap:8px;align-items:center}
+.input-with-btn .form-input{flex:1}
+.input-with-btn .btn{flex-shrink:0}
+.form-hint{font-size:11px;color:var(--text-muted);margin-top:5px}
+.dash-platform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.dash-platform-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:0 2px 8px rgba(15,76,92,.04);transition:transform .15s,box-shadow .15s}
+.dash-platform-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,76,92,.08)}
+.dash-platform-card.off{opacity:.7;background:#FAFBFD}
+.dash-platform-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.dash-platform-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.dash-platform-name{font-size:14px;font-weight:800;color:var(--text)}
+.dash-platform-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
+.dash-platform-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dash-platform-stat{background:#F8FAFE;border-radius:8px;padding:8px 10px;text-align:center;border:1px solid #EDF2F9}
+.dash-platform-stat .val{font-size:15px;font-weight:800;color:var(--primary)}
+.dash-platform-stat .lbl{font-size:10px;color:var(--text-muted);margin-top:2px}
+.list-row-accent{border-left:3px solid transparent}
+.list-row-accent:hover{border-left-color:var(--primary-light)}
+.list-row-accent.draft-row{border-left-color:#B8D4E8}
+.list-row-accent.record-row{border-left-color:#A7F3D0}
+.bulk-hint{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.bulk-hint i{color:var(--primary-light)}
+.form-row-inline{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.icon-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.icon-opt{width:36px;height:36px;border-radius:10px;border:2px solid var(--border);background:#FAFCFE;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-muted);transition:all .15s}
+.icon-opt:hover,.icon-opt.selected{border-color:var(--primary-light);background:var(--primary-bg);color:var(--primary-light)}
+.color-picker{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s}
+.color-opt:hover,.color-opt.selected{border-color:var(--text);transform:scale(1.1)}
+.dash-section-title{font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.04em}
+.dash-section-title i{color:var(--primary-light)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:20px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,.25);overflow:hidden;animation:modalIn .25s ease;max-height:90vh;display:flex;flex-direction:column}
+.modal-sm{max-width:520px}
+.modal-lg{max-width:720px}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.modal-head{padding:20px 24px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0}
+.modal-head.center{text-align:center;flex-direction:column;align-items:center}
+.modal-head h3{font-size:18px;font-weight:800;color:var(--text)}
+.modal-head p{font-size:12px;color:var(--text-muted);margin-top:4px}
+.modal-close{width:32px;height:32px;border-radius:10px;border:none;background:#F1F5F9;color:var(--text-muted);cursor:pointer;font-size:14px;flex-shrink:0}
+.modal-close:hover{background:#E2E8F0;color:var(--text)}
+.modal-body{padding:8px 24px 20px;overflow-y:auto;flex:1}
+.modal-foot{padding:12px 24px 20px;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;border-top:1px solid #F0F4FC}
+
+.progress-list{max-height:340px;overflow-y:auto}
+.progress-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F0F4FC;font-size:13px}
+.progress-item:last-child{border-bottom:none}
+.progress-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:#F1F5F9;color:#94A3B8;transition:all .3s}
+.progress-icon.running{background:#FEF3C7;color:var(--warning)}
+.progress-icon.done{background:#D4EDE8;color:var(--success)}
+.progress-icon.error{background:#FEE2E2;color:var(--danger)}
+.progress-info{flex:1;min-width:0}
+.progress-name{font-weight:600;color:var(--text)}
+.progress-status{font-size:11px;color:var(--text-muted);margin-top:2px}
+.progress-bar-wrap{height:4px;background:#E2E8F0;border-radius:4px;margin-top:16px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:4px;width:0;transition:width .4s ease}
+
+.preview-modal-cover{width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:16px;background:#E2E8F0}
+.preview-modal-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:12px;line-height:1.4}
+.preview-modal-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--border)}
+.preview-modal-meta span{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:#F1F5F9;color:#475569}
+.preview-modal-body{font-size:14px;line-height:1.85;color:#334155}
+.preview-modal-body img{max-width:100%;border-radius:8px;margin:12px 0}
+.preview-modal-body h1,.preview-modal-body h2,.preview-modal-body h3{margin:16px 0 8px;color:var(--text)}
+
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,50,70,.92);color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:500;z-index:2000;opacity:0;transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:299}
+.sidebar-backdrop.show{display:block}
+
+.mobile-compose-tabs{display:none;background:#fff;border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:14px;gap:4px}
+.mobile-compose-tab{flex:1;padding:8px;border:none;background:transparent;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:inherit}
+.mobile-compose-tab.active{background:var(--primary-bg);color:var(--primary-light)}
+
+@media(max-width:1200px){
+  .compose-layout{grid-template-columns:260px 1fr}
+  .panel-col{display:none}
+  .panel-col.mobile-show{display:block;grid-column:1/-1}
+  .dashboard-grid,.stat-row{grid-template-columns:repeat(2,1fr)}
+  .dash-layout{grid-template-columns:1fr}
+  .dash-row{grid-template-columns:1fr}
+  .draft-cols{grid-template-columns:56px 1fr 120px 130px}
+  .draft-cols .list-thead>*:nth-child(5),.draft-cols .list-thead>*:nth-child(6),
+  .draft-cols .list-row>*:nth-child(5),.draft-cols .list-row>*:nth-child(6){display:none}
+  .record-cols{grid-template-columns:1fr 110px 120px 130px}
+  .record-cols .list-thead>*:nth-child(4),.record-cols .list-thead>*:nth-child(5),
+  .record-cols .list-row>*:nth-child(4),.record-cols .list-row>*:nth-child(5){display:none}
+}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main-area{margin-left:0}
+  .sidebar-toggle{display:flex}
+  .main-header{padding:0 16px}
+  .page-shell{padding:16px}
+  .compose-layout{grid-template-columns:1fr}
+  .sidebar-col,.editor-col,.panel-col{display:none}
+  .sidebar-col.mobile-show,.editor-col.mobile-show,.panel-col.mobile-show{display:block}
+  .mobile-compose-tabs{display:flex}
+  .channel-grid{grid-template-columns:1fr}
+  .dashboard-grid,.stat-row{grid-template-columns:1fr 1fr}
+  .list-thead{display:none}
+  .draft-cols,.record-cols{grid-template-columns:56px 1fr auto!important;display:flex!important;flex-wrap:wrap;gap:10px;padding:16px}
+  .draft-cols .list-row>*,.record-cols .list-row>*{display:block}
+  .record-expand-grid{grid-template-columns:1fr}
+  .dash-hero-inner{flex-direction:column;align-items:flex-start}
+  .page-split{grid-template-columns:1fr}
+  .page-sub-sidebar{position:static}
+  .mgmt-grid{grid-template-columns:1fr}
+  .mgmt-cols{grid-template-columns:48px 1fr 80px auto!important}
+  .mgmt-cols .list-thead>*:nth-child(4),.mgmt-cols .list-thead>*:nth-child(5),
+  .mgmt-cols .list-row>*:nth-child(4),.mgmt-cols .list-row>*:nth-child(5){display:none}
+  .dash-platform-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row-inline{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .cover-upload{flex-direction:column;align-items:flex-start}
+  .dashboard-grid,.stat-row,.dash-platform-grid{grid-template-columns:1fr}
+  .btn span.hide-mobile{display:none}
+  .header-actions .btn span.hide-mobile{display:none}
+  .search-box{width:100%}
+  .page-header-actions{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="app-shell">
+  <!-- ═══ Left Sidebar ═══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo"><i class="fas fa-broadcast-tower"></i></div>
+      <h1>一键发文</h1>
+      <p>诉讼保 · 机构端</p>
+      <div class="sidebar-slogan"><i class="fas fa-sync-alt"></i> 一次编辑 · 多平台同步</div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item" data-view="dashboard"><i class="fas fa-chart-pie"></i> 仪表盘</button>
+      <button class="nav-item active" data-view="compose"><i class="fas fa-paper-plane"></i> 发布管理</button>
+      <button class="nav-item" data-view="drafts"><i class="fas fa-folder-open"></i> 草稿箱 <span class="nav-badge" id="draftBadge" style="display:none">0</span></button>
+      <button class="nav-item" data-view="records"><i class="fas fa-history"></i> 发布记录</button>
+      <div style="height:8px"></div>
+      <div class="page-sub-label" style="padding:4px 14px 6px">系统配置</div>
+      <button class="nav-item" data-view="channelmgmt"><i class="fas fa-sitemap"></i> 渠道管理</button>
+    </nav>
+    <div class="sidebar-foot">UI 原型 · Chrome 浏览器</div>
+  </aside>
+
+  <!-- ═══ Right Content ═══ -->
+  <div class="main-area">
+    <header class="main-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <div>
+          <h2 id="pageTitle"><i class="fas fa-paper-plane"></i> 发布管理</h2>
+          <div class="main-header-desc" id="pageDesc">编辑内容，选择目标与渠道，一键同步发布</div>
+        </div>
+      </div>
+      
+    </header>
+
+    <main class="main-content">
+
+      <!-- ═══ View: 发布管理 ═══ -->
+      <section class="view active" id="viewCompose">
+        <div class="mobile-compose-tabs" id="mobileComposeTabs">
+          <button class="mobile-compose-tab" data-tab="sidebar">目标渠道</button>
+          <button class="mobile-compose-tab active" data-tab="editor">编辑内容</button>
+          <button class="mobile-compose-tab" data-tab="panel">发布概览</button>
+        </div>
+        <div class="compose-layout">
+          <aside class="card sidebar-col" id="colSidebar">
+            <div class="card-head">
+              <h3><i class="fas fa-th-large"></i> 发布目标</h3>
+              <span class="badge" id="selectedCount">0 项</span>
+            </div>
+            <div class="card-body">
+              <div class="select-all-row">
+                <label><input type="checkbox" id="selectAllPlatforms"> 全选业务平台</label>
+                <button class="btn btn-sm btn-ghost" id="clearAll">清空</button>
+              </div>
+              <div id="platformList"></div>
+              <div class="section-divider"></div>
+              <div class="select-all-row">
+                <label><input type="checkbox" id="selectAllChannels"> 全选发布渠道</label>
+              </div>
+              <div class="channel-grid" id="channelList"></div>
+            </div>
+          </aside>
+
+          <div class="card editor-col mobile-show" id="colEditor">
+            <div class="card-head">
+              <h3><i class="fas fa-pen-fancy"></i> 内容编辑</h3>
+			  
+			  <div class="header-actions" id="headerActions">
+				<button class="btn btn-ghost btn-sm" id="btnDraft"><i class="fas fa-save"></i><span class="hide-mobile"> 存草稿</span></button>
+				<button class="btn btn-outline btn-sm" id="btnPreview"><i class="fas fa-eye"></i><span class="hide-mobile"> 预览</span></button>
+				<button class="btn btn-primary btn-sm" id="btnPublish"><i class="fas fa-rocket"></i><span class="hide-mobile"> 一键发文</span></button>
+			  </div>
+            </div>
+            <div class="card-body" style="padding:0">
+              <div class="form-row">
+                <label class="form-label">文章标题 <span style="color:var(--danger)">*</span></label>
+                <input type="text" class="form-input" id="articleTitle" placeholder="请输入文章标题，建议 20~40 字" maxlength="60">
+              </div>
+              <div class="form-row">
+                <label class="form-label">封面图</label>
+                <div class="cover-upload">
+                  <div class="cover-preview" id="coverPreview">
+                    <div class="placeholder"><i class="fas fa-image"></i>封面 16:9</div>
+                  </div>
+                  <div class="cover-actions">
+                    <button class="btn btn-sm btn-outline" id="btnCoverUpload"><i class="fas fa-upload"></i> 上传封面</button>
+                    <button class="btn btn-sm btn-ghost" id="btnCoverRemove" style="display:none"><i class="fas fa-trash-alt"></i> 移除</button>
+                    <span class="hint">支持 JPG/PNG/WebP，建议 900×500px，≤2MB</span>
+                  </div>
+                  <input type="file" id="coverInput" accept="image/jpeg,image/png,image/webp" hidden>
+                </div>
+              </div>
+              <div id="editor-wrap"><div id="editor"></div></div>
+              <div class="editor-footer">
+                <span>Quill 富文本：图片 · 字号 · 链接 · 样式 · 列表 · 对齐 · 引用</span>
+                <span class="word-count">字数 <strong id="wordCount">0</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="card panel-col" id="colPanel">
+            <div class="card-head"><h3><i class="fas fa-clipboard-check"></i> 发布概览</h3></div>
+            <div class="card-body">
+              <div class="summary-stats">
+                <div class="stat-box"><div class="num" id="statPlatforms">0</div><div class="lbl">业务平台</div></div>
+                <div class="stat-box"><div class="num" id="statChannels">0</div><div class="lbl">发布渠道</div></div>
+              </div>
+              <div class="form-label">已选目标</div>
+              <div class="target-list" id="targetList">
+                <div class="empty-hint"><i class="fas fa-hand-pointer"></i>请选择发布平台和渠道</div>
+              </div>
+              <div class="form-label" style="margin-top:14px">实时摘要</div>
+              <div class="mini-preview" id="miniPreview">
+                <div class="empty-hint" style="padding:16px 0"><i class="fas fa-file-alt"></i>编辑后自动更新</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ═══ View: 草稿箱 ═══ -->
+      <section class="view" id="viewDrafts">
+        <div class="page-shell">
+
+          <div class="page-split">
+            <aside class="page-sub-sidebar">
+              <div class="page-sub-head"><i class="fas fa-filter"></i> 筛选分类</div>
+              <div class="page-sub-nav" id="draftPlatformFilter">
+                <button class="page-sub-item active" data-platform="all"><i class="fas fa-th-list"></i> 全部草稿 <span class="sub-count" id="draftFilterAll">0</span></button>
+              </div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">按业务平台</div>
+              <div class="page-sub-nav" id="draftPlatformList"></div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">快捷操作</div>
+              <div class="page-sub-nav">
+                <button class="page-sub-item" onclick="switchView('compose')"><i class="fas fa-pen-fancy"></i> 去编辑发布</button>
+                <button class="page-sub-item" onclick="switchView('channelmgmt')"><i class="fas fa-sitemap"></i> 管理平台</button>
+              </div>
+            </aside>
+
+            <div class="page-main-col">
+              <div class="stat-row">
+                <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-file-alt"></i></div><div><div class="stat-num" id="draftTotal">0</div><div class="stat-lbl">总草稿数</div></div></div>
+                <div class="stat-card"><div class="stat-icon amber"><i class="fas fa-clock"></i></div><div><div class="stat-num" id="draftRecent">0</div><div class="stat-lbl">近 7 天更新</div></div></div>
+                <div class="stat-card"><div class="stat-icon green"><i class="fas fa-share-alt"></i></div><div><div class="stat-num" id="draftPlatforms">0</div><div class="stat-lbl">平均关联平台</div></div></div>
+                <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-broadcast-tower"></i></div><div><div class="stat-num" id="draftChannels">0</div><div class="stat-lbl">平均关联渠道</div></div></div>
+              </div>
+
+              <div class="list-panel">
+                <div class="list-toolbar">
+                  <div class="list-toolbar-left">
+                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="draftSearch" placeholder="搜索草稿标题..."></div>
+                    <select class="sort-select" id="draftSort">
+                      <option value="updated">按更新时间</option>
+                      <option value="created">按创建时间</option>
+                      <option value="title">按标题排序</option>
+                    </select>
+                    <span class="count-badge" id="draftCountBadge">0 篇草稿</span>
+                  </div>
+                  <div class="page-header-actions">
+					  <button class="btn btn-primary" id="btnNewDraft"><i class="fas fa-plus"></i> 新建文章</button>
+					</div>
+                </div>
+                <div class="list-table">
+                  <div class="list-thead draft-cols">
+                    <span>封面</span><span>文章标题</span><span>业务平台</span><span>发布渠道</span><span>更新时间</span><span style="text-align:right">操作</span>
+                  </div>
+                  <div class="list-tbody" id="draftList"></div>
+                </div>
+                <div class="list-footer">
+                  <span id="draftFooterLeft">共 0 篇草稿</span>
+                  <span>草稿自动保存在本地浏览器</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ View: 发布记录 ═══ -->
+      <section class="view" id="viewRecords">
+        <div class="page-shell">
+
+          <div class="page-split">
+            <aside class="page-sub-sidebar">
+              <div class="page-sub-head"><i class="fas fa-filter"></i> 筛选分类</div>
+              <div class="page-sub-nav" id="recordPlatformFilter">
+                <button class="page-sub-item active" data-platform="all"><i class="fas fa-th-list"></i> 全部记录 <span class="sub-count" id="recordFilterAll">0</span></button>
+              </div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">按业务平台</div>
+              <div class="page-sub-nav" id="recordPlatformList"></div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">按发布渠道</div>
+              <div class="page-sub-nav" id="recordChannelList"></div>
+            </aside>
+
+            <div class="page-main-col">
+              <div class="stat-row">
+                <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-paper-plane"></i></div><div><div class="stat-num" id="recTotal">0</div><div class="stat-lbl">累计发布</div></div></div>
+                <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div><div class="stat-num" id="recSuccessRate">0%</div><div class="stat-lbl">平均成功率</div></div></div>
+                <div class="stat-card"><div class="stat-icon amber"><i class="fas fa-calendar-week"></i></div><div><div class="stat-num" id="recThisWeek">0</div><div class="stat-lbl">本周发布</div></div></div>
+                <div class="stat-card"><div class="stat-icon teal"><i class="fas fa-users"></i></div><div><div class="stat-num" id="recReach">0</div><div class="stat-lbl">累计触达</div></div></div>
+              </div>
+
+              <div class="list-panel">
+                <div class="list-toolbar">
+                  <div class="list-toolbar-left">
+                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="recordSearch" placeholder="搜索记录标题..."></div>
+                    <span class="count-badge" id="recordCountBadge">0 条记录</span>
+                  </div>
+                  <div class="page-header-actions">
+					  <div class="filter-tabs" id="recordFilters">
+						<button class="filter-tab active" data-filter="all">全部</button>
+						<button class="filter-tab" data-filter="ok">成功</button>
+						<button class="filter-tab" data-filter="partial">部分成功</button>
+						<button class="filter-tab" data-filter="fail">失败</button>
+					  </div>
+					</div>
+                </div>
+                <div class="list-table">
+                  <div class="list-thead record-cols">
+                    <span>文章标题</span><span>发布状态</span><span>发布时间</span><span>成功率</span><span>平台/渠道</span><span style="text-align:right">操作</span>
+                  </div>
+                  <div class="list-tbody" id="recordList"></div>
+                </div>
+                <div class="list-footer">
+                  <span id="recordFooterLeft">共 0 条发布记录</span>
+                  <span>数据来源于本地发布历史</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ View: 平台渠道管理 ═══ -->
+      <section class="view" id="viewChannelmgmt">
+        <div class="page-shell">
+
+          <div class="page-split">
+            <aside class="page-sub-sidebar">
+              <div class="page-sub-head"><i class="fas fa-layer-group"></i> 管理分类</div>
+              <div class="page-sub-nav" id="mgmtTypeNav">
+                <button class="page-sub-item active" data-tab="platform"><i class="fas fa-th-large"></i> 业务平台 <span class="sub-count" id="mgmtPlatCount">0</span></button>
+                <button class="page-sub-item" data-tab="channel"><i class="fas fa-broadcast-tower"></i> 发布渠道 <span class="sub-count" id="mgmtChCount">0</span></button>
+              </div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">状态筛选</div>
+              <div class="page-sub-nav" id="mgmtStatusFilter">
+                <button class="page-sub-item active" data-status="all"><i class="fas fa-th-list"></i> 全部</button>
+                <button class="page-sub-item" data-status="enabled"><i class="fas fa-check-circle"></i> 已启用</button>
+                <button class="page-sub-item" data-status="disabled"><i class="fas fa-ban"></i> 已禁用</button>
+              </div>
+              <div class="page-sub-divider"></div>
+              <div class="page-sub-label">核心平台</div>
+              <div class="page-sub-nav" id="mgmtCoreList"></div>
+            </aside>
+
+            <div class="page-main-col">
+              <div class="stat-row">
+                <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-th-large"></i></div><div><div class="stat-num" id="mgmtStatTotal">0</div><div class="stat-lbl">当前类型总数</div></div></div>
+                <div class="stat-card"><div class="stat-icon green"><i class="fas fa-plug"></i></div><div><div class="stat-num" id="mgmtStatEnabled">0</div><div class="stat-lbl">已启用</div></div></div>
+                <div class="stat-card"><div class="stat-icon amber"><i class="fas fa-link"></i></div><div><div class="stat-num" id="mgmtStatUrl">0</div><div class="stat-lbl">已配置地址</div></div></div>
+                <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-key"></i></div><div><div class="stat-num" id="mgmtStatKey">0</div><div class="stat-lbl">已配置 API Key</div></div></div>
+              </div>
+
+              <div class="list-panel">
+                <div class="list-toolbar">
+                  <div class="list-toolbar-left">
+                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="mgmtSearch" placeholder="搜索名称或 ID..."></div>
+                    <span class="count-badge" id="mgmtCountBadge">0 项</span>
+                  </div>
+                  <button class="btn btn-primary" id="btnAddMgmt"><i class="fas fa-plus"></i> 添加</button>
+                </div>
+                <div class="list-table">
+                  <div class="list-thead mgmt-cols">
+                    <span></span><span>名称 / 描述</span><span>状态</span><span>发布地址</span><span>API Key</span><span style="text-align:right">操作</span>
+                  </div>
+                  <div class="list-tbody" id="mgmtList"></div>
+                </div>
+                <div class="list-footer">
+                  <span id="mgmtFooterLeft">共 0 项</span>
+                  <span>配置保存在本地浏览器</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ View: 仪表盘 ═══ -->
+      <section class="view" id="viewDashboard">
+        <div class="page-shell">
+
+          <div class="dash-section-title"><i class="fas fa-tachometer-alt"></i> 核心指标</div>
+          <div class="dashboard-grid" id="dashCards"></div>
+
+          <div class="dash-section-title"><i class="fas fa-server"></i> 核心平台状态</div>
+          <div class="dash-platform-grid" id="dashPlatformGrid"></div>
+
+          <div class="dash-section-title" style="margin-top:4px"><i class="fas fa-chart-line"></i> 趋势分析</div>
+          <div class="dash-layout">
+            <div class="dash-main-col">
+              <div class="dash-row">
+                <div class="chart-card">
+                  <div class="chart-title">
+                    <span><i class="fas fa-chart-bar"></i> 近 7 日发文量</span>
+                    <span class="chart-sub">按自然周统计</span>
+                  </div>
+                  <div class="bar-chart" id="weeklyChart"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">
+                    <span><i class="fas fa-broadcast-tower"></i> 渠道发布分布</span>
+                    <span class="chart-sub">各渠道累计发布</span>
+                  </div>
+                  <div class="bar-chart" id="channelChart"></div>
+                  <div class="channel-pills" id="channelPills"></div>
+                </div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-title">
+                  <span><i class="fas fa-trophy"></i> 平台发布排行 TOP 9</span>
+                  <span class="chart-sub">按成功发布次数</span>
+                </div>
+                <ul class="platform-rank" id="platformRank"></ul>
+              </div>
+            </div>
+            <div class="dash-side-col">
+              <div class="dash-section-title"><i class="fas fa-bullseye"></i> 运营辅助</div>
+              <div class="dash-goal-card">
+                <h4><i class="fas fa-bullseye"></i> 本月发文目标</h4>
+                <div class="goal-progress"><div class="goal-progress-fill" id="goalProgress" style="width:86%"></div></div>
+                <div class="goal-meta"><span>已完成 <strong id="goalCurrent">129</strong> / 150 篇</span><strong id="goalPct">86%</strong></div>
+                <div class="dash-kpi-mini">
+                  <div class="kpi-mini-item"><div class="val">1.8s</div><div class="lbl">平均发布时效</div></div>
+                  <div class="kpi-mini-item"><div class="val" id="dashPending">0</div><div class="lbl">待处理草稿</div></div>
+                </div>
+              </div>
+              <div class="activity-feed">
+                <h4><i class="fas fa-bolt"></i> 最新动态</h4>
+                <div class="activity-timeline" id="activityTimeline"></div>
+              </div>
+              <div class="chart-card">
+                <h4 style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i class="fas fa-link" style="color:var(--primary-light)"></i> 快捷入口</h4>
+                <div class="quick-links">
+                  <div class="quick-link" onclick="switchView('compose')"><i class="fas fa-pen-fancy"></i><span>编辑发布</span></div>
+                  <div class="quick-link" onclick="switchView('drafts')"><i class="fas fa-folder-open"></i><span>草稿箱</span></div>
+                  <div class="quick-link" onclick="switchView('records')"><i class="fas fa-list-alt"></i><span>发布记录</span></div>
+                  <div class="quick-link" onclick="switchView('channelmgmt')"><i class="fas fa-sitemap"></i><span>平台渠道</span></div>
+                  <div class="quick-link" onclick="switchView('compose');document.getElementById('btnPreview').click()"><i class="fas fa-eye"></i><span>内容预览</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h3><i class="fas fa-eye" style="color:var(--primary-light)"></i> 内容预览</h3>
+        <p>发布前预览文章在各平台的展示效果</p>
+      </div>
+      <button class="modal-close" id="previewClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="previewModalBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="previewClose2">关闭</button>
+      <button class="btn btn-primary" id="previewToPublish"><i class="fas fa-paper-plane"></i> 确认发布</button>
+    </div>
+  </div>
+</div>
+
+<!-- Publish Progress Modal -->
+<div class="modal-overlay" id="publishModal">
+  <div class="modal modal-sm">
+    <div class="modal-head center">
+      <h3 id="modalTitle">正在同步发布…</h3>
+      <p id="modalDesc">内容将同步推送至所选平台与渠道</p>
+    </div>
+    <div class="modal-body">
+      <div class="progress-list" id="progressList"></div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="modalClose" style="display:none">查看发布记录</button>
+      <button class="btn btn-ghost" id="modalCancel">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Platform/Channel Edit Modal -->
+<div class="modal-overlay" id="mgmtModal">
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h3 id="mgmtModalTitle">添加业务平台</h3>
+        <p id="mgmtModalDesc">配置名称、发布地址、API Key 及启用状态</p>
+      </div>
+      <button class="modal-close" id="mgmtModalClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-toggle-row">
+        <div><label>启用状态</label><span>禁用后不会在发布页显示，也无法选中发布</span></div>
+        <label class="toggle-switch"><input type="checkbox" id="mgmtEnabled" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="form-row-inline" style="margin-bottom:14px">
+        <div>
+          <label class="form-label">名称 <span style="color:var(--danger)">*</span></label>
+          <input type="text" class="form-input" id="mgmtName" placeholder="如：国函通" maxlength="20">
+        </div>
+        <div>
+          <label class="form-label">描述</label>
+          <input type="text" class="form-input" id="mgmtDesc" placeholder="平台简要说明" maxlength="40">
+        </div>
+      </div>
+      <div class="form-row" style="padding:0;border:none;margin-bottom:14px">
+        <label class="form-label">发布地址</label>
+        <input type="url" class="form-input" id="mgmtPublishUrl" placeholder="https://api.example.com/v1/publish">
+        <div class="form-hint">内容推送的目标 API 或 Webhook 地址</div>
+      </div>
+      <div class="form-row" style="padding:0;border:none;margin-bottom:14px">
+        <label class="form-label">授权 API Key</label>
+        <div class="input-with-btn">
+          <input type="password" class="form-input" id="mgmtApiKey" placeholder="sk_live_xxxxxxxx" autocomplete="off">
+          <button type="button" class="btn btn-sm btn-ghost" id="mgmtToggleKey"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="form-hint">用于平台鉴权的密钥，本地加密存储</div>
+      </div>
+      <div class="form-row-inline">
+        <div>
+          <label class="form-label">图标</label>
+          <div class="icon-picker" id="mgmtIconPicker"></div>
+        </div>
+        <div>
+          <label class="form-label">主题色</label>
+          <div class="color-picker" id="mgmtColorPicker"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="mgmtModalCancel">取消</button>
+      <button class="btn btn-primary" id="mgmtModalSave"><i class="fas fa-check"></i> 保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
+
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  var STORAGE_DRAFTS = 'ssb_publish_drafts_v3';
+  var STORAGE_RECORDS = 'ssb_publish_records_v3';
+  var STORAGE_DASH = 'ssb_publish_dash_v3';
+  var STORAGE_PLATFORMS = 'ssb_publish_platforms_v3';
+  var STORAGE_CHANNELS = 'ssb_publish_channels_v3';
+
+  var CORE_PLATFORM_IDS = ['guohantong', 'ssb', 'syb', 'fzb'];
+
+  var DEFAULT_PLATFORMS = [
+    { id:'guohantong', name:'国函通', desc:'国函通业务平台', icon:'fa-landmark', color:'#1D4ED8', enabled:true, publishUrl:'https://api.guohantong.com/v1/content/publish', apiKey:'ght_sk_live_8f3a2b1c9d4e' },
+    { id:'ssb', name:'诉讼保', desc:'诉讼保全核心平台', icon:'fa-balance-scale', color:'#0F4C5C', enabled:true, publishUrl:'https://api.ssb.com/openapi/article/push', apiKey:'ssb_sk_live_7e6d5c4b3a21' },
+    { id:'syb', name:'诉易宝', desc:'诉讼便捷服务', icon:'fa-gem', color:'#7C3AED', enabled:true, publishUrl:'https://open.suyibao.com/api/v2/publish', apiKey:'syb_sk_live_4a8f2e1d9c07' },
+    { id:'fzb', name:'法智保', desc:'法律智能保全', icon:'fa-brain', color:'#0369A1', enabled:true, publishUrl:'https://api.fazhibao.cn/publish/v2/article', apiKey:'fzb_sk_live_9b7c6a5d4e32' },
+    { id:'bht', name:'保函通看板', desc:'保函数据看板', icon:'fa-chart-bar', color:'#4338CA', enabled:true, publishUrl:'', apiKey:'' },
+    { id:'zsb', name:'智讼保(黄石)', desc:'黄石地区智讼保', icon:'fa-map-marker-alt', color:'#B45309', enabled:true, publishUrl:'', apiKey:'' },
+    { id:'jkb', name:'聚客保', desc:'聚客保全服务', icon:'fa-users', color:'#BE185D', enabled:true, publishUrl:'', apiKey:'' },
+    { id:'qrt', name:'泉融通', desc:'泉州融通平台', icon:'fa-handshake', color:'#15803D', enabled:true, publishUrl:'', apiKey:'' },
+    { id:'dzbh', name:'电子保函', desc:'电子保函系统', icon:'fa-file-contract', color:'#1D7A6E', enabled:true, publishUrl:'https://api.dzbh.com/content/sync', apiKey:'dzbh_sk_live_2f8e1a9c4b76' }
+  ];
+
+  var DEFAULT_CHANNELS = [
+    { id:'miniprogram', name:'小程序', icon:'fa-mobile-alt', desc:'微信小程序', color:'#1D7A6E', enabled:true, publishUrl:'https://api.weixin.qq.com/cgi-bin/message/custom/send', apiKey:'' },
+    { id:'wechat', name:'公众号', icon:'fa-comment-dots', desc:'微信公众号', color:'#1D4ED8', enabled:true, publishUrl:'https://api.weixin.qq.com/cgi-bin/material/add_news', apiKey:'' },
+    { id:'douyin', name:'抖音', icon:'fa-music', desc:'抖音短视频/图文', color:'#BE185D', enabled:true, publishUrl:'https://open.douyin.com/api/article/publish', apiKey:'dy_sk_live_3c8f1a2b9d04' },
+    { id:'xiaohongshu', name:'小红书', icon:'fa-book-open', desc:'小红书笔记', color:'#B91C1C', enabled:true, publishUrl:'https://open.xiaohongshu.com/api/note/publish', apiKey:'' },
+    { id:'channels', name:'视频号', icon:'fa-video', desc:'微信视频号', color:'#B45309', enabled:true, publishUrl:'https://api.weixin.qq.com/channels/ec/publish', apiKey:'' },
+    { id:'toutiao', name:'今日头条', icon:'fa-newspaper', desc:'头条号文章', color:'#DC2626', enabled:true, publishUrl:'https://open.toutiao.com/api/article/create', apiKey:'tt_sk_live_6e5d4c3b2a10' }
+  ];
+
+  var ICON_OPTIONS = ['fa-landmark','fa-balance-scale','fa-gem','fa-brain','fa-chart-bar','fa-map-marker-alt','fa-users','fa-handshake','fa-file-contract','fa-mobile-alt','fa-comment-dots','fa-music','fa-book-open','fa-video','fa-newspaper','fa-broadcast-tower'];
+  var COLOR_OPTIONS = ['#1D4ED8','#0F4C5C','#7C3AED','#0369A1','#4338CA','#B45309','#BE185D','#15803D','#1D7A6E','#DC2626','#B91C1C'];
+
+  var PLATFORMS = [];
+  var CHANNELS = [];
+
+  var PAGE_META = {
+    dashboard:   { title:'仪表盘', icon:'fa-chart-pie', desc:'发文数据总览与趋势分析' },
+    compose:     { title:'发布管理', icon:'fa-paper-plane', desc:'编辑内容，选择目标与渠道，一键同步发布' },
+    drafts:      { title:'草稿箱', icon:'fa-folder-open', desc:'管理已保存的草稿文章，支持筛选与列表操作' },
+    records:     { title:'发布记录', icon:'fa-history', desc:'查看已发布文章的目标平台、渠道及结果' },
+    channelmgmt: { title:'平台渠道管理', icon:'fa-sitemap', desc:'管理业务平台与发布渠道，配置地址、API Key 及启用状态' }
+  };
+
+  var mgmtTab = 'platform';
+  var mgmtStatusFilter = 'all';
+  var mgmtEditId = null;
+  var mgmtSelectedIcon = 'fa-landmark';
+  var mgmtSelectedColor = '#1D4ED8';
+  var draftPlatformFilter = 'all';
+  var recordPlatformFilter = 'all';
+  var recordChannelFilter = 'all';
+
+  var selectedPlatforms = new Set(['ssb', 'dzbh']);
+  var selectedChannels = new Set(['wechat', 'miniprogram']);
+  var coverDataUrl = null;
+  var publishing = false;
+  var currentDraftId = null;
+  var currentView = 'compose';
+
+  function loadJSON(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch(e){ return fallback; }
+  }
+  function saveJSON(key, data){ try { localStorage.setItem(key, JSON.stringify(data)); } catch(e){} }
+
+  function getDrafts(){ return loadJSON(STORAGE_DRAFTS, []); }
+  function saveDrafts(list){ saveJSON(STORAGE_DRAFTS, list); updateDraftBadge(); }
+  function getRecords(){ return loadJSON(STORAGE_RECORDS, []); }
+  function saveRecords(list){ saveJSON(STORAGE_RECORDS, list); }
+  function getDash(){ return loadJSON(STORAGE_DASH, null); }
+  function saveDash(d){ saveJSON(STORAGE_DASH, d); }
+
+  function migrateItem(item, defaults){
+    var def = defaults.find(function(d){ return d.id === item.id; }) || {};
+    var merged = Object.assign({
+      enabled: true, publishUrl: '', apiKey: '', desc: '', color: '#0F4C5C'
+    }, def, item);
+    if(!item.publishUrl && def.publishUrl) merged.publishUrl = def.publishUrl;
+    if(!item.apiKey && def.apiKey) merged.apiKey = def.apiKey;
+    if(item.enabled === undefined) merged.enabled = def.enabled !== false;
+    return merged;
+  }
+  function migrateList(saved, defaults){
+    if(!saved || !saved.length) return defaults.map(function(d){ return Object.assign({}, d); });
+    var savedIds = {};
+    saved.forEach(function(s){ savedIds[s.id] = true; });
+    var merged = saved.map(function(item){ return migrateItem(item, defaults); });
+    defaults.forEach(function(d){
+      if(!savedIds[d.id]) merged.push(Object.assign({}, d));
+    });
+    return merged;
+  }
+
+  function loadPlatforms(){
+    var saved = loadJSON(STORAGE_PLATFORMS, null);
+    PLATFORMS = migrateList(saved, DEFAULT_PLATFORMS);
+    saveJSON(STORAGE_PLATFORMS, PLATFORMS);
+  }
+  function savePlatforms(){ saveJSON(STORAGE_PLATFORMS, PLATFORMS); }
+  function loadChannels(){
+    var saved = loadJSON(STORAGE_CHANNELS, null);
+    CHANNELS = migrateList(saved, DEFAULT_CHANNELS);
+    saveJSON(STORAGE_CHANNELS, CHANNELS);
+  }
+  function saveChannels(){ saveJSON(STORAGE_CHANNELS, CHANNELS); }
+
+  function getActivePlatforms(){ return PLATFORMS.filter(function(p){ return p.enabled !== false; }); }
+  function getActiveChannels(){ return CHANNELS.filter(function(c){ return c.enabled !== false; }); }
+  function maskApiKey(key){
+    if(!key) return '未配置';
+    if(key.length <= 8) return '****';
+    return key.slice(0, 4) + '****' + key.slice(-4);
+  }
+
+  function genId(prefix){
+    return prefix + '_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  }
+
+  function initDashData(){
+    if(getDash()) return;
+    saveDash({
+      totalPublish: 128, totalDrafts: 0, successRate: 96.2, totalReach: 45820,
+      weekly: [12, 18, 9, 22, 15, 20, 14],
+      channelStats: { miniprogram:42, wechat:38, douyin:25, xiaohongshu:18, channels:22, toutiao:15 },
+      platformStats: { guohantong:28, ssb:45, bht:32, syb:22, zsb:18, fzb:26, jkb:15, qrt:12, dzbh:38 }
+    });
+  }
+
+  var SizeStyle = Quill.import('attributors/style/size');
+  SizeStyle.whitelist = ['12px','14px','16px','18px','20px','24px','28px','32px'];
+  Quill.register(SizeStyle, true);
+
+  var quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: '在此编辑文章内容，支持富文本排版、图片、链接等…',
+    modules: {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          [{ size: SizeStyle.whitelist }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'code-block'],
+          ['link', 'image'],
+          ['clean']
+        ],
+        handlers: { image: imageHandler }
+      }
+    }
+  });
+
+  quill.clipboard.dangerouslyPasteHTML(
+    '<h2>诉讼保全服务升级公告</h2>' +
+    '<p>尊敬的机构用户：</p>' +
+    '<p>为提升<strong>电子保函</strong>与<strong>诉讼保全</strong>业务办理效率，我们已完成以下升级：</p>' +
+    '<ol><li>一键发文功能上线，支持多平台同步推送</li><li>保函申请流程优化，平均办理时效缩短 30%</li><li>新增智讼保(黄石)区域专属通道</li></ol>' +
+    '<p>如有疑问，请联系您的专属客户经理。</p>'
+  );
+
+  function imageHandler(){
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(){
+      if(!input.files || !input.files[0]) return;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', e.target.result);
+        quill.setSelection(range.index + 1);
+      };
+      reader.readAsDataURL(input.files[0]);
+    };
+    input.click();
+  }
+
+  function findPlatform(id){ return PLATFORMS.find(function(p){ return p.id === id; }); }
+  function findChannel(id){ return CHANNELS.find(function(c){ return c.id === id; }); }
+  function formatTime(iso){
+    var d = new Date(iso);
+    var now = new Date();
+    var diff = (now - d) / 1000;
+    if(diff < 60) return '刚刚';
+    if(diff < 3600) return Math.floor(diff/60) + ' 分钟前';
+    if(diff < 86400) return Math.floor(diff/3600) + ' 小时前';
+    if(diff < 172800) return '昨天';
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function renderPlatforms(){
+    document.getElementById('platformList').innerHTML = PLATFORMS.map(function(p){
+      var disabled = p.enabled === false;
+      var sel = selectedPlatforms.has(p.id);
+      if(disabled && sel){ selectedPlatforms.delete(p.id); sel = false; }
+      return '<label class="check-item ' + (sel?'selected':'') + (disabled?' disabled':'') + '" style="' + (disabled?'opacity:.5;cursor:not-allowed':'') + '">' +
+        '<input type="checkbox" ' + (sel?'checked':'') + (disabled?' disabled':'') + ' data-type="platform" data-id="' + p.id + '">' +
+        '<div class="check-item-icon platform-icon" style="background:' + p.color + '15;color:' + p.color + '"><i class="fas ' + p.icon + '"></i></div>' +
+        '<div class="check-item-info"><div class="check-item-name">' + p.name + (disabled?' <span style="font-size:10px;color:#94A3B8">(已禁用)</span>':'') + '</div><div class="check-item-desc">' + p.desc + '</div></div></label>';
+    }).join('');
+  }
+
+  function renderChannels(){
+    document.getElementById('channelList').innerHTML = CHANNELS.map(function(c){
+      var disabled = c.enabled === false;
+      var sel = selectedChannels.has(c.id);
+      if(disabled && sel){ selectedChannels.delete(c.id); sel = false; }
+      return '<label class="check-item ' + (sel?'selected':'') + (disabled?' disabled':'') + '" style="' + (disabled?'opacity:.5;cursor:not-allowed':'') + '">' +
+        '<input type="checkbox" ' + (sel?'checked':'') + (disabled?' disabled':'') + ' data-type="channel" data-id="' + c.id + '">' +
+        '<div class="check-item-icon channel-icon"><i class="fas ' + c.icon + '"></i></div>' +
+        '<div class="check-item-info"><div class="check-item-name">' + c.name + (disabled?' <span style="font-size:10px;color:#94A3B8">(已禁用)</span>':'') + '</div><div class="check-item-desc">' + c.desc + '</div></div></label>';
+    }).join('');
+  }
+
+  function updateSummary(){
+    var pCount = selectedPlatforms.size, cCount = selectedChannels.size;
+    document.getElementById('selectedCount').textContent = (pCount + cCount) + ' 项';
+    document.getElementById('statPlatforms').textContent = pCount;
+    document.getElementById('statChannels').textContent = cCount;
+    var listEl = document.getElementById('targetList');
+    if(!pCount && !cCount){
+      listEl.innerHTML = '<div class="empty-hint"><i class="fas fa-hand-pointer"></i>请选择发布平台和渠道</div>';
+    } else {
+      var chips = '';
+      PLATFORMS.forEach(function(p){ if(selectedPlatforms.has(p.id)) chips += '<span class="target-chip platform"><i class="fas ' + p.icon + '"></i> ' + p.name + '</span>'; });
+      CHANNELS.forEach(function(c){ if(selectedChannels.has(c.id)) chips += '<span class="target-chip channel"><i class="fas ' + c.icon + '"></i> ' + c.name + '</span>'; });
+      if(pCount * cCount > 0) chips += '<div style="margin-top:8px;font-size:11px;color:var(--text-muted)">预计 <strong style="color:var(--primary)">' + (pCount*cCount) + '</strong> 个发布任务</div>';
+      listEl.innerHTML = chips;
+    }
+    var activePlat = getActivePlatforms().length, activeCh = getActiveChannels().length;
+    document.getElementById('selectAllPlatforms').checked = activePlat > 0 && pCount === activePlat;
+    document.getElementById('selectAllChannels').checked = activeCh > 0 && cCount === activeCh;
+    updateMiniPreview();
+  }
+
+  function updateMiniPreview(){
+    var title = document.getElementById('articleTitle').value.trim();
+    var text = quill.getText().trim();
+    var el = document.getElementById('miniPreview');
+    if(!title && !text){ el.innerHTML = '<div class="empty-hint" style="padding:16px 0"><i class="fas fa-file-alt"></i>编辑后自动更新</div>'; return; }
+    el.innerHTML = '<div class="pv-title">' + (title || '（无标题）') + '</div><div style="color:var(--text-muted);margin-top:4px">' + (text.slice(0,80) || '') + (text.length > 80 ? '…' : '') + '</div>';
+  }
+
+  function updateWordCount(){
+    document.getElementById('wordCount').textContent = quill.getText().trim().length;
+  }
+
+  function getArticleData(){
+    return {
+      title: document.getElementById('articleTitle').value,
+      body: quill.root.innerHTML,
+      cover: coverDataUrl,
+      platforms: Array.from(selectedPlatforms),
+      channels: Array.from(selectedChannels)
+    };
+  }
+
+  function setArticleData(data){
+    document.getElementById('articleTitle').value = data.title || '';
+    quill.root.innerHTML = data.body || '';
+    selectedPlatforms = new Set(data.platforms || []);
+    selectedChannels = new Set(data.channels || []);
+    coverDataUrl = data.cover || null;
+    if(coverDataUrl){
+      document.getElementById('coverPreview').innerHTML = '<img src="' + coverDataUrl + '" alt="封面">';
+      document.getElementById('btnCoverRemove').style.display = '';
+    } else {
+      document.getElementById('coverPreview').innerHTML = '<div class="placeholder"><i class="fas fa-image"></i>封面 16:9</div>';
+      document.getElementById('btnCoverRemove').style.display = 'none';
+    }
+    renderPlatforms(); renderChannels(); updateSummary(); updateWordCount();
+  }
+
+  function openPreviewModal(){
+    var data = getArticleData();
+    var title = data.title.trim();
+    var text = quill.getText().trim();
+    if(!title && !text){ showToast('请先编辑标题或正文'); return; }
+    var pNames = data.platforms.map(function(id){ var p = findPlatform(id); return p ? p.name : id; });
+    var cNames = data.channels.map(function(id){ var c = findChannel(id); return c ? c.name : id; });
+    var html = '';
+    if(data.cover) html += '<img class="preview-modal-cover" src="' + data.cover + '" alt="封面">';
+    html += '<div class="preview-modal-title">' + (title || '（无标题）') + '</div>';
+    html += '<div class="preview-modal-meta">';
+    html += '<span><i class="fas fa-th-large"></i> 平台：' + (pNames.join('、') || '未选择') + '</span>';
+    html += '<span><i class="fas fa-share-alt"></i> 渠道：' + (cNames.join('、') || '未选择') + '</span>';
+    html += '<span><i class="fas fa-font"></i> ' + text.length + ' 字</span></div>';
+    html += '<div class="preview-modal-body">' + (data.body || '<p style="color:#94A3B8">暂无正文</p>') + '</div>';
+    document.getElementById('previewModalBody').innerHTML = html;
+    document.getElementById('previewModal').classList.add('show');
+  }
+
+  function closePreviewModal(){ document.getElementById('previewModal').classList.remove('show'); }
+
+  function updateDraftBadge(){
+    var n = getDrafts().length;
+    var badge = document.getElementById('draftBadge');
+    if(n > 0){ badge.textContent = n; badge.style.display = ''; } else { badge.style.display = 'none'; }
+  }
+
+  function saveDraft(){
+    var data = getArticleData();
+    if(!data.title.trim() && !quill.getText().trim()){ showToast('内容为空，无法保存草稿'); return; }
+    var drafts = getDrafts();
+    var now = new Date().toISOString();
+    if(currentDraftId){
+      var idx = drafts.findIndex(function(d){ return d.id === currentDraftId; });
+      if(idx >= 0){ drafts[idx] = Object.assign({}, drafts[idx], data, { updatedAt: now }); }
+    } else {
+      currentDraftId = 'd_' + Date.now();
+      drafts.unshift({ id: currentDraftId, createdAt: now, updatedAt: now, title: data.title || '无标题草稿', body: data.body, cover: data.cover, platforms: data.platforms, channels: data.channels });
+    }
+    saveDrafts(drafts);
+    var dash = getDash(); if(dash){ dash.totalDrafts = drafts.length; saveDash(dash); }
+    showToast('草稿已保存');
+    renderDraftList();
+  }
+
+  function deleteDraft(id){
+    if(!confirm('确定删除该草稿？')) return;
+    saveDrafts(getDrafts().filter(function(d){ return d.id !== id; }));
+    if(currentDraftId === id) currentDraftId = null;
+    showToast('草稿已删除');
+    renderDraftList();
+  }
+
+  function loadDraft(id){
+    var draft = getDrafts().find(function(d){ return d.id === id; });
+    if(!draft) return;
+    currentDraftId = id;
+    setArticleData(draft);
+    switchView('compose');
+    showToast('草稿已加载');
+  }
+
+  function sortDrafts(list, sortBy){
+    var arr = list.slice();
+    if(sortBy === 'title') arr.sort(function(a,b){ return (a.title||'').localeCompare(b.title||''); });
+    else if(sortBy === 'created') arr.sort(function(a,b){ return new Date(b.createdAt) - new Date(a.createdAt); });
+    else arr.sort(function(a,b){ return new Date(b.updatedAt||b.createdAt) - new Date(a.updatedAt||a.createdAt); });
+    return arr;
+  }
+
+  function buildTagGroup(ids, type, max){
+    if(!ids || !ids.length) return '<span class="tag">未选择</span>';
+    var shown = ids.slice(0, max || 2);
+    var html = shown.map(function(id){
+      var item = type === 'platform' ? findPlatform(id) : findChannel(id);
+      var cls = type === 'platform' ? 'platform' : 'channel';
+      return '<span class="tag ' + cls + '">' + (item ? item.name : id) + '</span>';
+    }).join('');
+    if(ids.length > (max || 2)) html += '<span class="tag more">+' + (ids.length - (max || 2)) + '</span>';
+    return '<div class="tag-group">' + html + '</div>';
+  }
+
+  function renderDraftPlatformFilters(){
+    var allDrafts = getDrafts();
+    var el = document.getElementById('draftPlatformList');
+    if(!el) return;
+    var allBtn = document.querySelector('#draftPlatformFilter .page-sub-item[data-platform="all"]');
+    if(allBtn){
+      var cnt = document.getElementById('draftFilterAll');
+      if(cnt) cnt.textContent = allDrafts.length;
+    }
+    el.innerHTML = PLATFORMS.map(function(p){
+      var n = allDrafts.filter(function(d){ return (d.platforms||[]).indexOf(p.id) >= 0; }).length;
+      return '<button class="page-sub-item' + (draftPlatformFilter === p.id ? ' active' : '') + '" data-platform="' + p.id + '">' +
+        '<i class="fas ' + p.icon + '"></i> ' + p.name + ' <span class="sub-count">' + n + '</span></button>';
+    }).join('');
+  }
+
+  function renderRecordFilters(){
+    var allRecords = getRecords();
+    var allCnt = document.getElementById('recordFilterAll');
+    if(allCnt) allCnt.textContent = allRecords.length;
+    var platEl = document.getElementById('recordPlatformList');
+    if(platEl){
+      platEl.innerHTML = PLATFORMS.map(function(p){
+        var n = allRecords.filter(function(r){
+          return (r.results||[]).some(function(res){ return res.platformId === p.id; });
+        }).length;
+        return '<button class="page-sub-item' + (recordPlatformFilter === p.id ? ' active' : '') + '" data-platform="' + p.id + '">' +
+          '<i class="fas ' + p.icon + '"></i> ' + p.name + ' <span class="sub-count">' + n + '</span></button>';
+      }).join('');
+    }
+    var chEl = document.getElementById('recordChannelList');
+    if(chEl){
+      chEl.innerHTML = CHANNELS.map(function(c){
+        var n = allRecords.filter(function(r){
+          return (r.results||[]).some(function(res){ return res.channelId === c.id; });
+        }).length;
+        return '<button class="page-sub-item' + (recordChannelFilter === c.id ? ' active' : '') + '" data-channel="' + c.id + '">' +
+          '<i class="fas ' + c.icon + '"></i> ' + c.name + ' <span class="sub-count">' + n + '</span></button>';
+      }).join('');
+    }
+  }
+
+  function renderDraftList(){
+    var allDrafts = getDrafts();
+    renderDraftPlatformFilters();
+    var searchEl = document.getElementById('draftSearch');
+    var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+    var drafts = allDrafts.slice();
+    if(draftPlatformFilter !== 'all'){
+      drafts = drafts.filter(function(d){ return (d.platforms||[]).indexOf(draftPlatformFilter) >= 0; });
+    }
+    if(q) drafts = drafts.filter(function(d){ return (d.title||'').toLowerCase().indexOf(q) >= 0; });
+    var sortEl = document.getElementById('draftSort');
+    drafts = sortDrafts(drafts, sortEl ? sortEl.value : 'updated');
+    var el = document.getElementById('draftList');
+
+    var totalEl = document.getElementById('draftTotal');
+    var recentEl = document.getElementById('draftRecent');
+    var platEl = document.getElementById('draftPlatforms');
+    var chEl = document.getElementById('draftChannels');
+    if(totalEl) totalEl.textContent = allDrafts.length;
+    var weekAgo = Date.now() - 7*86400000;
+    var recent = allDrafts.filter(function(d){ return new Date(d.updatedAt||d.createdAt).getTime() > weekAgo; }).length;
+    if(recentEl) recentEl.textContent = recent;
+    var avgPlat = allDrafts.length ? (allDrafts.reduce(function(s,d){return s+(d.platforms||[]).length;},0)/allDrafts.length).toFixed(1) : 0;
+    var avgCh = allDrafts.length ? (allDrafts.reduce(function(s,d){return s+(d.channels||[]).length;},0)/allDrafts.length).toFixed(1) : 0;
+    if(platEl) platEl.textContent = avgPlat;
+    if(chEl) chEl.textContent = avgCh;
+    var badge = document.getElementById('draftCountBadge');
+    if(badge) badge.textContent = drafts.length + ' 篇草稿';
+    var footer = document.getElementById('draftFooterLeft');
+    var filterHint = (q || draftPlatformFilter !== 'all') ? '（已筛选）' : '';
+    if(footer) footer.textContent = '共 ' + drafts.length + ' 篇草稿' + filterHint;
+
+    if(!drafts.length){
+      el.innerHTML = '<div class="list-row empty-row"><div class="list-empty"><i class="fas fa-folder-open"></i><h4>暂无草稿</h4><p>编辑文章后点击「存草稿」保存，或点击「新建文章」开始创作</p></div></div>';
+      updateDraftBadge();
+      return;
+    }
+    el.innerHTML = drafts.map(function(d){
+      var coverHtml = d.cover ? '<img src="' + d.cover + '" alt="">' : '<i class="fas fa-file-alt"></i>';
+      var wordLen = (d.body||'').replace(/<[^>]+>/g,'').length;
+      return '<div class="list-row draft-cols list-row-accent draft-row">' +
+        '<div class="list-cell"><div class="list-thumb">' + coverHtml + '</div></div>' +
+        '<div class="list-cell">' +
+          '<div class="list-cell-title">' + (d.title || '无标题草稿') + '</div>' +
+          '<div class="list-cell-sub">约 ' + wordLen + ' 字 · 创建于 ' + formatTime(d.createdAt) + '</div>' +
+        '</div>' +
+        '<div class="list-cell">' + buildTagGroup(d.platforms, 'platform', 2) + '</div>' +
+        '<div class="list-cell">' + buildTagGroup(d.channels, 'channel', 2) + '</div>' +
+        '<div class="list-cell"><div class="list-cell-sub" style="margin:0;font-size:12px;color:var(--text)"><i class="fas fa-clock" style="color:var(--text-muted);margin-right:4px"></i>' + formatTime(d.updatedAt || d.createdAt) + '</div></div>' +
+        '<div class="list-cell list-cell-actions">' +
+          '<button class="btn btn-sm btn-primary" onclick="window.__loadDraft(\'' + d.id + '\')"><i class="fas fa-edit"></i> 编辑</button>' +
+          '<button class="btn btn-sm btn-danger" onclick="window.__deleteDraft(\'' + d.id + '\')"><i class="fas fa-trash-alt"></i></button>' +
+        '</div></div>';
+    }).join('');
+    updateDraftBadge();
+  }
+
+  window.__loadDraft = loadDraft;
+  window.__deleteDraft = deleteDraft;
+
+  function validatePublish(){
+    var title = document.getElementById('articleTitle').value.trim();
+    var text = quill.getText().trim();
+    if(!title){ showToast('请填写文章标题'); document.getElementById('articleTitle').focus(); return false; }
+    if(!text){ showToast('请编辑文章正文'); return false; }
+    if(!selectedPlatforms.size){ showToast('请至少选择一个业务平台'); switchView('compose'); switchMobileTab('sidebar'); return false; }
+    if(!selectedChannels.size){ showToast('请至少选择一个发布渠道'); switchView('compose'); switchMobileTab('sidebar'); return false; }
+    return true;
+  }
+
+  function buildTasks(){
+    var tasks = [];
+    getActivePlatforms().forEach(function(p){
+      if(!selectedPlatforms.has(p.id)) return;
+      getActiveChannels().forEach(function(c){
+        if(!selectedChannels.has(c.id)) return;
+        tasks.push({ platformId: p.id, channelId: c.id, platform: p, channel: c, label: p.name + ' · ' + c.name });
+      });
+    });
+    return tasks;
+  }
+
+  function startPublish(){
+    if(publishing || !validatePublish()) return;
+    publishing = true;
+    var tasks = buildTasks();
+    var modal = document.getElementById('publishModal');
+    document.getElementById('modalTitle').textContent = '正在同步发布…';
+    document.getElementById('modalDesc').textContent = '共 ' + tasks.length + ' 个发布任务，请稍候';
+    document.getElementById('modalClose').style.display = 'none';
+    document.getElementById('modalCancel').style.display = '';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('progressList').innerHTML = tasks.map(function(t,i){
+      return '<div class="progress-item"><div class="progress-icon" id="task-icon-' + i + '"><i class="fas fa-clock"></i></div>' +
+        '<div class="progress-info"><div class="progress-name">' + t.label + '</div><div class="progress-status" id="task-status-' + i + '">等待中</div></div></div>';
+    }).join('');
+    modal.classList.add('show');
+    closePreviewModal();
+
+    var completed = 0, cancelled = false, results = [];
+    document.getElementById('modalCancel').disabled = false;
+    document.getElementById('modalCancel').onclick = function(){
+      if(completed >= tasks.length) return;
+      cancelled = true;
+      document.getElementById('modalCancel').disabled = true;
+      showToast('已取消剩余任务');
+    };
+
+    function runTask(i){
+      if(cancelled && i >= tasks.length){ finishPublish(results, tasks.length, cancelled); return; }
+      if(i >= tasks.length){ finishPublish(results, tasks.length, cancelled); return; }
+      var iconEl = document.getElementById('task-icon-' + i);
+      var statusEl = document.getElementById('task-status-' + i);
+      iconEl.className = 'progress-icon running';
+      iconEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      statusEl.textContent = '发布中…';
+      setTimeout(function(){
+        if(cancelled){
+          results.push({ task: tasks[i], success: false, cancelled: true });
+          iconEl.className = 'progress-icon'; iconEl.innerHTML = '<i class="fas fa-ban"></i>';
+          statusEl.textContent = '已取消';
+        } else {
+          var fail = Math.random() < 0.06;
+          results.push({ task: tasks[i], success: !fail });
+          completed++;
+          document.getElementById('progressBar').style.width = Math.round(completed / tasks.length * 100) + '%';
+          if(fail){ iconEl.className = 'progress-icon error'; iconEl.innerHTML = '<i class="fas fa-times"></i>'; statusEl.textContent = '发布失败'; }
+          else { iconEl.className = 'progress-icon done'; iconEl.innerHTML = '<i class="fas fa-check"></i>'; statusEl.textContent = '发布成功'; }
+        }
+        runTask(i + 1);
+      }, 500 + Math.random() * 700);
+    }
+    runTask(0);
+  }
+
+  function finishPublish(results, total, cancelled){
+    publishing = false;
+    var ok = results.filter(function(r){ return r.success; }).length;
+    document.getElementById('modalTitle').textContent = cancelled ? '发布已中断' : '发布完成';
+    document.getElementById('modalDesc').textContent = '成功 ' + ok + ' / 共 ' + total + ' 个任务';
+    document.getElementById('modalClose').style.display = '';
+    document.getElementById('modalCancel').style.display = 'none';
+
+    if(ok > 0){
+      var data = getArticleData();
+      var record = {
+        id: 'r_' + Date.now(),
+        title: data.title.trim(),
+        body: data.body,
+        cover: data.cover,
+        publishedAt: new Date().toISOString(),
+        results: results.map(function(r){
+          return { platformId: r.task.platformId, channelId: r.task.channelId, success: r.success, cancelled: !!r.cancelled };
+        }),
+        successCount: ok,
+        totalCount: total
+      };
+      var records = getRecords();
+      records.unshift(record);
+      saveRecords(records);
+      updateDashAfterPublish(record);
+      if(currentDraftId){
+        saveDrafts(getDrafts().filter(function(d){ return d.id !== currentDraftId; }));
+        currentDraftId = null;
+      }
+      renderRecordList();
+      renderDashboard();
+    }
+  }
+
+  function updateDashAfterPublish(record){
+    var dash = getDash() || {};
+    dash.totalPublish = (dash.totalPublish || 0) + 1;
+    dash.totalReach = (dash.totalReach || 0) + Math.floor(Math.random() * 800 + 200);
+    var okRate = record.successCount / record.totalCount * 100;
+    dash.successRate = dash.successRate ? (dash.successRate * 0.9 + okRate * 0.1) : okRate;
+    dash.weekly = dash.weekly || [0,0,0,0,0,0,0];
+    dash.weekly[6] = (dash.weekly[6] || 0) + 1;
+    dash.channelStats = dash.channelStats || {};
+    dash.platformStats = dash.platformStats || {};
+    record.results.forEach(function(r){
+      if(r.success){
+        dash.channelStats[r.channelId] = (dash.channelStats[r.channelId] || 0) + 1;
+        dash.platformStats[r.platformId] = (dash.platformStats[r.platformId] || 0) + 1;
+      }
+    });
+    saveDash(dash);
+  }
+
+  function buildRecordMatrix(results){
+    return (results||[]).map(function(res){
+      var p = findPlatform(res.platformId), c = findChannel(res.channelId);
+      var label = (p ? p.name : res.platformId) + ' · ' + (c ? c.name : res.channelId);
+      var cls = res.success ? 'ok' : 'fail';
+      var icon = res.cancelled ? 'fa-ban' : (res.success ? 'fa-check' : 'fa-times');
+      return '<span class="matrix-cell ' + cls + '"><i class="fas ' + icon + '"></i> ' + label + '</span>';
+    }).join('');
+  }
+
+  function renderRecordList(){
+    var allRecords = getRecords();
+    renderRecordFilters();
+    var searchEl = document.getElementById('recordSearch');
+    var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+    var records = allRecords.slice();
+    if(recordPlatformFilter !== 'all'){
+      records = records.filter(function(r){
+        return (r.results||[]).some(function(res){ return res.platformId === recordPlatformFilter; });
+      });
+    }
+    if(recordChannelFilter !== 'all'){
+      records = records.filter(function(r){
+        return (r.results||[]).some(function(res){ return res.channelId === recordChannelFilter; });
+      });
+    }
+    if(q) records = records.filter(function(r){ return (r.title||'').toLowerCase().indexOf(q) >= 0; });
+    var activeFilter = 'all';
+    var activeTab = document.querySelector('#recordFilters .filter-tab.active');
+    if(activeTab) activeFilter = activeTab.dataset.filter;
+    if(activeFilter === 'ok') records = records.filter(function(r){ return r.successCount === r.totalCount; });
+    else if(activeFilter === 'partial') records = records.filter(function(r){ return r.successCount > 0 && r.successCount < r.totalCount; });
+    else if(activeFilter === 'fail') records = records.filter(function(r){ return r.successCount === 0; });
+    var el = document.getElementById('recordList');
+
+    var totEl = document.getElementById('recTotal'), rateEl=document.getElementById('recSuccessRate'), weekEl=document.getElementById('recThisWeek'), reachEl=document.getElementById('recReach');
+    if(totEl) totEl.textContent = allRecords.length;
+    var okCount = allRecords.reduce(function(s,r){return s + (r.successCount||0);},0);
+    var totTasks = allRecords.reduce(function(s,r){return s + (r.totalCount||0);},0);
+    if(rateEl) rateEl.textContent = totTasks ? Math.round(okCount/totTasks*100)+'%' : '0%';
+    var weekAgo = Date.now()-7*86400000;
+    var weekCnt = allRecords.filter(function(r){return new Date(r.publishedAt).getTime()>weekAgo;}).length;
+    if(weekEl) weekEl.textContent = weekCnt;
+    if(reachEl) reachEl.textContent = (allRecords.length*280).toLocaleString();
+    var badge = document.getElementById('recordCountBadge');
+    if(badge) badge.textContent = records.length + ' 条记录';
+    var footer = document.getElementById('recordFooterLeft');
+    var recFilterHint = (q || activeFilter !== 'all' || recordPlatformFilter !== 'all' || recordChannelFilter !== 'all') ? '（已筛选）' : '';
+    if(footer) footer.textContent = '共 ' + records.length + ' 条发布记录' + recFilterHint;
+
+    if(!records.length){
+      el.innerHTML = '<div class="list-row empty-row"><div class="list-empty"><i class="fas fa-history"></i><h4>暂无发布记录</h4><p>完成一键发文后，发布结果将在此以列表形式展示</p></div></div>';
+      return;
+    }
+    el.innerHTML = records.map(function(r){
+      var statusCls = r.successCount === r.totalCount ? 'status-ok' : (r.successCount > 0 ? 'status-partial' : 'status-fail');
+      var statusText = r.successCount === r.totalCount ? '全部成功' : (r.successCount > 0 ? '部分成功' : '发布失败');
+      var pSet = {}, cSet = {};
+      (r.results||[]).forEach(function(res){ if(res.success){ pSet[res.platformId]=1; cSet[res.channelId]=1; } });
+      var reach = Math.floor((r.successCount||0) * 180 + 120);
+      var pct = r.totalCount ? Math.round(r.successCount / r.totalCount * 100) : 0;
+      return '<div class="record-row-wrap" data-id="' + r.id + '">' +
+        '<div class="list-row record-cols list-row-accent record-row" onclick="window.__toggleRecord(this.parentElement)">' +
+          '<div class="list-cell">' +
+            '<div class="list-cell-title">' + r.title + '</div>' +
+            '<div class="list-cell-sub">触达约 ' + reach.toLocaleString() + ' 人次</div>' +
+          '</div>' +
+          '<div class="list-cell"><span class="record-status ' + statusCls + '">' + statusText + '</span></div>' +
+          '<div class="list-cell"><span style="font-size:12px;color:var(--text-muted)"><i class="fas fa-clock" style="margin-right:4px"></i>' + formatTime(r.publishedAt) + '</span></div>' +
+          '<div class="list-cell">' +
+            '<div style="font-size:12px;font-weight:700;color:var(--text)">' + pct + '%</div>' +
+            '<div class="progress-mini"><div class="progress-mini-fill" style="width:' + pct + '%"></div></div>' +
+          '</div>' +
+          '<div class="list-cell"><span style="font-size:12px;color:var(--text-muted)">' + Object.keys(pSet).length + ' 平台 / ' + Object.keys(cSet).length + ' 渠道</span></div>' +
+          '<div class="list-cell list-cell-actions" onclick="event.stopPropagation()">' +
+            '<button class="btn btn-sm btn-outline" onclick="window.__previewRecord(\'' + r.id + '\')"><i class="fas fa-eye"></i> 查看</button>' +
+            '<i class="fas fa-chevron-down record-chevron"></i>' +
+          '</div>' +
+        '</div>' +
+        '<div class="record-expand">' +
+          '<div class="record-summary"><span>成功任务 <strong>' + r.successCount + ' / ' + r.totalCount + '</strong></span><span>预估触达 <strong>' + reach.toLocaleString() + '</strong></span></div>' +
+          '<div class="record-expand-grid">' +
+            '<div class="record-expand-card"><h5>发布任务明细</h5><div class="record-matrix">' + buildRecordMatrix(r.results) + '</div></div>' +
+            '<div class="record-expand-card"><h5>覆盖范围</h5>' + buildTagGroup(Object.keys(pSet), 'platform', 5) + '<div style="height:8px"></div>' + buildTagGroup(Object.keys(cSet), 'channel', 5) + '</div>' +
+          '</div>' +
+          '<div class="list-cell-actions"><button class="btn btn-sm btn-outline" onclick="window.__previewRecord(\'' + r.id + '\')"><i class="fas fa-eye"></i> 查看完整内容</button></div>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  window.__toggleRecord = function(el){ el.classList.toggle('expanded'); };
+  window.__previewRecord = function(id){
+    var r = getRecords().find(function(x){ return x.id === id; });
+    if(!r) return;
+    document.getElementById('previewModalBody').innerHTML =
+      (r.cover ? '<img class="preview-modal-cover" src="' + r.cover + '" alt="">' : '') +
+      '<div class="preview-modal-title">' + r.title + '</div>' +
+      '<div class="preview-modal-meta"><span>发布于 ' + formatTime(r.publishedAt) + '</span><span>成功 ' + r.successCount + '/' + r.totalCount + '</span></div>' +
+      '<div class="preview-modal-body">' + r.body + '</div>';
+    document.getElementById('previewModal').classList.add('show');
+  };
+
+  function renderDashboard(){
+    var dash = getDash();
+    if(!dash) return;
+    var draftCount = getDrafts().length;
+    var records = getRecords();
+    document.getElementById('dashCards').innerHTML =
+      '<div class="dash-card"><div class="dash-card-head"><div class="dash-card-icon"><i class="fas fa-paper-plane"></i></div></div><div class="dash-num">' + dash.totalPublish + '</div><div class="dash-lbl">累计发文</div><div class="dash-trend up"><i class="fas fa-arrow-up"></i> 较上月 +18%</div></div>' +
+      '<div class="dash-card green"><div class="dash-card-head"><div class="dash-card-icon"><i class="fas fa-check-circle"></i></div></div><div class="dash-num">' + dash.successRate.toFixed(1) + '%</div><div class="dash-lbl">发布成功率</div><div class="dash-trend up"><i class="fas fa-arrow-up"></i> 稳定运行</div></div>' +
+      '<div class="dash-card warn"><div class="dash-card-head"><div class="dash-card-icon"><i class="fas fa-folder-open"></i></div></div><div class="dash-num">' + draftCount + '</div><div class="dash-lbl">草稿数量</div><div class="dash-trend">待编辑发布</div></div>' +
+      '<div class="dash-card purple"><div class="dash-card-head"><div class="dash-card-icon"><i class="fas fa-users"></i></div></div><div class="dash-num">' + (dash.totalReach||0).toLocaleString() + '</div><div class="dash-lbl">累计触达</div><div class="dash-trend up"><i class="fas fa-arrow-up"></i> +12%</div></div>';
+
+    var goalCurrent = document.getElementById('goalCurrent');
+    var goalPct = document.getElementById('goalPct');
+    var goalProgress = document.getElementById('goalProgress');
+    var dashPending = document.getElementById('dashPending');
+    var current = Math.min(dash.totalPublish || 0, 150);
+    var pct = Math.round(current / 150 * 100);
+    if(goalCurrent) goalCurrent.textContent = current;
+    if(goalPct) goalPct.textContent = pct + '%';
+    if(goalProgress) goalProgress.style.width = pct + '%';
+    if(dashPending) dashPending.textContent = draftCount;
+
+    var platGrid = document.getElementById('dashPlatformGrid');
+    if(platGrid){
+      var pStats = dash.platformStats || {};
+      platGrid.innerHTML = CORE_PLATFORM_IDS.map(function(pid){
+        var p = findPlatform(pid);
+        if(!p) return '';
+        var on = p.enabled !== false;
+        var pub = pStats[pid] || 0;
+        var urlOk = !!(p.publishUrl);
+        var keyOk = !!(p.apiKey);
+        return '<div class="dash-platform-card' + (on ? '' : ' off') + '">' +
+          '<div class="dash-platform-top">' +
+            '<div class="dash-platform-icon" style="background:' + p.color + '15;color:' + p.color + '"><i class="fas ' + p.icon + '"></i></div>' +
+            '<div><div class="dash-platform-name">' + p.name + '</div>' +
+            '<div class="dash-platform-meta"><span class="status-dot ' + (on ? 'on' : 'off') + '">' + (on ? '已启用' : '已禁用') + '</span></div></div>' +
+          '</div>' +
+          '<div class="dash-platform-stats">' +
+            '<div class="dash-platform-stat"><div class="val">' + pub + '</div><div class="lbl">成功发布</div></div>' +
+            '<div class="dash-platform-stat"><div class="val">' + (urlOk && keyOk ? '完整' : (urlOk || keyOk ? '部分' : '待配')) + '</div><div class="lbl">接口配置</div></div>' +
+          '</div></div>';
+      }).join('');
+    }
+
+    var days = ['周一','周二','周三','周四','周五','周六','周日'];
+    var maxW = Math.max.apply(null, dash.weekly || [1]);
+    document.getElementById('weeklyChart').innerHTML = (dash.weekly||[]).map(function(v,i){
+      var h = Math.max(4, Math.round(v / maxW * 120));
+      return '<div class="bar-col"><div class="bar-val">' + v + '</div><div class="bar-fill" style="height:' + h + 'px"></div><div class="bar-label">' + days[i] + '</div></div>';
+    }).join('');
+
+    var chStats = dash.channelStats || {};
+    var chMax = Math.max.apply(null, Object.values(chStats).concat([1]));
+    var chColors = ['#1D7A6E','#1D4ED8','#7C3AED','#BE185D','#B45309','#0369A1'];
+    document.getElementById('channelChart').innerHTML = CHANNELS.map(function(c){
+      var v = chStats[c.id] || 0;
+      var h = Math.max(4, Math.round(v / chMax * 120));
+      return '<div class="bar-col"><div class="bar-val">' + v + '</div><div class="bar-fill" style="height:' + h + 'px;background:linear-gradient(180deg,#34D399,#1D7A6E)"></div><div class="bar-label">' + c.name + '</div></div>';
+    }).join('');
+    var pillsEl = document.getElementById('channelPills');
+    if(pillsEl){
+      pillsEl.innerHTML = CHANNELS.map(function(c,i){
+        var v = chStats[c.id] || 0;
+        return '<span class="channel-pill"><span class="dot" style="background:' + chColors[i % chColors.length] + '"></span>' + c.name + ' ' + v + '</span>';
+      }).join('');
+    }
+
+    var pStats = dash.platformStats || {};
+    var ranked = PLATFORMS.map(function(p){ return { p: p, v: pStats[p.id] || 0 }; }).sort(function(a,b){ return b.v - a.v; });
+    var pMax = ranked[0] ? ranked[0].v : 1;
+    document.getElementById('platformRank').innerHTML = ranked.map(function(item,i){
+      var pctBar = pMax ? Math.round(item.v / pMax * 100) : 0;
+      return '<li><span class="rank-num ' + (i<3?'top':'') + '">' + (i+1) + '</span><span style="min-width:72px;font-weight:600">' + item.p.name + '</span><div class="rank-bar"><div class="rank-bar-fill" style="width:' + pctBar + '%"></div></div><span class="rank-val">' + item.v + '</span></li>';
+    }).join('');
+
+    var timeline = document.getElementById('activityTimeline');
+    if(timeline){
+      var items = [];
+      records.slice(0,3).forEach(function(r){
+        var dotCls = r.successCount === r.totalCount ? 'success' : (r.successCount > 0 ? 'warn' : '');
+        items.push('<div class="activity-item"><div class="activity-dot ' + dotCls + '"></div><div class="activity-content"><strong>「' + r.title + '」</strong> 发布' + (r.successCount === r.totalCount ? '全部成功' : (r.successCount > 0 ? '部分成功' : '失败')) + '<div class="activity-time">' + formatTime(r.publishedAt) + '</div></div></div>');
+      });
+      if(draftCount > 0){
+        var latestDraft = getDrafts()[0];
+        if(latestDraft) items.push('<div class="activity-item"><div class="activity-dot"></div><div class="activity-content">草稿 <strong>「' + (latestDraft.title || '无标题') + '」</strong> 待编辑<div class="activity-time">' + formatTime(latestDraft.updatedAt || latestDraft.createdAt) + '</div></div></div>');
+      }
+      if(!items.length){
+        items.push('<div class="activity-item"><div class="activity-dot"></div><div class="activity-content">暂无动态，开始您的第一篇发文吧<div class="activity-time">—</div></div></div>');
+      }
+      timeline.innerHTML = items.join('');
+    }
+  }
+
+  function viewIdFromName(name){
+    if(name === 'channelmgmt') return 'viewChannelmgmt';
+    return 'view' + name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
+  function renderMgmtCoreList(){
+    var el = document.getElementById('mgmtCoreList');
+    if(!el || mgmtTab !== 'platform') { if(el) el.innerHTML = ''; return; }
+    el.innerHTML = CORE_PLATFORM_IDS.map(function(pid){
+      var p = findPlatform(pid);
+      if(!p) return '';
+      return '<button class="page-sub-item" onclick="window.__editMgmt(\'' + pid + '\')"><i class="fas ' + p.icon + '"></i> ' + p.name +
+        ' <span class="sub-count" style="background:' + (p.enabled !== false ? '#D4EDE8' : '#F1F5F9') + ';color:' + (p.enabled !== false ? 'var(--success)' : '#94A3B8') + '">' + (p.enabled !== false ? 'ON' : 'OFF') + '</span></button>';
+    }).join('');
+  }
+
+  function renderMgmtList(){
+    var list = mgmtTab === 'platform' ? PLATFORMS : CHANNELS;
+    var searchEl = document.getElementById('mgmtSearch');
+    var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+    var filtered = list.slice();
+    if(mgmtStatusFilter === 'enabled') filtered = filtered.filter(function(x){ return x.enabled !== false; });
+    else if(mgmtStatusFilter === 'disabled') filtered = filtered.filter(function(x){ return x.enabled === false; });
+    if(q) filtered = filtered.filter(function(x){
+      return (x.name||'').toLowerCase().indexOf(q) >= 0 || (x.id||'').toLowerCase().indexOf(q) >= 0;
+    });
+
+    var platCnt = document.getElementById('mgmtPlatCount');
+    var chCnt = document.getElementById('mgmtChCount');
+    if(platCnt) platCnt.textContent = PLATFORMS.length;
+    if(chCnt) chCnt.textContent = CHANNELS.length;
+
+    var statTotal = document.getElementById('mgmtStatTotal');
+    var statEnabled = document.getElementById('mgmtStatEnabled');
+    var statUrl = document.getElementById('mgmtStatUrl');
+    var statKey = document.getElementById('mgmtStatKey');
+    if(statTotal) statTotal.textContent = list.length;
+    if(statEnabled) statEnabled.textContent = list.filter(function(x){ return x.enabled !== false; }).length;
+    if(statUrl) statUrl.textContent = list.filter(function(x){ return x.publishUrl; }).length;
+    if(statKey) statKey.textContent = list.filter(function(x){ return x.apiKey; }).length;
+
+    var badge = document.getElementById('mgmtCountBadge');
+    if(badge) badge.textContent = filtered.length + ' 项';
+    var footer = document.getElementById('mgmtFooterLeft');
+    var hint = (q || mgmtStatusFilter !== 'all') ? '（已筛选）' : '';
+    if(footer) footer.textContent = '共 ' + filtered.length + ' 项' + hint;
+
+    var el = document.getElementById('mgmtList');
+    if(!el) return;
+    renderMgmtCoreList();
+
+    if(!filtered.length){
+      var emptyLabel = mgmtTab === 'platform' ? '业务平台' : '发布渠道';
+      el.innerHTML = '<div class="list-row empty-row"><div class="list-empty"><i class="fas fa-sitemap"></i><h4>暂无' + emptyLabel + '</h4><p>点击右上角「添加」创建新的' + emptyLabel + '，或调整筛选条件</p></div></div>';
+      return;
+    }
+
+    el.innerHTML = filtered.map(function(item){
+      var color = item.color || '#0F4C5C';
+      var on = item.enabled !== false;
+      var urlHtml = item.publishUrl
+        ? '<div class="url-cell" title="' + item.publishUrl + '"><a href="' + item.publishUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation()"><i class="fas fa-link"></i> ' + item.publishUrl + '</a></div>'
+        : '<span class="url-cell" style="color:#CBD5E1">未配置</span>';
+      var keyHtml = '<span class="api-key-cell"><i class="fas fa-key"></i><span class="key-text">' + maskApiKey(item.apiKey) + '</span></span>';
+      return '<div class="list-row mgmt-cols' + (on ? '' : ' disabled') + '">' +
+        '<div class="list-cell"><div class="list-thumb" style="background:' + color + '15;color:' + color + ';border-color:' + color + '30"><i class="fas ' + item.icon + '"></i></div></div>' +
+        '<div class="list-cell">' +
+          '<div class="list-cell-title">' + item.name + '</div>' +
+          '<div class="list-cell-sub">' + (item.desc || '暂无描述') + ' · ID: ' + item.id + '</div>' +
+        '</div>' +
+        '<div class="list-cell"><span class="status-dot ' + (on ? 'on' : 'off') + '">' + (on ? '启用' : '禁用') + '</span></div>' +
+        '<div class="list-cell">' + urlHtml + '</div>' +
+        '<div class="list-cell">' + keyHtml + '</div>' +
+        '<div class="list-cell list-cell-actions">' +
+          '<label class="toggle-switch" title="' + (on ? '点击禁用' : '点击启用') + '" onclick="event.stopPropagation()">' +
+            '<input type="checkbox" ' + (on ? 'checked' : '') + ' onchange="window.__toggleMgmtEnabled(\'' + item.id + '\', this.checked)"><span class="toggle-slider"></span>' +
+          '</label>' +
+          '<button class="btn btn-sm btn-outline" onclick="window.__editMgmt(\'' + item.id + '\')"><i class="fas fa-edit"></i></button>' +
+          '<button class="btn btn-sm btn-danger" onclick="window.__deleteMgmt(\'' + item.id + '\')"><i class="fas fa-trash-alt"></i></button>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  function renderMgmtPickers(){
+    document.getElementById('mgmtIconPicker').innerHTML = ICON_OPTIONS.map(function(ic){
+      return '<div class="icon-opt' + (ic === mgmtSelectedIcon ? ' selected' : '') + '" data-icon="' + ic + '"><i class="fas ' + ic + '"></i></div>';
+    }).join('');
+    document.getElementById('mgmtColorPicker').innerHTML = COLOR_OPTIONS.map(function(c){
+      return '<div class="color-opt' + (c === mgmtSelectedColor ? ' selected' : '') + '" data-color="' + c + '" style="background:' + c + '"></div>';
+    }).join('');
+  }
+
+  function openMgmtModal(editId){
+    mgmtEditId = editId || null;
+    var isPlatform = mgmtTab === 'platform';
+    var list = isPlatform ? PLATFORMS : CHANNELS;
+    var item = editId ? list.find(function(x){ return x.id === editId; }) : null;
+    document.getElementById('mgmtModalTitle').textContent = (editId ? '修改' : '添加') + (isPlatform ? '业务平台' : '发布渠道');
+    document.getElementById('mgmtModalDesc').textContent = '配置名称、发布地址、API Key 及启用状态';
+    document.getElementById('mgmtName').value = item ? item.name : '';
+    document.getElementById('mgmtDesc').value = item ? (item.desc || '') : '';
+    document.getElementById('mgmtPublishUrl').value = item ? (item.publishUrl || '') : '';
+    document.getElementById('mgmtApiKey').value = item ? (item.apiKey || '') : '';
+    document.getElementById('mgmtApiKey').type = 'password';
+    document.getElementById('mgmtEnabled').checked = item ? (item.enabled !== false) : true;
+    var keyBtn = document.getElementById('mgmtToggleKey');
+    if(keyBtn) keyBtn.innerHTML = '<i class="fas fa-eye"></i>';
+    mgmtSelectedIcon = item ? item.icon : (isPlatform ? 'fa-landmark' : 'fa-mobile-alt');
+    mgmtSelectedColor = item ? (item.color || '#0F4C5C') : '#1D4ED8';
+    renderMgmtPickers();
+    document.getElementById('mgmtModal').classList.add('show');
+  }
+
+  function closeMgmtModal(){ document.getElementById('mgmtModal').classList.remove('show'); mgmtEditId = null; }
+
+  function saveMgmtItem(){
+    var name = document.getElementById('mgmtName').value.trim();
+    var desc = document.getElementById('mgmtDesc').value.trim();
+    var publishUrl = document.getElementById('mgmtPublishUrl').value.trim();
+    var apiKey = document.getElementById('mgmtApiKey').value.trim();
+    var enabled = document.getElementById('mgmtEnabled').checked;
+    if(!name){ showToast('请填写名称'); return; }
+    var isPlatform = mgmtTab === 'platform';
+    var list = isPlatform ? PLATFORMS : CHANNELS;
+    var payload = { name: name, desc: desc, icon: mgmtSelectedIcon, color: mgmtSelectedColor, publishUrl: publishUrl, apiKey: apiKey, enabled: enabled };
+    var savedId = mgmtEditId;
+    if(mgmtEditId){
+      var idx = list.findIndex(function(x){ return x.id === mgmtEditId; });
+      if(idx >= 0) list[idx] = Object.assign({}, list[idx], payload);
+    } else {
+      savedId = name.replace(/\s/g,'').toLowerCase().slice(0,12) + '_' + Date.now().toString(36).slice(-4);
+      list.push(Object.assign({ id: savedId }, payload));
+    }
+    if(isPlatform) savePlatforms(); else saveChannels();
+    if(!enabled && savedId){
+      if(isPlatform) selectedPlatforms.delete(savedId);
+      else selectedChannels.delete(savedId);
+    }
+    closeMgmtModal();
+    renderMgmtList();
+    renderPlatforms();
+    renderChannels();
+    updateSummary();
+    renderDashboard();
+    showToast(mgmtEditId ? '修改成功' : '添加成功');
+    mgmtEditId = null;
+  }
+
+  function toggleMgmtEnabled(id, enabled){
+    var isPlatform = mgmtTab === 'platform';
+    var list = isPlatform ? PLATFORMS : CHANNELS;
+    var idx = list.findIndex(function(x){ return x.id === id; });
+    if(idx < 0) return;
+    list[idx].enabled = enabled;
+    if(isPlatform){
+      savePlatforms();
+      if(!enabled) selectedPlatforms.delete(id);
+    } else {
+      saveChannels();
+      if(!enabled) selectedChannels.delete(id);
+    }
+    renderMgmtList();
+    renderPlatforms();
+    renderChannels();
+    updateSummary();
+    renderDashboard();
+    showToast(enabled ? '已启用' : '已禁用');
+  }
+
+  function deleteMgmtItem(id){
+    var isPlatform = mgmtTab === 'platform';
+    var list = isPlatform ? PLATFORMS : CHANNELS;
+    var item = list.find(function(x){ return x.id === id; });
+    if(!item) return;
+    if(!confirm('确定删除「' + item.name + '」？删除后发布页面将不再显示该项。')) return;
+    if(isPlatform){
+      PLATFORMS = PLATFORMS.filter(function(x){ return x.id !== id; });
+      selectedPlatforms.delete(id);
+      savePlatforms();
+    } else {
+      CHANNELS = CHANNELS.filter(function(x){ return x.id !== id; });
+      selectedChannels.delete(id);
+      saveChannels();
+    }
+    renderMgmtList();
+    renderPlatforms();
+    renderChannels();
+    updateSummary();
+    renderDashboard();
+    showToast('已删除');
+  }
+
+  window.__openMgmtModal = function(){ openMgmtModal(); };
+  window.__editMgmt = function(id){
+    var inPlat = PLATFORMS.some(function(p){ return p.id === id; });
+    var inCh = CHANNELS.some(function(c){ return c.id === id; });
+    if(inPlat) mgmtTab = 'platform';
+    else if(inCh) mgmtTab = 'channel';
+    document.querySelectorAll('#mgmtTypeNav .page-sub-item').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === mgmtTab);
+    });
+    openMgmtModal(id);
+    renderMgmtList();
+  };
+  window.__deleteMgmt = deleteMgmtItem;
+  window.__toggleMgmtEnabled = toggleMgmtEnabled;
+
+  function switchView(name){
+    if(!PAGE_META[name]) return;
+    currentView = name;
+    document.querySelectorAll('.view').forEach(function(v){
+      v.classList.toggle('active', v.id === viewIdFromName(name));
+    });
+    document.querySelectorAll('.nav-item').forEach(function(b){
+      b.classList.toggle('active', b.dataset.view === name);
+    });
+    var meta = PAGE_META[name];
+    document.getElementById('pageTitle').innerHTML = '<i class="fas ' + meta.icon + '"></i> ' + meta.title;
+    document.getElementById('pageDesc').textContent = meta.desc;
+    document.getElementById('headerActions').style.display = name === 'compose' ? '' : 'none';
+    if(name === 'drafts') renderDraftList();
+    if(name === 'records') renderRecordList();
+    if(name === 'dashboard') renderDashboard();
+    if(name === 'channelmgmt') renderMgmtList();
+    closeSidebar();
+  }
+  window.switchView = switchView;
+
+  function switchMobileTab(tab){
+    document.querySelectorAll('.mobile-compose-tab').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+    document.getElementById('colSidebar').classList.toggle('mobile-show', tab === 'sidebar');
+    document.getElementById('colEditor').classList.toggle('mobile-show', tab === 'editor');
+    document.getElementById('colPanel').classList.toggle('mobile-show', tab === 'panel');
+  }
+
+  function openSidebar(){
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarBackdrop').classList.add('show');
+  }
+  function closeSidebar(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('show');
+  }
+
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+  }
+
+  document.getElementById('platformList').addEventListener('change', function(e){
+    if(e.target.type !== 'checkbox') return;
+    var id = e.target.dataset.id;
+    if(e.target.checked) selectedPlatforms.add(id); else selectedPlatforms.delete(id);
+    renderPlatforms(); updateSummary();
+  });
+  document.getElementById('channelList').addEventListener('change', function(e){
+    if(e.target.type !== 'checkbox') return;
+    var id = e.target.dataset.id;
+    if(e.target.checked) selectedChannels.add(id); else selectedChannels.delete(id);
+    renderChannels(); updateSummary();
+  });
+  document.getElementById('selectAllPlatforms').addEventListener('change', function(e){
+    selectedPlatforms.clear();
+    if(e.target.checked) getActivePlatforms().forEach(function(p){ selectedPlatforms.add(p.id); });
+    renderPlatforms(); updateSummary();
+  });
+  document.getElementById('selectAllChannels').addEventListener('change', function(e){
+    selectedChannels.clear();
+    if(e.target.checked) getActiveChannels().forEach(function(c){ selectedChannels.add(c.id); });
+    renderChannels(); updateSummary();
+  });
+  document.getElementById('clearAll').addEventListener('click', function(){
+    selectedPlatforms.clear(); selectedChannels.clear();
+    renderPlatforms(); renderChannels(); updateSummary();
+    showToast('已清空所有选择');
+  });
+
+  document.getElementById('btnCoverUpload').addEventListener('click', function(){ document.getElementById('coverInput').click(); });
+  document.getElementById('coverInput').addEventListener('change', function(e){
+    var file = e.target.files[0]; if(!file) return;
+    if(file.size > 2*1024*1024){ showToast('封面不能超过 2MB'); return; }
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      coverDataUrl = ev.target.result;
+      document.getElementById('coverPreview').innerHTML = '<img src="' + coverDataUrl + '" alt="封面">';
+      document.getElementById('btnCoverRemove').style.display = '';
+      showToast('封面已上传');
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('btnCoverRemove').addEventListener('click', function(){
+    coverDataUrl = null;
+    document.getElementById('coverPreview').innerHTML = '<div class="placeholder"><i class="fas fa-image"></i>封面 16:9</div>';
+    document.getElementById('btnCoverRemove').style.display = 'none';
+    document.getElementById('coverInput').value = '';
+  });
+
+  document.getElementById('articleTitle').addEventListener('input', function(){ updateMiniPreview(); });
+  quill.on('text-change', function(){ updateWordCount(); updateMiniPreview(); });
+
+  document.getElementById('btnDraft').addEventListener('click', saveDraft);
+  document.getElementById('btnPreview').addEventListener('click', openPreviewModal);
+  document.getElementById('btnPublish').addEventListener('click', startPublish);
+  document.getElementById('previewClose').addEventListener('click', closePreviewModal);
+  document.getElementById('previewClose2').addEventListener('click', closePreviewModal);
+  document.getElementById('previewToPublish').addEventListener('click', startPublish);
+  document.getElementById('previewModal').addEventListener('click', function(e){ if(e.target === this) closePreviewModal(); });
+
+  document.getElementById('modalClose').addEventListener('click', function(){
+    document.getElementById('publishModal').classList.remove('show');
+    switchView('records');
+  });
+  document.getElementById('publishModal').addEventListener('click', function(e){
+    if(e.target === this && !publishing) this.classList.remove('show');
+  });
+
+  document.querySelectorAll('.nav-item').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchView(btn.dataset.view); });
+  });
+  document.getElementById('btnNewDraft').addEventListener('click', function(){
+    currentDraftId = null;
+    setArticleData({ title:'', body:'', cover:null, platforms:['ssb'], channels:['wechat'] });
+    switchView('compose');
+    showToast('已创建新文章');
+  });
+
+  // Search & filter wiring for drafts/records
+  var ds = document.getElementById('draftSearch');
+  if(ds){ ds.addEventListener('input', renderDraftList); }
+  var dsort = document.getElementById('draftSort');
+  if(dsort){ dsort.addEventListener('change', renderDraftList); }
+  var rs = document.getElementById('recordSearch');
+  if(rs){ rs.addEventListener('input', renderRecordList); }
+  var rf = document.getElementById('recordFilters');
+  if(rf){
+    rf.addEventListener('click', function(e){
+      var btn = e.target.closest('.filter-tab');
+      if(!btn) return;
+      rf.querySelectorAll('.filter-tab').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderRecordList();
+    });
+  }
+
+  var dpf = document.getElementById('draftPlatformFilter');
+  if(dpf){
+    dpf.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn) return;
+      draftPlatformFilter = btn.dataset.platform;
+      dpf.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('#draftPlatformList .page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      renderDraftList();
+    });
+  }
+  var dpl = document.getElementById('draftPlatformList');
+  if(dpl){
+    dpl.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn) return;
+      draftPlatformFilter = btn.dataset.platform;
+      dpl.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      var allBtn = dpf && dpf.querySelector('.page-sub-item[data-platform="all"]');
+      if(allBtn) allBtn.classList.remove('active');
+      renderDraftList();
+    });
+  }
+
+  var rpf = document.getElementById('recordPlatformFilter');
+  if(rpf){
+    rpf.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn || !btn.dataset.platform) return;
+      recordPlatformFilter = btn.dataset.platform;
+      recordChannelFilter = 'all';
+      rpf.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('#recordPlatformList .page-sub-item, #recordChannelList .page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      renderRecordList();
+    });
+  }
+  var rpl = document.getElementById('recordPlatformList');
+  if(rpl){
+    rpl.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn) return;
+      recordPlatformFilter = btn.dataset.platform;
+      recordChannelFilter = 'all';
+      rpl.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      document.querySelectorAll('#recordChannelList .page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      var allBtn = rpf && rpf.querySelector('.page-sub-item[data-platform="all"]');
+      if(allBtn) allBtn.classList.remove('active');
+      renderRecordList();
+    });
+  }
+  var rcl = document.getElementById('recordChannelList');
+  if(rcl){
+    rcl.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn) return;
+      recordChannelFilter = btn.dataset.channel;
+      recordPlatformFilter = 'all';
+      rcl.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      document.querySelectorAll('#recordPlatformList .page-sub-item').forEach(function(b){ b.classList.remove('active'); });
+      var allBtn = rpf && rpf.querySelector('.page-sub-item[data-platform="all"]');
+      if(allBtn) allBtn.classList.remove('active');
+      renderRecordList();
+    });
+  }
+
+  var mgmtTypeNav = document.getElementById('mgmtTypeNav');
+  if(mgmtTypeNav){
+    mgmtTypeNav.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn || !btn.dataset.tab) return;
+      mgmtTab = btn.dataset.tab;
+      mgmtTypeNav.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      renderMgmtList();
+    });
+  }
+  var mgmtStatusEl = document.getElementById('mgmtStatusFilter');
+  if(mgmtStatusEl){
+    mgmtStatusEl.addEventListener('click', function(e){
+      var btn = e.target.closest('.page-sub-item');
+      if(!btn || !btn.dataset.status) return;
+      mgmtStatusFilter = btn.dataset.status;
+      mgmtStatusEl.querySelectorAll('.page-sub-item').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      renderMgmtList();
+    });
+  }
+  var mgmtSearchEl = document.getElementById('mgmtSearch');
+  if(mgmtSearchEl){ mgmtSearchEl.addEventListener('input', renderMgmtList); }
+  document.getElementById('btnAddMgmt').addEventListener('click', function(){ openMgmtModal(); });
+  var mgmtToggleKey = document.getElementById('mgmtToggleKey');
+  if(mgmtToggleKey){
+    mgmtToggleKey.addEventListener('click', function(){
+      var inp = document.getElementById('mgmtApiKey');
+      var hidden = inp.type === 'password';
+      inp.type = hidden ? 'text' : 'password';
+      mgmtToggleKey.innerHTML = hidden ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+    });
+  }
+  document.getElementById('mgmtModalClose').addEventListener('click', closeMgmtModal);
+  document.getElementById('mgmtModalCancel').addEventListener('click', closeMgmtModal);
+  document.getElementById('mgmtModalSave').addEventListener('click', saveMgmtItem);
+  document.getElementById('mgmtModal').addEventListener('click', function(e){ if(e.target === this) closeMgmtModal(); });
+  document.getElementById('mgmtIconPicker').addEventListener('click', function(e){
+    var opt = e.target.closest('.icon-opt');
+    if(!opt) return;
+    mgmtSelectedIcon = opt.dataset.icon;
+    renderMgmtPickers();
+  });
+  document.getElementById('mgmtColorPicker').addEventListener('click', function(e){
+    var opt = e.target.closest('.color-opt');
+    if(!opt) return;
+    mgmtSelectedColor = opt.dataset.color;
+    renderMgmtPickers();
+  });
+  document.getElementById('mobileComposeTabs').addEventListener('click', function(e){
+    var btn = e.target.closest('.mobile-compose-tab');
+    if(btn) switchMobileTab(btn.dataset.tab);
+  });
+  document.getElementById('sidebarToggle').addEventListener('click', openSidebar);
+  document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebar);
+
+  function seedDemoRecords(){
+    if(getRecords().length) return;
+    saveRecords([
+      {
+        id:'r_demo1', title:'诉讼保全新规解读', cover:null,
+        body:'<p>关于诉讼保全最新规定的详细解读…</p>',
+        publishedAt: new Date(Date.now()-7200000).toISOString(),
+        successCount:4, totalCount:4,
+        results:[
+          { platformId:'ssb', channelId:'wechat', success:true },
+          { platformId:'ssb', channelId:'miniprogram', success:true },
+          { platformId:'dzbh', channelId:'wechat', success:true },
+          { platformId:'dzbh', channelId:'miniprogram', success:true }
+        ]
+      },
+      {
+        id:'r_demo2', title:'电子保函操作指南', cover:null,
+        body:'<p>电子保函系统操作步骤说明…</p>',
+        publishedAt: new Date(Date.now()-86400000).toISOString(),
+        successCount:5, totalCount:6,
+        results:[
+          { platformId:'dzbh', channelId:'miniprogram', success:true },
+          { platformId:'dzbh', channelId:'douyin', success:true },
+          { platformId:'bht', channelId:'wechat', success:true },
+          { platformId:'syb', channelId:'xiaohongshu', success:true },
+          { platformId:'fzb', channelId:'channels', success:true },
+          { platformId:'jkb', channelId:'toutiao', success:false }
+        ]
+      }
+    ]);
+  }
+
+  loadPlatforms();
+  loadChannels();
+  initDashData();
+  seedDemoRecords();
+  renderPlatforms();
+  renderChannels();
+  updateSummary();
+  updateWordCount();
+  updateDraftBadge();
+  renderDashboard();
+
+  if(window.innerWidth <= 900){
+    switchMobileTab('editor');
+    document.getElementById('colSidebar').classList.remove('mobile-show');
+  }
+})();
+</script>
+</body>
+</html>
