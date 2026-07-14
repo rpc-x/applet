@@ -67,6 +67,10 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .tag-pending{background:#FEF3C7;color:#B45309}.tag-review{background:#DBEAFE;color:#1D4ED8}
 .tag-issue{background:#E0E7FF;color:#4338CA}.tag-done{background:#D4EDE8;color:#1D7A6E}
 .tag-reject{background:#FEE2E2;color:#B91C1C}.tag-supplement{background:#FFEDD5;color:#C2410C}
+.tag-pay{background:#FEF9C3;color:#A16207}.tag-underwrite{background:#E0E7FF;color:#4338CA}
+.tag-effective{background:#D4EDE8;color:#1D7A6E}.tag-terminated{background:#F1F5F9;color:#64748B}
+.tag-closed{background:#F1F5F9;color:#64748B}.tag-cancel{background:#FFEDD5;color:#C2410C}
+.tag-cancel-ok{background:#ECFDF5;color:#047857}
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;margin-bottom:24px}
 .quick-item{text-align:center;cursor:pointer}
 .quick-icon{width:52px;height:52px;margin:0 auto 8px;border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#F0F9FB;color:#1A6B7C}
@@ -103,6 +107,30 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-timeline-item::before{content:"";width:10px;height:10px;background:#1A6B7C;border-radius:50%;position:absolute;left:-21px;top:4px}
 .sp-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .flex-between{display:flex;justify-content:space-between;align-items:center}
+.sp-link-detail{font-size:13px;font-weight:600;color:#1A6B7C;cursor:pointer;flex-shrink:0;text-decoration:none}
+.sp-info-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #F1F5F9;font-size:13px}
+.sp-info-row:last-child{border-bottom:none;padding-bottom:0}
+.sp-info-row .k{color:#94A3B8;font-weight:500;flex-shrink:0;min-width:88px}
+.sp-info-row .v{color:#1C2E36;font-weight:600;text-align:right;word-break:break-all;line-height:1.4}
+.sp-section-label{font-size:12px;font-weight:700;color:#64748B;letter-spacing:.5px;margin:4px 0 2px;padding-bottom:6px;border-bottom:1px dashed #E2E8F0}
+.case-summary-line{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:6px 0;font-size:13px;line-height:1.5;color:#334155;border-bottom:1px solid #F8FAFC}
+.case-summary-line:last-child{border-bottom:none}
+.case-summary-line .csl-label{color:#94A3B8;font-weight:500;flex-shrink:0;min-width:72px}
+.case-summary-line .csl-val{flex:1;text-align:right;font-weight:600;color:#1C2E36;word-break:break-all}
+.val-sourced{display:inline;border:none;background:linear-gradient(180deg,transparent 62%,rgba(26,107,124,.18) 62%);color:inherit;font:inherit;font-weight:700;padding:0;cursor:pointer;text-align:inherit;font-family:inherit;max-width:100%}
+.val-sourced:active{opacity:.75}
+.val-sourced .src-ico{display:inline-block;margin-left:3px;font-size:10px;color:#1A6B7C;vertical-align:middle;opacity:.9}
+.sp-modal.sp-modal-source{max-width:320px;text-align:left;padding:16px 16px 18px;max-height:78%;overflow-y:auto}
+.sp-modal-source .src-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sp-modal-source .src-modal-head h3{font-size:14px;margin:0;line-height:1.35}
+.sp-modal-source .src-modal-sub{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.4}
+.sp-modal-source .src-modal-close-x{width:32px;height:32px;border:none;border-radius:16px;background:#F1F5F9;color:#64748B;cursor:pointer;flex-shrink:0;font-size:14px}
+.src-doc-sheet{background:#FFFEF9;border:1px solid #E8E4D9;border-radius:12px;padding:14px 12px;font-size:12px;line-height:1.75;color:#334155}
+.src-doc-sheet .src-doc-title{text-align:center;font-size:14px;font-weight:800;color:#0F4C5C;margin:0 0 12px;letter-spacing:.5px}
+.src-doc-sheet .src-doc-line{margin:0 0 6px}
+.src-doc-sheet .src-doc-line.hit{background:#FEF08A;border-radius:4px;padding:2px 4px;margin-left:-4px;margin-right:-4px;box-shadow:0 0 0 2px #FEF08A}
+.src-doc-sheet .src-doc-line.hit mark{background:transparent;color:#92400E;font-weight:800;padding:0}
+.src-hit-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
 .filter-tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
 .filter-tabs button{flex-shrink:0;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D}
 .filter-tabs button.on{background:#1A6B7C;color:#fff}
@@ -237,6 +265,7 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-modal-mask.show{display:flex}
 .sp-modal{background:#fff;border-radius:24px;padding:20px;width:100%;max-width:300px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
 .sp-modal h3{font-size:16px;font-weight:800;color:#1C2E36;margin-bottom:8px}
+.sp-modal-mask.show:has(.sp-modal-source){align-items:flex-end;padding:16px 12px 28px}
 .sp-modal-close{margin-top:14px;width:100%}
 .sub-crumb{font-size:10px;color:#1A6B7C;background:#EFF8FC;padding:5px 12px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;border:1px solid #D4EDE8}
 .sub-crumb i{font-size:9px;opacity:.7}
@@ -406,10 +435,115 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 <script>
 (function(){
 const scroll=document.getElementById('mainScroll'),tabContent=document.getElementById('tabContent'),subOverlay=document.getElementById('subpageOverlay'),subBody=document.getElementById('subpageBody'),subTitle=document.getElementById('subpageTitle'),subSubtitle=document.getElementById('subpageSubtitle'),spToast=document.getElementById('spToast');
-let currentNav='workbench',currentOrderFilter='all',currentSubId=null,subPageStack=[];
+let currentNav='workbench',currentOrderFilter='all',currentXuepingFilter='all',currentSubId=null,subPageStack=[];
 const TOOL_CHILD_PAGES=new Set(['rarBatchPack','structExtract','smartAnalysis','crossDeviceSync']);
 const TOOL_HUB_ID='toolAssistantHub';
-let ORDER_STATE={id:'SS20250529001',status:'review',amount:8500000,premium:7225,applicant:'张正源',respondent:'北京某某贸易有限公司',caseNo:'（2025）京0105民初12345号',court:'北京市朝阳区人民法院',type:'财产保全',cause:'买卖合同纠纷',propertyClue:'工商银行朝阳支行 6222021234567890'};
+let ORDER_STATE={
+id:'SS20250529001',status:'review',amount:8500000,premium:7225,
+applicant:'张三',respondent:'北京朝阳区某某科技有限公司',
+caseNo:'（2025）京0105民初1234号',court:'北京朝阳区人民法院',
+type:'财产保全',preserveCategory:'诉前保全',cause:'买卖合同纠纷',targetAmount:500,
+applicantType:'自然人',idType:'身份证',idNo:'352203198410283984938',
+applicantPhone:'15800381002',applicantAddress:'北京朝阳区某某小区',
+respondentType:'企业',companyName:'北京朝阳区某某科技有限公司',creditCode:'9110201199001933YSJX',
+contactName:'北京朝阳区某某科技有限公司',respondentPhone:'',respondentAddress:'',
+propertyClue:'工商银行朝阳支行 6222021234567890',
+materials:[{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'}],
+/* 字段溯源：点击提取值 → 打开原文预览并高亮对应行 */
+fieldSources:{
+court:{file:'保全申请书.pdf',label:'保全申请书',docField:'受理法院'},
+applicant:{file:'起诉状.pdf',label:'起诉状',docField:'原告'},
+respondent:{file:'保全申请书.pdf',label:'保全申请书',docField:'被申请人'},
+caseNo:{file:'起诉状.pdf',label:'起诉状',docField:'案号'},
+cause:{file:'起诉状.pdf',label:'起诉状',docField:'案由'},
+type:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全类型'},
+preserveCategory:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全类别'},
+targetAmount:{file:'保全申请书.pdf',label:'保全申请书',docField:'申请保全金额'},
+applicantType:{file:'起诉状.pdf',label:'起诉状',docField:'原告类型'},
+idType:{file:'起诉状.pdf',label:'起诉状',docField:'证件类型'},
+idNo:{file:'起诉状.pdf',label:'起诉状',docField:'证件号码'},
+applicantPhone:{file:'起诉状.pdf',label:'起诉状',docField:'联系电话'},
+applicantAddress:{file:'起诉状.pdf',label:'起诉状',docField:'住所地'},
+respondentType:{file:'保全申请书.pdf',label:'保全申请书',docField:'被申请人类型'},
+companyName:{file:'保全申请书.pdf',label:'保全申请书',docField:'被申请人'},
+creditCode:{file:'起诉状.pdf',label:'起诉状',docField:'统一社会信用代码'},
+contactName:{file:'保全申请书.pdf',label:'保全申请书',docField:'被申请人'},
+propertyClue:{file:'保全申请书.pdf',label:'保全申请书',docField:'财产线索'}
+}
+};
+const SOURCE_DOCS={
+'保全申请书.pdf':{
+title:'财产保全申请书',
+lines:[
+{k:'申请人',v:'张三'},
+{k:'被申请人',v:'北京朝阳区某某科技有限公司'},
+{k:'被申请人类型',v:'企业'},
+{k:'案号',v:'（2025）京0105民初1234号'},
+{k:'受理法院',v:'北京朝阳区人民法院'},
+{k:'保全类型',v:'财产保全'},
+{k:'保全类别',v:'诉前保全'},
+{k:'申请保全金额',v:'500'},
+{k:'财产线索',v:'工商银行朝阳支行 6222021234567890'},
+{k:'请求事项',v:'请求贵院依法查封、冻结被申请人银行存款人民币500元'}
+]},
+'起诉状.pdf':{
+title:'民事起诉状',
+lines:[
+{k:'原告',v:'张三'},
+{k:'原告类型',v:'自然人'},
+{k:'证件类型',v:'身份证'},
+{k:'证件号码',v:'352203198410283984938'},
+{k:'联系电话',v:'15800381002'},
+{k:'住所地',v:'北京朝阳区某某小区'},
+{k:'被告',v:'北京朝阳区某某科技有限公司'},
+{k:'统一社会信用代码',v:'9110201199001933YSJX'},
+{k:'案号',v:'（2025）京0105民初1234号'},
+{k:'案由',v:'买卖合同纠纷'},
+{k:'诉讼请求',v:'判令被告支付货款并承担本案诉讼费用'}
+]}
+};
+function fmtDash(v){return(v===0||v)?String(v):'—'}
+function getFieldSource(srcKey){return(srcKey&&ORDER_STATE.fieldSources&&ORDER_STATE.fieldSources[srcKey])||null}
+function renderSourcedValue(v,srcKey){
+const text=fmtDash(v);
+const src=getFieldSource(srcKey);
+if(!src)return text;
+return`<button type="button" class="val-sourced" data-action="open-source" data-src-key="${srcKey}" title="点击核对原文（${src.label}）">${text}</button>`;
+}
+function renderInfoRow(k,v,srcKey){
+return`<div class="sp-info-row"><span class="k">${k}</span><span class="v">${renderSourcedValue(v,srcKey)}</span></div>`;
+}
+function renderCaseSummaryLine(label,value,srcKey){
+return`<div class="case-summary-line"><span class="csl-label">${label}</span><span class="csl-val">${renderSourcedValue(value,srcKey)}</span></div>`;
+}
+function openSourcePreview(srcKey){
+const src=getFieldSource(srcKey);
+if(!src){showToast('该字段无原文溯源');return}
+const doc=SOURCE_DOCS[src.file];
+const fieldLabel=src.docField||'';
+const val=ORDER_STATE[srcKey];
+const valText=fmtDash(val);
+let linesHtml='';
+if(doc&&doc.lines){
+linesHtml=doc.lines.map(line=>{
+const hit=line.k===fieldLabel;
+const body=hit?`<b>${line.k}：</b><mark>${line.v}</mark>`:`<b>${line.k}：</b>${line.v}`;
+return`<p class="src-doc-line${hit?' hit':''}">${body}</p>`;
+}).join('');
+}else{
+linesHtml=`<p class="src-doc-line hit"><b>${fieldLabel||'提取字段'}：</b><mark>${valText}</mark></p>`;
+}
+showModal(`<div class="src-modal-head"><div><h3><i class="fas fa-search-location" style="color:#1A6B7C;margin-right:4px"></i>原文溯源</h3>
+<p class="src-modal-sub">字段「${fieldLabel||srcKey}」提取自 ${src.file}</p></div>
+<button type="button" class="src-modal-close-x" data-action="modal-close" aria-label="关闭"><i class="fas fa-times"></i></button></div>
+<div class="src-doc-sheet">
+<div class="src-doc-title">${(doc&&doc.title)||src.label}</div>
+${linesHtml}
+</div>
+<p class="src-hit-tip"><i class="fas fa-highlighter"></i> 黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。</p>
+<button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">完成核对</button>`,{source:true});
+setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
+}
 
 const ORDER_STATUS_META={
 pending:{label:'待审核',tag:'tag-pending'},
@@ -426,6 +560,44 @@ const ORDER_LIST=[
 {id:'SS20250518001',status:'done',type:'财产保全',applicant:'张正源',respondent:'杭州某某网络科技有限公司',court:'杭州市西湖区人民法院',amount:5000000,caseNo:'（2025）浙0106民初22018号',cause:'网络服务合同纠纷',guaranteeNo:'YASS20250518001'},
 {id:'SS20250512003',status:'reject',type:'行为保全',applicant:'陈企法',respondent:'广州某某物流有限公司',court:'广州市天河区人民法院',amount:980000,caseNo:'（2025）粤0106民初33091号',cause:'不正当竞争纠纷'}
 ];
+const XUEPING_STATUS_META={
+wait_confirm:{label:'待确认',tag:'tag-review'},
+wait_pay:{label:'待支付',tag:'tag-pay'},
+wait_underwrite:{label:'待承保',tag:'tag-underwrite'},
+wait_effective:{label:'待生效',tag:'tag-pending'},
+effective:{label:'已生效',tag:'tag-effective'},
+terminated:{label:'已终止',tag:'tag-terminated'},
+closed:{label:'订单关闭',tag:'tag-closed'},
+wait_cancel:{label:'等待退保',tag:'tag-cancel'},
+cancel_processing:{label:'退保受理中',tag:'tag-cancel'},
+cancelled:{label:'退保成功',tag:'tag-cancel-ok'}
+};
+const XUEPING_FILTERS=[
+{key:'all',label:'全部'},
+{key:'wait_confirm',label:'待确认'},
+{key:'wait_pay',label:'待支付'},
+{key:'wait_underwrite',label:'待承保'},
+{key:'wait_effective',label:'待生效'},
+{key:'effective',label:'已生效'},
+{key:'terminated',label:'已终止'},
+{key:'closed',label:'订单关闭'},
+{key:'wait_cancel',label:'等待退保'},
+{key:'cancel_processing',label:'退保受理中'},
+{key:'cancelled',label:'退保成功'}
+];
+const XUEPING_LIST=[
+{id:'XP20250529001',status:'wait_confirm',product:'意外医疗',student:'王小明',school:'北京市朝阳区实验小学',grade:'三年级',premium:120,guardian:'王建国',phone:'138****6621',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250528015',status:'wait_pay',product:'住院津贴',student:'李思思',school:'朝阳实验小学',grade:'五年级',premium:180,guardian:'李强',phone:'139****8812',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250527008',status:'wait_underwrite',product:'意外医疗',student:'陈浩然',school:'北京市第一中学',grade:'初一',premium:150,guardian:'陈伟',phone:'136****2209',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250526003',status:'wait_effective',product:'意外医疗',student:'赵雨萱',school:'海淀实验小学',grade:'二年级',premium:120,guardian:'赵明',phone:'137****3345',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250526003'},
+{id:'XP20250518012',status:'effective',product:'住院津贴',student:'周子墨',school:'北京市第一中学',grade:'初二',premium:180,guardian:'周磊',phone:'135****6678',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250518012'},
+{id:'XP20250410005',status:'terminated',product:'意外医疗',student:'吴佳怡',school:'朝阳实验小学',grade:'六年级',premium:120,guardian:'吴刚',phone:'133****9901',period:'2024-09-01 ~ 2025-08-31',policyNo:'YAXP20250410005'},
+{id:'XP20250512009',status:'closed',product:'意外医疗',student:'孙浩天',school:'海淀实验小学',grade:'四年级',premium:120,guardian:'孙伟',phone:'158****1122',period:'—'},
+{id:'XP20250510002',status:'wait_cancel',product:'住院津贴',student:'郑一诺',school:'北京市第一中学',grade:'初三',premium:180,guardian:'郑华',phone:'186****4455',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250510002'},
+{id:'XP20250509001',status:'cancel_processing',product:'意外医疗',student:'冯思远',school:'朝阳实验小学',grade:'一年级',premium:120,guardian:'冯军',phone:'159****7788',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250509001'},
+{id:'XP20250508004',status:'cancelled',product:'住院津贴',student:'何雨桐',school:'海淀实验小学',grade:'三年级',premium:180,guardian:'何平',phone:'188****5566',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250508004'}
+];
+let XUEPING_STATE=Object.assign({},XUEPING_LIST[0]);
 function formatPreserveAmt(n){return'¥'+Number(n).toLocaleString('zh-CN')}
 function renderOrderCard(o){
 const meta=ORDER_STATUS_META[o.status]||ORDER_STATUS_META.pending;
@@ -442,6 +614,47 @@ return`<div class="order-card" data-status="${o.status}" data-page="orderDetail"
 </div>
 ${dl}
 </div>`}
+function renderXuepingCard(o){
+const meta=XUEPING_STATUS_META[o.status]||XUEPING_STATUS_META.wait_confirm;
+return`<div class="order-card" data-status="${o.status}" data-page="xuepingDetail" data-xp-id="${o.id}" data-push-stack="1">
+<div class="order-card-head"><span class="order-card-type">学平险 · ${o.product}</span><span class="tag ${meta.tag}">${meta.label}</span></div>
+<div class="order-fields">
+<div class="order-field"><span>学生</span><strong>${o.student}</strong></div>
+<div class="order-field"><span>年级</span><strong>${o.grade}</strong></div>
+<div class="order-field full"><span>学校</span><strong>${o.school}</strong></div>
+<div class="order-field"><span>保费</span><strong class="amt">¥${o.premium}</strong></div>
+<div class="order-field"><span>监护人</span><strong>${o.guardian}</strong></div>
+</div>
+</div>`}
+function renderXuepingSteps(status){
+const flow=['投保','确认','支付','承保','生效'];
+let active=0;
+if(status==='wait_confirm')active=1;
+else if(status==='wait_pay')active=2;
+else if(status==='wait_underwrite'||status==='wait_effective')active=3;
+else if(status==='effective')active=4;
+else if(status==='terminated'||status==='closed'||status==='wait_cancel'||status==='cancel_processing'||status==='cancelled')active=4;
+return`<div class="sp-steps">${flow.map((lab,i)=>{
+let cls='';
+if(status==='closed'&&i>0)cls='';
+else if(i<active)cls='done';
+else if(i===active)cls='active';
+return`<div class="sp-step ${cls}">${lab}</div>`;
+}).join('')}</div>`;
+}
+function renderXuepingActions(o){
+if(o.status==='wait_confirm')return`<div class="sp-grid-2"><button class="sp-btn-danger" data-action="xp-reject">驳回</button><button class="sp-btn-primary" data-action="xp-confirm">确认订单</button></div>`;
+if(o.status==='wait_pay')return`<button class="sp-btn-secondary" style="width:100%" data-action="toast" data-msg="已发送支付提醒给监护人">提醒支付</button>`;
+if(o.status==='wait_underwrite')return`<div class="sp-grid-2"><button class="sp-btn-danger" data-action="xp-reject">驳回</button><button class="sp-btn-primary" data-action="xp-underwrite">通过承保</button></div>`;
+if(o.status==='wait_effective')return`<button class="sp-btn-primary" data-action="toast" data-msg="保单将于保期起始日自动生效">等待生效</button>`;
+if(o.status==='effective')return`<div class="sp-grid-2"><button class="sp-btn-secondary" data-action="toast" data-msg="电子保单下载中…">下载保单</button><button class="sp-btn-danger" data-action="xp-start-cancel">发起退保</button></div>`;
+if(o.status==='wait_cancel')return`<div class="sp-grid-2"><button class="sp-btn-secondary" data-action="toast" data-msg="已拒绝退保申请">拒绝退保</button><button class="sp-btn-primary" data-action="xp-accept-cancel">受理退保</button></div>`;
+if(o.status==='cancel_processing')return`<button class="sp-btn-primary" data-action="xp-finish-cancel">确认退保成功</button>`;
+if(o.status==='cancelled')return`<div class="sp-result-box"><i class="fas fa-check-circle" style="font-size:28px;color:#1D7A6E"></i><p style="font-size:13px;margin-top:8px;color:#1D7A6E;font-weight:600">退保成功 · 保费已原路退回</p></div>`;
+if(o.status==='terminated')return`<div class="sp-result-box"><p style="font-size:13px;color:#64748B">保单已到期终止</p></div>`;
+if(o.status==='closed')return`<div class="sp-result-box"><p style="font-size:13px;color:#64748B">订单已关闭</p></div>`;
+return'';
+}
 
 const PREVIEW_DOC_TITLE={'财产保全':'财产保全申请书','证据保全':'证据保全申请书','行为保全':'行为保全申请书','继续执行':'继续执行申请书'};
 const PREVIEW_LEGAL={
@@ -595,12 +808,19 @@ ${fieldsHtml}
 ${renderMaterialFileList(type)}
 <div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
 }
-function showModal(html){
+function showModal(html,opts){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
-if(!mask||!inner)return;inner.innerHTML=html;mask.classList.add('show');
+if(!mask||!inner)return;
+inner.classList.toggle('sp-modal-source',!!(opts&&opts.source));
+inner.innerHTML=html;mask.classList.add('show');
 mask.onclick=e=>{if(e.target===mask)closeModal()};
-inner.querySelector('[data-action="modal-close"]')?.addEventListener('click',closeModal)}
-function closeModal(){document.getElementById('spModalMask')?.classList.remove('show');if(syncQrCountdown)clearInterval(syncQrCountdown)}
+inner.querySelectorAll('[data-action="modal-close"]').forEach(btn=>btn.addEventListener('click',closeModal));
+}
+function closeModal(){
+document.getElementById('spModalMask')?.classList.remove('show');
+document.getElementById('spModalInner')?.classList.remove('sp-modal-source');
+if(syncQrCountdown)clearInterval(syncQrCountdown);
+}
 function getPcUrl(tab){const u={workbench:'https://inst.workbench.ssbao.cn/material?order=SS20250529001',upload:'https://upload.ssbao.cn/inst/'+pcUploadToken,download:'https://inst.workbench.ssbao.cn/push?order=SS20250529001',chromeQr:'https://upload.ssbao.cn/inst/'+pcUploadToken,pair:'https://inst.workbench.ssbao.cn/auth/qr?s='+syncSpaceId,lan:'http://192.168.1.88:8765/upload?space='+syncSpaceId};return u[tab]||u.workbench}
 function pcShowToast(msg){const bar=document.getElementById('pcToastBar');if(!bar)return;bar.textContent=msg;bar.classList.add('show');clearTimeout(pcShowToast._t);pcShowToast._t=setTimeout(()=>bar.classList.remove('show'),2800)}
 function renderPcFileRows(highlightNew){
@@ -821,7 +1041,7 @@ opts=opts||{};const p=PAGES[id];if(!p){showToast('功能开发中');return}
 if(opts.fromHub&&TOOL_CHILD_PAGES.has(id)){subPageStack=[TOOL_HUB_ID]}else if(opts.pushStack&&currentSubId)subPageStack.push(currentSubId);
 else if(!opts.keepStack)subPageStack=[];
 currentSubId=id;
-subTitle.textContent=p.title;subSubtitle.textContent=p.sub||'';
+subTitle.textContent=p.title;subSubtitle.textContent=typeof p.sub==='function'?p.sub():(p.sub||'');
 const crumbEl=document.getElementById('subpageCrumb');
 if(TOOL_CHILD_PAGES.has(id)){
 crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+p.title;
@@ -832,6 +1052,11 @@ if(id==='orderList'){
 const filterTitles={all:'全部订单',pending:'待审核订单',issue:'待出函订单',supplement:'待补材料',done:'已出函订单',reject:'已驳回订单'};
 subTitle.textContent=filterTitles[currentOrderFilter]||'全部订单';
 }
+if(id==='xuepingOrders'){
+const meta=XUEPING_FILTERS.find(f=>f.key===currentXuepingFilter);
+subTitle.textContent=currentXuepingFilter==='all'?'学平险订单':('学平险 · '+(meta?meta.label:''));
+}
+if(id==='xuepingDetail')subSubtitle.textContent=XUEPING_STATE.id||'';
 if(id==='crossDeviceSync'){syncMobileTab=syncLoggedIn?'files':'scanLogin';showPcPanel(syncLoggedIn?'workbench':'pair');}else if(!TOOL_CHILD_PAGES.has(id))hidePcPanel();
 bindSubEvents(id)}
 function closeSubPage(){closeModal();subOverlay.classList.remove('active');document.getElementById('bottomNav').style.display='flex';currentSubId=null;subPageStack=[];document.getElementById('subpageCrumb').style.display='none';hidePcPanel()}
@@ -854,7 +1079,7 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 <div class="quick-grid">
 <div class="quick-item" data-page="orderList" data-filter="pending"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
 <div class="quick-item" data-page="orderList" data-filter="issue"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>出函办理</span></div>
-<div class="quick-item" data-page="xuepingInsurance"><div class="quick-icon"><i class="fas fa-graduation-cap"></i></div><span>学平险</span></div>
+<div class="quick-item" data-page="xuepingOrders"><div class="quick-icon"><i class="fas fa-graduation-cap"></i></div><span>学平险</span></div>
 <div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><i class="fas fa-robot"></i></div><span>工具助手</span></div>
 </div>
 <div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList">全部订单 →</a></div>
@@ -911,15 +1136,64 @@ orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>`
 <div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag tag-review">待审核</span></div>
 <p style="font-size:12px;color:#6F8FAA;margin:8px 0">保费 ¥${ORDER_STATE.premium.toLocaleString()}</p>
 <p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${ORDER_STATE.id}</p></div>
-<div class="sp-card"><div class="sp-card-title">案件信息</div>
-<p style="font-size:13px;line-height:1.8;color:#334155">申请人：${ORDER_STATE.applicant}<br>被保全人：${ORDER_STATE.respondent}<br>法院：${ORDER_STATE.court}<br>保全金额：¥${ORDER_STATE.amount.toLocaleString()}<br>案号：${ORDER_STATE.caseNo}<br>案由：${ORDER_STATE.cause}</p></div>
+<div class="sp-card">
+<div class="flex-between" style="margin-bottom:10px"><div class="sp-card-title" style="margin:0">案件信息</div><span class="sp-link-detail" data-page="caseInfoDetail" data-push-stack="1">详情 <i class="fas fa-chevron-right" style="font-size:10px"></i></span></div>
+${renderCaseSummaryLine('申请人',ORDER_STATE.applicant,'applicant')}
+${renderCaseSummaryLine('被申请人',ORDER_STATE.respondent,'respondent')}
+${renderCaseSummaryLine('法院',ORDER_STATE.court,'court')}
+${renderCaseSummaryLine('保全类型',ORDER_STATE.type,'type')}
+${renderCaseSummaryLine('标的金额','¥'+Number(ORDER_STATE.targetAmount).toLocaleString(),'targetAmount')}
+${renderCaseSummaryLine('案号',ORDER_STATE.caseNo,'caseNo')}
+${renderCaseSummaryLine('案由',ORDER_STATE.cause,'cause')}
+</div>
 <div class="sp-card"><div class="sp-card-title">申请材料</div>
-<div class="sp-list-item"><i class="fas fa-file-pdf" style="color:#E53E3E"></i><span style="flex:1;font-size:13px">起诉状.pdf</span><button class="sp-btn-secondary" data-action="toast" data-msg="预览已打开">预览</button></div>
-<div class="sp-list-item"><i class="fas fa-file-alt" style="color:#2B6CB0"></i><span style="flex:1;font-size:13px">保全申请书.pdf</span><button class="sp-btn-secondary" data-action="toast" data-msg="预览已打开">预览</button></div></div>
+${(ORDER_STATE.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="下载">下载</button></div>`).join('')}
+</div>
 <div class="sp-card"><div class="sp-card-title">审核记录</div><div class="sp-timeline">
 <div class="sp-timeline-item"><strong>用户提交</strong><br>2025-05-29 09:15</div>
 <div class="sp-timeline-item"><strong>AI预审通过</strong><br>2025-05-29 09:16 · 3项建议</div></div></div>
 <div class="sp-grid-2"><button class="sp-btn-danger" data-page="supplementRequest">要求补材料</button><button class="sp-btn-primary" data-page="orderReview">进入审核</button></div>`},
+caseInfoDetail:{title:'案件详情',sub:ORDER_STATE.caseNo,render:()=>{
+const o=ORDER_STATE;
+const canApprove=o.status==='pending'||o.status==='review';
+return`
+<div class="sp-card">
+<div class="sp-section-label">法院信息</div>
+${renderInfoRow('法院',o.court,'court')}
+${renderInfoRow('保全类型',o.type,'type')}
+${renderInfoRow('保全类别',o.preserveCategory,'preserveCategory')}
+${renderInfoRow('标的金额(元)',Number(o.targetAmount).toLocaleString(),'targetAmount')}
+${renderInfoRow('案由',o.cause,'cause')}
+${renderInfoRow('案件号',o.caseNo,'caseNo')}
+</div>
+<div class="sp-card">
+<div class="sp-section-label">申请人</div>
+${renderInfoRow('类型',o.applicantType,'applicantType')}
+${renderInfoRow('申请人',o.applicant,'applicant')}
+${renderInfoRow('证件类型',o.idType,'idType')}
+${renderInfoRow('证件号码',o.idNo,'idNo')}
+${renderInfoRow('手机号',o.applicantPhone,'applicantPhone')}
+${renderInfoRow('地址',o.applicantAddress,'applicantAddress')}
+</div>
+<div class="sp-card">
+<div class="sp-section-label">被申请人</div>
+${renderInfoRow('类型',o.respondentType,'respondentType')}
+${renderInfoRow('被申请人',o.respondent,'respondent')}
+${renderInfoRow('企业名称',o.companyName,'companyName')}
+${renderInfoRow('信用代码',o.creditCode,'creditCode')}
+${renderInfoRow('联系人',o.contactName,'contactName')}
+${renderInfoRow('手机号',o.respondentPhone)}
+${renderInfoRow('地址',o.respondentAddress)}
+</div>
+<div class="sp-card">
+<div class="sp-section-label">案件材料</div>
+${(o.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="${m.name} 下载中…"><i class="fas fa-download"></i> 下载</button></div>`).join('')}
+</div>
+<div class="sp-grid-2" style="margin-top:4px">
+<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>
+<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-send-email"><i class="fas fa-envelope"></i> 发送邮件</button>
+</div>
+${canApprove?`<button class="sp-btn-primary" data-page="orderReview" data-push-stack="1" style="margin-top:10px"><i class="fas fa-clipboard-check"></i> 审批</button>`:''}`}},
 orderReview:{title:'订单审核',sub:'核保 · 风险评估 · 审批',render:()=>`
 <div class="sp-steps"><div class="sp-step done">材料核验</div><div class="sp-step active">核保评估</div><div class="sp-step">审批</div><div class="sp-step">出函</div></div>
 <div class="sp-card"><div class="sp-card-title">核保评估</div>
@@ -943,16 +1217,31 @@ supplementRequest:{title:'要求补材料',sub:'通知申请人补充',render:()
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 企业营业执照</div>
 <span class="sp-label">补充说明</span><textarea class="sp-textarea">请补充起诉状首页及最后一页清晰扫描件。</textarea></div>
 <button class="sp-btn-primary" data-action="send-supplement">发送补材料通知</button>`},
-xuepingInsurance:{title:'学平险',sub:'学生平安保险 · 承保管理',render:()=>`
-<div class="sp-card"><div class="sp-card-title">产品概览</div>
-<p style="font-size:13px;line-height:1.8;color:#334155">面向在校学生的意外伤害及住院医疗保障，支持学校批量投保与个人续保。</p>
-<div class="sp-grid-2" style="margin-top:12px"><div class="sp-metric"><strong>1,286</strong><span>在保学生</span></div><div class="sp-metric"><strong>12</strong><span>合作学校</span></div></div></div>
-<div class="sp-card"><div class="sp-card-title">快捷办理</div>
-<div class="sp-list-item"><i class="fas fa-file-medical" style="color:#1A6B7C"></i><span style="flex:1;font-size:13px">批量投保录入</span><button class="sp-btn-secondary" data-action="toast" data-msg="打开批量投保">进入</button></div>
-<div class="sp-list-item"><i class="fas fa-user-plus" style="color:#1A6B7C"></i><span style="flex:1;font-size:13px">个人投保申请</span><button class="sp-btn-secondary" data-action="toast" data-msg="打开个人投保">进入</button></div>
-<div class="sp-list-item"><i class="fas fa-notes-medical" style="color:#1A6B7C"></i><span style="flex:1;font-size:13px">理赔案件处理</span><button class="sp-btn-secondary" data-action="toast" data-msg="打开理赔列表">进入</button></div></div>
-<div class="sp-card"><div class="flex-between"><strong>北京市第一中学</strong><span style="font-size:12px;color:#1D7A6E">在保 420 人</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">团体学平险 · 保期至 2025-08-31</p></div>
-<div class="sp-card"><div class="flex-between"><strong>朝阳实验小学</strong><span style="font-size:12px;color:#1D7A6E">在保 186 人</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">团体学平险 · 保期至 2025-09-15</p></div>`},
+xuepingOrders:{title:'学平险订单',sub:'学生平安保险 · 投保管理',render:()=>`
+<input class="sp-input" placeholder="搜索保单号/学生姓名/学校…">
+<div class="filter-tabs" id="xuepingFilters">${XUEPING_FILTERS.map(f=>`<button data-filter="${f.key}"${f.key==='all'?' class="on"':''}>${f.label}</button>`).join('')}</div>
+<div id="xuepingListArea">${XUEPING_LIST.map(renderXuepingCard).join('')}</div>`},
+xuepingDetail:{title:'学平险订单详情',sub:'订单详情',render:()=>{
+const o=XUEPING_STATE;
+const meta=XUEPING_STATUS_META[o.status]||XUEPING_STATUS_META.wait_confirm;
+return`
+${renderXuepingSteps(o.status)}
+<div class="sp-card"><div class="flex-between"><strong>学平险 · ${o.product}</strong><span class="tag ${meta.tag}">${meta.label}</span></div>
+<p style="font-size:12px;color:#6F8FAA;margin:8px 0">保费 ¥${o.premium}${o.policyNo?' · 保单号 '+o.policyNo:''}</p>
+<p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${o.id}</p></div>
+<div class="sp-card"><div class="sp-card-title">被保险人信息</div>
+${renderInfoRow('学生姓名',o.student)}
+${renderInfoRow('学校',o.school)}
+${renderInfoRow('年级',o.grade)}
+${renderInfoRow('监护人',o.guardian)}
+${renderInfoRow('联系电话',o.phone)}
+${renderInfoRow('保障期间',o.period)}
+</div>
+<div class="sp-card"><div class="sp-card-title">订单进度</div><div class="sp-timeline">
+<div class="sp-timeline-item"><strong>提交投保</strong><br>监护人线上提交 · ${o.id}</div>
+${o.status!=='closed'?`<div class="sp-timeline-item"><strong>当前状态 · ${meta.label}</strong><br>机构端可按状态办理确认/承保/退保</div>`:`<div class="sp-timeline-item"><strong>订单关闭</strong><br>用户取消或超时关闭</div>`}
+</div></div>
+${renderXuepingActions(o)}`}},
 customerList:{title:'客户管理',sub:'申请人 · 企业客户',render:()=>`
 <input class="sp-input" placeholder="搜索客户姓名/企业名称…">
 <div class="sp-card" data-page="customerDetail"><div class="flex-between"><strong>张正源</strong><span style="font-size:12px;color:#1D7A6E">3笔订单</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">131****2025 · 个人客户</p></div>
@@ -1287,7 +1576,17 @@ function bindSubEvents(id){
 subBody.querySelectorAll('[data-page]').forEach(el=>{
 el.addEventListener('click',e=>{
 if(e.target.closest('[data-action="download-guarantee"]'))return;
-e.stopPropagation();const pg=el.dataset.page;openSubPage(pg,{fromHub:TOOL_CHILD_PAGES.has(pg)||!!el.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario')});
+e.stopPropagation();
+const pg=el.dataset.page;
+const pushStack=el.dataset.pushStack==='1'||el.dataset.pushStack==='true';
+if(pg==='xuepingDetail'&&el.dataset.xpId){
+const found=XUEPING_LIST.find(x=>x.id===el.dataset.xpId);
+if(found)XUEPING_STATE=Object.assign({},found);
+}
+openSubPage(pg,{
+fromHub:TOOL_CHILD_PAGES.has(pg)||!!el.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario'),
+pushStack:pushStack
+});
 });
 });
 subBody.querySelectorAll('[data-action]').forEach(btn=>{
@@ -1295,11 +1594,20 @@ btn.addEventListener('click',e=>{
 e.stopPropagation();
 const act=btn.dataset.action,msg=btn.dataset.msg;
 if(act==='toast'&&msg)showToast(msg);
+if(act==='open-source'){openSourcePreview(btn.dataset.srcKey);return}
 if(act==='approve-order'){showToast('审核通过，订单进入待出函');setTimeout(()=>openSubPage('issueGuarantee'),800)}
 if(act==='reject-order'){showToast('订单已驳回，已通知申请人');setTimeout(closeSubPage,800)}
+if(act==='xp-confirm'){showToast('订单已确认，进入待支付');XUEPING_STATE.status='wait_pay';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
+if(act==='xp-reject'){showToast('投保申请已驳回，订单关闭');XUEPING_STATE.status='closed';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
+if(act==='xp-underwrite'){showToast('承保通过，保单待生效');XUEPING_STATE.status='wait_effective';XUEPING_STATE.policyNo=XUEPING_STATE.policyNo||('YAXP'+XUEPING_STATE.id.slice(2));setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
+if(act==='xp-start-cancel'){showToast('已发起退保，等待受理');XUEPING_STATE.status='wait_cancel';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
+if(act==='xp-accept-cancel'){showToast('退保已受理');XUEPING_STATE.status='cancel_processing';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
+if(act==='xp-finish-cancel'){showToast('退保成功，保费已退回');XUEPING_STATE.status='cancelled';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
 if(act==='issue-letter'){showToast('保函已出具并上链存证');ORDER_STATE.status='done';setTimeout(closeSubPage,1000)}
 if(act==='download-guarantee'){const gno=btn.dataset.gno||btn.dataset.id;showToast('保函 PDF 下载中… '+gno);return}
 if(act==='send-supplement'){showToast('补材料通知已发送');setTimeout(closeSubPage,800)}
+if(act==='case-pack-download')showToast('案件材料打包下载中…');
+if(act==='case-send-email')openEmailModal('案件材料包 · '+ORDER_STATE.caseNo);
 if(act==='rar-process')runRarProcess();
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
@@ -1386,6 +1694,22 @@ btn.addEventListener('click',()=>applyFilter(btn.dataset.filter));
 });
 applyFilter(currentOrderFilter||'all');
 }
+const xpFilters=document.getElementById('xuepingFilters');
+if(xpFilters){
+const applyXpFilter=f=>{
+currentXuepingFilter=f;
+xpFilters.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.filter===f));
+document.querySelectorAll('#xuepingListArea .order-card').forEach(card=>{
+card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
+});
+const meta=XUEPING_FILTERS.find(x=>x.key===f);
+subTitle.textContent=f==='all'?'学平险订单':('学平险 · '+(meta?meta.label:''));
+};
+xpFilters.querySelectorAll('button').forEach(btn=>{
+btn.addEventListener('click',()=>applyXpFilter(btn.dataset.filter));
+});
+applyXpFilter(currentXuepingFilter||'all');
+}
 }
 
 document.querySelectorAll('.nav-item').forEach(nav=>{
@@ -1399,12 +1723,14 @@ const PRD_SPECS={
 'stat-pending':{title:'待审核统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示待机构审核的订单数量，点击直达待审核列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=pending'],acceptance:['数字与列表待审核数一致'],api:'GET /api/inst/stats/pending'},
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
 'quick-issue':{title:'出函办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待出函订单列表，办理电子保函出具。',logic:['跳转 orderList filter=issue','自动选中「待出函」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待出函'],api:'GET /api/inst/orders?status=issue'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示完整案件信息（申请人、被保全人、法院、保全金额、案号、案由）、申请材料、审核记录，是审核决策的信息基础。',logic:['步骤条展示当前阶段','材料列表支持预览','底部操作：补材料/进入审核'],acceptance:['案件信息与用户端一致','时间线完整'],api:'GET /api/inst/order/{id}'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料与审核记录；案件信息右上角「详情」进入完整案件详情页。从材料提取的字段值带下划线可点，点击打开「原文溯源」弹层，在申请书/起诉状原文中高亮该字段供核保核对。',logic:['步骤条展示当前阶段','案件信息卡片右上角「详情」跳转 caseInfoDetail（支持返回）','提取字段 val-sourced 可点 → openSourcePreview 高亮原文行','材料列表支持预览','底部操作：补材料/进入审核'],acceptance:['案件摘要可见','提取字段可点开溯源','溯源弹层高亮对应原文','点击详情进入完整页','返回回到订单详情'],api:'GET /api/inst/order/{id}'},
+'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=待补材料'],api:'POST /api/inst/order/{id}/supplement'},
 'rate-config':{title:'费率配置',module:'业务',page:'rateConfig',priority:'P1',business:'机构配置产品费率，变更需平台审批后生效。',logic:['基础费率/最低保费/最高额度','提交审批 workflow'],acceptance:['提交后 Toast 已提交审批'],api:'POST /api/inst/rate/apply'},
-'customer-list':{title:'学平险',module:'业务',page:'xuepingInsurance',priority:'P1',business:'学生平安保险承保管理入口：在保学生、合作学校、批量投保与理赔办理。',logic:['展示在保规模与合作学校','批量投保/个人投保/理赔快捷入口','学校在保名单卡片'],acceptance:['工作台快捷入口显示学平险','可进入学平险管理页'],api:'GET /api/inst/xueping'},
+'customer-list':{title:'学平险订单',module:'工作台',page:'xuepingOrders',priority:'P0',business:'学平险投保订单入口：按待确认/待支付/待承保/待生效/已生效/已终止/订单关闭/等待退保/退保受理中/退保成功筛选，点击进入订单详情办理确认、承保与退保。',logic:['工作台快捷操作进入 xuepingOrders','十种状态筛选 Tab','卡片进入 xuepingDetail','详情按状态展示操作按钮'],acceptance:['工作台显示学平险','可按状态筛选','可进入订单详情'],api:'GET /api/inst/xueping/orders'},
+'xueping-detail':{title:'学平险订单详情',module:'学平险',page:'xuepingDetail',priority:'P0',business:'展示学平险订单状态、被保险人信息与进度；待确认可确认/驳回，待承保可通过承保，已生效可发起退保，退保链路覆盖等待退保→受理中→成功。',logic:['步骤条投保→确认→支付→承保→生效','状态徽标与十种状态一致','底部操作随状态变化'],acceptance:['详情状态正确','操作后状态流转 Toast'],api:'GET /api/inst/xueping/order/{id}'},
 'stats-report':{title:'业务报表',module:'业务',page:'statsReport',priority:'P1',business:'机构维度出函量、保费、通过率、时效统计。',logic:['四指标卡片','7日趋势图','导出 Excel'],acceptance:['指标数据准确','导出 Toast'],api:'GET /api/inst/report'},
 'blockchain-upload':{title:'链上存证',module:'业务',page:'blockchainUpload',priority:'P1',business:'保函出具后上司法区块链，支持法官核验。',logic:['输入保函编号','提交存证返回链哈希'],acceptance:['存证成功 Toast'],api:'POST /api/inst/blockchain/store'},
 'staff-manage':{title:'团队管理',module:'我的',page:'staffManage',priority:'P2',business:'机构管理员管理业务员账号与权限。',logic:['成员列表','邀请新成员生成链接'],acceptance:['邀请 Toast'],api:'GET /api/inst/staff'},
@@ -1429,7 +1755,9 @@ const ELEMENT_MAP=[
 {sel:'.nav-item[data-nav="workbench"]',id:'nav-workbench'},{sel:'.nav-item[data-nav="orders"]',id:'nav-orders'},
 {sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-filter="pending"]',id:'quick-review'},
 {sel:'.quick-item[data-filter="issue"]',id:'quick-issue'},{sel:'.order-card',id:'order-detail'},
-{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-page="xuepingInsurance"]',id:'customer-list'},
+{sel:'.sp-link-detail[data-page="caseInfoDetail"]',id:'case-info-detail'},
+{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-page="xuepingOrders"]',id:'customer-list'},
+{sel:'.order-card[data-page="xuepingDetail"]',id:'xueping-detail'},
 {sel:'.quick-item[data-page="statsReport"]',id:'stats-report'},{sel:'.quick-item[data-page="blockchainUpload"]',id:'blockchain-upload'},
 {sel:'.quick-item[data-page="staffManage"]',id:'staff-manage'},{sel:'.icon-btn[data-page="messageCenter"]',id:'message-center'},
 {sel:'.quick-item[data-page="productList"]',id:'product-list'},{sel:'.quick-item[data-page="courtCoverage"]',id:'court-coverage'},
