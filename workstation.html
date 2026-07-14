@@ -772,15 +772,36 @@ attr=attr||'data-preview-type';
 const types=['财产保全','证据保全','行为保全','继续执行'];
 return'<span class="sp-label">保全类型（切换预览格式）</span><div class="sp-tag-row" id="previewTypeRow">'+types.map(tp=>'<span class="sp-tag '+(tp===selected?'selected':'')+'" '+attr+'="'+tp+'">'+tp+'</span>').join('')+'</div>';
 }
+const ORDER_LIST_TITLES={
+all:['全部订单','筛选 · 搜索 · 批量处理'],
+pending:['订单审核','待审核订单列表'],
+review:['审核中','审核中订单列表'],
+issue:['出函办理','待出函订单列表'],
+done:['已出函','已出函订单列表'],
+reject:['已驳回','已驳回订单列表'],
+supplement:['待补材料','待补材料订单列表']
+};
+function applyOrderListFilter(root){
+const wrap=root||document;
+const area=wrap.querySelector('#orderListArea');
+const filters=wrap.querySelector('#orderFiltersSub')||wrap.querySelector('#orderFilters');
+const f=currentOrderFilter||'all';
+if(filters)filters.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.filter===f));
+if(area)area.querySelectorAll('.order-card').forEach(card=>{
+card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
+});
+}
 function openSubPage(id,opts){
 opts=opts||{};const p=PAGES[id];if(!p){showToast('功能开发中');return}
 if(opts.fromHub&&TOOL_CHILD_PAGES.has(id)){subPageStack=[TOOL_HUB_ID]}else if(opts.pushStack&&currentSubId)subPageStack.push(currentSubId);
 else if(!opts.keepStack)subPageStack=[];
 currentSubId=id;
-subTitle.textContent=p.title;subSubtitle.textContent=p.sub||'';
+let title=p.title,sub=p.sub||'';
+if(id==='orderList'){const t=ORDER_LIST_TITLES[currentOrderFilter]||ORDER_LIST_TITLES.all;title=t[0];sub=t[1]}
+subTitle.textContent=title;subSubtitle.textContent=sub;
 const crumbEl=document.getElementById('subpageCrumb');
 if(TOOL_CHILD_PAGES.has(id)){
-crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+p.title;
+crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+title;
 }else{crumbEl.style.display='none'}
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
@@ -804,14 +825,10 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 
 <div class="section-title"><span>⚡ 快捷操作</span></div>
 <div class="quick-grid">
-<div class="quick-item" data-page="orderReview"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
-<div class="quick-item" data-page="issueGuarantee"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>出函办理</span></div>
-<div class="quick-item" data-page="customerList"><div class="quick-icon"><i class="fas fa-users"></i></div><span>客户管理</span></div>
+<div class="quick-item" data-page="orderList" data-filter="pending"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
+<div class="quick-item" data-page="orderList" data-filter="issue"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>出函办理</span></div>
+<div class="quick-item" data-page="xuepingOrders"><div class="quick-icon"><i class="fas fa-user-graduate"></i></div><span>学平险</span></div>
 <div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><i class="fas fa-robot"></i></div><span>工具助手</span></div>
-<div class="quick-item" data-page="blockchainUpload"><div class="quick-icon"><i class="fas fa-link"></i></div><span>链上存证</span></div>
-<div class="quick-item" data-page="statsReport"><div class="quick-icon"><i class="fas fa-chart-bar"></i></div><span>业务报表</span></div>
-<div class="quick-item" data-page="courtCoverage"><div class="quick-icon"><i class="fas fa-landmark"></i></div><span>法院覆盖</span></div>
-<div class="quick-item" data-page="rateConfig"><div class="quick-icon"><i class="fas fa-percent"></i></div><span>费率配置</span></div>
 </div>
 <div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList">全部订单 →</a></div>
 <div class="order-card" data-page="orderDetail"><div class="flex-between"><strong style="font-size:14px">财产保全保函</strong><span class="tag tag-review">待审核</span></div><p style="font-size:12px;color:#6F8FAA;margin:8px 0">SS20250529001 · ¥7,225 · 张正源</p><p style="font-size:11px;color:#94A3B8">（2025）京0105民初12345号</p></div>
@@ -906,6 +923,21 @@ supplementRequest:{title:'要求补材料',sub:'通知申请人补充',render:()
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 企业营业执照</div>
 <span class="sp-label">补充说明</span><textarea class="sp-textarea">请补充起诉状首页及最后一页清晰扫描件。</textarea></div>
 <button class="sp-btn-primary" data-action="send-supplement">发送补材料通知</button>`},
+xuepingOrders:{title:'学平险订单',sub:'学生平安保险 · 投保审核',render:()=>`
+<div class="filter-tabs"><button class="on">全部</button><button>待审核</button><button>已承保</button><button>已退保</button></div>
+<input class="sp-input" placeholder="搜索保单号/学生姓名/学校…">
+<div class="order-card" data-page="xuepingDetail"><div class="flex-between"><strong>学平险 · 意外医疗</strong><span class="tag tag-review">待审核</span></div><p style="font-size:12px;color:#6F8FAA;margin:8px 0">XP20250529001 · ¥120 · 王小明</p><p style="font-size:11px;color:#94A3B8">北京市朝阳区实验小学 · 三年级</p></div>
+<div class="order-card" data-page="xuepingDetail"><div class="flex-between"><strong>学平险 · 住院津贴</strong><span class="tag tag-done">已承保</span></div><p style="font-size:12px;color:#6F8FAA;margin:8px 0">XP20250528015 · ¥180 · 李思思</p><p style="font-size:11px;color:#94A3B8">上海市浦东新区第二中学 · 初一</p></div>
+<div class="order-card" data-page="xuepingDetail"><div class="flex-between"><strong>学平险 · 意外医疗</strong><span class="tag tag-reject">已退保</span></div><p style="font-size:12px;color:#6F8FAA;margin:8px 0">XP20250520008 · ¥120 · 赵浩然</p><p style="font-size:11px;color:#94A3B8">深圳市南山外国语学校 · 五年级</p></div>`},
+xuepingDetail:{title:'学平险详情',sub:'XP20250529001',render:()=>`
+<div class="sp-steps"><div class="sp-step done">投保</div><div class="sp-step active">审核</div><div class="sp-step">承保</div><div class="sp-step">完成</div></div>
+<div class="sp-card"><div class="flex-between"><strong>学平险 · 意外医疗</strong><span class="tag tag-review">待审核</span></div>
+<p style="font-size:12px;color:#6F8FAA;margin:8px 0">保单号 XP20250529001 · 保费 ¥120</p></div>
+<div class="sp-card"><div class="sp-card-title">被保险人信息</div>
+<p style="font-size:13px;line-height:1.8;color:#334155">姓名：王小明<br>学校：北京市朝阳区实验小学<br>年级：三年级<br>监护人：王建国 · 138****6621</p></div>
+<div class="sp-card"><div class="sp-card-title">保障方案</div>
+<p style="font-size:13px;line-height:1.8;color:#334155">意外伤害：10万元<br>意外医疗：2万元<br>住院津贴：50元/天 · 最长90天</p></div>
+<div class="sp-grid-2"><button class="sp-btn-danger" data-action="toast" data-msg="已驳回该投保申请">驳回</button><button class="sp-btn-primary" data-action="toast" data-msg="审核通过，已承保">通过承保</button></div>`},
 customerList:{title:'客户管理',sub:'申请人 · 企业客户',render:()=>`
 <input class="sp-input" placeholder="搜索客户姓名/企业名称…">
 <div class="sp-card" data-page="customerDetail"><div class="flex-between"><strong>张正源</strong><span style="font-size:12px;color:#1D7A6E">3笔订单</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">131****2025 · 个人客户</p></div>
@@ -1036,12 +1068,16 @@ if(el._bound)return;el._bound=true;el.style.cursor='pointer';
 el.addEventListener('click',e=>{
 e.stopPropagation();
 const pg=el.dataset.page,flt=el.dataset.filter;
-if(flt)currentOrderFilter=flt;
+if(pg==='orderList')currentOrderFilter=flt||'all';
+else if(flt)currentOrderFilter=flt;
 if(pg)openSubPage(pg,{fromHub:el.closest('.inst-mat-hub,.inst-mat-grid')&&TOOL_CHILD_PAGES.has(pg)});
 });
 });
 document.querySelectorAll('.stat-item[data-page],.stat-block[data-page]').forEach(el=>{
-if(el._bound)return;el._bound=true;el.addEventListener('click',()=>{if(el.dataset.filter)currentOrderFilter=el.dataset.filter;openSubPage(el.dataset.page||'orderList')});
+if(el._bound)return;el._bound=true;el.addEventListener('click',()=>{
+currentOrderFilter=el.dataset.filter||'all';
+openSubPage(el.dataset.page||'orderList');
+});
 });
 document.querySelectorAll('.order-card[data-page]').forEach(el=>{
 if(el._bound)return;el._bound=true;el.addEventListener('click',()=>openSubPage('orderDetail'));
@@ -1054,6 +1090,7 @@ btn.addEventListener('click',()=>{
 filters.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
 btn.classList.add('on');
 const f=btn.dataset.filter;
+currentOrderFilter=f;
 document.querySelectorAll('#orderListArea .order-card').forEach(card=>{
 card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
 });
@@ -1321,12 +1358,16 @@ btn.addEventListener('click',()=>{
 filtersSub.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
 btn.classList.add('on');
 const f=btn.dataset.filter;
+currentOrderFilter=f;
+const t=ORDER_LIST_TITLES[f]||ORDER_LIST_TITLES.all;
+subTitle.textContent=t[0];subSubtitle.textContent=t[1];
 document.querySelectorAll('#orderListArea .order-card').forEach(card=>{
 card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
 });
 });
 });
 }
+if(id==='orderList')applyOrderListFilter(subBody);
 }
 
 document.querySelectorAll('.nav-item').forEach(nav=>{
@@ -1338,14 +1379,15 @@ const PRD_SPECS={
 'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页，展示待办统计、快捷操作入口及最新待办订单，帮助核保人员快速进入高频业务。',logic:['展示待审核/待出函/待补材料/本月出函四项核心指标','点击统计卡片可跳转对应筛选订单列表','待办订单卡片点击进入订单详情'],acceptance:['Tab 切换后工作台内容完整渲染','统计数字可点击跳转','待办 alert 可点击'],api:'GET /api/inst/dashboard'},
 'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端订单中心，集中管理用户提交的保全保函申请，支持状态筛选与搜索。',logic:['filter-tabs 六种状态筛选','order-card 点击进入 orderDetail','搜索 icon 跳转 searchPage'],acceptance:['六种筛选互斥','筛选后列表正确过滤'],api:'GET /api/inst/orders'},
 'stat-pending':{title:'待审核统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示待机构审核的订单数量，点击直达待审核列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=pending'],acceptance:['数字与列表待审核数一致'],api:'GET /api/inst/stats/pending'},
-'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入审核流程，缩短操作路径。',logic:['跳转 orderReview 子页','展示核保评估表单'],acceptance:['点击打开 orderReview','风险等级 tag 单选'],api:'POST /api/inst/order/review'},
-'quick-issue':{title:'出函办理',module:'工作台',page:'工作台',priority:'P0',business:'审核通过后生成电子保函并可选链上存证，完成机构侧核心产出。',logic:['选择待出函订单','自动生成保函编号','勾选司法链存证','确认出函通知用户'],acceptance:['出函后 Toast 成功','状态变为已出函'],api:'POST /api/inst/guarantee/issue'},
+'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待审核订单列表，从列表选择订单再进入审核。',logic:['跳转 orderList filter=pending','默认选中「待审核」Tab','仅展示待审核订单'],acceptance:['点击打开待审核订单列表','筛选项高亮待审核'],api:'GET /api/inst/orders?status=pending'},
+'quick-issue':{title:'出函办理快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待出函订单列表，从列表选择订单再办理出函。',logic:['跳转 orderList filter=issue','默认选中「待出函」Tab','仅展示待出函订单'],acceptance:['点击打开待出函订单列表','筛选项高亮待出函'],api:'GET /api/inst/orders?status=issue'},
 'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示完整案件信息、申请材料、审核记录，是审核决策的信息基础。',logic:['步骤条展示当前阶段','材料列表支持预览','底部操作：补材料/进入审核'],acceptance:['案件信息与用户端一致','时间线完整'],api:'GET /api/inst/order/{id}'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=待补材料'],api:'POST /api/inst/order/{id}/supplement'},
 'rate-config':{title:'费率配置',module:'业务',page:'rateConfig',priority:'P1',business:'机构配置产品费率，变更需平台审批后生效。',logic:['基础费率/最低保费/最高额度','提交审批 workflow'],acceptance:['提交后 Toast 已提交审批'],api:'POST /api/inst/rate/apply'},
 'customer-list':{title:'客户管理',module:'业务',page:'customerList',priority:'P1',business:'查看申请人/企业客户历史订单与信用概况。',logic:['搜索客户','卡片展示订单数','点击进入 customerDetail'],acceptance:['客户列表可搜索'],api:'GET /api/inst/customers'},
+'xueping-orders':{title:'学平险',module:'工作台',page:'xuepingOrders',priority:'P0',business:'学平险投保订单入口：查看待审核/已承保/已退保保单，完成学生平安保险核保承保（不含链上存证、法院覆盖等诉讼保函能力）。',logic:['工作台快捷操作进入','状态筛选全部/待审核/已承保/已退保','搜索保单号/学生/学校','卡片进入 xuepingDetail 审核承保'],acceptance:['工作台显示学平险非客户管理','无链上存证/业务报表/法院覆盖/费率配置快捷入口','可进入订单详情承保'],api:'GET /api/inst/xueping/orders'},
 'stats-report':{title:'业务报表',module:'业务',page:'statsReport',priority:'P1',business:'机构维度出函量、保费、通过率、时效统计。',logic:['四指标卡片','7日趋势图','导出 Excel'],acceptance:['指标数据准确','导出 Toast'],api:'GET /api/inst/report'},
 'blockchain-upload':{title:'链上存证',module:'业务',page:'blockchainUpload',priority:'P1',business:'保函出具后上司法区块链，支持法官核验。',logic:['输入保函编号','提交存证返回链哈希'],acceptance:['存证成功 Toast'],api:'POST /api/inst/blockchain/store'},
 'staff-manage':{title:'团队管理',module:'我的',page:'staffManage',priority:'P2',business:'机构管理员管理业务员账号与权限。',logic:['成员列表','邀请新成员生成链接'],acceptance:['邀请 Toast'],api:'GET /api/inst/staff'},
@@ -1368,9 +1410,9 @@ const PRD_SPECS={
 
 const ELEMENT_MAP=[
 {sel:'.nav-item[data-nav="workbench"]',id:'nav-workbench'},{sel:'.nav-item[data-nav="orders"]',id:'nav-orders'},
-{sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-page="orderReview"]',id:'quick-review'},
-{sel:'.quick-item[data-page="issueGuarantee"]',id:'quick-issue'},{sel:'.order-card',id:'order-detail'},
-{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-page="customerList"]',id:'customer-list'},
+{sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-page="orderList"][data-filter="pending"]',id:'quick-review'},
+{sel:'.quick-item[data-page="orderList"][data-filter="issue"]',id:'quick-issue'},{sel:'.order-card',id:'order-detail'},
+{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-page="xuepingOrders"]',id:'xueping-orders'},
 {sel:'.quick-item[data-page="statsReport"]',id:'stats-report'},{sel:'.quick-item[data-page="blockchainUpload"]',id:'blockchain-upload'},
 {sel:'.quick-item[data-page="staffManage"]',id:'staff-manage'},{sel:'.icon-btn[data-page="messageCenter"]',id:'message-center'},
 {sel:'.quick-item[data-page="productList"]',id:'product-list'},{sel:'.quick-item[data-page="courtCoverage"]',id:'court-coverage'},
