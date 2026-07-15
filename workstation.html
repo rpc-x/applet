@@ -148,6 +148,45 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .src-doc-sheet .src-doc-line.hit{background:#FEF08A;border-radius:4px;padding:2px 4px;margin-left:-4px;margin-right:-4px;box-shadow:0 0 0 2px #FEF08A}
 .src-doc-sheet .src-doc-line.hit mark{background:transparent;color:#92400E;font-weight:800;padding:0}
 .src-hit-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
+/* 案件证据链诊断 */
+.ev-chain-card{border:1px solid #D4EDE8;background:linear-gradient(165deg,#F7FBFC 0%,#fff 42%)}
+.ev-chain-type{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#E0F2FE;color:#0369A1}
+.ev-chain-type.loan{background:#FEF3C7;color:#B45309}
+.ev-chain-type.contract{background:#D1FAE5;color:#047857}
+.ev-chain-hint{font-size:11px;color:#6F8FAA;line-height:1.5;margin:-2px 0 12px}
+.ev-score-row{display:flex;align-items:center;gap:14px;padding:12px;background:#fff;border:1px solid #E8F0F8;border-radius:16px;margin-bottom:12px}
+.ev-score-ring{width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:3px solid #CBD5E1;background:#F8FAFC}
+.ev-score-ring.pass{border-color:#34D399;background:#ECFDF5}
+.ev-score-ring.warn{border-color:#FBBF24;background:#FFFBEB}
+.ev-score-ring.fail{border-color:#F87171;background:#FEF2F2}
+.ev-score-ring strong{font-size:20px;font-weight:800;line-height:1;color:#0F4C5C}
+.ev-score-ring span{font-size:9px;color:#64748B;font-weight:600;margin-top:2px}
+.ev-score-meta{flex:1;min-width:0}
+.ev-score-meta .ev-judge{font-size:13px;font-weight:800;color:#0F4C5C;margin-bottom:4px}
+.ev-score-meta .ev-judge.pass{color:#047857}.ev-score-meta .ev-judge.warn{color:#B45309}.ev-score-meta .ev-judge.fail{color:#B91C1C}
+.ev-score-bar{height:8px;background:#E2E8F0;border-radius:8px;overflow:hidden;margin:6px 0}
+.ev-score-bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#1A6B7C,#2A9B8E)}
+.ev-score-bar.warn i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.ev-score-bar.fail i{background:linear-gradient(90deg,#DC2626,#F87171)}
+.ev-score-meta p{font-size:11px;color:#64748B;line-height:1.45;margin:0}
+.ev-node{padding:10px 12px;border-radius:14px;background:#F8FAFE;border:1px solid #EDF2F9;margin-bottom:8px}
+.ev-node:last-child{margin-bottom:0}
+.ev-node.ok{border-color:#A7F3D0;background:#F0FDF4}
+.ev-node.miss{border-color:#FECACA;background:#FEF2F2}
+.ev-node.weak{border-color:#FDE68A;background:#FFFBEB}
+.ev-node-hd{display:flex;align-items:flex-start;gap:8px;font-size:12px;font-weight:700;color:#1C2E36;line-height:1.4}
+.ev-node-hd .ev-st{flex-shrink:0;width:18px;height:18px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff;margin-top:1px}
+.ev-node.ok .ev-st{background:#059669}.ev-node.miss .ev-st{background:#DC2626}.ev-node.weak .ev-st{background:#D97706}
+.ev-node-hd .ev-req{font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:auto;flex-shrink:0}
+.ev-node.ok .ev-req{background:#D1FAE5;color:#047857}
+.ev-node.miss .ev-req{background:#FEE2E2;color:#B91C1C}
+.ev-node.weak .ev-req{background:#FEF3C7;color:#B45309}
+.ev-node p{font-size:11px;color:#64748B;line-height:1.5;margin:6px 0 0 26px}
+.ev-diag-box{margin-top:12px;padding:12px;border-radius:14px;background:#EFF8FC;border:1px dashed #B8D4E8}
+.ev-diag-box strong{display:block;font-size:12px;color:#0F4C5C;margin-bottom:6px}
+.ev-diag-box p{font-size:11px;color:#475569;line-height:1.65;margin:0}
+.ev-chain-actions{display:flex;gap:8px;margin-top:12px}
+.ev-chain-actions button{flex:1;margin:0}
 .biz-line-tabs{display:flex;gap:4px;margin-bottom:10px;padding:3px;background:#EEF2F6;border-radius:12px}
 .biz-line-tabs button{flex:1;border:none;padding:8px 4px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:transparent;color:#64748B;font-family:inherit;line-height:1.2}
 .biz-line-tabs button.on{background:#fff;color:#0F4C5C;box-shadow:0 1px 3px rgba(15,76,92,.1)}
@@ -223,6 +262,12 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .profile-card{background:linear-gradient(115deg,#EFF5FC,#FFF);border-radius:28px;padding:20px;margin-bottom:20px;border:1px solid #E8F0F8}
 .profile-avatar{width:64px;height:64px;border-radius:32px;background:linear-gradient(145deg,#1A6B7C,#0F4C5C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;flex-shrink:0}
 .profile-avatar.guest{background:#E8EEF5;color:#94A3B8;border:2px dashed #CBD5E1}
+.profile-auth-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.profile-auth-row .auth-pending{font-size:11px;color:#B45309;font-weight:600}
+.profile-auth-row .auth-ok{font-size:11px;color:#059669;font-weight:600}
+.profile-auth-go{border:none;background:#1A6B7C;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:inherit;line-height:1.2}
+.setting-right.auth-done{color:#059669;font-weight:700;font-size:13px}
+.setting-right.auth-todo{color:#1A6B7C;font-weight:700;font-size:13px}
 .switch-toggle{width:46px;height:24px;background:#CBD5E1;border-radius:40px;position:relative;cursor:pointer}
 .switch-toggle::after{content:"";width:20px;height:20px;background:#fff;border-radius:20px;position:absolute;top:2px;left:3px;transition:.2s}
 .switch-toggle.active{background:#1A6B7C}.switch-toggle.active::after{left:23px}
@@ -230,6 +275,54 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-metric{text-align:center;padding:12px;background:#F8FAFE;border-radius:16px}
 .sp-metric strong{display:block;font-size:20px;color:#0F4C5C}
 .sp-metric span{font-size:11px;color:#6F8FAA}
+/* 消息中心 */
+.msg-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(125deg,#0F4C5C,#1A6B7C 60%,#2A9B8E);border-radius:20px;padding:16px 16px 14px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
+.msg-summary::after{content:"";position:absolute;right:-18px;top:-28px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)}
+.msg-summary-left{position:relative;z-index:1}
+.msg-summary-left strong{display:block;font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.msg-summary-left span{display:block;font-size:12px;opacity:.88;margin-top:6px}
+.msg-summary-actions{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.msg-mark-all{border:none;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:7px 12px;border-radius:20px;cursor:pointer;font-family:inherit;backdrop-filter:blur(4px)}
+.msg-mark-all:disabled{opacity:.45;cursor:default}
+.msg-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.msg-tabs button{flex-shrink:0;border:none;padding:7px 13px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.msg-tabs button.on{background:#1A6B7C;color:#fff}
+.msg-tabs .msg-tab-n{font-size:10px;font-weight:800;background:rgba(0,0,0,.08);padding:1px 6px;border-radius:8px}
+.msg-tabs button.on .msg-tab-n{background:rgba(255,255,255,.22)}
+.msg-group{margin-bottom:14px}
+.msg-group-hd{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 8px}
+.msg-group-hd span{font-size:12px;font-weight:700;color:#64748B}
+.msg-group-hd em{font-style:normal;font-size:11px;color:#94A3B8}
+.msg-list{background:#fff;border:1px solid #EDF2F9;border-radius:20px;overflow:hidden}
+.msg-item{display:flex;gap:12px;padding:14px 14px 14px 12px;border-bottom:1px solid #F1F5F9;cursor:pointer;position:relative;transition:background .15s}
+.msg-item:last-child{border-bottom:none}
+.msg-item:active{background:#F8FBFD}
+.msg-item.unread{background:linear-gradient(90deg,#F0F9FB 0%,#fff 48%)}
+.msg-item.unread::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:#1A6B7C}
+.msg-ico{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative}
+.msg-ico.audit{background:#FFF7ED;color:#EA580C}
+.msg-ico.biz{background:#ECFDF5;color:#059669}
+.msg-ico.system{background:#F1F5F9;color:#64748B}
+.msg-ico.sync{background:#EEF2FF;color:#4F46E5}
+.msg-ico.rate{background:#FEF3C7;color:#B45309}
+.msg-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#EF4444;border:2px solid #fff}
+.msg-body{flex:1;min-width:0}
+.msg-row1{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.msg-title{font-size:14px;font-weight:700;color:#1C2E36;line-height:1.35}
+.msg-item.unread .msg-title{font-weight:800}
+.msg-time{font-size:11px;color:#94A3B8;flex-shrink:0;padding-top:1px}
+.msg-desc{font-size:12px;color:#64748B;line-height:1.55;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.msg-meta{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.msg-chip{font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;background:#F1F5F9;color:#64748B}
+.msg-chip.audit{background:#FFF7ED;color:#C2410C}
+.msg-chip.biz{background:#ECFDF5;color:#047857}
+.msg-chip.system{background:#F1F5F9;color:#475569}
+.msg-chip.sync{background:#EEF2FF;color:#4338CA}
+.msg-chip.rate{background:#FEF3C7;color:#B45309}
+.msg-go{margin-left:auto;font-size:11px;font-weight:700;color:#1A6B7C}
+.msg-empty{text-align:center;padding:36px 16px;color:#94A3B8}
+.msg-empty i{font-size:36px;display:block;margin-bottom:10px;opacity:.5}
+.msg-empty p{font-size:13px;line-height:1.5}
 /* 业务报表 */
 .rpt-period{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .rpt-period button{flex-shrink:0;border:none;padding:7px 14px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D;font-family:inherit}
@@ -640,6 +733,23 @@ body.embed-mode #authOverlay{display:none!important}
 const scroll=document.getElementById('mainScroll'),tabContent=document.getElementById('tabContent'),subOverlay=document.getElementById('subpageOverlay'),subBody=document.getElementById('subpageBody'),subTitle=document.getElementById('subpageTitle'),subSubtitle=document.getElementById('subpageSubtitle'),spToast=document.getElementById('spToast');
 let currentNav='workbench',currentOrderFilter='all',currentXuepingFilter='all',currentBizLine='all',currentSubId=null,subPageStack=[];
 let authMode='login',authLoggedIn=false,entAuthStep=0,entAuthStatus='pending';
+let msgFilter='all';
+const MSG_TYPE_META={
+audit:{label:'审核',chip:'audit',ico:'fa-clipboard-check',cls:'audit'},
+biz:{label:'业务',chip:'biz',ico:'fa-file-signature',cls:'biz'},
+rate:{label:'费率',chip:'rate',ico:'fa-percent',cls:'rate'},
+sync:{label:'材料',chip:'sync',ico:'fa-paper-plane',cls:'sync'},
+system:{label:'系统',chip:'system',ico:'fa-bell',cls:'system'}
+};
+const MESSAGE_LIST=[
+{id:'m1',type:'audit',title:'新订单待审核',desc:'SS20250529001 · 财产保全保函，标的 ¥500 万，请尽快核保。',time:'10分钟前',group:'today',unread:true,action:'去审核',page:'orderDetail'},
+{id:'m2',type:'sync',title:'PC 已推送案件清单',desc:'批量案件清单.pdf 已下发至本机，可在文件空间站查看。',time:'32分钟前',group:'today',unread:true,action:'去查看',page:'crossDeviceSync'},
+{id:'m3',type:'biz',title:'待办理订单提醒',desc:'SS20250528008 · 继续执行保函已通过审核，待出函办理。',time:'1小时前',group:'today',unread:true,action:'去办理',page:'orderList'},
+{id:'m4',type:'rate',title:'费率变更已通过',desc:'平台已批准基础费率 0.85‰ 变更申请，次日生效。',time:'昨天 16:20',group:'earlier',unread:false,action:'查看',page:'rateConfig'},
+{id:'m5',type:'biz',title:'补材料已提交',desc:'SS20250527015 用户已补充起诉状与主体资格证明。',time:'昨天 09:48',group:'earlier',unread:false,action:'去复核',page:'orderDetail'},
+{id:'m6',type:'system',title:'企业认证进度提醒',desc:'贵司企业认证尚未完成，完成后方可开通完整业务权限。',time:'2天前',group:'earlier',unread:false,action:'去认证',page:'enterpriseAuth'},
+{id:'m7',type:'audit',title:'学平险待确认',desc:'XP20250521003 · 北京某中学团体投保，等待机构确认承保方案。',time:'3天前',group:'earlier',unread:false,action:'去确认',page:'orderList'}
+];
 const ENT_AUTH_STATE={license:false,idFront:false,idBack:false,permit:false,bankName:'中国工商银行',bankAccount:'6222 **** **** 8899',companyName:'北京某某科技有限公司',creditCode:'91110105MA01234567',legalName:'张三',payAmount:''};
 const TOOL_CHILD_PAGES=new Set(['rarBatchPack','structExtract','smartAnalysis','crossDeviceSync']);
 const TOOL_HUB_ID='toolAssistantHub';
@@ -653,7 +763,14 @@ applicantPhone:'15800381002',applicantAddress:'北京朝阳区某某小区',
 respondentType:'企业',companyName:'北京朝阳区某某科技有限公司',creditCode:'9110201199001933YSJX',
 contactName:'北京朝阳区某某科技有限公司',respondentPhone:'',respondentAddress:'',
 propertyClue:'工商银行朝阳支行 6222021234567890',
-materials:[{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'}],
+materials:[
+{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'买卖合同.pdf',icon:'fa-file-contract',color:'#0F766E'},
+{name:'送货验收单.pdf',icon:'fa-file-alt',color:'#2563EB'},
+{name:'增值税发票.pdf',icon:'fa-file-invoice',color:'#B45309'},
+{name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED'}
+],
 /* 字段溯源：点击提取值 → 打开原文预览并高亮对应行 */
 fieldSources:{
 court:{file:'保全申请书.pdf',label:'保全申请书',docField:'受理法院'},
@@ -748,6 +865,142 @@ ${linesHtml}
 <p class="src-hit-tip"><i class="fas fa-highlighter"></i> 黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。</p>
 <button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">完成核对</button>`,{source:true});
 setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
+}
+
+/** 诉讼保 · 按案由识别证据链模板（借贷 / 合同） */
+const EVIDENCE_CHAIN_TEMPLATES={
+loan:{
+key:'loan',label:'借贷·案件证据链',typeClass:'loan',
+summary:'围绕「借贷合意—协议—资金交付—沟通佐证」核验借贷事实是否可闭环。',
+nodes:[
+{id:'loan_intent',title:'证明存在借贷合意',desc:'借条、欠条、口头借贷合意确认、转账备注等可证明双方成立借贷关系',patterns:['借条','欠条','借贷合意','借款确认','借贷'],weight:25,required:true},
+{id:'loan_agreement',title:'借款协议',desc:'书面借款合同/借款协议，载明金额、期限、利率、还款方式',patterns:['借款协议','借款合同','贷款合同','借贷合同'],weight:20,required:true},
+{id:'loan_delivery',title:'证明资金实际交付',desc:'银行转账流水、微信支付、支付宝转账等资金出借凭证',patterns:['转账','银行流水','支付凭证','微信支付','支付宝','资金交付','出借'],weight:25,required:true},
+{id:'loan_chat',title:'微信/支付宝等聊天记录',desc:'催款、确认借款、还款协商等沟通记录，补强合意与交付',patterns:['微信','支付宝','聊天','通话记录','短信'],weight:15,required:false},
+{id:'loan_repay',title:'还款/利息凭证（建议）',desc:'已还部分或利息支付记录，用于核对争议金额',patterns:['还款','利息','收据'],weight:15,required:false}
+]},
+contract:{
+key:'contract',label:'合同·案件事实链',typeClass:'contract',
+summary:'围绕「合同关系成立—履约证明—沟通佐证」核验合同纠纷事实是否可闭环。',
+nodes:[
+{id:'ctr_establish',title:'证明合同关系成立',desc:'书面合同、订单、确认函等证明双方权利义务关系成立（核心节点）',patterns:['合同','协议','订单确认','确认函','买卖合同','服务合同'],weight:30,required:true},
+{id:'ctr_perform',title:'证明履约证明',desc:'交货、验收、施工、服务完成、发票等履约事实材料',patterns:['履约','交货','送货','验收','发票','施工','完工','对账'],weight:25,required:true},
+{id:'ctr_chat',title:'聊天记录等沟通佐证',desc:'微信/邮件等对合同履行、催款、变更的沟通记录',patterns:['微信','聊天','邮件','沟通','催款'],weight:20,required:false},
+{id:'ctr_pay',title:'付款/结算凭证（建议）',desc:'付款回单、结算单，用于核对应付未付金额',patterns:['付款','结算','回单','转账'],weight:15,required:false},
+{id:'ctr_subject',title:'主体资格证明',desc:'营业执照、身份证等主体适格材料',patterns:['营业执照','主体资格','身份证'],weight:10,required:true}
+]}
+};
+const EVIDENCE_SCORE_RULES=[
+{range:'≥ 80 分',level:'可提交审核',tip:'关键节点齐全，缺项均为建议项；可进入核保审核'},
+{range:'60 ~ 79 分',level:'建议补材料后提交',tip:'主链基本成立，但仍有影响证明力的缺口，建议补件后再审'},
+{range:'< 60 分',level:'材料不足 · 暂缓提交',tip:'关键必填节点缺失，证据链无法闭环，应先要求补材料'}
+];
+function resolveEvidenceChainType(cause){
+const c=String(cause||'');
+if(/借款|借贷|民间借贷|金融借款|欠款纠纷/.test(c))return EVIDENCE_CHAIN_TEMPLATES.loan;
+if(/合同|买卖|服务|租赁|承揽|建设工程|网络服务/.test(c))return EVIDENCE_CHAIN_TEMPLATES.contract;
+return EVIDENCE_CHAIN_TEMPLATES.contract;
+}
+function matchMaterialsForNode(materials,patterns){
+const names=(materials||[]).map(m=>m.name||m);
+return names.filter(n=>fileMatchesEvidence(n,patterns));
+}
+function analyzeEvidenceChain(order){
+const o=order||ORDER_STATE;
+const tpl=resolveEvidenceChainType(o.cause);
+const materials=o.materials||[];
+const nodes=tpl.nodes.map(n=>{
+const hits=matchMaterialsForNode(materials,n.patterns);
+const ok=hits.length>0;
+let status='miss';
+if(ok)status='ok';
+else if(!n.required)status='weak';
+return Object.assign({},n,{hits,status,ok});
+});
+const totalW=nodes.reduce((s,n)=>s+n.weight,0)||1;
+const gotW=nodes.filter(n=>n.ok).reduce((s,n)=>s+n.weight,0);
+const score=Math.round(gotW/totalW*100);
+const missRequired=nodes.filter(n=>n.required&&!n.ok);
+const missOptional=nodes.filter(n=>!n.required&&!n.ok);
+let level='fail',judge='材料不足 · 暂缓提交',judgeTip='关键必填节点缺失，证据链无法闭环，建议先要求补材料。';
+if(score>=80&&!missRequired.length){level='pass';judge='可提交审核';judgeTip='关键证据节点齐全，可进入核保审核；建议项可按需补强。'}
+else if(score>=60||(missRequired.length<=1&&score>=50)){level='warn';judge='建议补材料后提交';judgeTip='主链基本成立，但仍有影响证明力的缺口，建议补件后再审。'}
+const diagParts=[];
+diagParts.push(`案由识别为「${o.cause||'—'}」，适用【${tpl.label}】。`);
+diagParts.push(`已匹配 ${nodes.filter(n=>n.ok).length}/${nodes.length} 个证据节点，完整度 ${score} 分。`);
+if(missRequired.length)diagParts.push(`必填缺项：${missRequired.map(n=>n.title).join('、')}。`);
+if(missOptional.length)diagParts.push(`建议补强：${missOptional.map(n=>n.title).join('、')}。`);
+if(!missRequired.length&&!missOptional.length)diagParts.push('证据链闭环完整，未见明显缺件。');
+else if(tpl.key==='loan')diagParts.push('借贷案件需同时覆盖「合意/协议」与「资金实际交付」，缺一则证明力不足。');
+else diagParts.push('合同案件需优先固定「合同关系成立」与「履约证明」，沟通记录用于补强。');
+return{tpl,nodes,score,level,judge,judgeTip,diag:diagParts.join(''),missRequired,missOptional};
+}
+function renderEvidenceChainCard(order){
+const r=analyzeEvidenceChain(order);
+const barCls=r.level==='pass'?'':r.level;
+const nodesHtml=r.nodes.map(n=>{
+const stIcon=n.status==='ok'?'✓':(n.status==='weak'?'!':'×');
+const reqLabel=n.required?(n.ok?'必填·已齐':'必填·缺件'):(n.ok?'建议·已齐':'建议补强');
+const hitText=n.ok?`已匹配：${n.hits.join('、')}`:(n.required?`未检测到：${n.desc}`:`未检测到（可选）：${n.desc}`);
+return`<div class="ev-node ${n.status}"><div class="ev-node-hd"><span class="ev-st">${stIcon}</span><span>${n.title}</span><span class="ev-req">${reqLabel}</span></div><p>${hitText}</p></div>`;
+}).join('');
+return`<div class="sp-card ev-chain-card" data-prd="evidence-chain">
+<div class="flex-between" style="margin-bottom:8px"><div class="sp-card-title" style="margin:0"><i class="fas fa-project-diagram" style="color:#1A6B7C;margin-right:4px"></i>案件证据链诊断</div><span class="ev-chain-type ${r.tpl.typeClass}">${r.tpl.label}</span></div>
+<p class="ev-chain-hint">${r.tpl.summary}<br>依据案由「${(order||ORDER_STATE).cause||'—'}」与申请材料自动分析</p>
+<div class="ev-score-row">
+<div class="ev-score-ring ${r.level}"><strong>${r.score}</strong><span>完整度</span></div>
+<div class="ev-score-meta">
+<div class="ev-judge ${r.level}">${r.judge}</div>
+<div class="ev-score-bar ${barCls}"><i style="width:${r.score}%"></i></div>
+<p>${r.judgeTip}</p>
+</div></div>
+<div class="sp-card-title" style="font-size:12px;margin-bottom:8px">证据节点核对</div>
+${nodesHtml}
+<div class="ev-diag-box"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>${r.diag}</p></div>
+<div class="ev-chain-actions">
+<button type="button" class="sp-btn-secondary" data-action="ev-chain-rules"><i class="fas fa-balance-scale"></i> 评分规则</button>
+<button type="button" class="sp-btn-secondary" data-page="supplementRequest" data-push-stack="1"><i class="fas fa-folder-plus"></i> 按缺项补材料</button>
+</div>
+</div>`;
+}
+function openEvidenceScoreRules(){
+const r=analyzeEvidenceChain(ORDER_STATE);
+const rows=EVIDENCE_SCORE_RULES.map(x=>`<div class="sp-info-row"><span class="k">${x.range}</span><span class="v" style="text-align:left">${x.level}<br><span style="font-weight:500;color:#64748B;font-size:11px">${x.tip}</span></span></div>`).join('');
+const nodeWeights=r.tpl.nodes.map(n=>`<div class="sp-info-row"><span class="k">${n.title}</span><span class="v">${n.weight}分 · ${n.required?'必填':'建议'}</span></div>`).join('');
+showModal(`<h3><i class="fas fa-balance-scale" style="color:#1A6B7C"></i> 材料完整度评分规则</h3>
+<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">当前模板：${r.tpl.label}。按节点权重加权计分（命中即得分），再给出提交判断。</p>
+<div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">提交判断阈值</div>${rows}</div>
+<div class="sp-card" style="margin:0;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">节点权重（本订单）</div>${nodeWeights}</div>
+<button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">我知道了</button>`);
+}
+const DEMO_MATERIALS_BY_CHAIN={
+contract:[
+{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'买卖合同.pdf',icon:'fa-file-contract',color:'#0F766E'},
+{name:'送货验收单.pdf',icon:'fa-file-alt',color:'#2563EB'},
+{name:'增值税发票.pdf',icon:'fa-file-invoice',color:'#B45309'},
+{name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED'}
+],
+loan:[
+{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'借款协议.pdf',icon:'fa-file-contract',color:'#0F766E'},
+{name:'借条照片.jpg',icon:'fa-file-image',color:'#D97706'},
+{name:'银行转账流水.pdf',icon:'fa-file-invoice',color:'#2563EB'},
+{name:'微信支付截图.png',icon:'fa-file-image',color:'#07C160'}
+]
+};
+function applyLitigationOrderState(orderId){
+const found=ORDER_LIST.find(x=>x.id===orderId);
+if(!found)return;
+const chainKey=resolveEvidenceChainType(found.cause).key;
+ORDER_STATE=Object.assign({},ORDER_STATE,{
+id:found.id,status:found.status,amount:found.amount,premium:Math.round((found.amount||0)*0.00085)||ORDER_STATE.premium,
+applicant:found.applicant,respondent:found.respondent,caseNo:found.caseNo,court:found.court,
+type:found.type,cause:found.cause,targetAmount:found.amount?Math.round(found.amount/10000):ORDER_STATE.targetAmount,
+materials:(DEMO_MATERIALS_BY_CHAIN[chainKey]||DEMO_MATERIALS_BY_CHAIN.contract).slice()
+});
 }
 
 const ORDER_STATUS_META={
@@ -1857,7 +2110,11 @@ return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>登
 </div>`;
 }
 return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机构账号 · 业务权限</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
-<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar"><i class="fas fa-user-tie"></i></div><div><h3 style="font-size:20px;font-weight:800;color:#102A3C">王审核员</h3><p style="font-size:13px;color:#54708F">永安机构 · 业务专员</p><p style="font-size:11px;color:#1A6B7C;margin-top:4px"><i class="fas fa-shield-alt"></i> ${entAuthStatus==='passed'?'企业已认证':'待完成企业认证'}</p></div></div></div>
+<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar"><i class="fas fa-user-tie"></i></div><div style="flex:1;min-width:0"><h3 style="font-size:20px;font-weight:800;color:#102A3C">王审核员</h3><p style="font-size:13px;color:#54708F">永安机构 · 业务专员</p>
+${entAuthStatus==='passed'
+?`<div class="profile-auth-row"><span class="auth-ok"><i class="fas fa-check-circle"></i> 企业已认证</span></div>`
+:`<div class="profile-auth-row"><span class="auth-pending"><i class="fas fa-exclamation-circle"></i> 待完成企业认证</span><button type="button" class="profile-auth-go" data-page="enterpriseAuth">去认证</button></div>`}
+</div></div></div>
 <div class="quick-grid">
 <div class="quick-item" data-page="enterpriseAuth"><div class="quick-icon"><i class="fas fa-building"></i></div><span>企业认证</span></div>
 <div class="quick-item" data-page="statsReport"><div class="quick-icon"><i class="fas fa-chart-line"></i></div><span>业务报表</span></div>
@@ -1866,7 +2123,7 @@ return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机
 </div>
 <div class="section-title">⚙️ 账号设置</div>
 <div class="settings-list">
-<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>企业认证</span></div><div class="setting-right">${entAuthStatus==='passed'?'已认证 >':'去认证 >'}</div></div>
+<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>${entAuthStatus==='passed'?'已认证':'企业认证'}</span></div><div class="setting-right ${entAuthStatus==='passed'?'auth-done':'auth-todo'}">${entAuthStatus==='passed'?'<i class="fas fa-check-circle"></i>':'去认证 >'}</div></div>
 <div class="settings-item" data-page="profileInfo"><div class="setting-left"><i class="fas fa-user-edit"></i><span>个人信息</span></div><div class="setting-right">></div></div>
 <div class="settings-item" id="notifyItem"><div class="setting-left"><i class="fas fa-bell"></i><span>消息通知</span></div><div class="setting-right"><div class="switch-toggle active" id="notifySwitch"></div></div></div>
 <div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于机构端</span></div><div class="setting-right">v1.4.0 ></div></div>
@@ -1875,6 +2132,48 @@ return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机
 }
 
 const TABS={workbench:()=>WORKBENCH,orders:()=>renderOrdersTab(),business:()=>BUSINESS,profile:()=>renderProfileTab()};
+
+function renderMessageItem(m){
+const meta=MSG_TYPE_META[m.type]||MSG_TYPE_META.system;
+return`<div class="msg-item${m.unread?' unread':''}" data-action="msg-open" data-msg-id="${m.id}"${m.page?` data-goto="${m.page}"`:''}>
+<div class="msg-ico ${meta.cls}"><i class="fas ${meta.ico}"></i>${m.unread?'<span class="msg-dot"></span>':''}</div>
+<div class="msg-body">
+<div class="msg-row1"><div class="msg-title">${m.title}</div><div class="msg-time">${m.time}</div></div>
+<p class="msg-desc">${m.desc}</p>
+<div class="msg-meta"><span class="msg-chip ${meta.chip}">${meta.label}</span>${m.action?`<span class="msg-go">${m.action} <i class="fas fa-chevron-right" style="font-size:9px"></i></span>`:''}</div>
+</div>
+</div>`;
+}
+function renderMessageCenterPage(){
+const unreadN=MESSAGE_LIST.filter(m=>m.unread).length;
+const tabs=[
+{key:'all',label:'全部'},
+{key:'audit',label:'审核'},
+{key:'biz',label:'业务'},
+{key:'sync',label:'材料'},
+{key:'system',label:'系统'}
+];
+const filtered=MESSAGE_LIST.filter(m=>{
+if(msgFilter==='all')return true;
+if(msgFilter==='biz')return m.type==='biz'||m.type==='rate';
+if(msgFilter==='system')return m.type==='system';
+return m.type===msgFilter;
+});
+const today=filtered.filter(m=>m.group==='today');
+const earlier=filtered.filter(m=>m.group==='earlier');
+const tabBtns=tabs.map(t=>{
+const n=t.key==='all'?MESSAGE_LIST.length:MESSAGE_LIST.filter(m=>t.key==='biz'?(m.type==='biz'||m.type==='rate'):m.type===t.key).length;
+return`<button type="button" class="${msgFilter===t.key?'on':''}" data-action="msg-filter" data-filter="${t.key}">${t.label}<span class="msg-tab-n">${n}</span></button>`;
+}).join('');
+const groupBlock=(title,list)=>!list.length?'':`<div class="msg-group"><div class="msg-group-hd"><span>${title}</span><em>${list.length} 条</em></div><div class="msg-list">${list.map(renderMessageItem).join('')}</div></div>`;
+const empty=`<div class="msg-empty"><i class="fas fa-inbox"></i><p>该分类暂无消息</p></div>`;
+return`<div class="msg-summary">
+<div class="msg-summary-left"><strong>${unreadN}</strong><span>条未读消息 · 审核 / 业务 / 材料推送</span></div>
+<div class="msg-summary-actions"><button type="button" class="msg-mark-all" data-action="msg-read-all"${unreadN?'':' disabled'}>全部已读</button></div>
+</div>
+<div class="msg-tabs" id="msgTabs">${tabBtns}</div>
+${filtered.length?groupBlock('今天',today)+groupBlock('更早',earlier):empty}`;
+}
 
 const PAGES={
 orderList:{title:'订单中心',sub:'诉讼保 · 学平险 · 标后',render:()=>`
@@ -1903,11 +2202,14 @@ ${renderInfoRow('截止时间',o.deadline)}
 ${o.status==='bidding'?`<button class="sp-btn-primary" data-action="toast" data-msg="报价已提交">提交报价</button>`:''}
 ${o.status==='issuing'?`<button class="sp-btn-primary" data-action="toast" data-msg="已确认出函">确认出函</button>`:''}
 ${o.status==='done'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
-orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>`
+orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>{
+const ev=analyzeEvidenceChain(ORDER_STATE);
+const canEnterReview=ev.level!=='fail';
+return`
 <div class="sp-steps"><div class="sp-step done">提交</div><div class="sp-step active">审核</div><div class="sp-step">出函</div><div class="sp-step">完成</div></div>
 <div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag tag-review">待审核</span></div>
 <p style="font-size:12px;color:#6F8FAA;margin:8px 0">保费 ¥${ORDER_STATE.premium.toLocaleString()}</p>
-<p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${ORDER_STATE.id}</p></div>
+<p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${ORDER_STATE.id} · 诉讼保</p></div>
 <div class="sp-card">
 <div class="flex-between" style="margin-bottom:10px"><div class="sp-card-title" style="margin:0">案件信息</div><span class="sp-link-detail" data-page="caseInfoDetail" data-push-stack="1">详情 <i class="fas fa-chevron-right" style="font-size:10px"></i></span></div>
 ${renderCaseSummaryLine('申请人',ORDER_STATE.applicant,'applicant')}
@@ -1921,10 +2223,12 @@ ${renderCaseSummaryLine('案由',ORDER_STATE.cause,'cause')}
 <div class="sp-card"><div class="sp-card-title">申请材料</div>
 ${(ORDER_STATE.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="下载">下载</button></div>`).join('')}
 </div>
+${renderEvidenceChainCard(ORDER_STATE)}
 <div class="sp-card"><div class="sp-card-title">审核记录</div><div class="sp-timeline">
 <div class="sp-timeline-item"><strong>用户提交</strong><br>2025-05-29 09:15</div>
+<div class="sp-timeline-item"><strong>证据链诊断</strong><br>2025-05-29 09:16 · 完整度 ${ev.score} 分 · ${ev.judge}</div>
 <div class="sp-timeline-item"><strong>AI预审通过</strong><br>2025-05-29 09:16 · 3项建议</div></div></div>
-<div class="sp-grid-2"><button class="sp-btn-danger" data-page="supplementRequest">要求补材料</button><button class="sp-btn-primary" data-page="orderReview">进入审核</button></div>`},
+<div class="sp-grid-2"><button class="sp-btn-danger" data-page="supplementRequest">要求补材料</button><button class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'完整度不足'}</button></div>`}},
 caseInfoDetail:{title:'案件详情',sub:ORDER_STATE.caseNo,render:()=>{
 const o=ORDER_STATE;
 const canApprove=o.status==='pending'||o.status==='review';
@@ -1982,13 +2286,21 @@ issueGuarantee:{title:'出函办理',sub:'电子保函生成 · 链上存证',re
 <span class="sp-label">出函模板</span><select class="sp-select"><option>标准诉讼财产保全保函</option><option>继续执行专项保函</option></select>
 <div class="sp-check-row" style="display:flex;align-items:center;gap:8px;padding:8px 0"><input type="checkbox" checked id="chainCheck"> <label for="chainCheck" style="font-size:13px">同步司法区块链存证</label></div></div>
 <button class="sp-btn-primary" data-action="issue-letter">确认出函</button>`},
-supplementRequest:{title:'要求补材料',sub:'通知申请人补充',render:()=>`
-<div class="sp-card"><span class="sp-label">需补充材料（可多选）</span>
+supplementRequest:{title:'要求补材料',sub:'通知申请人补充',render:()=>{
+const ev=analyzeEvidenceChain(ORDER_STATE);
+const miss=[...ev.missRequired,...ev.missOptional];
+const checks=miss.length?miss.map((n,i)=>`<div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox" ${i<2||n.required?'checked':''}> ${n.title}</div>`).join(''):`
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox" checked> 起诉状原件扫描件</div>
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 财产线索证明</div>
-<div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 企业营业执照</div>
-<span class="sp-label">补充说明</span><textarea class="sp-textarea">请补充起诉状首页及最后一页清晰扫描件。</textarea></div>
-<button class="sp-btn-primary" data-action="send-supplement">发送补材料通知</button>`},
+<div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 企业营业执照</div>`;
+const note=miss.length
+?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：合同案件请优先固定「证明合同关系成立」与履约证明；借贷案件请同时提供合意/协议与资金交付凭证。`
+:'请补充起诉状首页及最后一页清晰扫描件。';
+return`
+<div class="sp-card"><span class="sp-label">需补充材料（可多选 · 已按证据链缺项预填）</span>
+${checks}
+<span class="sp-label">补充说明</span><textarea class="sp-textarea">${note}</textarea></div>
+<button class="sp-btn-primary" data-action="send-supplement">发送补材料通知</button>`}},
 xuepingOrders:{title:'学平险订单',sub:'学生平安保险 · 投保管理',render:()=>`
 <input class="sp-input" placeholder="搜索保单号/学生姓名/学校…">
 <div class="filter-tabs" id="xuepingFilters">${XUEPING_FILTERS.map(f=>`<button data-filter="${f.key}"${f.key==='all'?' class="on"':''}>${f.label}</button>`).join('')}</div>
@@ -2044,10 +2356,7 @@ blockchainUpload:{title:'链上存证',sub:'保函司法区块链存证',render:
 <div class="sp-card"><span class="sp-label">保函编号</span><input class="sp-input" value="YASS20250518001234">
 <button class="sp-btn-primary" data-action="toast" data-msg="存证成功 · 链哈希 0x7f3a…9c2e">提交存证</button></div>
 <div class="sp-result-box"><i class="fas fa-shield-alt" style="font-size:32px;color:#1A6B7C"></i><p style="font-size:12px;margin-top:8px;color:#5E6F8D">已接入国家级司法链</p></div>`},
-messageCenter:{title:'消息中心',sub:'审核提醒 · 系统通知',render:()=>`
-<div class="sp-card"><div class="flex-between"><strong style="font-size:14px">新订单待审核</strong><span style="font-size:11px;color:#94A3B8">10分钟前</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">SS20250529001 财产保全保函待您审核</p></div>
-<div class="sp-card"><div class="flex-between"><strong style="font-size:14px">费率变更已通过</strong><span style="font-size:11px;color:#94A3B8">昨天</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">平台已批准费率 0.85‰ 变更申请</p></div>
-<div class="sp-card"><div class="flex-between"><strong style="font-size:14px">补材料已提交</strong><span style="font-size:11px;color:#94A3B8">2天前</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">SS20250527015 用户已补充材料</p></div>`},
+messageCenter:{title:'消息中心',sub:'审核提醒 · 系统通知',render:()=>renderMessageCenterPage()},
 staffManage:{title:'团队管理',sub:'姓名 · 手机号 · 角色 · 业务权限',render:()=>renderStaffManagePage()},
 trainingHelp:{title:'操作培训',sub:'机构端使用指南',render:()=>`
 <div class="sp-card"><strong>订单审核流程</strong><p style="font-size:12px;color:#6F8FAA;margin-top:6px;line-height:1.6">1. 接收用户申请 → 2. 材料核验 → 3. 核保评估 → 4. 审批通过 → 5. 出函上链</p></div>
@@ -2418,6 +2727,7 @@ if(pg==='biaohouDetail'&&el.dataset.bhId){
 const found=BIAOHUO_LIST.find(x=>x.id===el.dataset.bhId);
 if(found)BIAOHUO_STATE=Object.assign({},found);
 }
+if(pg==='orderDetail'&&el.dataset.orderId)applyLitigationOrderState(el.dataset.orderId);
 openSubPage(pg,{
 fromHub:TOOL_CHILD_PAGES.has(pg)||!!el.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario'),
 pushStack:pushStack
@@ -2462,6 +2772,17 @@ if(act==='ent-retry'){entAuthStep=0;entAuthStatus='pending';['license','idFront'
 if(act==='ent-done'){closeSubPage();setActiveNav('workbench');showToast('企业认证已完成');return}
 if(act==='open-source'){openSourcePreview(btn.dataset.srcKey);return}
 if(act==='approve-order'){showToast('审核通过，订单进入待出函');setTimeout(()=>openSubPage('issueGuarantee'),800)}
+if(act==='ev-chain-rules'){openEvidenceScoreRules();return}
+if(act==='enter-order-review'){
+const ev=analyzeEvidenceChain(ORDER_STATE);
+if(ev.level==='warn')showToast('证据链完整度 '+ev.score+' 分 · 建议补材料，仍可进入审核');
+openSubPage('orderReview');return;
+}
+if(act==='ev-chain-block-review'){
+const ev=analyzeEvidenceChain(ORDER_STATE);
+showToast('完整度 '+ev.score+' 分，关键节点缺失，请先要求补材料');
+return;
+}
 if(act==='reject-order'){showToast('订单已驳回，已通知申请人');setTimeout(closeSubPage,800)}
 if(act==='xp-confirm'){showToast('订单已确认，进入待支付');XUEPING_STATE.status='wait_pay';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
 if(act==='xp-reject'){showToast('投保申请已驳回，订单关闭');XUEPING_STATE.status='closed';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
@@ -2472,6 +2793,26 @@ if(act==='xp-finish-cancel'){showToast('退保成功，保费已退回');XUEPING
 if(act==='issue-letter'){showToast('保函已出具并上链存证');ORDER_STATE.status='done';setTimeout(closeSubPage,1000)}
 if(act==='download-guarantee'){const gno=btn.dataset.gno||btn.dataset.id;showToast('保函 PDF 下载中… '+gno);return}
 if(act==='send-supplement'){showToast('补材料通知已发送');setTimeout(closeSubPage,800)}
+if(act==='msg-filter'){msgFilter=btn.dataset.filter||'all';openSubPage('messageCenter',{keepStack:true});return}
+if(act==='msg-read-all'){
+const n=MESSAGE_LIST.filter(m=>m.unread).length;
+if(!n){showToast('暂无未读消息');return}
+MESSAGE_LIST.forEach(m=>{m.unread=false});
+showToast('已全部标为已读');
+openSubPage('messageCenter',{keepStack:true});
+return;
+}
+if(act==='msg-open'){
+const mid=btn.dataset.msgId;
+const m=MESSAGE_LIST.find(x=>x.id===mid);
+if(m)m.unread=false;
+const goto=btn.dataset.goto;
+if(goto){
+if(goto==='orderList'){currentOrderFilter='pending';currentBizLine='litigation'}
+openSubPage(goto,{pushStack:true});
+}else openSubPage('messageCenter',{keepStack:true});
+return;
+}
 if(act==='case-pack-download')showToast('案件材料打包下载中…');
 if(act==='case-send-email')openEmailModal('案件材料包 · '+ORDER_STATE.caseNo);
 if(act==='rar-process')runRarProcess();
@@ -2580,7 +2921,8 @@ const PRD_SPECS={
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待办理订单列表。',logic:['跳转 orderList filter=issue biz=litigation','自动选中对应筛选 Tab'],acceptance:['点击打开订单列表且仅显示待办理'],api:'GET /api/inst/orders?status=issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料与审核记录；案件信息右上角「详情」进入完整案件详情页。从材料提取的字段值带下划线可点，点击打开「原文溯源」弹层，在申请书/起诉状原文中高亮该字段供核保核对。',logic:['步骤条展示当前阶段','案件信息卡片右上角「详情」跳转 caseInfoDetail（支持返回）','提取字段 val-sourced 可点 → openSourcePreview 高亮原文行','材料列表支持预览','底部操作：补材料/进入审核'],acceptance:['案件摘要可见','提取字段可点开溯源','溯源弹层高亮对应原文','点击详情进入完整页','返回回到订单详情'],api:'GET /api/inst/order/{id}'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、案件证据链诊断与审核记录；案件信息右上角「详情」进入完整案件详情页。从材料提取的字段值带下划线可点，点击打开「原文溯源」弹层。诉讼保订单按案由自动识别证据链：借贷案核验合意/借款协议/资金交付/聊天记录；合同案核验合同关系成立/履约证明/沟通佐证等，输出完整度评分、诊断结论与提交判断。',logic:['步骤条展示当前阶段','案件信息卡片右上角「详情」跳转 caseInfoDetail','提取字段 val-sourced → openSourcePreview','申请材料列表后渲染证据链诊断卡','案由关键词匹配借贷/合同模板并按文件名匹配节点','完整度加权计分：≥80可提交、60-79建议补件、<60暂缓','评分规则弹层 + 按缺项预填补材料','底部：补材料 / 进入审核（不足时阻断）'],acceptance:['诉讼保详情可见证据链诊断','借贷/合同节点与案由匹配','完整度分数与提交判断一致','评分规则可查看','缺项可带入补材料页'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
+'evidence-chain':{title:'案件证据链诊断',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链：借贷链（合意、借款协议、资金实际交付、微信/支付宝聊天记录）；合同事实链（证明合同关系成立、履约证明、聊天记录等）。输出诊断分析、材料完整度评分与提交判断，支撑核保补件决策。',logic:['resolveEvidenceChainType(案由)','节点 weight 加权命中计分','必填缺件优先提示','提交判断三档阈值','一键跳转 supplementRequest 预填缺项'],acceptance:['合同案突出「证明合同关系成立」','借贷案同时要求合意与交付','分数与节点状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
@@ -2590,7 +2932,7 @@ const PRD_SPECS={
 'stats-report':{title:'业务报表',module:'业务',page:'statsReport',priority:'P1',business:'机构维度出函量、保费、通过率、时效统计；支持周期切换与 Excel 多 Sheet 导出。',logic:['周期 Tab：本周/本月/本季/本年','经营概况 Hero + 四指标卡片（含环比）','双系列趋势图','产品结构占比','法院出函 TOP5','明细流水表','导出 Excel（.xls 多 Sheet）/发邮箱'],acceptance:['周期切换指标与趋势同步变化','导出触发真实文件下载','发邮箱 Toast'],api:'GET /api/inst/report'},
 'blockchain-upload':{title:'链上存证',module:'业务',page:'blockchainUpload',priority:'P1',business:'保函出具后上司法区块链，支持法官核验。',logic:['输入保函编号','提交存证返回链哈希'],acceptance:['存证成功 Toast'],api:'POST /api/inst/blockchain/store'},
 'staff-manage':{title:'团队管理',module:'我的',page:'staffManage',priority:'P2',business:'机构管理员管理团队成员：展示姓名、手机号、业务角色，并按业务线分配权限（诉讼保、学平险、标后等）。',logic:['顶部工具栏：说明文案 + 新成员入口','成员卡片：姓名·手机号·业务角色·业务权限标签','编辑弹窗可改姓名/手机/角色/权限','邀请新成员：填姓名手机角色权限后生成链接'],acceptance:['无顶部数量统计','新成员在列表上方','权限标签含诉讼保/学平险/标后','邀请与保存有 Toast 并刷新列表'],api:'GET/POST /api/inst/staff'},
-'message-center':{title:'消息中心',module:'我的',page:'messageCenter',priority:'P1',business:'审核提醒、费率审批、补材料等系统通知。',logic:['按时间倒序','未读标记'],acceptance:['消息列表完整'],api:'GET /api/inst/messages'},
+'message-center':{title:'消息中心',module:'我的',page:'messageCenter',priority:'P1',business:'审核提醒、费率审批、补材料、PC 材料推送等系统通知；顶部未读汇总 + 分类筛选 + 今天/更早分组列表。',logic:['未读汇总条与全部已读','Tab：全部/审核/业务/材料/系统','消息卡片：类型图标·未读红点·摘要·操作入口','点击消息标已读并跳转业务页'],acceptance:['分类筛选正确','未读态可清空','可跳转订单/认证/文件空间站'],api:'GET /api/inst/messages'},
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
 'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料智能处理总入口：批量 RAR 收案、结构化提取写入订单、智能缺件分析、手机与 PC 核保工作台材料互通。',logic:['工作台/业务 Tab 双入口','四宫格进入子功能','典型场景说明收案/核保/外勤路径','演示完整流程'],acceptance:['四入口可跳转','演示有 Toast'],api:'—'},
@@ -2611,6 +2953,7 @@ const ELEMENT_MAP=[
 {sel:'.nav-item[data-nav="workbench"]',id:'nav-workbench'},{sel:'.nav-item[data-nav="orders"]',id:'nav-orders'},
 {sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-filter="pending"]',id:'quick-review'},
 {sel:'.quick-item[data-filter="issue"]',id:'quick-issue'},{sel:'.order-card[data-page="orderDetail"]',id:'order-detail'},
+{sel:'.ev-chain-card',id:'evidence-chain'},
 {sel:'.sp-link-detail[data-page="caseInfoDetail"]',id:'case-info-detail'},
 {sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-biz="xueping"]',id:'customer-list'},
 {sel:'.order-card[data-page="xuepingDetail"]',id:'xueping-detail'},
