@@ -50,20 +50,37 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .stat-monthly .stat-label{color:#065F46}
 .section-title{font-size:18px;font-weight:700;color:#1C2E36;margin:16px 0 12px;display:flex;justify-content:space-between;align-items:center}
 .section-title a{font-size:12px;color:#1A6B7C;text-decoration:none;font-weight:500}
-.order-card{background:#fff;border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid #EDF2F9;cursor:pointer}
-.order-card .tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
-.order-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-.order-card-type{font-size:14px;font-weight:700;color:#1C2E36}
-.order-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
-.order-field{min-width:0}
-.order-field span{display:block;font-size:10px;color:#94A3B8;font-weight:600;margin-bottom:2px}
-.order-field strong{display:block;font-size:12px;font-weight:600;color:#334155;line-height:1.35;word-break:break-all}
-.order-field.full{grid-column:1/-1}
-.order-field .amt{color:#0F4C5C;font-weight:800}
-.order-card-foot{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed #E8EEF5}
-.order-id-hint{font-size:10px;color:#94A3B8;font-weight:500}
-.order-dl-btn{border:none;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit;flex-shrink:0}
+.order-card{background:#fff;border-radius:16px;margin-bottom:10px;border:1px solid #EDF2F9;cursor:pointer;display:flex;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.order-card:active{transform:scale(.995)}
+.order-card-accent{width:4px;flex-shrink:0}
+.order-card[data-biz="litigation"] .order-card-accent{background:#0284C7}
+.order-card[data-biz="xueping"] .order-card-accent{background:#DB2777}
+.order-card[data-biz="biaohou"] .order-card-accent{background:#D97706}
+.order-card-main{flex:1;min-width:0;padding:12px 12px 10px 12px}
+.order-card .tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;flex-shrink:0;line-height:1.3}
+.order-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.order-card-title-wrap{min-width:0;flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.order-biz-chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.2px}
+.order-biz-chip.litigation{background:#E0F2FE;color:#0369A1}
+.order-biz-chip.xueping{background:#FCE7F3;color:#BE185D}
+.order-biz-chip.biaohou{background:#FEF3C7;color:#B45309}
+.order-card-title{font-size:13px;font-weight:700;color:#1C2E36;line-height:1.3}
+.order-card-primary{font-size:13px;font-weight:600;color:#1E293B;margin-top:8px;line-height:1.4;word-break:break-all}
+.order-card-primary .arrow{color:#94A3B8;margin:0 4px;font-weight:500}
+.order-card-meta{font-size:11px;color:#64748B;margin-top:4px;line-height:1.45;word-break:break-all}
+.order-card-meta .dot{margin:0 5px;color:#CBD5E1}
+.order-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid #F1F5F9}
+.order-card-amt{font-size:15px;font-weight:800;color:#0F4C5C;letter-spacing:-.2px}
+.order-card-amt em{font-style:normal;font-size:11px;font-weight:600;color:#94A3B8;margin-left:4px}
+.order-card-side{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.order-id-hint{font-size:10px;color:#94A3B8;font-weight:500;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.order-dl-btn{border:none;background:#ECFDF5;color:#047857;font-size:10px;font-weight:700;padding:5px 10px;border-radius:16px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;flex-shrink:0}
 .order-dl-btn:active{transform:scale(.97)}
+.order-biz-badge{display:none}
+.order-list-summary{display:flex;gap:8px;margin-bottom:12px}
+.order-list-summary .sum-pill{flex:1;background:#F8FAFC;border:1px solid #EDF2F9;border-radius:12px;padding:8px 6px;text-align:center}
+.order-list-summary .sum-pill strong{display:block;font-size:16px;font-weight:800;color:#0F4C5C;line-height:1.2}
+.order-list-summary .sum-pill span{font-size:10px;color:#64748B;font-weight:600}
 .tag-pending{background:#FEF3C7;color:#B45309}.tag-review{background:#DBEAFE;color:#1D4ED8}
 .tag-issue{background:#E0E7FF;color:#4338CA}.tag-done{background:#D4EDE8;color:#1D7A6E}
 .tag-reject{background:#FEE2E2;color:#B91C1C}.tag-supplement{background:#FFEDD5;color:#C2410C}
@@ -131,16 +148,81 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .src-doc-sheet .src-doc-line.hit{background:#FEF08A;border-radius:4px;padding:2px 4px;margin-left:-4px;margin-right:-4px;box-shadow:0 0 0 2px #FEF08A}
 .src-doc-sheet .src-doc-line.hit mark{background:transparent;color:#92400E;font-weight:800;padding:0}
 .src-hit-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
-.filter-tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
-.filter-tabs button{flex-shrink:0;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D}
+.biz-line-tabs{display:flex;gap:4px;margin-bottom:10px;padding:3px;background:#EEF2F6;border-radius:12px}
+.biz-line-tabs button{flex:1;border:none;padding:8px 4px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:transparent;color:#64748B;font-family:inherit;line-height:1.2}
+.biz-line-tabs button.on{background:#fff;color:#0F4C5C;box-shadow:0 1px 3px rgba(15,76,92,.1)}
+.biz-line-tabs button[data-biz="litigation"].on{color:#0369A1}
+.biz-line-tabs button[data-biz="xueping"].on{color:#BE185D}
+.biz-line-tabs button[data-biz="biaohou"].on{color:#B45309}
+.filter-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.filter-tabs button{flex-shrink:0;border:none;padding:6px 11px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D;font-family:inherit}
 .filter-tabs button.on{background:#1A6B7C;color:#fff}
+.auth-overlay{position:absolute;inset:0;background:rgba(244,247,251,.42);backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);z-index:120;display:none;flex-direction:column;border-radius:48px;overflow:hidden}
+.auth-overlay.active{display:flex}
+.auth-body{flex:1;overflow-y:auto;padding:20px 22px 28px;display:flex;flex-direction:column}
+.auth-brand{text-align:center;margin:18px 0 22px}
+.auth-brand-logo{width:68px;height:68px;margin:0 auto 12px;border-radius:20px;background:linear-gradient(145deg,#0F4C5C,#1A6B7C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;box-shadow:0 12px 28px rgba(15,76,92,.28)}
+.auth-brand h1{font-size:24px;font-weight:800;color:#0F4C5C;letter-spacing:.5px}
+.auth-brand p{font-size:12px;color:#5E6F8D;margin-top:6px;line-height:1.5}
+.auth-panel{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.65);border-radius:22px;padding:18px 16px 16px;box-shadow:0 10px 32px rgba(15,76,92,.1)}
+.auth-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid rgba(226,232,240,.9)}
+.auth-tabs button{flex:1;border:none;background:none;padding:10px;font-size:14px;font-weight:700;color:#94A3B8;cursor:pointer;font-family:inherit;position:relative}
+.auth-tabs button.on{color:#0F4C5C}
+.auth-tabs button.on::after{content:"";position:absolute;left:28%;right:28%;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#1A6B7C}
+.auth-sms-row{display:flex;gap:8px;align-items:stretch}
+.auth-sms-row .sp-input{flex:1;margin-bottom:10px}
+.auth-sms-btn{flex-shrink:0;border:none;border-radius:14px;padding:0 14px;font-size:12px;font-weight:700;background:#EFF8FC;color:#1A6B7C;cursor:pointer;margin-bottom:10px;font-family:inherit;white-space:nowrap}
+.auth-agree{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#64748B;line-height:1.55;margin:4px 0 8px}
+.auth-agree input{margin-top:2px}
+.auth-footer-link{text-align:center;font-size:13px;color:#6F8FAA;margin-top:14px}
+.auth-footer-link a{color:#1A6B7C;font-weight:700;cursor:pointer;text-decoration:none}
+.auth-wx-btn{width:100%;margin-top:10px;border:none;border-radius:40px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:#07C160;color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.auth-wx-btn i{font-size:18px}
+.auth-close{position:absolute;top:14px;right:16px;width:36px;height:36px;border:none;border-radius:18px;background:rgba(255,255,255,.75);color:#64748B;font-size:16px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center}
+.auth-hint{text-align:center;font-size:11px;color:#94A3B8;margin-top:14px;line-height:1.5}
+.wx-mask{position:absolute;inset:0;z-index:40;background:rgba(15,23,42,.45);display:none;align-items:flex-end;justify-content:center;padding:0 0 18px}
+.wx-mask.show{display:flex;animation:wxFadeIn .2s ease}
+@keyframes wxFadeIn{from{opacity:0}to{opacity:1}}
+.wx-sheet{width:calc(100% - 28px);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.25);animation:wxSheetUp .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes wxSheetUp{from{transform:translateY(24px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.wx-sheet-head{padding:18px 18px 10px;display:flex;align-items:center;gap:12px}
+.wx-app-ico{width:44px;height:44px;border-radius:10px;background:linear-gradient(145deg,#0F4C5C,#1A6B7C);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.wx-sheet-head h3{font-size:15px;font-weight:700;color:#1C2E36}
+.wx-sheet-head p{font-size:12px;color:#64748B;margin-top:3px}
+.wx-sheet-body{padding:8px 18px 14px}
+.wx-perm{font-size:13px;color:#334155;padding:8px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.45}
+.wx-perm i{color:#07C160;margin-top:2px;width:16px;text-align:center}
+.wx-sheet-foot{display:flex;border-top:1px solid #F1F5F9}
+.wx-sheet-foot button{flex:1;border:none;background:#fff;padding:15px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.wx-sheet-foot .wx-deny{color:#64748B;border-right:1px solid #F1F5F9}
+.wx-sheet-foot .wx-allow{color:#07C160}
+.profile-guest-card{background:linear-gradient(115deg,#EFF5FC,#FFF);border-radius:28px;padding:24px 20px;margin-bottom:20px;border:1px solid #E8F0F8;text-align:center}
+.profile-guest-avatar{width:72px;height:72px;border-radius:36px;margin:0 auto 14px;background:#E8EEF5;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:32px;border:2px dashed #CBD5E1}
+.profile-guest-card h3{font-size:18px;font-weight:800;color:#102A3C}
+.profile-guest-card p{font-size:13px;color:#64748B;margin-top:6px;line-height:1.55}
+.profile-login-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;padding:12px 36px;border:none;border-radius:40px;background:linear-gradient(95deg,#0F4C5C,#1A6B7C);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(15,76,92,.22)}
+.profile-login-btn i{font-size:16px}
+.profile-card.guest-tap{cursor:pointer}
+.ent-step-bar{display:flex;gap:4px;margin-bottom:16px}
+.ent-step-bar .ent-step{flex:1;text-align:center;padding:8px 2px;border-radius:12px;font-size:10px;font-weight:700;background:#EEF4F8;color:#94A3B8}
+.ent-step-bar .ent-step.on{background:#1A6B7C;color:#fff}
+.ent-step-bar .ent-step.done{background:#D4EDE8;color:#1D7A6E}
+.ent-upload{border:1.5px dashed #B8D4E8;border-radius:16px;padding:20px 12px;text-align:center;background:#F8FBFD;cursor:pointer;margin-bottom:10px}
+.ent-upload i{font-size:28px;color:#1A6B7C;display:block;margin-bottom:8px}
+.ent-upload strong{display:block;font-size:13px;color:#0F4C5C}
+.ent-upload span{display:block;font-size:11px;color:#94A3B8;margin-top:4px}
+.ent-upload.done{border-style:solid;border-color:#6EE7B7;background:#ECFDF5}
+.ent-upload.done i{color:#059669}
+.ent-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:12px;padding:10px 12px;line-height:1.55;margin-bottom:12px}
+.ent-tip i{margin-right:4px}
 .settings-list{background:#fff;border-radius:28px;border:1px solid #EDF2F9;overflow:hidden;margin-top:12px}
 .settings-item{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #F0F2F8;cursor:pointer}
 .settings-item:last-child{border-bottom:none}
 .setting-left i{width:28px;color:#1A6B7C;font-size:18px}
 .setting-left span{font-size:15px;font-weight:500;color:#1C2E36;margin-left:8px}
 .profile-card{background:linear-gradient(115deg,#EFF5FC,#FFF);border-radius:28px;padding:20px;margin-bottom:20px;border:1px solid #E8F0F8}
-.profile-avatar{width:64px;height:64px;border-radius:32px;background:linear-gradient(145deg,#1A6B7C,#0F4C5C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px}
+.profile-avatar{width:64px;height:64px;border-radius:32px;background:linear-gradient(145deg,#1A6B7C,#0F4C5C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;flex-shrink:0}
+.profile-avatar.guest{background:#E8EEF5;color:#94A3B8;border:2px dashed #CBD5E1}
 .switch-toggle{width:46px;height:24px;background:#CBD5E1;border-radius:40px;position:relative;cursor:pointer}
 .switch-toggle::after{content:"";width:20px;height:20px;background:#fff;border-radius:20px;position:absolute;top:2px;left:3px;transition:.2s}
 .switch-toggle.active{background:#1A6B7C}.switch-toggle.active::after{left:23px}
@@ -148,6 +230,74 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-metric{text-align:center;padding:12px;background:#F8FAFE;border-radius:16px}
 .sp-metric strong{display:block;font-size:20px;color:#0F4C5C}
 .sp-metric span{font-size:11px;color:#6F8FAA}
+/* 业务报表 */
+.rpt-period{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.rpt-period button{flex-shrink:0;border:none;padding:7px 14px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D;font-family:inherit}
+.rpt-period button.on{background:#1A6B7C;color:#fff}
+.rpt-hero{background:linear-gradient(135deg,#0F4C5C 0%,#1A6B7C 55%,#2A9B8E 100%);border-radius:20px;padding:18px 16px;margin-bottom:12px;color:#fff;border:none;position:relative;overflow:hidden}
+.rpt-hero::after{content:"";position:absolute;right:-20px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+.rpt-hero-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.rpt-hero-top h3{font-size:15px;font-weight:800;margin:0}
+.rpt-hero-top p{font-size:11px;opacity:.85;margin-top:4px}
+.rpt-hero-badge{font-size:10px;font-weight:700;background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px}
+.rpt-hero-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;position:relative;z-index:1}
+.rpt-hero-kpi strong{display:block;font-size:22px;font-weight:800;letter-spacing:-.3px}
+.rpt-hero-kpi span{font-size:11px;opacity:.85;margin-top:2px;display:block}
+.rpt-hero-kpi em{font-style:normal;font-size:10px;font-weight:600;opacity:.9;margin-top:4px;display:inline-block;background:rgba(255,255,255,.18);padding:2px 7px;border-radius:8px}
+.rpt-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rpt-metric{background:#fff;border:1px solid #EDF2F9;border-radius:16px;padding:12px;position:relative;overflow:hidden}
+.rpt-metric .rm-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:8px}
+.rpt-metric .rm-val{font-size:20px;font-weight:800;color:#0F4C5C;line-height:1.15}
+.rpt-metric .rm-lbl{font-size:11px;color:#6F8FAA;font-weight:600;margin-top:3px}
+.rpt-metric .rm-delta{font-size:10px;font-weight:700;margin-top:6px}
+.rpt-metric .rm-delta.up{color:#059669}.rpt-metric .rm-delta.down{color:#DC2626}
+.rpt-metric.m1 .rm-ico{background:#ECFDF5;color:#059669}
+.rpt-metric.m2 .rm-ico{background:#EFF6FF;color:#2563EB}
+.rpt-metric.m3 .rm-ico{background:#FEF3C7;color:#B45309}
+.rpt-metric.m4 .rm-ico{background:#F3E8FF;color:#7C3AED}
+.rpt-chart-wrap{background:#fff;border:1px solid #EDF2F9;border-radius:20px;padding:14px 14px 10px;margin-bottom:12px}
+.rpt-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.rpt-chart-head strong{font-size:14px;color:#1C2E36}
+.rpt-legend{display:flex;gap:10px;font-size:10px;color:#64748B;font-weight:600}
+.rpt-legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:middle}
+.rpt-bars{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;height:110px;padding:0 2px}
+.rpt-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.rpt-bar-stack{display:flex;align-items:flex-end;gap:2px;width:100%;justify-content:center;flex:1}
+.rpt-bar{width:10px;border-radius:3px 3px 0 0;min-height:4px}
+.rpt-bar.issue{background:linear-gradient(180deg,#2A9B8E,#1A6B7C)}
+.rpt-bar.prem{background:linear-gradient(180deg,#93C5FD,#2563EB)}
+.rpt-bar-lbl{font-size:9px;color:#94A3B8;font-weight:600}
+.rpt-bar-n{font-size:9px;color:#0F4C5C;font-weight:700;height:12px}
+.rpt-mix{background:#fff;border:1px solid #EDF2F9;border-radius:20px;padding:14px;margin-bottom:12px}
+.rpt-mix-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rpt-mix-row:last-child{margin-bottom:0}
+.rpt-mix-name{font-size:12px;font-weight:600;color:#1C2E36;width:72px;flex-shrink:0}
+.rpt-mix-track{flex:1;height:8px;background:#F1F5F9;border-radius:8px;overflow:hidden}
+.rpt-mix-fill{height:100%;border-radius:8px}
+.rpt-mix-pct{font-size:11px;font-weight:700;color:#0F4C5C;width:36px;text-align:right}
+.rpt-mix-amt{font-size:10px;color:#94A3B8;width:48px;text-align:right}
+.rpt-rank{background:#fff;border:1px solid #EDF2F9;border-radius:20px;padding:14px;margin-bottom:12px}
+.rpt-rank-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F1F5F9}
+.rpt-rank-item:last-child{border-bottom:none;padding-bottom:0}
+.rpt-rank-no{width:22px;height:22px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;background:#F1F5F9;color:#64748B}
+.rpt-rank-item:nth-child(1) .rpt-rank-no{background:#FEF3C7;color:#B45309}
+.rpt-rank-item:nth-child(2) .rpt-rank-no{background:#E2E8F0;color:#475569}
+.rpt-rank-item:nth-child(3) .rpt-rank-no{background:#FFEDD5;color:#C2410C}
+.rpt-rank-body{flex:1;min-width:0}
+.rpt-rank-body strong{display:block;font-size:12px;color:#1C2E36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt-rank-body span{font-size:10px;color:#94A3B8}
+.rpt-rank-val{font-size:13px;font-weight:800;color:#0F4C5C;flex-shrink:0}
+.rpt-table-card{background:#fff;border:1px solid #EDF2F9;border-radius:20px;padding:14px;margin-bottom:12px}
+.rpt-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px}
+.rpt-table{width:100%;border-collapse:collapse;font-size:11px;min-width:300px}
+.rpt-table th{text-align:left;padding:8px 6px;color:#64748B;font-weight:600;border-bottom:1px solid #E2E8F0;white-space:nowrap}
+.rpt-table td{padding:9px 6px;color:#1C2E36;font-weight:600;border-bottom:1px solid #F8FAFC;white-space:nowrap}
+.rpt-table tr:last-child td{border-bottom:none}
+.rpt-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.rpt-export-bar{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;margin-top:4px}
+.rpt-export-bar .sp-btn-primary{margin-top:0;padding:12px;font-size:13px;border-radius:30px}
+.rpt-export-bar .sp-btn-secondary{padding:12px;border-radius:30px;width:100%}
+.rpt-hint{font-size:10px;color:#94A3B8;text-align:center;margin-top:10px;line-height:1.5}
 .prd-sidebar{width:420px;min-width:360px;max-height:calc(100vh - 32px);background:#FFF;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden;position:sticky;top:16px;flex-shrink:0}
 .prd-sidebar-header{background:linear-gradient(135deg,#0F4C5C,#1A6B7C);color:#fff;padding:16px 18px}
 .prd-sidebar-header h1{font-size:16px;font-weight:800;margin-bottom:4px}
@@ -265,8 +415,26 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-modal-mask.show{display:flex}
 .sp-modal{background:#fff;border-radius:24px;padding:20px;width:100%;max-width:300px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
 .sp-modal h3{font-size:16px;font-weight:800;color:#1C2E36;margin-bottom:8px}
+.sp-modal.sp-modal-form{max-width:320px;text-align:left;max-height:78%;overflow-y:auto}
+.sp-modal.sp-modal-form h3{text-align:center}
 .sp-modal-mask.show:has(.sp-modal-source){align-items:flex-end;padding:16px 12px 28px}
 .sp-modal-close{margin-top:14px;width:100%}
+.staff-role-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;background:#EEF2FF;color:#4338CA;margin-left:6px;vertical-align:middle}
+.staff-role-chip.admin{background:#FEF3C7;color:#B45309}
+.staff-role-chip.uw{background:#E0F2FE;color:#0369A1}
+.staff-role-chip.sales{background:#ECFDF5;color:#047857}
+.staff-online{font-size:11px;font-weight:700;color:#1D7A6E}
+.staff-offline{font-size:11px;font-weight:700;color:#94A3B8}
+.staff-perm-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.staff-perm-row .order-biz-chip{font-size:11px;padding:4px 9px}
+.staff-perm-row .order-biz-chip.off{opacity:.35;filter:grayscale(.4)}
+.staff-card-actions{display:flex;gap:8px;margin-top:12px}
+.staff-card-actions button{flex:1;margin-top:0}
+.staff-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding:12px 14px;background:#fff;border:1px solid #EDF2F9;border-radius:16px}
+.staff-toolbar-info{min-width:0;flex:1}
+.staff-toolbar-info strong{display:block;font-size:14px;font-weight:700;color:#1C2E36}
+.staff-toolbar-info p{font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.45}
+.staff-toolbar .sp-btn-primary{width:auto;margin-top:0;padding:10px 16px;font-size:13px;border-radius:24px;flex-shrink:0;white-space:nowrap}
 .sub-crumb{font-size:10px;color:#1A6B7C;background:#EFF8FC;padding:5px 12px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;border:1px solid #D4EDE8}
 .sub-crumb i{font-size:9px;opacity:.7}
 .sync-arch-diagram{font-size:10px;line-height:1.8;color:#475569;background:#F8FAFC;border-radius:14px;padding:14px;border:1px solid #E2E8F0;font-family:Consolas,monospace}
@@ -385,6 +553,16 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 @media(max-width:1400px){.pc-browser{width:520px}}
 @media(max-width:1200px){.prd-pc-wrap.visible{width:100%}.pc-browser{width:100%;max-width:640px}}
 @media(max-width:900px){body.prd-mode{flex-direction:column}.prd-workspace{flex-direction:column;align-items:center}.prd-sidebar{width:100%;max-width:420px;position:relative;max-height:50vh}}
+body.embed-mode{background:#F4F7FB;padding:0;min-height:100vh;align-items:stretch}
+body.embed-mode .prd-workspace{width:100%;margin:0;gap:0}
+body.embed-mode .prd-phone-wrap{padding:0;width:100%}
+body.embed-mode .iphone-pro{width:100%;height:100vh;border-radius:0;box-shadow:none}
+body.embed-mode .prd-sidebar,
+body.embed-mode .prd-pc-wrap,
+body.embed-mode .prd-mode-bar,
+body.embed-mode .prd-tooltip,
+body.embed-mode .prd-pending-hint,
+body.embed-mode #authOverlay{display:none!important}
 </style>
 </head>
 <body class="prd-mode">
@@ -403,6 +581,31 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 <div class="subpage-bar"><div class="subpage-back" id="subpageBack"><i class="fas fa-chevron-left"></i></div><div class="subpage-title-wrap"><h1 id="subpageTitle">功能页</h1><p id="subpageSubtitle"></p><div id="subpageCrumb" class="sub-crumb" style="display:none;margin-top:6px;"></div></div></div>
 <div class="subpage-body" id="subpageBody"></div>
 <div class="sp-modal-mask" id="spModalMask"><div class="sp-modal" id="spModalInner"></div></div>
+</div>
+<div class="auth-overlay" id="authOverlay">
+<button type="button" class="auth-close" id="authClose" aria-label="关闭登录"><i class="fas fa-times"></i></button>
+<div class="auth-body" id="authBody"></div>
+<div class="wx-mask" id="wxMask" aria-hidden="true">
+<div class="wx-sheet" role="dialog" aria-label="微信授权登录">
+<div class="wx-sheet-head">
+<div class="wx-app-ico"><i class="fas fa-shield-alt"></i></div>
+<div>
+<h3>诉讼保 申请</h3>
+<p>获取你的微信授权以完成登录</p>
+</div>
+</div>
+<div class="wx-sheet-body">
+<div class="wx-perm"><i class="fas fa-check-circle"></i><span>获取你的昵称、头像</span></div>
+<div class="wx-perm"><i class="fas fa-check-circle"></i><span>获取你绑定的手机号</span></div>
+<div class="wx-perm"><i class="fas fa-check-circle"></i><span>用于机构端账号登录与消息通知</span></div>
+</div>
+<div class="wx-sheet-foot">
+<button type="button" class="wx-deny" id="wxDeny">拒绝</button>
+<button type="button" class="wx-allow" id="wxAllow">允许</button>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -428,14 +631,16 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 </div>
 <aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 诉讼保机构端小程序 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR归类·结构化预览·机构匹配·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V8</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
 </div>
-<div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V8 · 文件空间站（小程序）· 四 Tab 交互 · <a href="version/诉讼保-文件助手.html" target="_blank" style="color:#A5F3FC">诉讼保-文件助手.html</a></div>
+<div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V8 · 未登录可进「我的」空态 · 点击弹出登录（对齐 <a href="login.html" style="color:#A5F3FC">login.html</a>）· 文件空间站 · <a href="version/诉讼保-文件助手.html" target="_blank" style="color:#A5F3FC">诉讼保-文件助手.html</a></div>
 <div class="prd-tooltip" id="prdTooltip"></div>
 <div class="prd-pending-hint" id="prdPendingHint">停留中… 1 秒后显示需求</div>
 <div class="sp-toast" id="spToast"></div>
 <script>
 (function(){
 const scroll=document.getElementById('mainScroll'),tabContent=document.getElementById('tabContent'),subOverlay=document.getElementById('subpageOverlay'),subBody=document.getElementById('subpageBody'),subTitle=document.getElementById('subpageTitle'),subSubtitle=document.getElementById('subpageSubtitle'),spToast=document.getElementById('spToast');
-let currentNav='workbench',currentOrderFilter='all',currentXuepingFilter='all',currentSubId=null,subPageStack=[];
+let currentNav='workbench',currentOrderFilter='all',currentXuepingFilter='all',currentBizLine='all',currentSubId=null,subPageStack=[];
+let authMode='login',authLoggedIn=false,entAuthStep=0,entAuthStatus='pending';
+const ENT_AUTH_STATE={license:false,idFront:false,idBack:false,permit:false,bankName:'中国工商银行',bankAccount:'6222 **** **** 8899',companyName:'北京某某科技有限公司',creditCode:'91110105MA01234567',legalName:'张三',payAmount:''};
 const TOOL_CHILD_PAGES=new Set(['rarBatchPack','structExtract','smartAnalysis','crossDeviceSync']);
 const TOOL_HUB_ID='toolAssistantHub';
 let ORDER_STATE={
@@ -554,12 +759,35 @@ done:{label:'已出函',tag:'tag-done'},
 reject:{label:'已驳回',tag:'tag-reject'}
 };
 const ORDER_LIST=[
-{id:'SS20250529001',status:'pending',type:'财产保全',applicant:'张正源',respondent:'北京某某贸易有限公司',court:'北京市朝阳区人民法院',amount:8500000,caseNo:'（2025）京0105民初12345号',cause:'买卖合同纠纷'},
-{id:'SS20250528008',status:'issue',type:'继续执行',applicant:'李法务',respondent:'上海某某科技有限公司',court:'上海市浦东新区人民法院',amount:3200000,caseNo:'（2024）沪0115民初88721号',cause:'借款合同纠纷'},
-{id:'SS20250527015',status:'supplement',type:'证据保全',applicant:'王律师',respondent:'深圳某某电子有限公司',court:'深圳市南山区人民法院',amount:1500000,caseNo:'（2025）粤0305民初44102号',cause:'侵害商业秘密纠纷'},
-{id:'SS20250518001',status:'done',type:'财产保全',applicant:'张正源',respondent:'杭州某某网络科技有限公司',court:'杭州市西湖区人民法院',amount:5000000,caseNo:'（2025）浙0106民初22018号',cause:'网络服务合同纠纷',guaranteeNo:'YASS20250518001'},
-{id:'SS20250512003',status:'reject',type:'行为保全',applicant:'陈企法',respondent:'广州某某物流有限公司',court:'广州市天河区人民法院',amount:980000,caseNo:'（2025）粤0106民初33091号',cause:'不正当竞争纠纷'}
+{id:'SS20250529001',biz:'litigation',status:'pending',type:'财产保全',applicant:'张正源',respondent:'北京某某贸易有限公司',court:'北京市朝阳区人民法院',amount:8500000,caseNo:'（2025）京0105民初12345号',cause:'买卖合同纠纷'},
+{id:'SS20250528008',biz:'litigation',status:'issue',type:'继续执行',applicant:'李法务',respondent:'上海某某科技有限公司',court:'上海市浦东新区人民法院',amount:3200000,caseNo:'（2024）沪0115民初88721号',cause:'借款合同纠纷'},
+{id:'SS20250527015',biz:'litigation',status:'supplement',type:'证据保全',applicant:'王某',respondent:'深圳某某电子有限公司',court:'深圳市南山区人民法院',amount:1500000,caseNo:'（2025）粤0305民初44102号',cause:'侵害商业秘密纠纷'},
+{id:'SS20250518001',biz:'litigation',status:'done',type:'财产保全',applicant:'张正源',respondent:'杭州某某网络科技有限公司',court:'杭州市西湖区人民法院',amount:5000000,caseNo:'（2025）浙0106民初22018号',cause:'网络服务合同纠纷',guaranteeNo:'YASS20250518001'},
+{id:'SS20250512003',biz:'litigation',status:'reject',type:'行为保全',applicant:'陈企法',respondent:'广州某某物流有限公司',court:'广州市天河区人民法院',amount:980000,caseNo:'（2025）粤0106民初33091号',cause:'不正当竞争纠纷'}
 ];
+const BIAOHUO_STATUS_META={
+bidding:{label:'竞价中',tag:'tag-review'},
+issuing:{label:'办理中',tag:'tag-issue'},
+done:{label:'已办结',tag:'tag-done'},
+refunded:{label:'已退保',tag:'tag-cancel'},
+cancelled:{label:'已取消',tag:'tag-closed'}
+};
+const BIAOHUO_FILTERS=[
+{key:'all',label:'全部'},
+{key:'bidding',label:'竞价中'},
+{key:'issuing',label:'办理中'},
+{key:'done',label:'已办结'},
+{key:'refunded',label:'已退保'},
+{key:'cancelled',label:'已取消'}
+];
+const BIAOHUO_LIST=[
+{id:'BH20250620001',biz:'biaohou',status:'bidding',type:'履约',project:'某某市政道路改造工程',applicant:'某某建设集团有限公司',amount:5000000,deadline:'2025-06-25 18:00',quotes:12},
+{id:'BH20250618008',biz:'biaohou',status:'issuing',type:'投标',project:'智慧园区弱电工程',applicant:'某某科技股份有限公司',amount:2000000,deadline:'2025-06-28 12:00',quotes:8},
+{id:'BH20250610003',biz:'biaohou',status:'done',type:'农民工工资',project:'保障房三期土建',applicant:'某某建筑劳务有限公司',amount:8000000,deadline:'—',quotes:15,guaranteeNo:'YABH20250610003'},
+{id:'BH20250605002',biz:'biaohou',status:'refunded',type:'预付款',project:'设备采购项目',applicant:'某某机电有限公司',amount:1200000,deadline:'—',quotes:6},
+{id:'BH20250528009',biz:'biaohou',status:'cancelled',type:'质量',project:'绿化养护服务',applicant:'某某园林工程有限公司',amount:600000,deadline:'—',quotes:3}
+];
+let BIAOHUO_STATE=Object.assign({},BIAOHUO_LIST[0]);
 const XUEPING_STATUS_META={
 wait_confirm:{label:'待确认',tag:'tag-review'},
 wait_pay:{label:'待支付',tag:'tag-pay'},
@@ -586,46 +814,158 @@ const XUEPING_FILTERS=[
 {key:'cancelled',label:'退保成功'}
 ];
 const XUEPING_LIST=[
-{id:'XP20250529001',status:'wait_confirm',product:'意外医疗',student:'王小明',school:'北京市朝阳区实验小学',grade:'三年级',premium:120,guardian:'王建国',phone:'138****6621',period:'2025-09-01 ~ 2026-08-31'},
-{id:'XP20250528015',status:'wait_pay',product:'住院津贴',student:'李思思',school:'朝阳实验小学',grade:'五年级',premium:180,guardian:'李强',phone:'139****8812',period:'2025-09-01 ~ 2026-08-31'},
-{id:'XP20250527008',status:'wait_underwrite',product:'意外医疗',student:'陈浩然',school:'北京市第一中学',grade:'初一',premium:150,guardian:'陈伟',phone:'136****2209',period:'2025-09-01 ~ 2026-08-31'},
-{id:'XP20250526003',status:'wait_effective',product:'意外医疗',student:'赵雨萱',school:'海淀实验小学',grade:'二年级',premium:120,guardian:'赵明',phone:'137****3345',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250526003'},
-{id:'XP20250518012',status:'effective',product:'住院津贴',student:'周子墨',school:'北京市第一中学',grade:'初二',premium:180,guardian:'周磊',phone:'135****6678',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250518012'},
-{id:'XP20250410005',status:'terminated',product:'意外医疗',student:'吴佳怡',school:'朝阳实验小学',grade:'六年级',premium:120,guardian:'吴刚',phone:'133****9901',period:'2024-09-01 ~ 2025-08-31',policyNo:'YAXP20250410005'},
-{id:'XP20250512009',status:'closed',product:'意外医疗',student:'孙浩天',school:'海淀实验小学',grade:'四年级',premium:120,guardian:'孙伟',phone:'158****1122',period:'—'},
-{id:'XP20250510002',status:'wait_cancel',product:'住院津贴',student:'郑一诺',school:'北京市第一中学',grade:'初三',premium:180,guardian:'郑华',phone:'186****4455',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250510002'},
-{id:'XP20250509001',status:'cancel_processing',product:'意外医疗',student:'冯思远',school:'朝阳实验小学',grade:'一年级',premium:120,guardian:'冯军',phone:'159****7788',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250509001'},
-{id:'XP20250508004',status:'cancelled',product:'住院津贴',student:'何雨桐',school:'海淀实验小学',grade:'三年级',premium:180,guardian:'何平',phone:'188****5566',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250508004'}
+{id:'XP20250529001',biz:'xueping',status:'wait_confirm',product:'意外医疗',student:'王小明',school:'北京市朝阳区实验小学',grade:'三年级',premium:120,guardian:'王建国',phone:'138****6621',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250528015',biz:'xueping',status:'wait_pay',product:'住院津贴',student:'李思思',school:'朝阳实验小学',grade:'五年级',premium:180,guardian:'李强',phone:'139****8812',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250527008',biz:'xueping',status:'wait_underwrite',product:'意外医疗',student:'陈浩然',school:'北京市第一中学',grade:'初一',premium:150,guardian:'陈伟',phone:'136****2209',period:'2025-09-01 ~ 2026-08-31'},
+{id:'XP20250526003',biz:'xueping',status:'wait_effective',product:'意外医疗',student:'赵雨萱',school:'海淀实验小学',grade:'二年级',premium:120,guardian:'赵明',phone:'137****3345',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250526003'},
+{id:'XP20250518012',biz:'xueping',status:'effective',product:'住院津贴',student:'周子墨',school:'北京市第一中学',grade:'初二',premium:180,guardian:'周磊',phone:'135****6678',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250518012'},
+{id:'XP20250410005',biz:'xueping',status:'terminated',product:'意外医疗',student:'吴佳怡',school:'朝阳实验小学',grade:'六年级',premium:120,guardian:'吴刚',phone:'133****9901',period:'2024-09-01 ~ 2025-08-31',policyNo:'YAXP20250410005'},
+{id:'XP20250512009',biz:'xueping',status:'closed',product:'意外医疗',student:'孙浩天',school:'海淀实验小学',grade:'四年级',premium:120,guardian:'孙伟',phone:'158****1122',period:'—'},
+{id:'XP20250510002',biz:'xueping',status:'wait_cancel',product:'住院津贴',student:'郑一诺',school:'北京市第一中学',grade:'初三',premium:180,guardian:'郑华',phone:'186****4455',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250510002'},
+{id:'XP20250509001',biz:'xueping',status:'cancel_processing',product:'意外医疗',student:'冯思远',school:'朝阳实验小学',grade:'一年级',premium:120,guardian:'冯军',phone:'159****7788',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250509001'},
+{id:'XP20250508004',biz:'xueping',status:'cancelled',product:'住院津贴',student:'何雨桐',school:'海淀实验小学',grade:'三年级',premium:180,guardian:'何平',phone:'188****5566',period:'2025-09-01 ~ 2026-08-31',policyNo:'YAXP20250508004'}
 ];
 let XUEPING_STATE=Object.assign({},XUEPING_LIST[0]);
+const BIZ_LINE_META={all:{label:'全部'},litigation:{label:'诉讼保'},xueping:{label:'学平险'},biaohou:{label:'标后'}};
+const STAFF_ROLE_META={
+admin:{label:'管理员',cls:'admin'},
+underwriter:{label:'核保专员',cls:'uw'},
+sales:{label:'业务员',cls:'sales'},
+reviewer:{label:'复核专员',cls:'uw'}
+};
+const STAFF_PERM_KEYS=['litigation','xueping','biaohou'];
+let STAFF_LIST=[
+{id:'ST001',name:'王审核员',phone:'138****6621',role:'underwriter',perms:['litigation','xueping','biaohou'],online:true,admin:true},
+{id:'ST002',name:'李业务员',phone:'139****8834',role:'sales',perms:['litigation','biaohou'],online:false,admin:false},
+{id:'ST003',name:'赵核保',phone:'186****2209',role:'underwriter',perms:['litigation','xueping'],online:true,admin:false},
+{id:'ST004',name:'陈学平',phone:'177****5512',role:'sales',perms:['xueping'],online:true,admin:false},
+{id:'ST005',name:'周标后',phone:'150****7740',role:'reviewer',perms:['biaohou','litigation'],online:false,admin:false}
+];
+const ALL_BIZ_FILTERS=[
+{key:'all',label:'全部'},
+{key:'todo',label:'待处理'},
+{key:'doing',label:'办理中'},
+{key:'done_bucket',label:'已办结'},
+{key:'abnormal',label:'异常'}
+];
+const ALL_STATUS_BUCKET={
+todo:new Set(['pending','wait_confirm','bidding']),
+doing:new Set(['issue','review','supplement','wait_pay','wait_underwrite','wait_effective','issuing','wait_cancel','cancel_processing']),
+done_bucket:new Set(['done','effective','terminated','cancelled','refunded']),
+abnormal:new Set(['reject','closed'])
+};
 function formatPreserveAmt(n){return'¥'+Number(n).toLocaleString('zh-CN')}
-function renderOrderCard(o){
+function formatAmtShort(n){
+const v=Number(n)||0;
+if(v>=10000)return'¥'+(v/10000).toLocaleString('zh-CN',{maximumFractionDigits:v%10000?1:0})+'万';
+return formatPreserveAmt(v);
+}
+function softStatusLabel(status){
+const map={pending:'待审核',issue:'待办理',supplement:'待补材料',done:'已办结',reject:'已驳回',review:'审核中'};
+return map[status]||(ORDER_STATUS_META[status]&&ORDER_STATUS_META[status].label)||status;
+}
+function matchAllBizFilter(status,filter){
+if(!filter||filter==='all')return true;
+const bucket=ALL_STATUS_BUCKET[filter];
+return bucket?bucket.has(status):status===filter;
+}
+function orderCardShell(opts){
+const{biz,status,page,idAttr,title,statusLabel,statusTag,primary,meta,amtHtml,sideHtml}=opts;
+const chip=opts.showBiz?`<span class="order-biz-chip ${biz}">${BIZ_LINE_META[biz]?BIZ_LINE_META[biz].label:biz}</span>`:'';
+return`<div class="order-card" data-status="${status}" data-biz="${biz}" data-page="${page}" ${idAttr}>
+<div class="order-card-accent"></div>
+<div class="order-card-main">
+<div class="order-card-top"><div class="order-card-title-wrap">${chip}<span class="order-card-title">${title}</span></div><span class="tag ${statusTag}">${statusLabel}</span></div>
+<div class="order-card-primary">${primary}</div>
+<div class="order-card-meta">${meta}</div>
+<div class="order-card-bottom"><div class="order-card-amt">${amtHtml}</div><div class="order-card-side">${sideHtml||''}</div></div>
+</div></div>`;
+}
+function renderOrderCard(o,opts){
+opts=opts||{};
+const soft=!!opts.soft;
 const meta=ORDER_STATUS_META[o.status]||ORDER_STATUS_META.pending;
-const dl=o.status==='done'?`<div class="order-card-foot"><button type="button" class="order-dl-btn" data-action="download-guarantee" data-id="${o.id}" data-gno="${o.guaranteeNo||''}"><i class="fas fa-download"></i> 下载保函</button></div>`:'';
-return`<div class="order-card" data-status="${o.status}" data-page="orderDetail" data-order-id="${o.id}">
-<div class="order-card-head"><span class="order-card-type">${o.type}保函</span><span class="tag ${meta.tag}">${meta.label}</span></div>
-<div class="order-fields">
-<div class="order-field"><span>申请人</span><strong>${o.applicant}</strong></div>
-<div class="order-field"><span>被保全人</span><strong>${o.respondent}</strong></div>
-<div class="order-field full"><span>法院</span><strong>${o.court}</strong></div>
-<div class="order-field"><span>保全金额</span><strong class="amt">${formatPreserveAmt(o.amount)}</strong></div>
-<div class="order-field"><span>案由</span><strong>${o.cause}</strong></div>
-<div class="order-field full"><span>案号</span><strong>${o.caseNo}</strong></div>
-</div>
-${dl}
-</div>`}
-function renderXuepingCard(o){
+const statusLabel=soft?softStatusLabel(o.status):meta.label;
+const typeLabel=soft?o.type:(o.type+'保函');
+const dl=(!soft&&o.status==='done')?`<button type="button" class="order-dl-btn" data-action="download-guarantee" data-id="${o.id}" data-gno="${o.guaranteeNo||''}"><i class="fas fa-download"></i> 下载</button>`:`<span class="order-id-hint">${o.caseNo||o.id}</span>`;
+return orderCardShell({
+biz:'litigation',status:o.status,page:'orderDetail',idAttr:`data-order-id="${o.id}"`,
+showBiz:!!opts.showBiz,title:typeLabel,statusLabel,statusTag:meta.tag,
+primary:`${o.applicant}<span class="arrow">→</span>${o.respondent}`,
+meta:`${o.court}<span class="dot">·</span>${o.cause}`,
+amtHtml:`${formatAmtShort(o.amount)}${soft?'':'<em>保全额</em>'}`,
+sideHtml:dl
+});
+}
+function renderXuepingCard(o,opts){
+opts=opts||{};
+const soft=!!opts.soft;
 const meta=XUEPING_STATUS_META[o.status]||XUEPING_STATUS_META.wait_confirm;
-return`<div class="order-card" data-status="${o.status}" data-page="xuepingDetail" data-xp-id="${o.id}" data-push-stack="1">
-<div class="order-card-head"><span class="order-card-type">学平险 · ${o.product}</span><span class="tag ${meta.tag}">${meta.label}</span></div>
-<div class="order-fields">
-<div class="order-field"><span>学生</span><strong>${o.student}</strong></div>
-<div class="order-field"><span>年级</span><strong>${o.grade}</strong></div>
-<div class="order-field full"><span>学校</span><strong>${o.school}</strong></div>
-<div class="order-field"><span>保费</span><strong class="amt">¥${o.premium}</strong></div>
-<div class="order-field"><span>监护人</span><strong>${o.guardian}</strong></div>
-</div>
-</div>`}
+return orderCardShell({
+biz:'xueping',status:o.status,page:'xuepingDetail',idAttr:`data-xp-id="${o.id}" data-push-stack="1"`,
+showBiz:!!opts.showBiz,title:o.product,statusLabel:meta.label,statusTag:meta.tag,
+primary:`${o.student}<span class="arrow">·</span>${o.grade}`,
+meta:`${o.school}<span class="dot">·</span>监护人 ${o.guardian}`,
+amtHtml:`¥${o.premium}${soft?'':'<em>保费</em>'}`,
+sideHtml:`<span class="order-id-hint">${o.policyNo||o.id}</span>`
+});
+}
+function renderBiaohouCard(o,opts){
+opts=opts||{};
+const soft=!!opts.soft;
+const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
+const dl=(!soft&&o.status==='done')?`<button type="button" class="order-dl-btn" data-action="download-guarantee" data-id="${o.id}" data-gno="${o.guaranteeNo||''}"><i class="fas fa-download"></i> 下载</button>`:`<span class="order-id-hint">${o.deadline&&o.deadline!=='—'?'截止 '+o.deadline:o.id}</span>`;
+return orderCardShell({
+biz:'biaohou',status:o.status,page:'biaohouDetail',idAttr:`data-bh-id="${o.id}" data-push-stack="1"`,
+showBiz:!!opts.showBiz,title:soft?o.type:(o.type+'保函'),statusLabel:meta.label,statusTag:meta.tag,
+primary:o.project,
+meta:`${o.applicant}<span class="dot">·</span>${o.quotes} 家报价`,
+amtHtml:`${formatAmtShort(o.amount)}${soft?'':'<em>项目额</em>'}`,
+sideHtml:dl
+});
+}
+function getStatusFiltersForBiz(biz){
+if(biz==='all')return ALL_BIZ_FILTERS;
+if(biz==='xueping')return XUEPING_FILTERS;
+if(biz==='biaohou')return BIAOHUO_FILTERS;
+return[{key:'all',label:'全部'},{key:'pending',label:'待审核'},{key:'issue',label:'待出函'},{key:'supplement',label:'待补材料'},{key:'done',label:'已出函'},{key:'reject',label:'已驳回'}];
+}
+function renderOrderListSummary(){
+const lit=ORDER_LIST.length,xp=XUEPING_LIST.length,bh=BIAOHUO_LIST.length;
+return``;
+}
+function renderUnifiedOrderList(biz,filter,opts){
+opts=opts||{};
+const showBiz=biz==='all';
+let cards='';
+const useBucket=biz==='all';
+if(biz==='all'||biz==='litigation'){
+ORDER_LIST.filter(o=>useBucket?matchAllBizFilter(o.status,filter):(filter==='all'||o.status===filter)).forEach(o=>{cards+=renderOrderCard(o,{showBiz,soft:opts.soft})});
+}
+if(biz==='all'||biz==='xueping'){
+const xpFilter=biz==='xueping'?filter:'all';
+XUEPING_LIST.filter(o=>{
+if(useBucket)return matchAllBizFilter(o.status,filter);
+return xpFilter==='all'||o.status===xpFilter;
+}).forEach(o=>{cards+=renderXuepingCard(o,{showBiz,soft:opts.soft})});
+}
+if(biz==='all'||biz==='biaohou'){
+const bhFilter=biz==='biaohou'?filter:'all';
+BIAOHUO_LIST.filter(o=>{
+if(useBucket)return matchAllBizFilter(o.status,filter);
+return bhFilter==='all'||o.status===bhFilter;
+}).forEach(o=>{cards+=renderBiaohouCard(o,{showBiz,soft:opts.soft})});
+}
+return cards||'<div class="sp-card" style="text-align:center;color:#94A3B8;font-size:13px">暂无订单</div>';
+}
+function renderBizLineTabs(active){
+return`<div class="biz-line-tabs" id="bizLineTabs">${Object.keys(BIZ_LINE_META).map(k=>`<button type="button" data-biz="${k}"${k===active?' class="on"':''}>${BIZ_LINE_META[k].label}</button>`).join('')}</div>`;
+}
+function renderOrderStatusTabs(biz,active,id){
+const filters=getStatusFiltersForBiz(biz);
+const safe=filters.some(f=>f.key===active)?active:'all';
+return`<div class="filter-tabs" id="${id||'orderFilters'}">${filters.map(f=>`<button data-filter="${f.key}"${f.key===safe?' class="on"':''}>${f.label}</button>`).join('')}</div>`;
+}
 function renderXuepingSteps(status){
 const flow=['投保','确认','支付','承保','生效'];
 let active=0;
@@ -786,8 +1126,253 @@ showModal(`<h3><i class="fas fa-envelope" style="color:#1A6B7C"></i> 发送邮�
 <button class="sp-btn-primary" data-action="email-send-confirm" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 确认发送</button>
 <button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`);
 }
+function renderStaffPermChips(perms,interactive){
+return STAFF_PERM_KEYS.map(k=>{
+const on=perms.includes(k);
+const meta=BIZ_LINE_META[k];
+if(interactive)return`<span class="sp-tag ${on?'selected':''}" data-staff-perm="${k}">${meta.label}</span>`;
+return`<span class="order-biz-chip ${k}${on?'':' off'}">${meta.label}</span>`;
+}).join('');
+}
+function renderStaffCard(s){
+const role=STAFF_ROLE_META[s.role]||STAFF_ROLE_META.sales;
+const roleLabel=s.admin?(role.label+' · 管理员'):role.label;
+return`<div class="sp-card" data-staff-id="${s.id}">
+<div class="flex-between" style="align-items:flex-start;margin-bottom:10px">
+<div style="min-width:0;flex:1">
+<strong style="font-size:15px">${s.name}</strong>
+<span class="staff-role-chip ${role.cls}">${roleLabel}</span>
+</div>
+<span class="${s.online?'staff-online':'staff-offline'}">${s.online?'':''}</span>
+</div>
+<div class="sp-info-row"><span class="k">手机号</span><span class="v">${s.phone}</span></div>
+<div class="sp-info-row"><span class="k">业务角色</span><span class="v">${role.label}${s.admin?'（机构管理员）':''}</span></div>
+<div style="margin-top:8px">
+<span class="sp-label" style="margin-bottom:4px">业务权限</span>
+<div class="staff-perm-row">${renderStaffPermChips(s.perms,false)}</div>
+</div>
+<div class="staff-card-actions">
+<button type="button" class="sp-btn-secondary" data-action="staff-edit" data-staff-id="${s.id}">编辑</button>
+<button type="button" class="sp-btn-secondary" data-action="toast" data-msg="已发送重置密码短信至 ${s.phone}">删除</button>
+</div>
+</div>`;
+}
+function renderStaffManagePage(){
+return`<div class="staff-toolbar">
+<div class="staff-toolbar-info">
+<strong>团队成员</strong>
+<p>配置姓名、手机号、业务角色及诉讼保 / 学平险 / 标后权限</p>
+</div>
+<button type="button" class="sp-btn-primary" data-action="staff-invite"><i class="fas fa-user-plus" style="margin-right:6px"></i>新成员</button>
+</div>
+${STAFF_LIST.map(renderStaffCard).join('')}`;
+}
+function bindStaffModalTags(inner){
+inner.querySelectorAll('.sp-tag[data-staff-perm]').forEach(tag=>{
+tag.addEventListener('click',()=>tag.classList.toggle('selected'));
+});
+inner.querySelectorAll('.sp-tag[data-staff-role]').forEach(tag=>{
+tag.addEventListener('click',()=>{
+tag.parentElement.querySelectorAll('.sp-tag').forEach(t=>t.classList.remove('selected'));
+tag.classList.add('selected');
+});
+});
+}
+function openStaffInviteModal(){
+const roleTags=Object.keys(STAFF_ROLE_META).map(k=>`<span class="sp-tag ${k==='sales'?'selected':''}" data-staff-role="${k}">${STAFF_ROLE_META[k].label}</span>`).join('');
+showModal(`<h3><i class="fas fa-user-plus" style="color:#1A6B7C"></i> 新成员</h3>
+<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:4px 0 12px;text-align:center">填写姓名、手机号并分配业务角色与权限</p>
+<span class="sp-label">姓名</span><input class="sp-input" id="staffInviteName" placeholder="请输入真实姓名">
+<span class="sp-label">手机号</span><input class="sp-input" id="staffInvitePhone" placeholder="11 位手机号" maxlength="11" inputmode="tel">
+<span class="sp-label">业务角色</span><div class="sp-tag-row" id="staffInviteRoleRow">${roleTags}</div>
+<span class="sp-label">业务权限</span><div class="sp-tag-row" id="staffInvitePermRow">${renderStaffPermChips(['litigation'],true)}</div>
+<p style="font-size:11px;color:#94A3B8;margin:4px 0 8px;line-height:1.5">权限决定该成员可处理的业务线订单（诉讼保、学平险、标后等）。</p>
+<button class="sp-btn-primary" data-action="staff-invite-confirm">保存</button>
+<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+if(!inner)return;
+bindStaffModalTags(inner);
+inner.querySelector('[data-action="staff-invite-confirm"]')?.addEventListener('click',()=>{
+const name=(document.getElementById('staffInviteName')?.value||'').trim();
+const phone=(document.getElementById('staffInvitePhone')?.value||'').trim();
+const roleEl=inner.querySelector('.sp-tag[data-staff-role].selected');
+const role=roleEl?.dataset.staffRole||'sales';
+const perms=[...inner.querySelectorAll('.sp-tag[data-staff-perm].selected')].map(t=>t.dataset.staffPerm);
+if(!name){showToast('请填写姓名');return}
+if(!/^1\d{10}$/.test(phone)){showToast('请填写正确的 11 位手机号');return}
+if(!perms.length){showToast('请至少选择一项业务权限');return}
+const masked=phone.slice(0,3)+'****'+phone.slice(7);
+STAFF_LIST.push({id:'ST'+String(STAFF_LIST.length+1).padStart(3,'0'),name,phone:masked,role,perms,online:false,admin:role==='admin'});
+closeModal();
+showToast('邀请链接已生成 · 已发送至 '+masked);
+if(currentSubId==='staffManage')openSubPage('staffManage',{keepStack:true});
+});
+}
+function openStaffEditModal(staffId){
+const s=STAFF_LIST.find(x=>x.id===staffId);
+if(!s){showToast('成员不存在');return}
+const roleTags=Object.keys(STAFF_ROLE_META).map(k=>`<span class="sp-tag ${k===s.role?'selected':''}" data-staff-role="${k}">${STAFF_ROLE_META[k].label}</span>`).join('');
+showModal(`<h3><i class="fas fa-user-cog" style="color:#1A6B7C"></i> 编辑成员</h3>
+<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:4px 0 12px;text-align:center">${s.name} · ${s.phone}</p>
+<span class="sp-label">姓名</span><input class="sp-input" id="staffEditName" value="${s.name}">
+<span class="sp-label">手机号</span><input class="sp-input" id="staffEditPhone" value="${s.phone}" maxlength="11" inputmode="tel" placeholder="修改请填完整 11 位手机号">
+<span class="sp-label">业务角色</span><div class="sp-tag-row">${roleTags}</div>
+<span class="sp-label">业务权限</span><div class="sp-tag-row">${renderStaffPermChips(s.perms,true)}</div>
+<button class="sp-btn-primary" data-action="staff-edit-confirm">保存</button>
+<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+if(!inner)return;
+bindStaffModalTags(inner);
+inner.querySelector('[data-action="staff-edit-confirm"]')?.addEventListener('click',()=>{
+const name=(document.getElementById('staffEditName')?.value||'').trim();
+const phoneRaw=(document.getElementById('staffEditPhone')?.value||'').trim();
+const roleEl=inner.querySelector('.sp-tag[data-staff-role].selected');
+const role=roleEl?.dataset.staffRole||s.role;
+const perms=[...inner.querySelectorAll('.sp-tag[data-staff-perm].selected')].map(t=>t.dataset.staffPerm);
+if(!name){showToast('请填写姓名');return}
+if(!perms.length){showToast('请至少选择一项业务权限');return}
+let phone=s.phone;
+if(phoneRaw&&phoneRaw!==s.phone){
+if(!/^1\d{10}$/.test(phoneRaw)){showToast('请填写正确的 11 位手机号');return}
+phone=phoneRaw.slice(0,3)+'****'+phoneRaw.slice(7);
+}
+s.name=name;s.phone=phone;s.role=role;s.perms=perms;s.admin=role==='admin'||!!s.admin;
+closeModal();
+showToast('成员权限已更新');
+if(currentSubId==='staffManage')openSubPage('staffManage',{keepStack:true});
+});
+}
 
 function showToast(msg){spToast.textContent=msg;spToast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>spToast.classList.remove('show'),2200)}
+let reportPeriod='month';
+const REPORT_DATA={
+week:{label:'本周',range:'2025-05-26 ~ 05-29',issue:28,issueDelta:'+18%',prem:'¥12.4万',premDelta:'+9.2%',pass:'97.8%',passDelta:'+0.4%',avg:'1.6h',avgDelta:'-0.2h',
+days:[{d:'一',n:5,p:42},{d:'二',n:7,p:58},{d:'三',n:4,p:36},{d:'四',n:8,p:72},{d:'五',n:4,p:38}]},
+month:{label:'本月',range:'2025-05-01 ~ 05-29',issue:86,issueDelta:'+12%',prem:'¥36.8万',premDelta:'+8.5%',pass:'98.2%',passDelta:'+1.1%',avg:'1.8h',avgDelta:'-0.3h',
+days:[{d:'05/23',n:9,p:68},{d:'05/24',n:14,p:92},{d:'05/25',n:11,p:74},{d:'05/26',n:17,p:118},{d:'05/27',n:15,p:96},{d:'05/28',n:12,p:82},{d:'05/29',n:8,p:58}]},
+quarter:{label:'本季',range:'2025-04-01 ~ 05-29',issue:214,issueDelta:'+6%',prem:'¥92.1万',premDelta:'+4.8%',pass:'97.5%',passDelta:'+0.6%',avg:'2.0h',avgDelta:'-0.1h',
+days:[{d:'W1',n:28,p:180},{d:'W2',n:36,p:240},{d:'W3',n:32,p:210},{d:'W4',n:41,p:280},{d:'W5',n:38,p:255},{d:'W6',n:39,p:268}]},
+year:{label:'本年',range:'2025-01-01 ~ 05-29',issue:412,issueDelta:'+21%',prem:'¥178万',premDelta:'+15%',pass:'97.1%',passDelta:'+0.9%',avg:'2.1h',avgDelta:'-0.4h',
+days:[{d:'1月',n:68,p:480},{d:'2月',n:52,p:360},{d:'3月',n:78,p:520},{d:'4月',n:96,p:640},{d:'5月',n:86,p:580}]}
+};
+const REPORT_MIX=[{name:'财产保全',pct:62,amt:'¥22.8万',color:'#1A6B7C'},{name:'继续执行',pct:22,amt:'¥8.1万',color:'#2563EB'},{name:'证据保全',pct:10,amt:'¥3.7万',color:'#B45309'},{name:'行为保全',pct:6,amt:'¥2.2万',color:'#7C3AED'}];
+const REPORT_COURTS=[{name:'朝阳区人民法院',cnt:18,avg:'1.2h'},{name:'浦东新区人民法院',cnt:14,avg:'1.5h'},{name:'南山区人民法院',cnt:11,avg:'1.8h'},{name:'天河区人民法院',cnt:9,avg:'2.1h'},{name:'鼓楼区人民法院',cnt:7,avg:'2.4h'}];
+const REPORT_DETAIL=[
+{date:'05-29',caseNo:'(2025)京0105民初8821号',type:'财产保全',amt:'¥4800',status:'已出函'},
+{date:'05-29',caseNo:'(2025)沪0115民初3342号',type:'继续执行',amt:'¥6200',status:'已出函'},
+{date:'05-28',caseNo:'(2025)粤0305民初1908号',type:'财产保全',amt:'¥3600',status:'已出函'},
+{date:'05-28',caseNo:'(2025)京0105民初8790号',type:'证据保全',amt:'¥2100',status:'已出函'},
+{date:'05-27',caseNo:'(2025)浙0106民初5512号',type:'财产保全',amt:'¥8900',status:'已出函'},
+{date:'05-27',caseNo:'(2025)苏0106民初2201号',type:'行为保全',amt:'¥1500',status:'已出函'}
+];
+function renderStatsReportPage(){
+const d=REPORT_DATA[reportPeriod]||REPORT_DATA.month;
+const maxN=Math.max(...d.days.map(x=>x.n),1);
+const maxP=Math.max(...d.days.map(x=>x.p),1);
+const periods=[['week','本周'],['month','本月'],['quarter','本季'],['year','本年']];
+return`
+<div class="rpt-period">${periods.map(([k,l])=>`<button type="button" data-rpt-period="${k}" class="${reportPeriod===k?'on':''}">${l}</button>`).join('')}</div>
+<div class="rpt-hero">
+<div class="rpt-hero-top"><div><h3>${d.label}经营概况</h3><p>${d.range} · 永安保险</p></div><span class="rpt-hero-badge">实时</span></div>
+<div class="rpt-hero-row">
+<div class="rpt-hero-kpi"><strong>${d.issue}</strong><span>出函量（笔）</span><em>${d.issueDelta} 环比</em></div>
+<div class="rpt-hero-kpi"><strong>${d.prem}</strong><span>保费收入</span><em>${d.premDelta} 环比</em></div>
+</div></div>
+<div class="rpt-metrics">
+<div class="rpt-metric m1"><div class="rm-ico"><i class="fas fa-file-signature"></i></div><div class="rm-val">${d.issue}</div><div class="rm-lbl">出函量</div><div class="rm-delta up">${d.issueDelta}</div></div>
+<div class="rpt-metric m2"><div class="rm-ico"><i class="fas fa-yen-sign"></i></div><div class="rm-val">${d.prem}</div><div class="rm-lbl">保费收入</div><div class="rm-delta up">${d.premDelta}</div></div>
+<div class="rpt-metric m3"><div class="rm-ico"><i class="fas fa-check-circle"></i></div><div class="rm-val">${d.pass}</div><div class="rm-lbl">审核通过率</div><div class="rm-delta up">${d.passDelta}</div></div>
+<div class="rpt-metric m4"><div class="rm-ico"><i class="fas fa-clock"></i></div><div class="rm-val">${d.avg}</div><div class="rm-lbl">平均出函时效</div><div class="rm-delta down">${d.avgDelta}</div></div>
+</div>
+<div class="rpt-chart-wrap">
+<div class="rpt-chart-head"><strong>出函 · 保费趋势</strong><div class="rpt-legend"><span><i style="background:#1A6B7C"></i>出函</span><span><i style="background:#2563EB"></i>保费</span></div></div>
+<div class="rpt-bars">${d.days.map(x=>`
+<div class="rpt-bar-col"><div class="rpt-bar-n">${x.n}</div>
+<div class="rpt-bar-stack">
+<div class="rpt-bar issue" style="height:${Math.round(x.n/maxN*100)}%"></div>
+<div class="rpt-bar prem" style="height:${Math.round(x.p/maxP*100)}%"></div>
+</div>
+<div class="rpt-bar-lbl">${x.d}</div></div>`).join('')}</div>
+</div>
+<div class="rpt-mix"><div class="sp-card-title" style="margin-bottom:12px">产品结构占比</div>
+${REPORT_MIX.map(m=>`<div class="rpt-mix-row"><span class="rpt-mix-name">${m.name}</span><div class="rpt-mix-track"><div class="rpt-mix-fill" style="width:${m.pct}%;background:${m.color}"></div></div><span class="rpt-mix-pct">${m.pct}%</span><span class="rpt-mix-amt">${m.amt}</span></div>`).join('')}
+</div>
+<div class="rpt-rank"><div class="sp-card-title" style="margin-bottom:4px">法院出函 TOP5</div>
+${REPORT_COURTS.map((c,i)=>`<div class="rpt-rank-item"><div class="rpt-rank-no">${i+1}</div><div class="rpt-rank-body"><strong>${c.name}</strong><span>平均时效 ${c.avg}</span></div><div class="rpt-rank-val">${c.cnt}笔</div></div>`).join('')}
+</div>
+<div class="rpt-table-card"><div class="flex-between" style="margin-bottom:8px"><div class="sp-card-title" style="margin:0">明细流水</div><span style="font-size:11px;color:#94A3B8">近6笔</span></div>
+<div class="rpt-table-scroll"><table class="rpt-table"><thead><tr><th>日期</th><th>案号</th><th>类型</th><th class="num">保费</th></tr></thead>
+<tbody>${REPORT_DETAIL.map(r=>`<tr><td>${r.date}</td><td>${r.caseNo}</td><td>${r.type}</td><td class="num">${r.amt}</td></tr>`).join('')}</tbody></table></div>
+</div>
+<div class="rpt-export-bar">
+<button type="button" class="sp-btn-secondary" data-action="export-report-email"><i class="fas fa-envelope" style="margin-right:4px"></i>发邮箱</button>
+<button type="button" class="sp-btn-primary" data-action="export-report-excel"><i class="fas fa-file-excel" style="margin-right:6px"></i>导出 Excel</button>
+</div>
+<p class="rpt-hint">导出含汇总指标、趋势、产品结构、法院排名与明细流水</p>`;
+}
+function exportReportExcel(){
+const d=REPORT_DATA[reportPeriod]||REPORT_DATA.month;
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const rows=(arr)=>arr.map(r=>`<Row>${r.map(c=>`<Cell><Data ss:Type="${typeof c==='number'?'Number':'String'}">${esc(c)}</Data></Cell>`).join('')}</Row>`).join('');
+const xml=`<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+<Styles>
+<Style ss:ID="hdr"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1A6B7C" ss:Pattern="Solid"/></Style>
+</Styles>
+<Worksheet ss:Name="汇总指标">
+<Table>
+${rows([['统计周期',d.label+'（'+d.range+'）'],['机构','永安保险'],['出函量（笔）',d.issue],['保费收入',d.prem],['审核通过率',d.pass],['平均出函时效',d.avg],['出函环比',d.issueDelta],['保费环比',d.premDelta]])}
+</Table></Worksheet>
+<Worksheet ss:Name="趋势数据">
+<Table>
+<Row>${['时段','出函量','保费指数'].map(h=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${h}</Data></Cell>`).join('')}</Row>
+${rows(d.days.map(x=>[x.d,x.n,x.p]))}
+</Table></Worksheet>
+<Worksheet ss:Name="产品结构">
+<Table>
+<Row>${['产品类型','占比(%)','保费'].map(h=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${h}</Data></Cell>`).join('')}</Row>
+${rows(REPORT_MIX.map(m=>[m.name,m.pct,m.amt]))}
+</Table></Worksheet>
+<Worksheet ss:Name="法院排名">
+<Table>
+<Row>${['排名','法院','出函量','平均时效'].map(h=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${h}</Data></Cell>`).join('')}</Row>
+${rows(REPORT_COURTS.map((c,i)=>[i+1,c.name,c.cnt,c.avg]))}
+</Table></Worksheet>
+<Worksheet ss:Name="明细流水">
+<Table>
+<Row>${['日期','案号','类型','保费','状态'].map(h=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${h}</Data></Cell>`).join('')}</Row>
+${rows(REPORT_DETAIL.map(r=>[r.date,r.caseNo,r.type,r.amt,r.status]))}
+</Table></Worksheet>
+</Workbook>`;
+const blob=new Blob([xml],{type:'application/vnd.ms-excel;charset=utf-8'});
+const a=document.createElement('a');
+const stamp=new Date().toISOString().slice(0,10).replace(/-/g,'');
+a.href=URL.createObjectURL(blob);
+a.download=`诉讼保业务报表_${d.label}_${stamp}.xls`;
+document.body.appendChild(a);a.click();
+setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);
+showToast('Excel 报表已下载 · '+d.label);
+}
+function bindStatsReportEvents(){
+subBody.querySelectorAll('[data-rpt-period]').forEach(btn=>{
+if(btn._rpt)return;btn._rpt=true;
+btn.addEventListener('click',()=>{
+reportPeriod=btn.dataset.rptPeriod;
+subBody.innerHTML=renderStatsReportPage();
+bindStatsReportEvents();
+});
+});
+subBody.querySelectorAll('[data-action="export-report-excel"],[data-action="export-report-email"]').forEach(btn=>{
+if(btn._exp)return;btn._exp=true;
+btn.addEventListener('click',e=>{
+e.stopPropagation();
+if(btn.dataset.action==='export-report-excel')exportReportExcel();
+else showToast('报表已发送至机构管理员邮箱');
+});
+});
+}
 function hero(grad,icon,title,sub){return`<div class="sp-card" style="background:${grad};color:#fff;border:none;"><div style="font-size:32px;margin-bottom:8px">${icon}</div><h2 style="font-size:18px;font-weight:800;margin-bottom:6px">${title}</h2><p style="font-size:12px;opacity:.9;line-height:1.5">${sub}</p></div>`}
 function steps(labels,activeIdx){return`<div class="sp-steps">${labels.map((l,i)=>`<div class="sp-step ${i<activeIdx?'done':i===activeIdx?'active':''}">${l}</div>`).join('')}</div>`}
 function renderMaterialFileList(type){
@@ -812,13 +1397,15 @@ function showModal(html,opts){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
 if(!mask||!inner)return;
 inner.classList.toggle('sp-modal-source',!!(opts&&opts.source));
+inner.classList.toggle('sp-modal-form',!!(opts&&opts.form));
 inner.innerHTML=html;mask.classList.add('show');
 mask.onclick=e=>{if(e.target===mask)closeModal()};
 inner.querySelectorAll('[data-action="modal-close"]').forEach(btn=>btn.addEventListener('click',closeModal));
 }
 function closeModal(){
 document.getElementById('spModalMask')?.classList.remove('show');
-document.getElementById('spModalInner')?.classList.remove('sp-modal-source');
+const inner=document.getElementById('spModalInner');
+inner?.classList.remove('sp-modal-source','sp-modal-form');
 if(syncQrCountdown)clearInterval(syncQrCountdown);
 }
 function getPcUrl(tab){const u={workbench:'https://inst.workbench.ssbao.cn/material?order=SS20250529001',upload:'https://upload.ssbao.cn/inst/'+pcUploadToken,download:'https://inst.workbench.ssbao.cn/push?order=SS20250529001',chromeQr:'https://upload.ssbao.cn/inst/'+pcUploadToken,pair:'https://inst.workbench.ssbao.cn/auth/qr?s='+syncSpaceId,lan:'http://192.168.1.88:8765/upload?space='+syncSpaceId};return u[tab]||u.workbench}
@@ -1038,6 +1625,8 @@ return'<span class="sp-label">保全类型（切换预览格式）</span><div cl
 }
 function openSubPage(id,opts){
 opts=opts||{};const p=PAGES[id];if(!p){showToast('功能开发中');return}
+const AUTH_REQUIRED=new Set(['enterpriseAuth','profileInfo','securityCenter','staffManage','statsReport','messageCenter']);
+if(!authLoggedIn&&AUTH_REQUIRED.has(id)){showAuthOverlay('login');return}
 if(opts.fromHub&&TOOL_CHILD_PAGES.has(id)){subPageStack=[TOOL_HUB_ID]}else if(opts.pushStack&&currentSubId)subPageStack.push(currentSubId);
 else if(!opts.keepStack)subPageStack=[];
 currentSubId=id;
@@ -1049,9 +1638,11 @@ crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"><
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
 if(id==='orderList'){
-const filterTitles={all:'全部订单',pending:'待审核订单',issue:'待出函订单',supplement:'待补材料',done:'已出函订单',reject:'已驳回订单'};
-subTitle.textContent=filterTitles[currentOrderFilter]||'全部订单';
+const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
+subTitle.textContent=currentOrderFilter==='all'?(bizLabel+'订单'):(bizLabel+' · '+currentOrderFilter);
 }
+if(id==='enterpriseAuth')subSubtitle.textContent=entAuthStatus==='passed'?'已认证':'证照上传 · 打款验证';
+if(id==='biaohouDetail')subSubtitle.textContent=BIAOHUO_STATE.id||'';
 if(id==='xuepingOrders'){
 const meta=XUEPING_FILTERS.find(f=>f.key===currentXuepingFilter);
 subTitle.textContent=currentXuepingFilter==='all'?'学平险订单':('学平险 · '+(meta?meta.label:''));
@@ -1064,32 +1655,172 @@ function subPageBack(){
 if(subPageStack.length){const prev=subPageStack.pop();openSubPage(prev,{keepStack:true});return}
 closeSubPage()}
 
-const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作台</h2><p>永安保险 · 诉讼保全业务</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
+function renderAuthPage(){
+const isLogin=authMode==='login';
+return`<div class="auth-brand"><div class="auth-brand-logo"><i class="fas fa-shield-alt"></i></div>
+<h1>诉讼保</h1><p>机构业务工作台<br>安全登录 · 高效协同</p></div>
+<div class="auth-panel">
+<div class="auth-tabs">
+<button type="button" class="${isLogin?'on':''}" data-auth-tab="login">登录</button>
+</div>
+${isLogin?`<div>
+<span class="sp-label">手机号</span><input class="sp-input" id="authPhone" type="tel" maxlength="11" placeholder="请输入手机号" value="13800138000">
+<span class="sp-label">验证码</span><div class="auth-sms-row"><input class="sp-input" id="authSms" type="tel" maxlength="6" placeholder="请输入验证码" value="123456"><button type="button" class="auth-sms-btn" data-action="auth-sms">获取验证码</button></div>
+<label class="auth-agree"><input type="checkbox" id="authAgree" checked> 已阅读并同意 <a href="#" style="color:#1A6B7C">《用户服务协议》</a> 与 <a href="#" style="color:#1A6B7C">《隐私政策》</a></label>
+<button type="button" class="sp-btn-primary" data-action="auth-login">登录</button>
+<button type="button" class="auth-wx-btn" data-action="auth-wx"><i class="fab fa-weixin"></i> 微信一键登录</button>
+</div>`:`<div>
+<span class="sp-label">手机号</span><input class="sp-input" id="regPhone" type="tel" maxlength="11" placeholder="请输入手机号">
+<span class="sp-label">验证码</span><div class="auth-sms-row"><input class="sp-input" id="regSms" type="tel" maxlength="6" placeholder="请输入验证码"><button type="button" class="auth-sms-btn" data-action="auth-sms">获取验证码</button></div>
+<span class="sp-label">设置密码</span><input class="sp-input" id="regPwd" type="password" placeholder="6–20位字母或数字">
+<span class="sp-label">确认密码</span><input class="sp-input" id="regPwd2" type="password" placeholder="再次输入密码">
+<label class="auth-agree"><input type="checkbox" id="regAgree" checked> 已阅读并同意 <a href="#" style="color:#1A6B7C">《用户服务协议》</a> 与 <a href="#" style="color:#1A6B7C">《隐私政策》</a></label>
+<button type="button" class="sp-btn-primary" data-action="auth-register">注册并登录</button>
+<p class="auth-footer-link">已有账号？<a data-auth-tab="login">去登录</a></p>
+</div>`}
+</div>
+<p class="auth-hint">登录后可同步机构账号、企业认证与业务权限</p>`;
+}
+function showWxAuth(){
+const wxMask=document.getElementById('wxMask');
+if(!wxMask)return;
+wxMask.classList.add('show');wxMask.setAttribute('aria-hidden','false');
+}
+function hideWxAuth(){
+const wxMask=document.getElementById('wxMask');
+if(!wxMask)return;
+wxMask.classList.remove('show');wxMask.setAttribute('aria-hidden','true');
+}
+function showAuthOverlay(mode){
+authMode=mode||'login';
+const ov=document.getElementById('authOverlay');
+const body=document.getElementById('authBody');
+if(!ov||!body)return;
+body.innerHTML=renderAuthPage();
+ov.classList.add('active');
+document.getElementById('bottomNav').style.display='none';
+bindAuthEvents();
+/* 对齐 login.html：进入登录层后自动唤起微信授权 */
+setTimeout(showWxAuth,450);
+}
+function hideAuthOverlay(){
+hideWxAuth();
+const ov=document.getElementById('authOverlay');
+if(ov)ov.classList.remove('active');
+if(!currentSubId)document.getElementById('bottomNav').style.display='flex';
+}
+function enterAppAfterAuth(opts){
+opts=opts||{};
+authLoggedIn=true;
+try{sessionStorage.setItem('ssbao_inst_logged_in','1');if(opts.via)sessionStorage.setItem('ssbao_inst_login_via',opts.via)}catch(e){}
+hideAuthOverlay();
+setActiveNav(currentNav||'profile');
+if(opts.needEntAuth&&entAuthStatus!=='passed'){
+showToast('请先完成企业认证');
+setTimeout(()=>openSubPage('enterpriseAuth'),500);
+}
+}
+function bindAuthEvents(){
+const body=document.getElementById('authBody');if(!body)return;
+body.querySelectorAll('[data-auth-tab]').forEach(el=>{
+el.addEventListener('click',e=>{e.preventDefault();authMode=el.dataset.authTab;body.innerHTML=renderAuthPage();bindAuthEvents()});
+});
+body.querySelectorAll('[data-action]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const act=btn.dataset.action;
+if(act==='auth-sms'){showToast('验证码已发送 123456');return}
+if(act==='auth-wx'){showWxAuth();return}
+if(act==='auth-login'){
+const ok=document.getElementById('authAgree');
+if(ok&&!ok.checked){showToast('请先同意协议');return}
+showToast('登录成功');
+enterAppAfterAuth({via:'sms'});
+}
+if(act==='auth-register'){
+const a=document.getElementById('regAgree');
+if(a&&!a.checked){showToast('请先同意协议');return}
+const p1=document.getElementById('regPwd')?.value||'',p2=document.getElementById('regPwd2')?.value||'';
+if(p1&&p1!==p2){showToast('两次密码不一致');return}
+showToast('注册成功');
+entAuthStatus='pending';
+try{sessionStorage.setItem('ssbao_inst_need_ent','1')}catch(e){}
+enterAppAfterAuth({needEntAuth:true,via:'register'});
+}
+});
+});
+}
+function renderEntUpload(key,icon,title,sub){
+const done=!!ENT_AUTH_STATE[key];
+return`<div class="ent-upload${done?' done':''}" data-action="ent-upload" data-key="${key}">
+<i class="fas ${done?'fa-check-circle':icon}"></i><strong>${title}</strong><span>${done?'已上传 · 识别成功':sub}</span></div>`;
+}
+function renderEnterpriseAuthPage(){
+const steps=['上传证照','开户信息','打款验证','认证结果'];
+const stepBar=`<div class="ent-step-bar">${steps.map((s,i)=>`<div class="ent-step${i<entAuthStep?' done':(i===entAuthStep?' on':'')}">${i+1}. ${s}</div>`).join('')}</div>`;
+const tip=`<div class="ent-tip"><i class="fas fa-info-circle"></i>与保函通一致（7.31）：营业执照 + 法人身份证 + 开户许可证 → 小额打款验证。</div>`;
+if(entAuthStep===0)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">① 上传营业执照及法人身份证</div>
+${renderEntUpload('license','fa-id-card','企业营业执照','拍照/相册上传，自动识别企业信息')}
+${renderEntUpload('idFront','fa-address-card','法人身份证 · 人像面','系统自动识别姓名与证件号')}
+${renderEntUpload('idBack','fa-address-card','法人身份证 · 国徽面','请确保边角完整、文字清晰')}
+${ENT_AUTH_STATE.license?`<div class="sp-card" style="background:#F8FAFC;margin:0"><div class="sp-info-row"><span class="k">企业名称</span><span class="v">${ENT_AUTH_STATE.companyName}</span></div>
+<div class="sp-info-row"><span class="k">信用代码</span><span class="v">${ENT_AUTH_STATE.creditCode}</span></div>
+<div class="sp-info-row"><span class="k">法定代表人</span><span class="v">${ENT_AUTH_STATE.legalName}</span></div></div>`:''}
+</div><button type="button" class="sp-btn-primary" data-action="ent-next">下一步</button>`;
+if(entAuthStep===1)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">② 企业基本开户信息</div>
+${renderEntUpload('permit','fa-university','开户许可证','上传后自动识别开户行与账号')}
+<span class="sp-label">开户银行</span><input class="sp-input" id="entBankName" value="${ENT_AUTH_STATE.bankName}">
+<span class="sp-label">基本户账号</span><input class="sp-input" id="entBankAccount" value="${ENT_AUTH_STATE.bankAccount}">
+<p style="font-size:11px;color:#64748B;line-height:1.55;margin-bottom:4px">请核对开户信息无误后再进入打款验证。</p></div>
+<div class="sp-grid-2"><button type="button" class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="ent-prev">上一步</button>
+<button type="button" class="sp-btn-primary" style="margin:0" data-action="ent-next">下一步</button></div>`;
+if(entAuthStep===2)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">③ 打款验证</div>
+<p style="font-size:13px;color:#334155;line-height:1.7;margin-bottom:12px">系统已向贵司基本户 <strong>${ENT_AUTH_STATE.bankAccount}</strong> 打入一笔小额款项。请财务登录网银确认到账金额后回填。</p>
+<span class="sp-label">到账金额（元）</span><input class="sp-input" id="entPayAmount" type="text" placeholder="例如 0.12" value="${ENT_AUTH_STATE.payAmount}">
+<p style="font-size:11px;color:#94A3B8">演示可填任意金额后提交</p></div>
+<div class="sp-grid-2"><button type="button" class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="ent-prev">上一步</button>
+<button type="button" class="sp-btn-primary" style="margin:0" data-action="ent-submit">提交验证</button></div>`;
+const ok=entAuthStatus==='passed';
+return stepBar+`<div class="sp-result-box" style="padding:28px 16px">
+<i class="fas ${ok?'fa-check-circle':'fa-times-circle'}" style="font-size:48px;color:${ok?'#059669':'#DC2626'}"></i>
+<p style="font-size:18px;font-weight:800;color:#0F4C5C;margin:12px 0 6px">${ok?'企业认证成功':'企业认证失败'}</p>
+<p style="font-size:12px;color:#64748B;line-height:1.6">${ok?'已开通完整业务权限，可返回工作台处理订单。':'请核对资料后重新提交。'}</p>
+</div>
+${ok?`<button type="button" class="sp-btn-primary" data-action="ent-done">进入工作台</button>`:
+`<button type="button" class="sp-btn-primary" data-action="ent-retry">重新提交资料</button>`}`;
+}
+
+const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作台</h2><p>永安机构 · 业务协同</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
 <div class="stats-dashboard">
-<div class="stats-dashboard-head"><span class="stats-dashboard-title">📊 数据看板</span><span class="stats-dashboard-date">2025年5月</span></div>
+<div class="stats-dashboard-head"><span class="stats-dashboard-title">📊 数据看板</span></div>
 <div class="stats-grid">
-<div class="stat-item stat-pending" data-page="orderList" data-filter="pending"><div class="stat-item-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">待审核</div></div></div>
-<div class="stat-item stat-issue" data-page="orderList" data-filter="issue"><div class="stat-item-icon"><i class="fas fa-file-signature"></i></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待出函</div></div></div>
-<div class="stat-item stat-supplement" data-page="orderList" data-filter="supplement"><div class="stat-item-icon"><i class="fas fa-folder-open"></i></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">待补材料</div></div></div>
-<div class="stat-item stat-monthly" data-page="statsReport"><div class="stat-item-icon"><i class="fas fa-chart-line"></i></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月出函</div></div></div>
+<div class="stat-item stat-pending" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">待审核</div></div></div>
+<div class="stat-item stat-issue" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-file-signature"></i></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待办理</div></div></div>
+<div class="stat-item stat-supplement" data-page="orderList" data-filter="supplement" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-folder-open"></i></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">待补材料</div></div></div>
+<div class="stat-item stat-monthly" data-page="statsReport"><div class="stat-item-icon"><i class="fas fa-chart-line"></i></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月办结</div></div></div>
 </div></div>
-<div class="alert-banner" data-page="orderList" data-filter="pending"><strong style="font-size:15px;"><i class="fas fa-exclamation-circle"></i> 12 笔订单待审核，请尽快处理</strong><span class="alert-badge">去处理</span></div>
+<div class="alert-banner" data-page="orderList" data-filter="pending" data-biz="litigation"><strong style="font-size:15px;"><i class="fas fa-exclamation-circle"></i> 12 笔订单待审核，请尽快处理</strong><span class="alert-badge">去处理</span></div>
 
 <div class="section-title"><span>⚡ 快捷操作</span></div>
 <div class="quick-grid">
-<div class="quick-item" data-page="orderList" data-filter="pending"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
-<div class="quick-item" data-page="orderList" data-filter="issue"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>出函办理</span></div>
-<div class="quick-item" data-page="xuepingOrders"><div class="quick-icon"><i class="fas fa-graduation-cap"></i></div><span>学平险</span></div>
+<div class="quick-item" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
+<div class="quick-item" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>业务办理</span></div>
+<div class="quick-item" data-page="orderList" data-biz="xueping"><div class="quick-icon"><i class="fas fa-graduation-cap"></i></div><span>学平业务</span></div>
 <div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><i class="fas fa-robot"></i></div><span>工具助手</span></div>
 </div>
-<div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList">全部订单 →</a></div>
-${ORDER_LIST.filter(o=>o.status==='pending'||o.status==='issue'||o.status==='supplement').map(renderOrderCard).join('')}`;
+<div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList" data-biz="all">订单中心 →</a></div>
+${ORDER_LIST.filter(o=>o.status==='pending'||o.status==='issue'||o.status==='supplement').map(o=>renderOrderCard(o,{soft:true})).join('')}
+${BIAOHUO_LIST.filter(o=>o.status==='bidding'||o.status==='issuing').slice(0,1).map(o=>renderBiaohouCard(o,{soft:true,showBiz:true})).join('')}
+${XUEPING_LIST.filter(o=>o.status==='wait_confirm'||o.status==='wait_underwrite').slice(0,1).map(o=>renderXuepingCard(o,{soft:true,showBiz:true})).join('')}`;
 
-const ORDERS=`<div class="header-flex"><div class="greeting"><h2>📂 订单中心</h2><p>保全保函全流程管理</p></div><div class="icon-btn" data-page="searchPage"><i class="fas fa-search"></i></div></div>
-<div class="filter-tabs" id="orderFilters"><button class="on" data-filter="all">全部</button><button data-filter="pending">待审核</button><button data-filter="issue">待出函</button><button data-filter="supplement">待补材料</button><button data-filter="done">已出函</button><button data-filter="reject">已驳回</button></div>
-<div id="orderListArea">${ORDER_LIST.map(renderOrderCard).join('')}</div>`;
+function renderOrdersTab(){
+return`<div class="header-flex"><div class="greeting"><h2>📂 订单中心</h2><p>诉讼保 · 学平险 · 标后</p></div><div class="icon-btn" data-page="searchPage"><i class="fas fa-search"></i></div></div>
+${currentBizLine==='all'?renderOrderListSummary():''}
+${renderBizLineTabs(currentBizLine)}
+${renderOrderStatusTabs(currentBizLine,currentOrderFilter,'orderFilters')}
+<div id="orderListArea">${renderUnifiedOrderList(currentBizLine,currentOrderFilter)}</div>`;
+}
 
-const BUSINESS=`<div class="header-flex"><div class="greeting"><h2>💼 业务管理</h2><p>产品 · 费率 · 法院 · 团队</p></div></div>
+const BUSINESS=`<div class="header-flex"><div class="greeting"><h2>💼 业务管理</h2><p>产品 · 费率 · 覆盖 · 团队</p></div></div>
 <div class="inst-mat-hub" data-page="toolAssistantHub" style="margin-bottom:16px;">
 <h3><i class="fas fa-robot"></i> 工具助手</h3>
 <p>RAR 归类 · 结构化提取 · 机构匹配分析 · 手机/PC 材料互通</p>
@@ -1111,26 +1842,67 @@ const BUSINESS=`<div class="header-flex"><div class="greeting"><h2>💼 业务�
 <div class="section-title"><span>🏛️ 法院接入</span><a href="#" data-page="courtCoverage">328家 →</a></div>
 <div class="sp-card"><p style="font-size:13px;color:#3e5a7a">已接入全国328家法院电子保全系统，朝阳区/浦东新区等支持当日出函。</p></div>`;
 
-const PROFILE=`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机构账号 · 业务权限</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
-<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar"><i class="fas fa-user-tie"></i></div><div><h3 style="font-size:20px;font-weight:800;color:#102A3C">王审核员</h3><p style="font-size:13px;color:#54708F">永安保险 · 核保专员</p><p style="font-size:11px;color:#1A6B7C;margin-top:4px"><i class="fas fa-shield-alt"></i> 已认证机构账号</p></div></div></div>
+function renderProfileTab(){
+if(!authLoggedIn){
+return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>登录后同步机构账号</p></div></div>
+<div class="profile-guest-card">
+<div class="profile-guest-avatar"><i class="fas fa-user-lock"></i></div>
+<h3>欢迎使用诉讼保机构端</h3>
+<p>登录后可进行企业认证、查看业务报表、<br>管理团队成员与账号安全设置</p>
+<button type="button" class="profile-login-btn" data-action="auth-open"><i class="fab fa-weixin"></i> 微信登录 / 手机号登录</button>
+</div>
+<div class="section-title">⚙️ 更多</div>
+<div class="settings-list">
+<div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于机构端</span></div><div class="setting-right">v1.4.0 ></div></div>
+</div>`;
+}
+return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机构账号 · 业务权限</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
+<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar"><i class="fas fa-user-tie"></i></div><div><h3 style="font-size:20px;font-weight:800;color:#102A3C">王审核员</h3><p style="font-size:13px;color:#54708F">永安机构 · 业务专员</p><p style="font-size:11px;color:#1A6B7C;margin-top:4px"><i class="fas fa-shield-alt"></i> ${entAuthStatus==='passed'?'企业已认证':'待完成企业认证'}</p></div></div></div>
 <div class="quick-grid">
+<div class="quick-item" data-page="enterpriseAuth"><div class="quick-icon"><i class="fas fa-building"></i></div><span>企业认证</span></div>
 <div class="quick-item" data-page="statsReport"><div class="quick-icon"><i class="fas fa-chart-line"></i></div><span>业务报表</span></div>
 <div class="quick-item" data-page="messageCenter"><div class="quick-icon"><i class="fas fa-envelope"></i></div><span>消息中心</span></div>
 <div class="quick-item" data-page="staffManage"><div class="quick-icon"><i class="fas fa-users-cog"></i></div><span>团队管理</span></div>
-<div class="quick-item" data-page="trainingHelp"><div class="quick-icon"><i class="fas fa-book"></i></div><span>帮助中心</span></div>
 </div>
 <div class="section-title">⚙️ 账号设置</div>
 <div class="settings-list">
-<div class="settings-item" data-page="profileInfo"><div class="setting-left"><i class="fas fa-user-edit"></i><span>个人信息</span></div><div class="setting-right">已认证 ></div></div>
-<div class="settings-item" data-page="securityCenter"><div class="setting-left"><i class="fas fa-lock"></i><span>安全中心</span></div><div class="setting-right">></div></div>
+<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>企业认证</span></div><div class="setting-right">${entAuthStatus==='passed'?'已认证 >':'去认证 >'}</div></div>
+<div class="settings-item" data-page="profileInfo"><div class="setting-left"><i class="fas fa-user-edit"></i><span>个人信息</span></div><div class="setting-right">></div></div>
 <div class="settings-item" id="notifyItem"><div class="setting-left"><i class="fas fa-bell"></i><span>消息通知</span></div><div class="setting-right"><div class="switch-toggle active" id="notifySwitch"></div></div></div>
 <div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于机构端</span></div><div class="setting-right">v1.4.0 ></div></div>
+<div class="settings-item" data-action="auth-logout"><div class="setting-left"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></div><div class="setting-right">></div></div>
 </div>`;
+}
 
-const TABS={workbench:WORKBENCH,orders:ORDERS,business:BUSINESS,profile:PROFILE};
+const TABS={workbench:()=>WORKBENCH,orders:()=>renderOrdersTab(),business:()=>BUSINESS,profile:()=>renderProfileTab()};
 
 const PAGES={
-orderList:{title:'全部订单',sub:'筛选 · 搜索 · 批量处理',render:()=>ORDERS.replace('id="orderFilters"','id="orderFiltersSub"')},
+orderList:{title:'订单中心',sub:'诉讼保 · 学平险 · 标后',render:()=>`
+${currentBizLine==='all'?renderOrderListSummary():''}
+${renderBizLineTabs(currentBizLine)}
+${renderOrderStatusTabs(currentBizLine,currentOrderFilter,'orderFiltersSub')}
+<div id="orderListArea">${renderUnifiedOrderList(currentBizLine,currentOrderFilter)}</div>`},
+enterpriseAuth:{title:'企业认证',sub:'与保函通一致 · 7.31',render:()=>renderEnterpriseAuthPage()},
+biaohouDetail:{title:'标后订单详情',sub:'订单详情',render:()=>{
+const o=BIAOHUO_STATE;const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
+return`<div class="sp-card"><div class="flex-between"><strong>${o.type}保函</strong><span class="tag ${meta.tag}">${meta.label}</span></div>
+<p style="font-size:12px;color:#6F8FAA;margin:8px 0">金额 ${formatPreserveAmt(o.amount)}${o.guaranteeNo?' · 编号 '+o.guaranteeNo:''}</p>
+<p style="font-size:11px;color:#94A3B8">订单号 ${o.id}</p></div>
+<div class="sp-card"><div class="sp-card-title">项目信息</div>
+${renderInfoRow('项目名称',o.project)}
+${renderInfoRow('申请人',o.applicant)}
+${renderInfoRow('业务类型',o.type)}
+${renderInfoRow('项目金额',formatPreserveAmt(o.amount))}
+${renderInfoRow('报价机构',o.quotes+' 家')}
+${renderInfoRow('截止时间',o.deadline)}
+</div>
+<div class="sp-card"><div class="sp-card-title">办理进度</div><div class="sp-timeline">
+<div class="sp-timeline-item"><strong>发布需求</strong><br>企业发起标后业务申请</div>
+<div class="sp-timeline-item"><strong>当前 · ${meta.label}</strong><br>机构端可报价、出函或退保受理</div>
+</div></div>
+${o.status==='bidding'?`<button class="sp-btn-primary" data-action="toast" data-msg="报价已提交">提交报价</button>`:''}
+${o.status==='issuing'?`<button class="sp-btn-primary" data-action="toast" data-msg="已确认出函">确认出函</button>`:''}
+${o.status==='done'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
 orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>`
 <div class="sp-steps"><div class="sp-step done">提交</div><div class="sp-step active">审核</div><div class="sp-step">出函</div><div class="sp-step">完成</div></div>
 <div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag tag-review">待审核</span></div>
@@ -1266,10 +2038,7 @@ courtCoverage:{title:'法院覆盖',sub:'已接入法院列表',render:()=>`
 <div class="sp-card"><div class="flex-between"><div><strong>北京市朝阳区人民法院</strong><p style="font-size:11px;color:#1D7A6E">● 电子保函已接入 · 2h裁定</p></div><span style="font-size:12px;color:#1A6B7C">已开通</span></div></div>
 <div class="sp-card"><div class="flex-between"><div><strong>上海市浦东新区人民法院</strong><p style="font-size:11px;color:#1D7A6E">● 绿色通道</p></div><span style="font-size:12px;color:#1A6B7C">已开通</span></div></div>
 <div class="sp-card"><div class="flex-between"><div><strong>深圳市南山区人民法院</strong><p style="font-size:11px;color:#B45309">○ 申请接入中</p></div><button class="sp-btn-secondary" data-action="toast" data-msg="接入申请已提交">申请接入</button></div></div>`},
-statsReport:{title:'业务报表',sub:'出函量 · 保费 · 趋势',render:()=>`
-<div class="sp-grid-2" style="margin-bottom:14px"><div class="sp-metric"><strong>86</strong><span>本月出函</span></div><div class="sp-metric"><strong>¥36.8万</strong><span>本月保费</span></div><div class="sp-metric"><strong>98.2%</strong><span>审核通过率</span></div><div class="sp-metric"><strong>1.8h</strong><span>平均出函</span></div></div>
-<div class="sp-card"><div class="sp-card-title">近7日出函趋势</div><div style="height:80px;background:linear-gradient(180deg,#D4EDE8 0%,transparent 100%);border-radius:12px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px"><div style="width:20px;height:40%;background:#1A6B7C;border-radius:4px 4px 0 0"></div><div style="width:20px;height:65%;background:#1A6B7C;border-radius:4px 4px 0 0"></div><div style="width:20px;height:50%;background:#1A6B7C;border-radius:4px 4px 0 0"></div><div style="width:20px;height:80%;background:#1A6B7C;border-radius:4px 4px 0 0"></div><div style="width:20px;height:70%;background:#1A6B7C;border-radius:4px 4px 0 0"></div></div></div>
-<button class="sp-btn-secondary" style="width:100%" data-action="toast" data-msg="报表已导出至邮箱">导出 Excel 报表</button>`},
+statsReport:{title:'业务报表',sub:'出函量 · 保费 · 趋势 · 导出',render:()=>renderStatsReportPage()},
 blockchainUpload:{title:'链上存证',sub:'保函司法区块链存证',render:()=>`
 <div class="sp-card"><p style="font-size:13px;line-height:1.7;color:#3e5a7a">保函出函后自动上链，生成不可篡改存证凭证，支持法官端一键核验。</p></div>
 <div class="sp-card"><span class="sp-label">保函编号</span><input class="sp-input" value="YASS20250518001234">
@@ -1279,10 +2048,7 @@ messageCenter:{title:'消息中心',sub:'审核提醒 · 系统通知',render:()
 <div class="sp-card"><div class="flex-between"><strong style="font-size:14px">新订单待审核</strong><span style="font-size:11px;color:#94A3B8">10分钟前</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">SS20250529001 财产保全保函待您审核</p></div>
 <div class="sp-card"><div class="flex-between"><strong style="font-size:14px">费率变更已通过</strong><span style="font-size:11px;color:#94A3B8">昨天</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">平台已批准费率 0.85‰ 变更申请</p></div>
 <div class="sp-card"><div class="flex-between"><strong style="font-size:14px">补材料已提交</strong><span style="font-size:11px;color:#94A3B8">2天前</span></div><p style="font-size:12px;color:#6F8FAA;margin-top:6px">SS20250527015 用户已补充材料</p></div>`},
-staffManage:{title:'团队管理',sub:'机构业务员 · 权限分配',render:()=>`
-<div class="sp-card"><div class="flex-between"><div><strong>王审核员</strong><p style="font-size:11px;color:#6F8FAA">核保专员 · 管理员</p></div><span style="font-size:12px;color:#1D7A6E">在线</span></div></div>
-<div class="sp-card"><div class="flex-between"><div><strong>李业务员</strong><p style="font-size:11px;color:#6F8FAA">业务员 · 订单审核</p></div><span style="font-size:12px;color:#94A3B8">离线</span></div></div>
-<button class="sp-btn-primary" data-action="toast" data-msg="邀请链接已生成">邀请新成员</button>`},
+staffManage:{title:'团队管理',sub:'姓名 · 手机号 · 角色 · 业务权限',render:()=>renderStaffManagePage()},
 trainingHelp:{title:'操作培训',sub:'机构端使用指南',render:()=>`
 <div class="sp-card"><strong>订单审核流程</strong><p style="font-size:12px;color:#6F8FAA;margin-top:6px;line-height:1.6">1. 接收用户申请 → 2. 材料核验 → 3. 核保评估 → 4. 审批通过 → 5. 出函上链</p></div>
 <div class="sp-card"><strong>出函时效要求</strong><p style="font-size:12px;color:#6F8FAA;margin-top:6px;line-height:1.6">标准通道4-8小时，极速通道2小时内完成出函。</p></div>
@@ -1360,46 +2126,111 @@ crossDeviceSync:{title:'文件空间站',sub:'上传 · 扫码 · 配对 · 内�
 function setActiveNav(id){
 currentNav=id;
 document.querySelectorAll('.nav-item').forEach(n=>{n.classList.toggle('active',n.dataset.nav===id)});
-tabContent.innerHTML=TABS[id]||'';
+const tabFn=TABS[id];
+tabContent.innerHTML=typeof tabFn==='function'?tabFn():(tabFn||'');
 scroll.scrollTop=0;
 bindTabClicks();
 if(id==='profile')bindNotifySwitch();
 }
 
-function bindTabClicks(){
-document.querySelectorAll('[data-page]').forEach(el=>{
-if(el._bound)return;el._bound=true;el.style.cursor='pointer';
+function refreshOrderListArea(filterId){
+if(currentNav==='orders'&&!currentSubId){
+setActiveNav('orders');
+return;
+}
+if(currentSubId==='orderList'){
+openSubPage('orderList',{keepStack:true});
+return;
+}
+const area=document.getElementById('orderListArea');
+const filtersEl=document.getElementById(filterId||'orderFilters')||document.getElementById('orderFiltersSub');
+if(filtersEl)filtersEl.outerHTML=renderOrderStatusTabs(currentBizLine,currentOrderFilter,filtersEl.id);
+if(area)area.innerHTML=renderUnifiedOrderList(currentBizLine,currentOrderFilter);
+bindOrderListInteractions(filterId);
+}
+
+function bindOrderListInteractions(preferredFilterId){
+const bizTabs=document.getElementById('bizLineTabs');
+if(bizTabs&&!bizTabs._bound){
+bizTabs._bound=true;
+bizTabs.querySelectorAll('button').forEach(btn=>{
+btn.addEventListener('click',()=>{
+currentBizLine=btn.dataset.biz||'all';
+currentOrderFilter='all';
+bizTabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===btn));
+const fid=(document.getElementById('orderFiltersSub')&&'orderFiltersSub')||'orderFilters';
+refreshOrderListArea(fid);
+if(currentSubId==='orderList'){
+const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
+subTitle.textContent=bizLabel+'订单';
+}
+});
+});
+}
+const filters=document.getElementById(preferredFilterId)||document.getElementById('orderFilters')||document.getElementById('orderFiltersSub');
+if(filters&&!filters._bound){
+filters._bound=true;
+filters.querySelectorAll('button').forEach(btn=>{
+btn.addEventListener('click',()=>{
+currentOrderFilter=btn.dataset.filter||'all';
+const fid=filters.id||preferredFilterId||'orderFilters';
+refreshOrderListArea(fid);
+if(currentSubId==='orderList'){
+const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
+const meta=getStatusFiltersForBiz(currentBizLine).find(f=>f.key===currentOrderFilter);
+subTitle.textContent=currentOrderFilter==='all'?(bizLabel+'订单'):(bizLabel+' · '+(meta?meta.label:currentOrderFilter));
+}
+});
+});
+}
+document.querySelectorAll('#orderListArea .order-card[data-page],#tabContent .order-card[data-page]').forEach(el=>{
+if(el._orderBound)return;el._orderBound=true;
 el.addEventListener('click',e=>{
 if(e.target.closest('[data-action="download-guarantee"]'))return;
 e.stopPropagation();
-const pg=el.dataset.page,flt=el.dataset.filter;
-if(pg==='orderList')currentOrderFilter=flt||'all';
-else if(flt)currentOrderFilter=flt;
-if(pg)openSubPage(pg,{fromHub:el.closest('.inst-mat-hub,.inst-mat-grid')&&TOOL_CHILD_PAGES.has(pg)});
+if(el.dataset.xpId){
+const found=XUEPING_LIST.find(x=>x.id===el.dataset.xpId);
+if(found)XUEPING_STATE=Object.assign({},found);
+}
+if(el.dataset.bhId){
+const found=BIAOHUO_LIST.find(x=>x.id===el.dataset.bhId);
+if(found)BIAOHUO_STATE=Object.assign({},found);
+}
+openSubPage(el.dataset.page,{pushStack:el.dataset.pushStack==='1'});
 });
 });
 document.querySelectorAll('[data-action="download-guarantee"]').forEach(btn=>{
 if(btn._dlBound)return;btn._dlBound=true;
 btn.addEventListener('click',e=>{
 e.stopPropagation();
-const gno=btn.dataset.gno||btn.dataset.id;
-showToast('保函 PDF 下载中… '+gno);
-});
-});
-const filters=document.getElementById('orderFilters');
-if(filters&&!filters._bound){
-filters._bound=true;
-filters.querySelectorAll('button').forEach(btn=>{
-btn.addEventListener('click',()=>{
-filters.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-btn.classList.add('on');
-const f=btn.dataset.filter;
-document.querySelectorAll('#orderListArea .order-card').forEach(card=>{
-card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
-});
+showToast('文件下载中… '+(btn.dataset.gno||btn.dataset.id||''));
 });
 });
 }
+
+function bindTabClicks(){
+document.querySelectorAll('#tabContent [data-page]').forEach(el=>{
+if(el._bound)return;el._bound=true;el.style.cursor='pointer';
+el.addEventListener('click',e=>{
+if(e.target.closest('[data-action="download-guarantee"]'))return;
+if(el.classList.contains('order-card'))return;
+e.stopPropagation();
+const pg=el.dataset.page,flt=el.dataset.filter,biz=el.dataset.biz;
+if(biz)currentBizLine=biz;
+if(pg==='orderList')currentOrderFilter=flt||'all';
+else if(flt)currentOrderFilter=flt;
+if(pg)openSubPage(pg,{fromHub:el.closest('.inst-mat-hub,.inst-mat-grid')&&TOOL_CHILD_PAGES.has(pg)});
+});
+});
+document.querySelectorAll('#tabContent [data-action="auth-logout"]').forEach(el=>{
+if(el._logoutBound)return;el._logoutBound=true;
+el.addEventListener('click',e=>{e.stopPropagation();authLoggedIn=false;try{sessionStorage.removeItem('ssbao_inst_logged_in');sessionStorage.removeItem('ssbao_inst_login_via');sessionStorage.removeItem('ssbao_inst_need_ent')}catch(err){}closeSubPage();showToast('已退出登录');setActiveNav('profile')});
+});
+document.querySelectorAll('#tabContent [data-action="auth-open"]').forEach(el=>{
+if(el._authOpenBound)return;el._authOpenBound=true;
+el.addEventListener('click',e=>{e.stopPropagation();showAuthOverlay('login')});
+});
+bindOrderListInteractions('orderFilters');
 }
 
 function bindNotifySwitch(){
@@ -1583,6 +2414,10 @@ if(pg==='xuepingDetail'&&el.dataset.xpId){
 const found=XUEPING_LIST.find(x=>x.id===el.dataset.xpId);
 if(found)XUEPING_STATE=Object.assign({},found);
 }
+if(pg==='biaohouDetail'&&el.dataset.bhId){
+const found=BIAOHUO_LIST.find(x=>x.id===el.dataset.bhId);
+if(found)BIAOHUO_STATE=Object.assign({},found);
+}
 openSubPage(pg,{
 fromHub:TOOL_CHILD_PAGES.has(pg)||!!el.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario'),
 pushStack:pushStack
@@ -1594,6 +2429,37 @@ btn.addEventListener('click',e=>{
 e.stopPropagation();
 const act=btn.dataset.action,msg=btn.dataset.msg;
 if(act==='toast'&&msg)showToast(msg);
+if(act==='ent-upload'){
+ENT_AUTH_STATE[btn.dataset.key]=true;
+showToast('上传成功 · 已自动识别');
+openSubPage('enterpriseAuth',{keepStack:true});
+return;
+}
+if(act==='ent-next'){
+if(entAuthStep===0&&!(ENT_AUTH_STATE.license&&ENT_AUTH_STATE.idFront&&ENT_AUTH_STATE.idBack)){showToast('请先上传营业执照与法人身份证正反面');return}
+if(entAuthStep===1){
+if(!ENT_AUTH_STATE.permit){showToast('请先上传开户许可证');return}
+const bn=document.getElementById('entBankName'),ba=document.getElementById('entBankAccount');
+if(bn)ENT_AUTH_STATE.bankName=bn.value;
+if(ba)ENT_AUTH_STATE.bankAccount=ba.value;
+}
+entAuthStep=Math.min(entAuthStep+1,3);
+openSubPage('enterpriseAuth',{keepStack:true});
+return;
+}
+if(act==='ent-prev'){entAuthStep=Math.max(entAuthStep-1,0);openSubPage('enterpriseAuth',{keepStack:true});return}
+if(act==='ent-submit'){
+const amt=document.getElementById('entPayAmount')?.value?.trim();
+if(!amt){showToast('请填写到账金额');return}
+ENT_AUTH_STATE.payAmount=amt;
+entAuthStatus='passed';
+entAuthStep=3;
+showToast('打款验证通过');
+openSubPage('enterpriseAuth',{keepStack:true});
+return;
+}
+if(act==='ent-retry'){entAuthStep=0;entAuthStatus='pending';['license','idFront','idBack','permit'].forEach(k=>ENT_AUTH_STATE[k]=false);openSubPage('enterpriseAuth',{keepStack:true});return}
+if(act==='ent-done'){closeSubPage();setActiveNav('workbench');showToast('企业认证已完成');return}
 if(act==='open-source'){openSourcePreview(btn.dataset.srcKey);return}
 if(act==='approve-order'){showToast('审核通过，订单进入待出函');setTimeout(()=>openSubPage('issueGuarantee'),800)}
 if(act==='reject-order'){showToast('订单已驳回，已通知申请人');setTimeout(closeSubPage,800)}
@@ -1613,6 +2479,8 @@ if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
 if(act==='rar-open-email')openEmailModal('批量案件清单 PDF');
 if(act==='email-send-confirm'){closeModal();showToast('邮件已发送至业务员邮箱');}
+if(act==='staff-invite'){openStaffInviteModal();return}
+if(act==='staff-edit'){openStaffEditModal(btn.dataset.staffId);return}
 if(act==='struct-extract')runStructExtract();
 if(act==='struct-apply-order'){showToast('已写入订单 '+ORDER_STATE.id);setTimeout(()=>openSubPage('orderReview'),800)}
 if(act==='smart-analyze-run')runSmartAnalyze();
@@ -1674,26 +2542,12 @@ if(act==='demo-tool-flow'){showToast('演示：RAR→提取→分析→审核');
 });
 });
 if(['rarBatchPack','structExtract','toolAssistantHub','crossDeviceSync','smartAnalysis'].includes(id))bindMaterialEvents(id);
+if(id==='statsReport')bindStatsReportEvents();
 if(id==='structExtract'||id==='rarBatchPack')bindPreviewTypeTags();
 subBody.querySelectorAll('.sp-tag[data-select]').forEach(tag=>{
 tag.addEventListener('click',()=>{tag.parentElement.querySelectorAll('.sp-tag').forEach(t=>t.classList.remove('selected'));tag.classList.add('selected')});
 });
-const filtersSub=document.getElementById('orderFiltersSub');
-if(filtersSub){
-const filterTitles={all:'全部订单',pending:'待审核订单',issue:'待出函订单',supplement:'待补材料',done:'已出函订单',reject:'已驳回订单'};
-const applyFilter=f=>{
-currentOrderFilter=f;
-filtersSub.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.filter===f));
-document.querySelectorAll('#orderListArea .order-card').forEach(card=>{
-card.style.display=(f==='all'||card.dataset.status===f)?'':'none';
-});
-subTitle.textContent=filterTitles[f]||'全部订单';
-};
-filtersSub.querySelectorAll('button').forEach(btn=>{
-btn.addEventListener('click',()=>applyFilter(btn.dataset.filter));
-});
-applyFilter(currentOrderFilter||'all');
-}
+if(id==='orderList')bindOrderListInteractions('orderFiltersSub');
 const xpFilters=document.getElementById('xuepingFilters');
 if(xpFilters){
 const applyXpFilter=f=>{
@@ -1718,22 +2572,24 @@ nav.addEventListener('click',()=>{closeSubPage();setActiveNav(nav.dataset.nav)})
 document.getElementById('subpageBack').addEventListener('click',subPageBack);
 
 const PRD_SPECS={
-'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页，展示待办统计、快捷操作入口及最新待办订单，帮助核保人员快速进入高频业务。',logic:['展示待审核/待出函/待补材料/本月出函四项核心指标','点击统计卡片可跳转对应筛选订单列表','待办订单卡片点击进入订单详情'],acceptance:['Tab 切换后工作台内容完整渲染','统计数字可点击跳转','待办 alert 可点击'],api:'GET /api/inst/dashboard'},
-'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端订单中心，集中管理用户提交的保全保函申请。列表突出案件核保关键字段：申请人、被保全人、法院、保全金额、案号、案由、订单状态；已出函可直接下载保函。订单号不在列表展示，仅在订单详情底部次要位置保留，便于客服查单。',logic:['filter-tabs 状态筛选（全部/待审核/待出函/待补材料/已出函/已驳回）','order-card 双列字段网格展示案件信息','已出函卡片底部显示「下载保函」按钮','点击卡片进入 orderDetail，下载按钮 stopPropagation','搜索 icon 跳转 searchPage'],acceptance:['六种筛选互斥且列表正确过滤','每笔订单展示申请人/被保全人/法院/保全金额/案号/案由/状态','已出函可下载，其他状态无下载按钮'],api:'GET /api/inst/orders'},
+'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页。首页文案规避保函/保险/法院/司法/律师等敏感字眼，用「待办理/办结/受理单位」等中性表述；待办区可混排诉讼保全、学平、标后订单。',logic:['四项指标：待审核/待办理/待补材料/本月办结','快捷：订单审核/业务办理/学平业务/工具助手','待办卡片 soft 文案渲染'],acceptance:['首页无敏感字眼','统计与快捷可跳转订单列表','待办可进入详情'],api:'GET /api/inst/dashboard'},
+'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换 + 状态筛选；「全部」视图用待处理/办理中/已办结/异常分桶。卡片统一为色条+标题+主信息+金额行。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图汇总条 + 跨业务状态分桶','单业务线保留原状态筛选','点击进入对应详情页'],acceptance:['三类订单字段可读且不拥挤','业务线切换后列表与筛选同步','已办结可下载文件'],api:'GET /api/inst/orders?bizLine='},
+'enterprise-auth':{title:'企业认证',module:'账号',page:'enterpriseAuth',priority:'P0',business:'7.31 与保函通对齐：上传营业执照+法人身份证→开户许可证→小额打款验证→认证结果。',logic:['四步 ent-step-bar','证照 OCR 回填企业信息','开户信息确认','打款金额回填','成功开通业务权限'],acceptance:['四步可前进/回退','缺件阻断下一步','验证通过后状态=已认证'],api:'POST /api/ent/auth/*'},
+'auth-login':{title:'登录注册',module:'账号',page:'我的 · 登录弹层',priority:'P0',business:'首次访问可浏览小程序；「我的」为未登录排版。点击登录后弹出半透明登录层（样式对齐 login.html）：手机号验证码 + 微信一键授权。',logic:['未登录「我的」展示空态与登录入口','点击弹出 authOverlay','自动唤起微信授权弹层','授权/登录后刷新「我的」为已登录态','退出回到未登录「我的」'],acceptance:['未登录无个人信息','点击才弹出登录','微信授权可允许/拒绝','登录后展示账号信息'],api:'POST /api/auth/wx · /sms · /login · /register'},
 'stat-pending':{title:'待审核统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示待机构审核的订单数量，点击直达待审核列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=pending'],acceptance:['数字与列表待审核数一致'],api:'GET /api/inst/stats/pending'},
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
-'quick-issue':{title:'出函办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待出函订单列表，办理电子保函出具。',logic:['跳转 orderList filter=issue','自动选中「待出函」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待出函'],api:'GET /api/inst/orders?status=issue'},
+'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待办理订单列表。',logic:['跳转 orderList filter=issue biz=litigation','自动选中对应筛选 Tab'],acceptance:['点击打开订单列表且仅显示待办理'],api:'GET /api/inst/orders?status=issue'},
+'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
 'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料与审核记录；案件信息右上角「详情」进入完整案件详情页。从材料提取的字段值带下划线可点，点击打开「原文溯源」弹层，在申请书/起诉状原文中高亮该字段供核保核对。',logic:['步骤条展示当前阶段','案件信息卡片右上角「详情」跳转 caseInfoDetail（支持返回）','提取字段 val-sourced 可点 → openSourcePreview 高亮原文行','材料列表支持预览','底部操作：补材料/进入审核'],acceptance:['案件摘要可见','提取字段可点开溯源','溯源弹层高亮对应原文','点击详情进入完整页','返回回到订单详情'],api:'GET /api/inst/order/{id}'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=待补材料'],api:'POST /api/inst/order/{id}/supplement'},
 'rate-config':{title:'费率配置',module:'业务',page:'rateConfig',priority:'P1',business:'机构配置产品费率，变更需平台审批后生效。',logic:['基础费率/最低保费/最高额度','提交审批 workflow'],acceptance:['提交后 Toast 已提交审批'],api:'POST /api/inst/rate/apply'},
-'customer-list':{title:'学平险订单',module:'工作台',page:'xuepingOrders',priority:'P0',business:'学平险投保订单入口：按待确认/待支付/待承保/待生效/已生效/已终止/订单关闭/等待退保/退保受理中/退保成功筛选，点击进入订单详情办理确认、承保与退保。',logic:['工作台快捷操作进入 xuepingOrders','十种状态筛选 Tab','卡片进入 xuepingDetail','详情按状态展示操作按钮'],acceptance:['工作台显示学平险','可按状态筛选','可进入订单详情'],api:'GET /api/inst/xueping/orders'},
-'xueping-detail':{title:'学平险订单详情',module:'学平险',page:'xuepingDetail',priority:'P0',business:'展示学平险订单状态、被保险人信息与进度；待确认可确认/驳回，待承保可通过承保，已生效可发起退保，退保链路覆盖等待退保→受理中→成功。',logic:['步骤条投保→确认→支付→承保→生效','状态徽标与十种状态一致','底部操作随状态变化'],acceptance:['详情状态正确','操作后状态流转 Toast'],api:'GET /api/inst/xueping/order/{id}'},
-'stats-report':{title:'业务报表',module:'业务',page:'statsReport',priority:'P1',business:'机构维度出函量、保费、通过率、时效统计。',logic:['四指标卡片','7日趋势图','导出 Excel'],acceptance:['指标数据准确','导出 Toast'],api:'GET /api/inst/report'},
+'xueping-detail':{title:'学平订单详情',module:'学平',page:'xuepingDetail',priority:'P0',business:'展示学平订单状态、被保险人信息与进度；待确认可确认/驳回，待承保可通过承保，已生效可发起退保。',logic:['步骤条投保→确认→支付→承保→生效','状态徽标与十种状态一致','底部操作随状态变化'],acceptance:['详情状态正确','操作后状态流转 Toast'],api:'GET /api/inst/xueping/order/{id}'},
+'stats-report':{title:'业务报表',module:'业务',page:'statsReport',priority:'P1',business:'机构维度出函量、保费、通过率、时效统计；支持周期切换与 Excel 多 Sheet 导出。',logic:['周期 Tab：本周/本月/本季/本年','经营概况 Hero + 四指标卡片（含环比）','双系列趋势图','产品结构占比','法院出函 TOP5','明细流水表','导出 Excel（.xls 多 Sheet）/发邮箱'],acceptance:['周期切换指标与趋势同步变化','导出触发真实文件下载','发邮箱 Toast'],api:'GET /api/inst/report'},
 'blockchain-upload':{title:'链上存证',module:'业务',page:'blockchainUpload',priority:'P1',business:'保函出具后上司法区块链，支持法官核验。',logic:['输入保函编号','提交存证返回链哈希'],acceptance:['存证成功 Toast'],api:'POST /api/inst/blockchain/store'},
-'staff-manage':{title:'团队管理',module:'我的',page:'staffManage',priority:'P2',business:'机构管理员管理业务员账号与权限。',logic:['成员列表','邀请新成员生成链接'],acceptance:['邀请 Toast'],api:'GET /api/inst/staff'},
+'staff-manage':{title:'团队管理',module:'我的',page:'staffManage',priority:'P2',business:'机构管理员管理团队成员：展示姓名、手机号、业务角色，并按业务线分配权限（诉讼保、学平险、标后等）。',logic:['顶部工具栏：说明文案 + 新成员入口','成员卡片：姓名·手机号·业务角色·业务权限标签','编辑弹窗可改姓名/手机/角色/权限','邀请新成员：填姓名手机角色权限后生成链接'],acceptance:['无顶部数量统计','新成员在列表上方','权限标签含诉讼保/学平险/标后','邀请与保存有 Toast 并刷新列表'],api:'GET/POST /api/inst/staff'},
 'message-center':{title:'消息中心',module:'我的',page:'messageCenter',priority:'P1',business:'审核提醒、费率审批、补材料等系统通知。',logic:['按时间倒序','未读标记'],acceptance:['消息列表完整'],api:'GET /api/inst/messages'},
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
@@ -1754,10 +2610,14 @@ const PRD_SPECS={
 const ELEMENT_MAP=[
 {sel:'.nav-item[data-nav="workbench"]',id:'nav-workbench'},{sel:'.nav-item[data-nav="orders"]',id:'nav-orders'},
 {sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-filter="pending"]',id:'quick-review'},
-{sel:'.quick-item[data-filter="issue"]',id:'quick-issue'},{sel:'.order-card',id:'order-detail'},
+{sel:'.quick-item[data-filter="issue"]',id:'quick-issue'},{sel:'.order-card[data-page="orderDetail"]',id:'order-detail'},
 {sel:'.sp-link-detail[data-page="caseInfoDetail"]',id:'case-info-detail'},
-{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-page="xuepingOrders"]',id:'customer-list'},
+{sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-biz="xueping"]',id:'customer-list'},
 {sel:'.order-card[data-page="xuepingDetail"]',id:'xueping-detail'},
+{sel:'.quick-item[data-page="enterpriseAuth"]',id:'enterprise-auth'},
+{sel:'.settings-item[data-page="enterpriseAuth"]',id:'enterprise-auth'},
+{sel:'#authOverlay',id:'auth-login'},
+{sel:'.biz-line-tabs',id:'nav-orders'},
 {sel:'.quick-item[data-page="statsReport"]',id:'stats-report'},{sel:'.quick-item[data-page="blockchainUpload"]',id:'blockchain-upload'},
 {sel:'.quick-item[data-page="staffManage"]',id:'staff-manage'},{sel:'.icon-btn[data-page="messageCenter"]',id:'message-center'},
 {sel:'.quick-item[data-page="productList"]',id:'product-list'},{sel:'.quick-item[data-page="courtCoverage"]',id:'court-coverage'},
@@ -1827,8 +2687,36 @@ bindSpecs();
 }
 renderPcMain();
 bindPcEvents();
+(function bootApp(){
+const qs=new URLSearchParams(location.search);
+const isEmbed=qs.get('embed')==='1';
+let loggedIn=false;
+try{loggedIn=sessionStorage.getItem('ssbao_inst_logged_in')==='1'}catch(e){}
+if(qs.get('from')==='login'){
+loggedIn=true;
+try{sessionStorage.setItem('ssbao_inst_logged_in','1')}catch(e){}
+try{if(history.replaceState)history.replaceState(null,'',location.href.split('?')[0]+(location.hash||''))}catch(e){}
+}
+/* 关闭登录弹层 */
+document.getElementById('authClose')?.addEventListener('click',()=>{hideAuthOverlay();if(currentNav==='profile')setActiveNav('profile')});
+document.getElementById('wxDeny')?.addEventListener('click',()=>{hideWxAuth();showToast('已取消微信授权，可改用手机号登录')});
+document.getElementById('wxAllow')?.addEventListener('click',()=>{hideWxAuth();showToast('微信授权成功');enterAppAfterAuth({via:'wechat'})});
+if(isEmbed){
+document.body.classList.add('embed-mode');
+authLoggedIn=true;
 setActiveNav('workbench');
+return;
+}
+authLoggedIn=!!loggedIn;
+setActiveNav('workbench');
+try{
+if(authLoggedIn&&sessionStorage.getItem('ssbao_inst_need_ent')==='1'){
+sessionStorage.removeItem('ssbao_inst_need_ent');
+setTimeout(()=>openSubPage('enterpriseAuth'),400);
+}
+}catch(e){}
 initPRD();
+})();
 })();
 </script>
 </body>
