@@ -154,18 +154,23 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .val-sourced{display:inline;border:none;background:linear-gradient(180deg,transparent 62%,rgba(26,107,124,.18) 62%);color:inherit;font:inherit;font-weight:700;padding:0;cursor:pointer;text-align:inherit;font-family:inherit;max-width:100%}
 .val-sourced:active{opacity:.75}
 .val-sourced .src-ico{display:inline-block;margin-left:3px;font-size:10px;color:#1A6B7C;vertical-align:middle;opacity:.9}
-.sp-modal.sp-modal-source{max-width:320px;text-align:left;padding:16px 16px 18px;max-height:78%;overflow-y:auto}
+.sp-modal.sp-modal-source{max-width:340px;text-align:left;padding:14px 14px 16px;max-height:82%;overflow-y:auto;border-radius:20px}
 .sp-modal-source .src-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
 .sp-modal-source .src-modal-head h3{font-size:14px;margin:0;line-height:1.35}
 .sp-modal-source .src-modal-sub{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.4}
 .sp-modal-source .src-modal-close-x{width:32px;height:32px;border:none;border-radius:16px;background:#F1F5F9;color:#64748B;cursor:pointer;flex-shrink:0;font-size:14px}
-.src-doc-sheet{background:#FFFEF9;border:1px solid #E8E4D9;border-radius:12px;padding:14px 12px;font-size:12px;line-height:1.75;color:#334155}
-.src-doc-sheet .src-doc-title{text-align:center;font-size:14px;font-weight:800;color:#0F4C5C;margin:0 0 12px;letter-spacing:.5px}
-.src-doc-sheet .src-doc-line{margin:0 0 6px}
-.src-doc-sheet .src-doc-line.hit{background:#FEF08A;border-radius:4px;padding:2px 4px;margin-left:-4px;margin-right:-4px;box-shadow:0 0 0 2px #FEF08A}
-.src-doc-sheet .src-doc-line.hit mark{background:transparent;color:#92400E;font-weight:800;padding:0}
-.src-hit-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
-/* 案件证据链诊断 */
+.src-doc-sheet{background:#F3F5F8;border:1px solid #E2E8F0;border-radius:14px;padding:16px 12px 14px;font-size:12px;line-height:1.7;color:#334155}
+.src-doc-sheet .src-doc-title{text-align:center;font-size:15px;font-weight:800;color:#0F4C5C;margin:0 0 10px;letter-spacing:.5px}
+.src-doc-omit{text-align:center;font-size:11px;color:#94A3B8;margin:0 0 8px;letter-spacing:.2px}
+.src-doc-line{display:flex;align-items:flex-start;gap:8px;margin:0;padding:2px 6px;border-radius:6px;min-height:1.7em}
+.src-doc-line .src-ln{flex-shrink:0;width:18px;text-align:right;font-size:11px;color:#94A3B8;font-variant-numeric:tabular-nums;line-height:1.7;user-select:none}
+.src-doc-line .src-lt{flex:1;min-width:0;word-break:break-all}
+.src-doc-line.hit{background:#FFF2AC}
+.src-doc-line.hit .src-lt{color:#78350F}
+.src-doc-line.hit .src-lt b{color:#92400E;font-weight:800}
+.src-doc-line.blank .src-lt{min-height:1em}
+.src-hit-tip{font-size:11px;color:#B45309;background:#FFF7E6;border-radius:12px;padding:10px 12px;margin:10px 0 0;line-height:1.55;text-align:left}
+/* 证据链诊断 */
 .ev-chain-card{border:1px solid #D4EDE8;background:linear-gradient(165deg,#F7FBFC 0%,#fff 42%)}
 .ev-chain-type{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#E0F2FE;color:#0369A1}
 .ev-chain-type.loan{background:#FEF3C7;color:#B45309}
@@ -812,33 +817,43 @@ propertyClue:{file:'保全申请书.pdf',label:'保全申请书',docField:'财�
 };
 const SOURCE_DOCS={
 '保全申请书.pdf':{
-title:'财产保全申请书',
+title:'保全申请书',
 lines:[
-{k:'申请人',v:'张三'},
-{k:'被申请人',v:'北京朝阳区某某科技有限公司'},
-{k:'被申请人类型',v:'企业'},
-{k:'案号',v:'（2025）京0105民初1234号'},
-{k:'受理法院',v:'北京朝阳区人民法院'},
-{k:'保全类型',v:'财产保全'},
-{k:'保全类别',v:'诉前保全'},
-{k:'申请保全金额',v:'500'},
-{k:'财产线索',v:'工商银行朝阳支行 6222021234567890'},
-{k:'请求事项',v:'请求贵院依法查封、冻结被申请人银行存款人民币500元'}
+{n:1,text:'财产保全申请书'},
+{n:2,text:''},
+{n:3,text:'申请人：张三',field:'申请人'},
+{n:4,text:'被申请人：北京朝阳区某某科技有限公司',field:'被申请人'},
+{n:5,text:'被申请人类型：企业',field:'被申请人类型'},
+{n:6,text:'案号：（2025）京0105民初1234号',field:'案号'},
+{n:7,text:'受理法院：北京朝阳区人民法院',field:'受理法院'},
+{n:8,text:''},
+{n:9,text:'保全类型：财产保全',field:'保全类型'},
+{n:10,text:'保全类别：诉前保全',field:'保全类别'},
+{n:11,text:'申请保全金额：500',field:'申请保全金额'},
+{n:12,text:'财产线索：工商银行朝阳支行 6222021234567890',field:'财产线索'},
+{n:13,text:''},
+{n:14,text:'请求事项：请求贵院依法查封、冻结被申请人银行存款人民币500元',field:'请求事项'},
+{n:15,text:''}
 ]},
 '起诉状.pdf':{
-title:'民事起诉状',
+title:'起诉状',
 lines:[
-{k:'原告',v:'张三'},
-{k:'原告类型',v:'自然人'},
-{k:'证件类型',v:'身份证'},
-{k:'证件号码',v:'352203198410283984938'},
-{k:'联系电话',v:'15800381002'},
-{k:'住所地',v:'北京朝阳区某某小区'},
-{k:'被告',v:'北京朝阳区某某科技有限公司'},
-{k:'统一社会信用代码',v:'9110201199001933YSJX'},
-{k:'案号',v:'（2025）京0105民初1234号'},
-{k:'案由',v:'买卖合同纠纷'},
-{k:'诉讼请求',v:'判令被告支付货款并承担本案诉讼费用'}
+{n:1,text:'民事起诉状'},
+{n:2,text:''},
+{n:3,text:'原告：张三',field:'原告'},
+{n:4,text:'原告类型：自然人',field:'原告类型'},
+{n:5,text:'证件类型：身份证',field:'证件类型'},
+{n:6,text:'证件号码：352203198410283984938',field:'证件号码'},
+{n:7,text:'联系电话：15800381002',field:'联系电话'},
+{n:8,text:'住所地：北京朝阳区某某小区',field:'住所地'},
+{n:9,text:''},
+{n:10,text:'被告：北京朝阳区某某科技有限公司',field:'被告'},
+{n:11,text:'统一社会信用代码：9110201199001933YSJX',field:'统一社会信用代码'},
+{n:12,text:'案号：（2025）京0105民初1234号',field:'案号'},
+{n:13,text:'案由：买卖合同纠纷',field:'案由'},
+{n:14,text:''},
+{n:15,text:'诉讼请求：判令被告支付货款并承担本案诉讼费用',field:'诉讼请求'},
+{n:16,text:''}
 ]}
 };
 function fmtDash(v){return(v===0||v)?String(v):'—'}
@@ -855,31 +870,58 @@ return`<div class="sp-info-row"><span class="k">${k}</span><span class="v">${ren
 function renderCaseSummaryLine(label,value,srcKey){
 return`<div class="case-summary-line"><span class="csl-label">${label}</span><span class="csl-val">${renderSourcedValue(value,srcKey)}</span></div>`;
 }
+function formatSourceLineText(text,isHit){
+if(!text)return'';
+const m=String(text).match(/^([^：:]{1,20})([：:])([\s\S]*)$/);
+if(m){
+const label=isHit?`<b>${m[1]}</b>`:m[1];
+return`${label}${m[2]}${m[3]}`;
+}
+return isHit?`<b>${text}</b>`:text;
+}
+function buildSourceContextHtml(doc,fieldLabel,fallbackText){
+const lines=(doc&&doc.lines)||[];
+let hitIdx=lines.findIndex(l=>l.field===fieldLabel);
+if(hitIdx<0&&fallbackText){
+hitIdx=lines.findIndex(l=>(l.text||'').includes(String(fallbackText)));
+}
+if(hitIdx<0){
+return{omitBefore:'',omitAfter:'',linesHtml:`<div class="src-doc-line hit"><span class="src-ln">—</span><span class="src-lt"><b>${fieldLabel||'提取字段'}：</b>${fmtDash(fallbackText)}</span></div>`};
+}
+const before=4,after=3;
+const start=Math.max(0,hitIdx-before);
+const end=Math.min(lines.length-1,hitIdx+after);
+const firstN=lines[start].n;
+const lastN=lines[end].n;
+const docFirst=lines[0].n;
+const docLast=lines[lines.length-1].n;
+const omitBefore=start>0?`<p class="src-doc-omit">… 前文已省略 (第 ${docFirst} ~ ${firstN-1} 行) …</p>`:'';
+const omitAfter=end<lines.length-1?`<p class="src-doc-omit">… 后文已省略 (第 ${lastN+1} ~ ${docLast} 行) …</p>`:'';
+const linesHtml=lines.slice(start,end+1).map(line=>{
+const hit=line.field===fieldLabel||(hitIdx>=0&&line===lines[hitIdx]);
+const blank=!line.text;
+return`<div class="src-doc-line${hit?' hit':''}${blank?' blank':''}"><span class="src-ln">${line.n}</span><span class="src-lt">${formatSourceLineText(line.text,hit)}</span></div>`;
+}).join('');
+return{omitBefore,omitAfter,linesHtml};
+}
 function openSourcePreview(srcKey){
 const src=getFieldSource(srcKey);
 if(!src){showToast('该字段无原文溯源');return}
 const doc=SOURCE_DOCS[src.file];
 const fieldLabel=src.docField||'';
-const val=ORDER_STATE[srcKey];
-const valText=fmtDash(val);
-let linesHtml='';
-if(doc&&doc.lines){
-linesHtml=doc.lines.map(line=>{
-const hit=line.k===fieldLabel;
-const body=hit?`<b>${line.k}：</b><mark>${line.v}</mark>`:`<b>${line.k}：</b>${line.v}`;
-return`<p class="src-doc-line${hit?' hit':''}">${body}</p>`;
-}).join('');
-}else{
-linesHtml=`<p class="src-doc-line hit"><b>${fieldLabel||'提取字段'}：</b><mark>${valText}</mark></p>`;
-}
+const valText=fmtDash(ORDER_STATE[srcKey]);
+const ctx=buildSourceContextHtml(doc,fieldLabel,valText);
+const docTitle=(doc&&doc.title)||src.label;
 showModal(`<div class="src-modal-head"><div><h3><i class="fas fa-search-location" style="color:#1A6B7C;margin-right:4px"></i>原文溯源</h3>
 <p class="src-modal-sub">字段「${fieldLabel||srcKey}」提取自 ${src.file}</p></div>
 <button type="button" class="src-modal-close-x" data-action="modal-close" aria-label="关闭"><i class="fas fa-times"></i></button></div>
 <div class="src-doc-sheet">
-<div class="src-doc-title">${(doc&&doc.title)||src.label}</div>
-${linesHtml}
+<div class="src-doc-title">${docTitle}</div>
+${ctx.omitBefore}
+${ctx.linesHtml}
+${ctx.omitAfter}
 </div>
-<p class="src-hit-tip"><i class="fas fa-highlighter"></i> 黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。</p>
+<p class="src-hit-tip">黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。大文件仅展示命中行附近上下文，不会整篇下发。</p>
 <button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">完成核对</button>`,{source:true});
 setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
@@ -992,7 +1034,7 @@ ${nodesHtml}
 <button type="button" class="sp-btn-secondary" data-action="ev-chain-rules"><i class="fas fa-balance-scale"></i> 评分规则</button>
 <button type="button" class="sp-btn-secondary" data-action="ev-chain-supplement"><i class="fas fa-folder-plus"></i> 按缺项补材料</button>
 </div>`;
-return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>案件证据链诊断`,body,{
+return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>证据链诊断`,body,{
 extraClass:'ev-chain-card',prd:'evidence-chain',
 tools:`<span class="ev-chain-type ${r.tpl.typeClass}">${r.tpl.label}</span>`
 });
@@ -2285,10 +2327,10 @@ return`
 <div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag tag-review">待审核</span></div>
 <p style="font-size:12px;color:#6F8FAA;margin:8px 0">保费 ¥${ORDER_STATE.premium.toLocaleString()}</p>
 <p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${ORDER_STATE.id} · 诉讼保</p></div>
-${renderFoldSection('case','案件信息',caseBody,{tools:`<span class="sp-link-detail" data-page="caseInfoDetail" data-push-stack="1">详情 <i class="fas fa-chevron-right" style="font-size:10px"></i></span>`})}
-${renderFoldSection('materials',`申请材料 · ${matN}份`,matBody)}
+${renderFoldSection('case',`<i class="fas fa-briefcase fold-lead"></i>案件信息`,caseBody,{tools:`<span class="sp-link-detail" data-page="caseInfoDetail" data-push-stack="1">详情 <i class="fas fa-chevron-right" style="font-size:10px"></i></span>`})}
+${renderFoldSection('materials',`<i class="fas fa-folder-open fold-lead"></i>申请材料 · ${matN}份`,matBody)}
 ${renderEvidenceChainCard(ORDER_STATE)}
-${renderFoldSection('audit','审核记录',auditBody)}
+${renderFoldSection('audit',`<i class="fas fa-history fold-lead"></i>审核记录`,auditBody)}
 </div>
 <div class="od-footer">
 <button type="button" class="sp-btn-danger" data-action="ev-chain-supplement">要求补材料</button>
@@ -2997,8 +3039,8 @@ const PRD_SPECS={
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待办理订单列表。',logic:['跳转 orderList filter=issue biz=litigation','自动选中对应筛选 Tab'],acceptance:['点击打开订单列表且仅显示待办理'],api:'GET /api/inst/orders?status=issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、案件证据链诊断与审核记录；四块内容可折叠展开。底部「要求补材料 / 进入审核」固定于页底；「要求补材料」与证据链内「按缺项补材料」共用弹层。案件信息「详情」进入完整案件详情；提取字段可原文溯源。诉讼保按案由识别借贷/合同证据链并输出完整度与提交判断。',logic:['od-page：上滚下固','sp-fold 折叠','底部要求补材料 → openEvidenceSupplementModal','证据链评分规则/按缺项补材料弹层'],acceptance:['四区域可折叠','底部补材料为弹层','底部按钮始终可见'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
-'evidence-chain':{title:'案件证据链诊断',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链：借贷链（合意、借款协议、资金实际交付、微信/支付宝聊天记录）；合同事实链（证明合同关系成立、履约证明、聊天记录等）。输出诊断分析、材料完整度评分与提交判断，支撑核保补件决策。',logic:['resolveEvidenceChainType(案由)','节点 weight 加权命中计分','必填缺件优先提示','提交判断三档阈值','评分规则 / 按缺项补材料均弹层呈现'],acceptance:['合同案突出「证明合同关系成立」','借贷案同时要求合意与交付','两按钮均为弹层','分数与节点状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、证据链诊断与审核记录；四块内容可折叠展开。底部「要求补材料 / 进入审核」固定于页底；「要求补材料」与证据链内「按缺项补材料」共用弹层。案件信息「详情」进入完整案件详情；提取字段可原文溯源。诉讼保按案由识别借贷/合同证据链并输出完整度与提交判断。',logic:['od-page：上滚下固','sp-fold 折叠','底部要求补材料 → openEvidenceSupplementModal','证据链评分规则/按缺项补材料弹层'],acceptance:['四区域可折叠','底部补材料为弹层','底部按钮始终可见'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
+'evidence-chain':{title:'证据链诊断',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链：借贷链（合意、借款协议、资金实际交付、微信/支付宝聊天记录）；合同事实链（证明合同关系成立、履约证明、聊天记录等）。输出诊断分析、材料完整度评分与提交判断，支撑核保补件决策。',logic:['resolveEvidenceChainType(案由)','节点 weight 加权命中计分','必填缺件优先提示','提交判断三档阈值','评分规则 / 按缺项补材料均弹层呈现'],acceptance:['合同案突出「证明合同关系成立」','借贷案同时要求合意与交付','两按钮均为弹层','分数与节点状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
