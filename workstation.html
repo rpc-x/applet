@@ -1015,15 +1015,15 @@ const checks=miss.length?miss.map((n,i)=>`<div class="sp-check-row" style="displ
 const note=miss.length
 ?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：合同案件请优先固定「证明合同关系成立」与履约证明；借贷案件请同时提供合意/协议与资金交付凭证。`
 :'证据链节点已齐，如有其他材料需补充请在此说明。';
-showModal(`<h3><i class="fas fa-folder-plus" style="color:#1A6B7C"></i> 按缺项补材料</h3>
-<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">完整度 ${ev.score} 分 · ${ev.judge} · ${ev.tpl.label}</p>
+showModal(`<h3><i class="fas fa-folder-plus" style="color:#1A6B7C"></i> 要求补材料</h3>
+<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">已按证据链缺项预填 · 完整度 ${ev.score} 分 · ${ev.judge} · ${ev.tpl.label}</p>
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
 <span class="sp-label">需补充材料（可多选）</span>
 ${checks}
 <span class="sp-label" style="margin-top:8px">补充说明</span>
 <textarea class="sp-textarea" id="evSuppNote" style="min-height:110px;margin-bottom:0">${note}</textarea>
 </div>
-<button class="sp-btn-primary" data-action="ev-supp-send" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 发送补材料通知</button>
+<button class="sp-btn-primary" data-action="ev-supp-send" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 提交</button>
 <button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`,{form:true});
 const inner=document.getElementById('spModalInner');
 inner?.querySelector('[data-action="ev-supp-send"]')?.addEventListener('click',()=>{
@@ -2291,7 +2291,7 @@ ${renderEvidenceChainCard(ORDER_STATE)}
 ${renderFoldSection('audit','审核记录',auditBody)}
 </div>
 <div class="od-footer">
-<button type="button" class="sp-btn-danger" data-page="supplementRequest">要求补材料</button>
+<button type="button" class="sp-btn-danger" data-action="ev-chain-supplement">要求补材料</button>
 <button type="button" class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'完整度不足'}</button>
 </div>
 </div>`}},
@@ -2366,7 +2366,7 @@ return`
 <div class="sp-card"><span class="sp-label">需补充材料（可多选 · 已按证据链缺项预填）</span>
 ${checks}
 <span class="sp-label">补充说明</span><textarea class="sp-textarea">${note}</textarea></div>
-<button class="sp-btn-primary" data-action="send-supplement">发送补材料通知</button>`}},
+<button class="sp-btn-primary" data-action="send-supplement">提交</button>`}},
 xuepingOrders:{title:'学平险订单',sub:'学生平安保险 · 投保管理',render:()=>`
 <input class="sp-input" placeholder="搜索保单号/学生姓名/学校…">
 <div class="filter-tabs" id="xuepingFilters">${XUEPING_FILTERS.map(f=>`<button data-filter="${f.key}"${f.key==='all'?' class="on"':''}>${f.label}</button>`).join('')}</div>
@@ -2997,7 +2997,7 @@ const PRD_SPECS={
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待办理订单列表。',logic:['跳转 orderList filter=issue biz=litigation','自动选中对应筛选 Tab'],acceptance:['点击打开订单列表且仅显示待办理'],api:'GET /api/inst/orders?status=issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、案件证据链诊断与审核记录；四块内容可折叠展开。底部「要求补材料 / 进入审核」固定于页底，无需滚至最底。案件信息「详情」进入完整案件详情；提取字段可原文溯源。诉讼保按案由识别借贷/合同证据链并输出完整度与提交判断。',logic:['od-page：上滚下固','sp-fold 折叠：案件信息/申请材料/证据链/审核记录','折叠态 ORDER_DETAIL_FOLD 记忆','证据链诊断与补材料联动','底部 od-footer 固定操作'],acceptance:['四区域可折叠','折叠状态可保持','底部按钮始终可见','证据链与审核逻辑不变'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、案件证据链诊断与审核记录；四块内容可折叠展开。底部「要求补材料 / 进入审核」固定于页底；「要求补材料」与证据链内「按缺项补材料」共用弹层。案件信息「详情」进入完整案件详情；提取字段可原文溯源。诉讼保按案由识别借贷/合同证据链并输出完整度与提交判断。',logic:['od-page：上滚下固','sp-fold 折叠','底部要求补材料 → openEvidenceSupplementModal','证据链评分规则/按缺项补材料弹层'],acceptance:['四区域可折叠','底部补材料为弹层','底部按钮始终可见'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
 'evidence-chain':{title:'案件证据链诊断',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链：借贷链（合意、借款协议、资金实际交付、微信/支付宝聊天记录）；合同事实链（证明合同关系成立、履约证明、聊天记录等）。输出诊断分析、材料完整度评分与提交判断，支撑核保补件决策。',logic:['resolveEvidenceChainType(案由)','节点 weight 加权命中计分','必填缺件优先提示','提交判断三档阈值','评分规则 / 按缺项补材料均弹层呈现'],acceptance:['合同案突出「证明合同关系成立」','借贷案同时要求合意与交付','两按钮均为弹层','分数与节点状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
