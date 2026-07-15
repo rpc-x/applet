@@ -155,10 +155,10 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .val-sourced:active{opacity:.75}
 .val-sourced .src-ico{display:inline-block;margin-left:3px;font-size:10px;color:#1A6B7C;vertical-align:middle;opacity:.9}
 .sp-modal.sp-modal-source{max-width:340px;text-align:left;padding:14px 14px 16px;max-height:82%;overflow-y:auto;border-radius:20px}
-.sp-modal-source .src-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-.sp-modal-source .src-modal-head h3{font-size:14px;margin:0;line-height:1.35}
-.sp-modal-source .src-modal-sub{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.4}
-.sp-modal-source .src-modal-close-x{width:32px;height:32px;border:none;border-radius:16px;background:#F1F5F9;color:#64748B;cursor:pointer;flex-shrink:0;font-size:14px}
+.sp-modal .src-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sp-modal .src-modal-head h3{font-size:15px;font-weight:800;color:#1C2E36;margin:0;line-height:1.35;text-align:left}
+.sp-modal .src-modal-sub{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.4;text-align:left}
+.sp-modal .src-modal-close-x{width:32px;height:32px;border:none;border-radius:16px;background:#F1F5F9;color:#64748B;cursor:pointer;flex-shrink:0;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
 .src-doc-sheet{background:#F3F5F8;border:1px solid #E2E8F0;border-radius:14px;padding:16px 12px 14px;font-size:12px;line-height:1.7;color:#334155}
 .src-doc-sheet .src-doc-title{text-align:center;font-size:15px;font-weight:800;color:#0F4C5C;margin:0 0 10px;letter-spacing:.5px}
 .src-doc-omit{text-align:center;font-size:11px;color:#94A3B8;margin:0 0 8px;letter-spacing:.2px}
@@ -527,12 +527,10 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .chrome-tip{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:16px;padding:12px 14px;margin-bottom:12px;font-size:11px;color:#1E40AF;line-height:1.7}
 .chrome-tip strong{color:#1D4ED8}
 .sp-modal-mask{position:absolute;inset:0;background:rgba(15,23,42,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;border-radius:48px}
-.sp-modal-mask.show{display:flex}
+.sp-modal-mask.show{display:flex;align-items:center;justify-content:center}
 .sp-modal{background:#fff;border-radius:24px;padding:20px;width:100%;max-width:300px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
 .sp-modal h3{font-size:16px;font-weight:800;color:#1C2E36;margin-bottom:8px}
-.sp-modal.sp-modal-form{max-width:320px;text-align:left;max-height:78%;overflow-y:auto}
-.sp-modal.sp-modal-form h3{text-align:center}
-.sp-modal-mask.show:has(.sp-modal-source){align-items:flex-end;padding:16px 12px 28px}
+.sp-modal.sp-modal-form{max-width:320px;text-align:left;max-height:78%;overflow-y:auto;padding:16px 16px 18px}
 .sp-modal-close{margin-top:14px;width:100%}
 .staff-role-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;background:#EEF2FF;color:#4338CA;margin-left:6px;vertical-align:middle}
 .staff-role-chip.admin{background:#FEF3C7;color:#B45309}
@@ -904,6 +902,10 @@ return`<div class="src-doc-line${hit?' hit':''}${blank?' blank':''}"><span class
 }).join('');
 return{omitBefore,omitAfter,linesHtml};
 }
+function renderModalHead(titleHtml,subHtml){
+return`<div class="src-modal-head"><div><h3>${titleHtml}</h3>${subHtml?`<p class="src-modal-sub">${subHtml}</p>`:''}</div>
+<button type="button" class="src-modal-close-x" data-action="modal-close" aria-label="关闭"><i class="fas fa-times"></i></button></div>`;
+}
 function openSourcePreview(srcKey){
 const src=getFieldSource(srcKey);
 if(!src){showToast('该字段无原文溯源');return}
@@ -912,17 +914,14 @@ const fieldLabel=src.docField||'';
 const valText=fmtDash(ORDER_STATE[srcKey]);
 const ctx=buildSourceContextHtml(doc,fieldLabel,valText);
 const docTitle=(doc&&doc.title)||src.label;
-showModal(`<div class="src-modal-head"><div><h3><i class="fas fa-search-location" style="color:#1A6B7C;margin-right:4px"></i>原文溯源</h3>
-<p class="src-modal-sub">字段「${fieldLabel||srcKey}」提取自 ${src.file}</p></div>
-<button type="button" class="src-modal-close-x" data-action="modal-close" aria-label="关闭"><i class="fas fa-times"></i></button></div>
+showModal(`${renderModalHead('<i class="fas fa-search-location" style="color:#1A6B7C;margin-right:4px"></i>原文溯源',`字段「${fieldLabel||srcKey}」提取自 ${src.file}`)}
 <div class="src-doc-sheet">
 <div class="src-doc-title">${docTitle}</div>
 ${ctx.omitBefore}
 ${ctx.linesHtml}
 ${ctx.omitAfter}
 </div>
-<p class="src-hit-tip">黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。大文件仅展示命中行附近上下文，不会整篇下发。</p>
-<button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">完成核对</button>`,{source:true});
+<p class="src-hit-tip">黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。大文件仅展示命中行附近上下文，不会整篇下发。</p>`,{source:true});
 setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
 
@@ -1043,11 +1042,9 @@ function openEvidenceScoreRules(){
 const r=analyzeEvidenceChain(ORDER_STATE);
 const rows=EVIDENCE_SCORE_RULES.map(x=>`<div class="sp-info-row"><span class="k">${x.range}</span><span class="v" style="text-align:left">${x.level}<br><span style="font-weight:500;color:#64748B;font-size:11px">${x.tip}</span></span></div>`).join('');
 const nodeWeights=r.tpl.nodes.map(n=>`<div class="sp-info-row"><span class="k">${n.title}</span><span class="v">${n.weight}分 · ${n.required?'必填':'建议'}</span></div>`).join('');
-showModal(`<h3><i class="fas fa-balance-scale" style="color:#1A6B7C"></i> 材料完整度评分规则</h3>
-<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">当前模板：${r.tpl.label}。按节点权重加权计分（命中即得分），再给出提交判断。</p>
+showModal(`${renderModalHead('<i class="fas fa-balance-scale" style="color:#1A6B7C;margin-right:4px"></i>材料完整度评分规则',`当前模板：${r.tpl.label}。按节点权重加权计分（命中即得分），再给出提交判断。`)}
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">提交判断阈值</div>${rows}</div>
-<div class="sp-card" style="margin:0;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">节点权重（本订单）</div>${nodeWeights}</div>
-<button class="sp-btn-primary sp-modal-close" data-action="modal-close" style="margin-top:12px">我知道了</button>`);
+<div class="sp-card" style="margin:0;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">节点权重（本订单）</div>${nodeWeights}</div>`,{form:true});
 }
 function openEvidenceSupplementModal(){
 const ev=analyzeEvidenceChain(ORDER_STATE);
@@ -1057,16 +1054,14 @@ const checks=miss.length?miss.map((n,i)=>`<div class="sp-check-row" style="displ
 const note=miss.length
 ?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：合同案件请优先固定「证明合同关系成立」与履约证明；借贷案件请同时提供合意/协议与资金交付凭证。`
 :'证据链节点已齐，如有其他材料需补充请在此说明。';
-showModal(`<h3><i class="fas fa-folder-plus" style="color:#1A6B7C"></i> 要求补材料</h3>
-<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">已按证据链缺项预填 · 完整度 ${ev.score} 分 · ${ev.judge} · ${ev.tpl.label}</p>
+showModal(`${renderModalHead('<i class="fas fa-folder-plus" style="color:#1A6B7C;margin-right:4px"></i>要求补材料',`已按证据链缺项预填 · 完整度 ${ev.score} 分 · ${ev.judge} · ${ev.tpl.label}`)}
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
 <span class="sp-label">需补充材料（可多选）</span>
 ${checks}
 <span class="sp-label" style="margin-top:8px">补充说明</span>
 <textarea class="sp-textarea" id="evSuppNote" style="min-height:110px;margin-bottom:0">${note}</textarea>
 </div>
-<button class="sp-btn-primary" data-action="ev-supp-send" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 提交</button>
-<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`,{form:true});
+<button class="sp-btn-primary" data-action="ev-supp-send" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 提交</button>`,{form:true});
 const inner=document.getElementById('spModalInner');
 inner?.querySelector('[data-action="ev-supp-send"]')?.addEventListener('click',()=>{
 closeModal();
@@ -1076,8 +1071,7 @@ showToast('补材料通知已发送 · 订单进入待补材料');
 function openOrderReviewModal(){
 const ev=analyzeEvidenceChain(ORDER_STATE);
 const o=ORDER_STATE;
-showModal(`<h3><i class="fas fa-clipboard-check" style="color:#1A6B7C"></i> 进入审核</h3>
-<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 12px">${o.id} · ${o.type} · 完整度 ${ev.score} 分 · ${ev.judge}</p>
+showModal(`${renderModalHead('<i class="fas fa-clipboard-check" style="color:#1A6B7C;margin-right:4px"></i>进入审核',`${o.id} · ${o.type} · 完整度 ${ev.score} 分 · ${ev.judge}`)}
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
 <span class="sp-label">风险等级</span>
 <div class="sp-tag-row" id="reviewRiskRow"><span class="sp-tag selected" data-review-risk>低风险</span><span class="sp-tag" data-review-risk>中风险</span><span class="sp-tag" data-review-risk>高风险</span></div>
@@ -1090,8 +1084,7 @@ showModal(`<h3><i class="fas fa-clipboard-check" style="color:#1A6B7C"></i> 进�
 <div class="sp-grid-2" style="gap:8px">
 <button type="button" class="sp-btn-danger" data-action="modal-reject-order" style="margin:0;width:100%;padding:12px;border-radius:40px">驳回</button>
 <button type="button" class="sp-btn-primary" data-action="modal-approve-order" style="margin:0;width:100%;padding:12px;border-radius:40px">审核通过</button>
-</div>
-<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`,{form:true});
+</div>`,{form:true});
 const inner=document.getElementById('spModalInner');
 if(!inner)return;
 inner.querySelectorAll('[data-review-risk]').forEach(tag=>{
