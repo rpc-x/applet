@@ -28,24 +28,25 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat-item{display:flex;align-items:center;gap:10px;padding:14px 12px;border-radius:18px;cursor:pointer;border:1px solid transparent;transition:transform .15s}
 .stat-item:active{transform:scale(.98)}
-.stat-item-icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.stat-item-icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;overflow:hidden;padding:0;background:transparent}
+.stat-item-icon img{width:100%;height:100%;object-fit:cover;display:block}
 .stat-item-body{min-width:0;flex:1}
 .stat-item .stat-number{font-size:22px;font-weight:800;line-height:1.1}
 .stat-item .stat-label{font-size:10px;margin-top:3px;font-weight:600}
 .stat-pending{background:#FFFBEB;border-color:#FEF3C7}
-.stat-pending .stat-item-icon{background:#FEF3C7;color:#B45309}
+.stat-pending .stat-item-icon{background:transparent;color:#B45309}
 .stat-pending .stat-number{color:#B45309}
 .stat-pending .stat-label{color:#92400E}
 .stat-issue{background:#EEF2FF;border-color:#E0E7FF}
-.stat-issue .stat-item-icon{background:#E0E7FF;color:#4338CA}
+.stat-issue .stat-item-icon{background:transparent;color:#4338CA}
 .stat-issue .stat-number{color:#4338CA}
 .stat-issue .stat-label{color:#3730A3}
 .stat-supplement{background:#FFF7ED;border-color:#FFEDD5}
-.stat-supplement .stat-item-icon{background:#FFEDD5;color:#C2410C}
+.stat-supplement .stat-item-icon{background:transparent;color:#C2410C}
 .stat-supplement .stat-number{color:#C2410C}
 .stat-supplement .stat-label{color:#9A3412}
 .stat-monthly{background:#ECFDF5;border-color:#D4EDE8}
-.stat-monthly .stat-item-icon{background:#D4EDE8;color:#1D7A6E}
+.stat-monthly .stat-item-icon{background:transparent;color:#1D7A6E}
 .stat-monthly .stat-number{color:#1D7A6E}
 .stat-monthly .stat-label{color:#065F46}
 .section-title{font-size:18px;font-weight:700;color:#1C2E36;margin:16px 0 12px;display:flex;justify-content:space-between;align-items:center}
@@ -90,7 +91,8 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .tag-cancel-ok{background:#ECFDF5;color:#047857}
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;margin-bottom:24px}
 .quick-item{text-align:center;cursor:pointer}
-.quick-icon{width:52px;height:52px;margin:0 auto 8px;border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#F0F9FB;color:#1A6B7C}
+.quick-icon{width:54px;height:54px;margin:0 auto 8px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:22px;background:transparent;color:#1A6B7C;overflow:hidden;box-shadow:0 4px 12px rgba(15,76,92,.08)}
+.quick-icon img{width:100%;height:100%;object-fit:cover;display:block}
 .quick-item span{font-size:11px;font-weight:600;color:#2D4059}
 .alert-banner{background:#FFF7ED;border-left:4px solid #F59E0B;border-radius:16px;padding:14px 10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .alert-badge{background:#F59E0B;color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700}
@@ -2177,19 +2179,19 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 <div class="stats-dashboard">
 <div class="stats-dashboard-head"><span class="stats-dashboard-title">📊 数据看板</span></div>
 <div class="stats-grid">
-<div class="stat-item stat-pending" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-clipboard-check"></i></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">待审核</div></div></div>
-<div class="stat-item stat-issue" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-file-signature"></i></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待办理</div></div></div>
-<div class="stat-item stat-supplement" data-page="orderList" data-filter="supplement" data-biz="litigation"><div class="stat-item-icon"><i class="fas fa-folder-open"></i></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">待补材料</div></div></div>
-<div class="stat-item stat-monthly" data-page="statsReport"><div class="stat-item-icon"><i class="fas fa-chart-line"></i></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月办结</div></div></div>
+<div class="stat-item stat-pending" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-pending.svg" alt="待审核"></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">待审核</div></div></div>
+<div class="stat-item stat-issue" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-issue.svg" alt="待办理"></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待办理</div></div></div>
+<div class="stat-item stat-supplement" data-page="orderList" data-filter="supplement" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-supplement.svg" alt="待补材料"></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">待补材料</div></div></div>
+<div class="stat-item stat-monthly" data-page="statsReport"><div class="stat-item-icon"><img src="assets/wb/stat-done.svg" alt="本月办结"></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月办结</div></div></div>
 </div></div>
 <div class="alert-banner" data-page="orderList" data-filter="pending" data-biz="litigation"><strong style="font-size:15px;"><i class="fas fa-exclamation-circle"></i> 12 笔订单待审核，请尽快处理</strong><span class="alert-badge">去处理</span></div>
 
 <div class="section-title"><span>⚡ 快捷操作</span></div>
 <div class="quick-grid">
-<div class="quick-item" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="quick-icon"><i class="fas fa-clipboard-check"></i></div><span>订单审核</span></div>
-<div class="quick-item" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="quick-icon"><i class="fas fa-file-signature"></i></div><span>业务办理</span></div>
-<div class="quick-item" data-page="orderList" data-biz="xueping"><div class="quick-icon"><i class="fas fa-graduation-cap"></i></div><span>学平业务</span></div>
-<div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><i class="fas fa-robot"></i></div><span>工具助手</span></div>
+<div class="quick-item" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="quick-icon"><img src="assets/wb/qa-audit.svg" alt="订单审核"></div><span>订单审核</span></div>
+<div class="quick-item" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="quick-icon"><img src="assets/wb/qa-issue.svg" alt="业务办理"></div><span>业务办理</span></div>
+<div class="quick-item" data-page="orderList" data-biz="xueping"><div class="quick-icon"><img src="assets/wb/qa-xueping.svg" alt="学平业务"></div><span>学平业务</span></div>
+<div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><img src="assets/wb/qa-tools.svg" alt="工具助手"></div><span>工具助手</span></div>
 </div>
 <div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList" data-biz="all">订单中心 →</a></div>
 ${ORDER_LIST.filter(o=>o.status==='pending'||o.status==='issue'||o.status==='supplement').map(o=>renderOrderCard(o,{soft:true})).join('')}
