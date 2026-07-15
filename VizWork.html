@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诉讼保 · 证据链可视化工作台 · 专利原型</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1F26; --teal:#0F4C5C; --teal-mid:#1A6B7C; --teal-soft:#E8F4F6;
+  --amber:#C2410C; --amber-soft:#FFF7ED; --ok:#047857; --ok-soft:#ECFDF5;
+  --warn:#B45309; --danger:#B91C1C; --danger-soft:#FEE2E2;
+  --line:#D8E4EC; --mute:#5E6F8D; --paper:#F4F7FB; --white:#FFF;
+  --panel:#FBFDFF; --shadow:0 12px 40px rgba(15,76,92,.1);
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans',"PingFang SC","Microsoft YaHei",sans-serif;
+  --serif:'Noto Serif SC',"Songti SC",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:none;background:none}
+.app{display:grid;grid-template-rows:56px 1fr 34px;height:100vh;overflow:hidden}
+
+/* Top bar */
+.topbar{display:flex;align-items:center;gap:16px;padding:0 18px;background:linear-gradient(105deg,#0B3A46 0%,#0F4C5C 45%,#1A6B7C 100%);color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand{display:flex;align-items:center;gap:10px;min-width:220px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:15px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.brand h1{font-size:14px;font-weight:700;letter-spacing:.2px}
+.brand p{font-size:10px;opacity:.72;margin-top:2px}
+.case-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 12px;font-size:12px}
+.case-pill strong{font-weight:700}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.tb-btn{height:32px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px;transition:background .15s}
+.tb-btn:hover{background:rgba(255,255,255,.2)}
+.tb-btn.primary{background:#F59E0B;border-color:#F59E0B;color:#1C1917}
+.tb-btn.primary:hover{background:#FBBF24}
+
+/* Workspace */
+.workspace{display:grid;grid-template-columns:280px 1fr 360px;min-height:0;overflow:hidden}
+.pane{min-height:0;overflow:hidden;display:flex;flex-direction:column;background:var(--panel)}
+.pane-left{border-right:1px solid var(--line)}
+.pane-right{border-left:1px solid var(--line)}
+.pane-hd{height:44px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#fff;flex-shrink:0}
+.pane-hd h2{font-size:13px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:7px}
+.pane-hd h2 i{font-size:12px;opacity:.85}
+.pane-tools{display:flex;gap:4px}
+.icon-btn{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--mute);background:#F1F5F9;font-size:12px}
+.icon-btn:hover,.icon-btn.on{background:var(--teal-soft);color:var(--teal-mid)}
+.pane-bd{flex:1;min-height:0;overflow:auto}
+
+/* Left: files */
+.dropzone{margin:12px;border:1.5px dashed #A8C5CE;border-radius:12px;padding:14px;text-align:center;background:linear-gradient(180deg,#F7FBFC,#EEF6F8);cursor:pointer;transition:border-color .15s,background .15s}
+.dropzone:hover,.dropzone.drag{border-color:var(--teal-mid);background:#E8F4F6}
+.dropzone i{font-size:22px;color:var(--teal-mid);margin-bottom:6px}
+.dropzone p{font-size:12px;font-weight:600;color:var(--teal)}
+.dropzone span{display:block;font-size:10px;color:var(--mute);margin-top:4px;line-height:1.5}
+.file-filters{display:flex;gap:4px;padding:0 12px 8px;flex-wrap:wrap}
+.chip{font-size:10px;font-weight:600;padding:4px 8px;border-radius:999px;background:#F1F5F9;color:var(--mute);cursor:pointer}
+.chip.on{background:var(--teal);color:#fff}
+.file-list{padding:0 10px 16px}
+.file-item{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:9px 10px;border-radius:10px;cursor:pointer;border:1px solid transparent;margin-bottom:4px}
+.file-item:hover{background:#F8FBFD}
+.file-item.active{background:var(--teal-soft);border-color:#B7D7DF}
+.file-ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:12px;color:#fff}
+.file-meta{min-width:0}
+.file-meta strong{display:block;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-meta span{font-size:10px;color:var(--mute)}
+.file-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;background:#fff;border:1px solid var(--line);color:var(--mute)}
+.file-badge.hash{color:var(--ok);border-color:#A7F3D0;background:var(--ok-soft)}
+
+/* Center */
+.center{display:grid;grid-template-rows:auto 1fr;min-height:0;background:var(--paper)}
+.tabs{display:flex;gap:2px;padding:8px 12px 0;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{flex-shrink:0;padding:10px 14px;font-size:12px;font-weight:600;color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px;display:inline-flex;align-items:center;gap:6px}
+.tab:hover{color:var(--teal)}
+.tab.on{color:var(--teal);border-bottom-color:var(--teal)}
+.tab .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45}
+.tab.on .dot{background:#F59E0B;opacity:1;box-shadow:0 0 0 3px rgba(245,158,11,.25)}
+.view{min-height:0;overflow:hidden;position:relative}
+.view-panel{display:none;height:100%;overflow:auto;padding:14px}
+.view-panel.on{display:block}
+
+/* Universal preview */
+.preview-shell{display:grid;grid-template-columns:1fr 220px;gap:12px;min-height:calc(100vh - 180px)}
+@media(max-width:1280px){.preview-shell{grid-template-columns:1fr}}
+.preview-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:480px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.preview-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#FFF,#F8FBFD)}
+.preview-bar .name{font-size:12px;font-weight:700;color:var(--teal);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preview-body{flex:1;overflow:auto;padding:16px 18px;font-size:13px;line-height:1.85;position:relative}
+.preview-body.mono{font-family:var(--mono);font-size:12px;line-height:1.7}
+.line-row{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:1px 6px;border-radius:6px}
+.line-row .ln{color:#94A3B8;font-family:var(--mono);font-size:11px;user-select:none;text-align:right}
+.line-row.hit{background:#FEF08A;box-shadow:0 0 0 2px #FDE047;animation:pulseHit .9s ease}
+.line-row.hit mark{background:transparent;color:#92400E;font-weight:700}
+@keyframes pulseHit{0%{box-shadow:0 0 0 2px #FDE047}50%{box-shadow:0 0 0 6px rgba(253,224,71,.35)}100%{box-shadow:0 0 0 2px #FDE047}}
+.media-stage{display:grid;place-items:center;min-height:360px;background:radial-gradient(ellipse at 50% 30%,#1A6B7C22,#0B1F2608 60%),#0B1F26;color:#E2E8F0;border-radius:0 0 14px 14px}
+.media-stage .fake-player{width:min(520px,90%);text-align:center}
+.media-stage .wave{height:64px;display:flex;align-items:flex-end;justify-content:center;gap:3px;margin:18px 0}
+.media-stage .wave i{display:block;width:4px;border-radius:4px;background:linear-gradient(180deg,#5EEAD4,#1A6B7C);animation:wave 1.2s ease-in-out infinite}
+@keyframes wave{0%,100%{height:12px;opacity:.5}50%{height:48px;opacity:1}}
+.media-stage .timeline{height:4px;background:#334155;border-radius:4px;margin:12px 0;position:relative}
+.media-stage .timeline b{position:absolute;left:28%;top:-3px;width:10px;height:10px;border-radius:50%;background:#F59E0B;box-shadow:0 0 0 4px rgba(245,158,11,.3)}
+.side-meta{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;height:fit-content}
+.side-meta h3{font-size:12px;font-weight:700;color:var(--teal);margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed #E8EEF4;font-size:11px}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--mute)}
+.kv .v{font-weight:600;text-align:right;max-width:60%;word-break:break-all}
+.hash{font-family:var(--mono);font-size:10px;color:var(--ok)}
+
+/* Evidence graph */
+.graph-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);min-height:520px;position:relative}
+.graph-canvas{height:520px;background:
+  radial-gradient(circle at 20% 30%,rgba(26,107,124,.08),transparent 40%),
+  radial-gradient(circle at 80% 70%,rgba(245,158,11,.06),transparent 35%),
+  linear-gradient(#F8FBFD,#EEF4F7);
+position:relative}
+.g-node{position:absolute;min-width:120px;max-width:160px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 24px rgba(15,76,92,.08);cursor:pointer;transition:transform .15s,box-shadow .15s;z-index:2}
+.g-node:hover,.g-node.on{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,76,92,.16);border-color:var(--teal-mid)}
+.g-node .t{font-size:10px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.4px}
+.g-node .n{font-size:12px;font-weight:700;margin-top:3px;color:var(--ink)}
+.g-node .s{font-size:10px;color:var(--mute);margin-top:4px;line-height:1.4}
+.g-node.claim{border-left:3px solid var(--amber)}
+.g-node.proof{border-left:3px solid var(--teal-mid)}
+.g-node.party{border-left:3px solid #2563EB}
+.g-node.risk{border-left:3px solid var(--danger);background:#FFF7F7}
+.g-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.g-svg path{fill:none;stroke:#94A3B8;stroke-width:1.5;stroke-dasharray:4 3;animation:dash 18s linear infinite}
+.g-svg path.strong{stroke:var(--teal-mid);stroke-width:2;stroke-dasharray:none}
+.g-svg path.warn{stroke:var(--amber);stroke-dasharray:3 4}
+@keyframes dash{to{stroke-dashoffset:-120}}
+.graph-legend{display:flex;gap:12px;padding:10px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--mute);flex-wrap:wrap}
+.graph-legend span{display:inline-flex;align-items:center;gap:5px}
+.graph-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* Structured / fields */
+.field-grid{display:grid;gap:8px}
+.field-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.field-card:hover,.field-card.on{border-color:var(--teal-mid);box-shadow:0 0 0 3px rgba(26,107,124,.1)}
+.field-card .lab{font-size:10px;font-weight:700;color:var(--mute);display:flex;justify-content:space-between;gap:8px}
+.field-card .val{font-size:13px;font-weight:700;margin-top:4px;color:var(--ink)}
+.field-card .src{font-size:10px;color:var(--teal-mid);margin-top:6px;font-family:var(--mono);display:flex;align-items:center;gap:5px}
+.field-card .conf{font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:var(--ok-soft);color:var(--ok)}
+.field-card.conf-mid .conf{background:var(--amber-soft);color:var(--warn)}
+.field-card.conf-low .conf{background:var(--danger-soft);color:var(--danger)}
+.conflict{background:#FFF7ED;border:1px solid #FDBA74;border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:#9A3412;line-height:1.55}
+.conflict strong{display:block;margin-bottom:4px}
+
+/* Diagnosis */
+.diag-score{display:grid;grid-template-columns:120px 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;align-items:center}
+.ring{width:110px;height:110px;border-radius:50%;background:conic-gradient(var(--teal-mid) 0 78%,#E2E8F0 78% 100%);display:grid;place-items:center;position:relative}
+.ring::after{content:"";position:absolute;inset:10px;background:#fff;border-radius:50%}
+.ring-num{position:relative;z-index:1;text-align:center}
+.ring-num b{display:block;font-size:28px;font-weight:800;color:var(--teal);line-height:1}
+.ring-num span{font-size:10px;color:var(--mute);font-weight:600}
+.triad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.triad-item{background:#F8FBFD;border-radius:10px;padding:10px;text-align:center}
+.triad-item b{display:block;font-size:18px;font-weight:800;color:var(--teal)}
+.triad-item span{font-size:10px;color:var(--mute);font-weight:600}
+.issue-list{display:grid;gap:8px}
+.issue{background:#fff;border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:12px;cursor:pointer}
+.issue.critical{border-left-color:var(--danger)}
+.issue.ok{border-left-color:var(--ok)}
+.issue h4{font-size:12px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.issue p{font-size:11px;color:var(--mute);margin-top:5px;line-height:1.55}
+.issue .act{margin-top:8px;font-size:11px;font-weight:700;color:var(--teal-mid)}
+
+/* Draft */
+.draft-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.seg{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:700;background:#F1F5F9;color:var(--mute);border:1px solid transparent}
+.seg.on{background:var(--teal);color:#fff}
+.draft-paper{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 32px;min-height:520px;box-shadow:var(--shadow);font-family:var(--serif)}
+.draft-paper h3{text-align:center;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:22px;letter-spacing:4px}
+.draft-paper .para{font-size:14px;line-height:2;margin-bottom:10px;text-indent:2em}
+.draft-paper .cite{background:#E8F4F6;border-bottom:1px dashed var(--teal-mid);padding:0 3px;cursor:pointer;color:var(--teal);font-weight:600;text-indent:0}
+.draft-paper .cite:hover{background:#FEF08A}
+.draft-paper .slot{background:#FFF7ED;border-bottom:1px dashed var(--amber);padding:0 3px}
+.cite-tip{position:fixed;z-index:50;background:#0B1F26;color:#fff;font-size:11px;padding:8px 10px;border-radius:8px;pointer-events:none;max-width:260px;line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.25);display:none}
+
+/* Merge export */
+.merge-layout{display:grid;grid-template-columns:1fr 320px;gap:12px}
+@media(max-width:1100px){.merge-layout{grid-template-columns:1fr}}
+.merge-list{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}
+.merge-item{display:grid;grid-template-columns:24px 28px 1fr auto auto;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#FAFCFE}
+.merge-item .ord{width:22px;height:22px;border-radius:6px;background:var(--teal-soft);color:var(--teal);font-size:11px;font-weight:800;display:grid;place-items:center}
+.merge-opts{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.merge-opts h3{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:10px}
+.opt-row{margin-bottom:10px}
+.opt-row label{display:block;font-size:11px;font-weight:600;color:var(--mute);margin-bottom:5px}
+.opt-row select,.opt-row input{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#FAFCFE;font-size:12px}
+.check{display:flex;align-items:center;gap:8px;font-size:12px;margin:8px 0;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:10px;font-size:12px;font-weight:700}
+.btn-primary{background:linear-gradient(95deg,#0F4C5C,#1A6B7C);color:#fff;width:100%}
+.btn-ghost{background:#F1F5F9;color:var(--teal)}
+.btn-warn{background:var(--amber-soft);color:var(--amber)}
+.progress{height:8px;background:#E2E8F0;border-radius:999px;overflow:hidden;margin:12px 0}
+.progress b{display:block;height:100%;width:0;background:linear-gradient(90deg,#1A6B7C,#34D399);transition:width .4s}
+.pipeline{font-size:11px;color:var(--mute);line-height:1.7}
+.pipeline li{list-style:none;padding:4px 0 4px 18px;position:relative}
+.pipeline li::before{content:"";width:8px;height:8px;border-radius:50%;background:#CBD5E1;position:absolute;left:0;top:8px}
+.pipeline li.done::before{background:var(--ok)}
+.pipeline li.run::before{background:#F59E0B;box-shadow:0 0 0 3px rgba(245,158,11,.25)}
+
+/* Right rail */
+.rail-tabs{display:flex;padding:0 8px;gap:2px;border-bottom:1px solid var(--line);background:#fff;flex-shrink:0}
+.rail-tab{flex:1;padding:10px 4px;font-size:11px;font-weight:700;color:var(--mute);text-align:center}
+.rail-tab.on{color:var(--teal);box-shadow:inset 0 -2px 0 var(--teal)}
+.rail-panel{display:none;padding:12px;overflow:auto;flex:1;min-height:0}
+.rail-panel.on{display:block}
+.patent-card{background:linear-gradient(145deg,#0B3A46,#1A6B7C);color:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+.patent-card .tag{display:inline-block;font-size:9px;font-weight:800;background:#F59E0B;color:#1C1917;padding:2px 7px;border-radius:999px;margin-bottom:8px}
+.patent-card h3{font-size:13px;font-weight:700;margin-bottom:6px}
+.patent-card p{font-size:11px;opacity:.88;line-height:1.55}
+.moat-list{display:grid;gap:8px}
+.moat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;cursor:pointer}
+.moat:hover{border-color:var(--teal-mid)}
+.moat h4{font-size:12px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:6px}
+.moat p{font-size:11px;color:var(--mute);margin-top:5px;line-height:1.5}
+.moat .lvl{margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:#FEF3C7;color:#B45309}
+.audit{font-family:var(--mono);font-size:10px;line-height:1.7;color:#334155;background:#0B1F26;color:#A7F3D0;border-radius:12px;padding:12px;max-height:220px;overflow:auto}
+.audit .t{color:#94A3B8}
+
+/* Status bar */
+.statusbar{display:flex;align-items:center;gap:14px;padding:0 14px;background:#fff;border-top:1px solid var(--line);font-size:11px;color:var(--mute)}
+.statusbar .ok{color:var(--ok);font-weight:600}
+.statusbar .sep{width:1px;height:14px;background:var(--line)}
+
+/* Modal */
+.modal-mask{position:fixed;inset:0;background:rgba(11,31,38,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-mask.on{display:flex}
+.modal{background:#fff;border-radius:16px;width:min(720px,100%);max-height:85vh;overflow:auto;box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.modal hd,.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modal-hd h3{font-size:15px;font-weight:700;color:var(--teal)}
+.modal-bd{padding:16px 18px 20px;font-size:13px;line-height:1.7;color:#334155}
+.modal-bd h4{font-size:13px;color:var(--teal);margin:14px 0 6px}
+.modal-bd ul{padding-left:18px}
+.toast{position:fixed;right:18px;bottom:48px;background:#0B1F26;color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:600;z-index:120;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+
+/* Search bar in preview */
+.src-bar{display:flex;gap:8px;align-items:center;padding:10px 12px;background:#FFFBEB;border-bottom:1px solid #FDE68A}
+.src-bar input{flex:1;border:1px solid #FCD34D;border-radius:8px;padding:7px 10px;font-size:12px;background:#fff}
+.src-bar button{height:30px;padding:0 12px;border-radius:8px;background:var(--teal);color:#fff;font-size:11px;font-weight:700}
+
+@media(max-width:960px){
+  .workspace{grid-template-columns:1fr}
+  .pane-left,.pane-right{display:none}
+  .pane-left.show,.pane-right.show{display:flex;position:fixed;inset:56px 0 34px 0;z-index:40;background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><i class="fas fa-link"></i></div>
+      <div>
+        <h1>诉讼保 · 证据链工作台</h1>
+        <p>多模态统一预览 · 行级溯源 · 跨格式合并 · 文书草拟</p>
+      </div>
+    </div>
+    <div class="case-pill">
+      <i class="fas fa-briefcase"></i>
+      <span>订单 <strong>SS20260715088</strong></span>
+      <span>·</span>
+      <span>财产保全 · ¥2,800,000</span>
+    </div>
+    <div class="top-actions">
+      <button class="tb-btn" id="btnPatent"><i class="fas fa-lightbulb"></i> 专利要点</button>
+      <button class="tb-btn" id="btnAudit"><i class="fas fa-shield-halved"></i> 存证链</button>
+      <button class="tb-btn primary" id="btnExport"><i class="fas fa-file-export"></i> 合并导出</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <!-- LEFT: files -->
+    <aside class="pane pane-left">
+      <div class="pane-hd">
+        <h2><i class="fas fa-folder-tree"></i> 证据材料库</h2>
+        <div class="pane-tools">
+          <button class="icon-btn" title="刷新" onclick="toast('材料列表已同步')"><i class="fas fa-sync-alt"></i></button>
+          <button class="icon-btn" title="解压归档" onclick="runUnpack()"><i class="fas fa-box-open"></i></button>
+        </div>
+      </div>
+      <div class="pane-bd">
+        <div class="dropzone" id="dropzone">
+          <i class="fas fa-cloud-arrow-up"></i>
+          <p>拖拽 / 点击上传任意格式</p>
+          <span>PDF · DOCX · TXT · 音视频 · ZIP/RAR · HTML · 图片</span>
+          <input type="file" id="fileInput" multiple hidden accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,.jpg,.jpeg,.png,.gif,.webp,.mp3,.wav,.m4a,.mp4,.webm,.zip,.rar,.7z">
+        </div>
+        <div class="file-filters" id="fileFilters">
+          <span class="chip on" data-f="all">全部</span>
+          <span class="chip" data-f="doc">文书</span>
+          <span class="chip" data-f="media">音视频</span>
+          <span class="chip" data-f="img">图片</span>
+          <span class="chip" data-f="arch">压缩包</span>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+    </aside>
+
+    <!-- CENTER -->
+    <main class="center">
+      <nav class="tabs" id="mainTabs">
+        <button class="tab on" data-view="preview"><i class="dot"></i>万能预览</button>
+        <button class="tab" data-view="graph"><i class="dot"></i>证据链图谱</button>
+        <button class="tab" data-view="struct"><i class="dot"></i>结构化字段</button>
+        <button class="tab" data-view="diag"><i class="dot"></i>链诊断</button>
+        <button class="tab" data-view="draft"><i class="dot"></i>文书草拟</button>
+        <button class="tab" data-view="merge"><i class="dot"></i>跨格式合并</button>
+      </nav>
+      <div class="view">
+        <!-- Preview -->
+        <section class="view-panel on" data-panel="preview">
+          <div class="preview-shell">
+            <div class="preview-card">
+              <div class="preview-bar">
+                <span class="name" id="previewName">起诉状.pdf</span>
+                <button class="icon-btn" onclick="zoomPreview(-1)" title="缩小"><i class="fas fa-minus"></i></button>
+                <button class="icon-btn" onclick="zoomPreview(1)" title="放大"><i class="fas fa-plus"></i></button>
+                <button class="icon-btn on" onclick="toast('已切换原文对照模式')"><i class="fas fa-columns"></i></button>
+              </div>
+              <div class="src-bar">
+                <i class="fas fa-crosshairs" style="color:#B45309"></i>
+                <input id="kwInput" value="申请保全金额" placeholder="关键字 / 字段名 → 行级溯源定位">
+                <button type="button" id="btnLocate">定位溯源</button>
+              </div>
+              <div class="preview-body mono" id="previewBody" style="font-size:12px"></div>
+            </div>
+            <div class="side-meta" id="sideMeta"></div>
+          </div>
+        </section>
+
+        <!-- Graph -->
+        <section class="view-panel" data-panel="graph">
+          <div class="graph-wrap">
+            <div class="graph-canvas" id="graphCanvas">
+              <svg class="g-svg" id="graphSvg"></svg>
+            </div>
+            <div class="graph-legend">
+              <span><i style="background:#C2410C"></i> 诉请/主张</span>
+              <span><i style="background:#1A6B7C"></i> 证据节点</span>
+              <span><i style="background:#2563EB"></i> 主体</span>
+              <span><i style="background:#B91C1C"></i> 风险/缺口</span>
+              <span>实线=强支撑 · 虚线=弱关联 · 橙虚线=冲突</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Struct -->
+        <section class="view-panel" data-panel="struct">
+          <div class="conflict" id="conflictBox">
+            <strong><i class="fas fa-code-branch"></i> 多源字段冲突仲裁（专利点）</strong>
+            「申请保全金额」在《起诉状》为 <b>2,800,000</b>，在《财产线索说明》OCR 为 <b>2,800.000</b>（小数点误识）。仲裁规则：文书法定优先 > OCR 次优先，并保留双方溯源锚点。
+          </div>
+          <div class="field-grid" id="fieldGrid"></div>
+        </section>
+
+        <!-- Diagnosis -->
+        <section class="view-panel" data-panel="diag">
+          <div class="diag-score">
+            <div class="ring"><div class="ring-num"><b>78</b><span>链完整度</span></div></div>
+            <div>
+              <div class="triad">
+                <div class="triad-item"><b>86</b><span>真实性</span></div>
+                <div class="triad-item"><b>72</b><span>合法性</span></div>
+                <div class="triad-item"><b>81</b><span>关联性</span></div>
+              </div>
+              <p style="font-size:11px;color:var(--mute);margin-top:10px;line-height:1.55">基于「三性评分 + 时序一致性 + 主体一致性 + 哈希存证」四维引擎；分数可解释，点击下方问题可跳转至证据节点与原文行。</p>
+            </div>
+          </div>
+          <div class="issue-list" id="issueList"></div>
+        </section>
+
+        <!-- Draft -->
+        <section class="view-panel" data-panel="draft">
+          <div class="draft-toolbar" id="draftTypes">
+            <button class="seg on" data-d="起诉状">起诉状</button>
+            <button class="seg" data-d="保全申请书">保全申请书</button>
+            <button class="seg" data-d="答辩状">答辩状</button>
+            <button class="seg" data-d="证据清单">证据清单</button>
+            <button class="btn btn-ghost" style="margin-left:auto" onclick="toast('已按证据链槽位重新填充文书')"><i class="fas fa-wand-magic-sparkles"></i> 依据证据链重生成</button>
+            <button class="btn btn-warn" onclick="toast('已导出 DOCX（含溯源批注）')"><i class="fas fa-file-word"></i> 导出 DOCX</button>
+          </div>
+          <div class="draft-paper" id="draftPaper"></div>
+        </section>
+
+        <!-- Merge -->
+        <section class="view-panel" data-panel="merge">
+          <div class="merge-layout">
+            <div class="merge-list" id="mergeList"></div>
+            <div class="merge-opts">
+              <h3><i class="fas fa-layer-group"></i> 跨格式合并编排</h3>
+              <div class="opt-row">
+                <label>目标格式</label>
+                <select id="mergeTarget">
+                  <option value="pdf">PDF（诉讼材料卷宗）</option>
+                  <option value="docx">DOCX（可编辑文书包）</option>
+                  <option value="zip">ZIP（原件 + 结构化 JSON）</option>
+                </select>
+              </div>
+              <div class="opt-row">
+                <label>编排策略</label>
+                <select id="mergeStrategy">
+                  <option>按证据清单序号</option>
+                  <option>按时序（取证时间）</option>
+                  <option>按关联强度（图谱权重）</option>
+                  <option>自定义拖拽顺序</option>
+                </select>
+              </div>
+              <label class="check"><input type="checkbox" checked> 插入页眉卷宗号 / 页脚页码</label>
+              <label class="check"><input type="checkbox" checked> 异格式归一化（图片→A4、音视频→转写页）</label>
+              <label class="check"><input type="checkbox" checked> 生成哈希链与操作审计附录</label>
+              <label class="check"><input type="checkbox" checked> 字段溯源批注嵌入 PDF Comment</label>
+              <div class="progress"><b id="mergeProg"></b></div>
+              <ul class="pipeline" id="mergePipe">
+                <li>等待开始…</li>
+              </ul>
+              <button class="btn btn-primary" id="btnRunMerge" style="margin-top:8px"><i class="fas fa-file-export"></i> 开始合并导出</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- RIGHT -->
+    <aside class="pane pane-right">
+      <div class="rail-tabs" id="railTabs">
+        <button class="rail-tab on" data-rail="anchor">溯源</button>
+        <button class="rail-tab" data-rail="extract">抽取</button>
+        <button class="rail-tab" data-rail="moat">壁垒</button>
+        <button class="rail-tab" data-rail="audit">审计</button>
+      </div>
+      <div class="rail-panel on" data-rail-panel="anchor">
+        <div class="patent-card">
+          <span class="tag">核心专利点</span>
+          <h3>行级双向溯源锚点</h3>
+          <p>结构化字段 ⇄ 文件哈希 + 页/行/字符偏移 + 模态时间码，形成可司法核验的 SourceAnchor。</p>
+        </div>
+        <div id="anchorDetail"></div>
+      </div>
+      <div class="rail-panel" data-rail-panel="extract">
+        <p style="font-size:11px;color:var(--mute);margin-bottom:10px">关键词 / 规则 / 模型三通道抽取，结果写入标准诉讼保字段字典。</p>
+        <div class="opt-row">
+          <label>抽取词典</label>
+          <select>
+            <option>财产保全标准字段包</option>
+            <option>证据保全标准字段包</option>
+            <option>答辩状对抗字段包</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="margin:8px 0" onclick="runExtract()"><i class="fas fa-microscope"></i> 运行多通道抽取</button>
+        <div id="extractLog" class="audit" style="background:#F8FBFD;color:#334155;border:1px solid var(--line)"></div>
+      </div>
+      <div class="rail-panel" data-rail-panel="moat">
+        <div class="moat-list" id="moatList"></div>
+      </div>
+      <div class="rail-panel" data-rail-panel="audit">
+        <p style="font-size:11px;color:var(--mute);margin-bottom:8px">每次打开 / 抽取 / 合并 / 草拟均追加不可篡改审计段。</p>
+        <div class="audit" id="auditLog"></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="statusbar">
+    <span class="ok"><i class="fas fa-circle" style="font-size:8px"></i> 本地沙箱预览已就绪</span>
+    <span class="sep"></span>
+    <span id="statFiles">材料 8</span>
+    <span class="sep"></span>
+    <span id="statAnchors">溯源锚点 14</span>
+    <span class="sep"></span>
+    <span>引擎：统一证据图 · 冲突仲裁 · 跨格式编排 · ASR对齐</span>
+    <span style="margin-left:auto">原型 · 不连接真实后端</span>
+  </footer>
+</div>
+
+<div class="cite-tip" id="citeTip"></div>
+<div class="toast" id="toast"></div>
+
+<div class="modal-mask" id="patentModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>可申请专利 / 技术壁垒事项（建议）</h3>
+      <button class="icon-btn" onclick="closeModal('patentModal')"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-bd">
+      <p>面向诉讼保机构端业务员的「证据链可视化处理系统」，建议围绕下列具备新颖性、创造性与实用价值的技术点布局专利（发明优先，辅以软件著作权与方法专利）：</p>
+      <h4>1. 多模态统一证据图与跨模态对齐方法</h4>
+      <ul>
+        <li>将 PDF/DOCX/TXT/HTML/图片 OCR、语音 ASR、视频关键帧统一映射为「证据节点 + 关系边」图结构；</li>
+        <li>以时间轴、主体、金额、标的物为对齐键，建立音视频时间码与文书段落的双向索引。</li>
+      </ul>
+      <h4>2. 行级双向溯源锚点（SourceAnchor）</h4>
+      <ul>
+        <li>结构化字段绑定：文件内容哈希 + 页码 + 行号 + 字符偏移 / 音视频起止毫秒；</li>
+        <li>从字段一键跳转原文，并从原文高亮反查字段，支持大文件仅渲染上下文窗口。</li>
+      </ul>
+      <h4>3. 多源字段冲突仲裁引擎</h4>
+      <ul>
+        <li>同一字段多文档抽取差异时，按「文书法定效力 > 签章可信度 > OCR 置信度」仲裁；</li>
+        <li>保留冲突双方完整锚点与决策解释链，可供核保复核。</li>
+      </ul>
+      <h4>4. 异质格式卷宗合并编排方法</h4>
+      <ul>
+        <li>将 PDF/DOCX/PNG/JPG/音视频转写页统一归一化为可诉讼提交的目标卷宗（PDF/DOCX）；</li>
+        <li>合并过程生成哈希链与页级材料指纹，保证链上保管连续性。</li>
+      </ul>
+      <h4>5. 证据链三性可解释诊断</h4>
+      <ul>
+        <li>真实性 / 合法性 / 关联性自动评分 + 缺口、矛盾、时序倒置检测；</li>
+        <li>诊断结果可定位到图谱节点与原文行，形成「问题→证据→原文」闭环。</li>
+      </ul>
+      <h4>6. 证据驱动的诉讼文书槽位填充与引用回链</h4>
+      <ul>
+        <li>起诉状 / 保全申请书 / 答辩状模板槽位由证据链字段自动填充；</li>
+        <li>每个事实陈述嵌入可点击引用，回溯到证据文件具体行。</li>
+      </ul>
+      <h4>7. 压缩包嵌套材料智能拆解与司法分类</h4>
+      <ul>
+        <li>ZIP/RAR 多层解压后按诉讼材料本体自动分类、去重、完整性校验。</li>
+      </ul>
+      <h4>8. 操作审计与司法存证链</h4>
+      <ul>
+        <li>预览、抽取、合并、草拟全流程追加哈希段，支持事后核验「谁在何时改了什么」。</li>
+      </ul>
+      <p style="margin-top:14px;font-size:12px;color:#64748B">本页为交互式 UI/方法原型，用于产品演示与专利交底书素材沉淀；落地时需配套后端解析、OCR/ASR、合并引擎与权限审计。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== Demo data ========== */
+const FILES = [
+  { id:'f1', name:'起诉状.pdf', cat:'doc', type:'PDF', icon:'fa-file-pdf', color:'#E53E3E', size:'286 KB', hash:'a3f8…91c2', pages:6, modality:'document' },
+  { id:'f2', name:'财产保全申请书.docx', cat:'doc', type:'DOCX', icon:'fa-file-word', color:'#2563EB', size:'94 KB', hash:'b12e…77a0', pages:3, modality:'document' },
+  { id:'f3', name:'合同及转账记录.txt', cat:'doc', type:'TXT', icon:'fa-file-lines', color:'#0F4C5C', size:'18 KB', hash:'c90d…12ef', pages:1, modality:'text' },
+  { id:'f4', name:'通话录音_20260312.mp3', cat:'media', type:'AUDIO', icon:'fa-file-audio', color:'#7C3AED', size:'4.2 MB', hash:'d44a…88b1', duration:'08:42', modality:'audio' },
+  { id:'f5', name:'仓库现场视频.mp4', cat:'media', type:'VIDEO', icon:'fa-file-video', color:'#DB2777', size:'86 MB', hash:'e781…03aa', duration:'03:15', modality:'video' },
+  { id:'f6', name:'营业执照.jpg', cat:'img', type:'IMG', icon:'fa-file-image', color:'#0891B2', size:'1.1 MB', hash:'f015…6cd4', pages:1, modality:'image' },
+  { id:'f7', name:'补充材料包.zip', cat:'arch', type:'ZIP', icon:'fa-file-zipper', color:'#D97706', size:'32 MB', hash:'112c…9fe0', entries:17, modality:'archive' },
+  { id:'f8', name:'法院公告页.html', cat:'doc', type:'HTML', icon:'fa-file-code', color:'#059669', size:'42 KB', hash:'223d…ab19', pages:1, modality:'html' },
+];
+
+const DOC_LINES = [
+  '民事起诉状',
+  '',
+  '原告：上海某某商贸有限公司',
+  '住所地：上海市浦东新区世纪大道 100 号',
+  '法定代表人：李某',
+  '',
+  '被告：北京朝阳区某某科技有限公司',
+  '住所地：北京市朝阳区望京街 9 号',
+  '法定代表人：王某',
+  '',
+  '诉讼请求：',
+  '一、判令被告支付货款人民币 2,800,000 元；',
+  '二、判令被告支付逾期利息（自 2025 年 12 月 1 日起至实际清偿之日止）；',
+  '三、本案诉讼费用由被告承担。',
+  '',
+  '事实与理由：',
+  '2025 年 6 月 18 日，原被告签订《产品购销合同》，约定货款总额 2,800,000 元。',
+  '原告已按约交付货物，被告仅支付部分款项，尚欠 2,800,000 元至今未付。',
+  '为防止被告转移财产，原告拟同步申请财产保全。',
+  '申请保全金额：2,800,000 元。',
+  '财产线索：工商银行朝阳支行 622202**********7890。',
+  '受理法院：北京朝阳区人民法院。',
+  '',
+  '此致',
+  '北京朝阳区人民法院',
+];
+
+const FIELDS = [
+  { key:'applicant', lab:'申请人/原告', val:'上海某某商贸有限公司', conf:96, file:'起诉状.pdf', line:3, page:1, cls:'' },
+  { key:'respondent', lab:'被申请人/被告', val:'北京朝阳区某某科技有限公司', conf:95, file:'起诉状.pdf', line:7, page:1, cls:'' },
+  { key:'court', lab:'受理法院', val:'北京朝阳区人民法院', conf:97, file:'起诉状.pdf', line:22, page:2, cls:'' },
+  { key:'amount', lab:'申请保全金额', val:'2,800,000 元', conf:91, file:'起诉状.pdf', line:20, page:2, cls:'conf-mid' },
+  { key:'clue', lab:'财产线索', val:'工行朝阳支行 622202****7890', conf:88, file:'起诉状.pdf', line:21, page:2, cls:'conf-mid' },
+  { key:'contractDate', lab:'合同签订日', val:'2025-06-18', conf:93, file:'合同及转账记录.txt', line:4, page:1, cls:'' },
+  { key:'audioAdmit', lab:'对方承认欠款（ASR）', val:'「……尾款两千八还没付……」', conf:84, file:'通话录音_20260312.mp3', line:null, page:null, t:'00:03:12–00:03:28', cls:'' },
+  { key:'videoLoc', lab:'标的物所在地（视频）', val:'望京仓库货架区 A3', conf:79, file:'仓库现场视频.mp4', line:null, page:null, t:'00:01:06', cls:'conf-mid' },
+];
+
+const ISSUES = [
+  { lvl:'critical', title:'关键性缺口：保全标的与财产线索弱对齐', desc:'申请保全金额 280 万，但财产线索仅一张银行卡号，未见余额/股权/房产佐证。建议补充银行流水或不动产登记信息。', act:'定位到 财产线索 字段 → 起诉状 L21' },
+  { lvl:'warn', title:'多源金额冲突（已仲裁）', desc:'OCR 将 2,800,000 误识为 2,800.000。仲裁采用起诉状文本值，冲突已写入审计链。', act:'查看冲突仲裁面板' },
+  { lvl:'warn', title:'时序风险：录音早于合同签订日说法不一致', desc:'通话提及「去年合同」，与合同签订日 2025-06-18 需人工核对表述。', act:'打开音视频对齐轴 00:03:12' },
+  { lvl:'ok', title:'主体一致性通过', desc:'起诉状 / 申请书 / 营业执照三方主体名称一致（归一化后）。', act:'查看主体归一结果' },
+  { lvl:'ok', title:'哈希完整性通过', desc:'8 个材料文件指纹与入库记录一致，未见事后替换痕迹。', act:'打开存证链' },
+];
+
+const MOATS = [
+  { icon:'fa-diagram-project', title:'多模态统一证据图', desc:'文书段落、ASR 片段、视频关键帧映射为同一图模型，边权重表达支撑强度。', lvl:'高壁垒' },
+  { icon:'fa-location-crosshairs', title:'行级双向 SourceAnchor', desc:'字段⇄文件哈希+页行偏移/时间码，大文件上下文窗口渲染。', lvl:'高壁垒' },
+  { icon:'fa-scale-balanced', title:'多源字段冲突仲裁', desc:'法定效力/签章/OCR 置信度分层决策，输出可解释仲裁链。', lvl:'高壁垒' },
+  { icon:'fa-layer-group', title:'异质格式卷宗编排', desc:'PDF/DOCX/图片/音视频转写页归一合并，附哈希链附录。', lvl:'中高' },
+  { icon:'fa-stethoscope', title:'三性可解释诊断', desc:'真实性·合法性·关联性评分，缺口与矛盾自动定位原文。', lvl:'中高' },
+  { icon:'fa-file-signature', title:'证据驱动文书回链草拟', desc:'起诉状/保全申请/答辩状槽位填充，每句可点回证据行。', lvl:'中高' },
+  { icon:'fa-wave-square', title:'音视频关键事件对齐', desc:'ASR+关键帧与诉讼事实时间轴对齐，生成可引用片段。', lvl:'高壁垒' },
+  { icon:'fa-box-archive', title:'嵌套压缩包司法分类', desc:'多层 ZIP/RAR 解压、去重、材料本体自动归类。', lvl:'中' },
+  { icon:'fa-link', title:'操作审计存证链', desc:'预览/抽取/合并/草拟全流程哈希追加，防篡改核验。', lvl:'中高' },
+  { icon:'fa-fire', title:'诉请支撑强度热力', desc:'按诉讼请求拆解证据覆盖度，热力提示薄弱诉请。', lvl:'中' },
+];
+
+const AUDIT = [
+  { t:'22:01:08', m:'INGEST  补充材料包.zip  sha256=112c…9fe0' },
+  { t:'22:01:12', m:'UNPACK  17 entries · classify=司法材料本体' },
+  { t:'22:02:03', m:'EXTRACT channel=rule+ner+asr  fields=14' },
+  { t:'22:02:11', m:'CONFLICT amount 起诉状>OCR  decision=keep_2,800,000' },
+  { t:'22:03:40', m:'ANCHOR  bind amount → 起诉状.pdf p2 L20 off=12' },
+  { t:'22:05:02', m:'DIAG    score=78 triad=86/72/81' },
+  { t:'22:06:18', m:'DRAFT   保全申请书 slots_filled=11 cites=7' },
+];
+
+let activeFileId = 'f1';
+let activeFilter = 'all';
+let previewZoom = 12;
+
+/* ========== Render helpers ========== */
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>el.classList.remove('on'), 2200);
+}
+
+function escapeHtml(s){
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderFiles(){
+  const list = document.getElementById('fileList');
+  const rows = FILES.filter(f => activeFilter==='all' || f.cat===activeFilter);
+  list.innerHTML = rows.map(f => `
+    <div class="file-item ${f.id===activeFileId?'active':''}" data-id="${f.id}">
+      <div class="file-ico" style="background:${f.color}"><i class="fas ${f.icon}"></i></div>
+      <div class="file-meta">
+        <strong>${escapeHtml(f.name)}</strong>
+        <span>${f.type} · ${f.size}${f.duration?' · '+f.duration:''}${f.entries?' · '+f.entries+'项':''}</span>
+      </div>
+      <span class="file-badge hash">HASH</span>
+    </div>
+  `).join('');
+  list.querySelectorAll('.file-item').forEach(el=>{
+    el.addEventListener('click',()=>{
+      activeFileId = el.dataset.id;
+      renderFiles();
+      openFile(activeFileId);
+      switchView('preview');
+    });
+  });
+  document.getElementById('statFiles').textContent = '材料 ' + FILES.length;
+}
+
+function openFile(id){
+  const f = FILES.find(x=>x.id===id) || FILES[0];
+  document.getElementById('previewName').textContent = f.name;
+  const body = document.getElementById('previewBody');
+  const meta = document.getElementById('sideMeta');
+
+  meta.innerHTML = `
+    <h3><i class="fas fa-fingerprint"></i> 文件指纹 / 元数据</h3>
+    <div class="kv"><span class="k">格式</span><span class="v">${f.type}</span></div>
+    <div class="kv"><span class="k">模态</span><span class="v">${f.modality}</span></div>
+    <div class="kv"><span class="k">大小</span><span class="v">${f.size}</span></div>
+    <div class="kv"><span class="k">SHA-256</span><span class="v hash">${f.hash}</span></div>
+    ${f.pages?`<div class="kv"><span class="k">页数</span><span class="v">${f.pages}</span></div>`:''}
+    ${f.duration?`<div class="kv"><span class="k">时长</span><span class="v">${f.duration}</span></div>`:''}
+    ${f.entries?`<div class="kv"><span class="k">包内文件</span><span class="v">${f.entries}</span></div>`:''}
+    <div class="kv"><span class="k">入库</span><span class="v">2026-07-15 21:58</span></div>
+    <div style="margin-top:12px;display:grid;gap:6px">
+      <button class="btn btn-ghost" onclick="runExtract()"><i class="fas fa-microscope"></i> 抽取本文件字段</button>
+      <button class="btn btn-ghost" onclick="switchView('graph')"><i class="fas fa-diagram-project"></i> 在图谱中高亮</button>
+    </div>
+  `;
+
+  if (f.modality==='audio' || f.modality==='video'){
+    body.className = 'preview-body';
+    body.innerHTML = `
+      <div class="media-stage">
+        <div class="fake-player">
+          <div style="font-size:13px;opacity:.8;margin-bottom:6px">${f.modality==='audio'?'语音智能预览 · ASR 已就绪':'视频智能预览 · 关键帧已抽取'}</div>
+          <strong style="font-size:16px">${escapeHtml(f.name)}</strong>
+          <div class="wave">${Array.from({length:28},(_,i)=>`<i style="animation-delay:${i*0.05}s"></i>`).join('')}</div>
+          <div class="timeline"><b></b></div>
+          <div style="font-size:12px;opacity:.85">关键片段对齐：<span style="color:#FBBF24">00:03:12</span> 「尾款两千八还没付」</div>
+          <div style="margin-top:14px;font-size:11px;opacity:.7;line-height:1.6;text-align:left;background:rgba(255,255,255,.06);padding:10px 12px;border-radius:10px">
+            <div>· 00:01:06 提及仓库货架 A3（与视频关键帧对齐）</div>
+            <div>· 00:03:12 承认欠款金额（写入字段 audioAdmit）</div>
+            <div>· 00:05:40 协商还款期限（弱相关）</div>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  if (f.modality==='image'){
+    body.className = 'preview-body';
+    body.innerHTML = `
+      <div style="min-height:360px;display:grid;place-items:center;background:linear-gradient(160deg,#E8F4F6,#FFF)">
+        <div style="width:min(360px,90%);aspect-ratio:3/4;border-radius:12px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;box-shadow:var(--shadow)">
+          <div style="text-align:center;padding:20px">
+            <i class="fas fa-id-card" style="font-size:48px;color:#0891B2"></i>
+            <p style="margin-top:12px;font-weight:700;color:var(--teal)">营业执照（OCR 预览）</p>
+            <p style="font-size:12px;color:var(--mute);margin-top:8px;line-height:1.7;text-align:left">名称：北京朝阳区某某科技有限公司<br>法定代表人：王某<br>住所：北京市朝阳区望京街 9 号</p>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  if (f.modality==='archive'){
+    body.className = 'preview-body';
+    body.innerHTML = `
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px">
+        <h3 style="font-size:13px;color:var(--teal);margin-bottom:10px"><i class="fas fa-box-open"></i> 嵌套解压预览（17 项）</h3>
+        ${['证据清单.pdf','银行流水.pdf','发货单.jpg','微信聊天记录.docx','子目录/现场照片.zip'].map((n,i)=>`
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F1F5F9;font-size:12px">
+            <span><i class="fas fa-file" style="color:var(--mute);margin-right:8px"></i>${n}</span>
+            <span style="color:var(--ok);font-weight:700;font-size:10px">${i<4?'已分类':'待二次解压'}</span>
+          </div>`).join('')}
+        <button class="btn btn-primary" style="margin-top:12px" onclick="runUnpack()">智能拆解并入库</button>
+      </div>`;
+    return;
+  }
+  if (f.modality==='html'){
+    body.className = 'preview-body';
+    body.innerHTML = `
+      <div style="border:1px solid var(--line);border-radius:12px;overflow:hidden">
+        <div style="background:#F1F5F9;padding:8px 12px;font-size:11px;color:var(--mute)">沙箱渲染 · 脚本已剥离</div>
+        <div style="padding:20px;font-family:var(--serif)">
+          <h3 style="text-align:center;margin-bottom:12px">北京朝阳区人民法院 · 公告</h3>
+          <p style="line-height:1.9;font-size:13px;text-indent:2em">关于上海某某商贸有限公司与北京朝阳区某某科技有限公司买卖合同纠纷一案……</p>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // document / text — line preview
+  body.className = 'preview-body mono';
+  body.style.fontSize = previewZoom + 'px';
+  const kw = document.getElementById('kwInput').value.trim();
+  body.innerHTML = DOC_LINES.map((t,i)=>{
+    const hit = kw && t.includes(kw);
+    let text = escapeHtml(t) || '&nbsp;';
+    if (hit) text = text.split(escapeHtml(kw)).join('<mark>'+escapeHtml(kw)+'</mark>');
+    return `<div class="line-row ${hit?'hit':''}" data-line="${i+1}"><span class="ln">${i+1}</span><span>${text}</span></div>`;
+  }).join('');
+  const hitEl = body.querySelector('.hit');
+  if (hitEl) hitEl.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function locateKeyword(){
+  openFile(activeFileId);
+  const kw = document.getElementById('kwInput').value.trim();
+  const field = FIELDS.find(f => f.lab.includes(kw) || f.val.includes(kw) || kw.includes('金额') && f.key==='amount');
+  if (field){
+    showAnchor(field);
+    toast('已定位：' + field.file + (field.line ? ' 第 ' + field.line + ' 行' : ' @ ' + field.t));
+    appendAudit('LOCATE  '+field.lab+' → '+(field.line?field.file+' L'+field.line:field.file+' '+field.t));
+  } else {
+    toast(kw ? '已按关键字高亮行' : '请输入关键字');
+  }
+  // switch to matching file if amount-like
+  if (kw.includes('金额') || kw.includes('保全')){
+    activeFileId = 'f1';
+    renderFiles();
+    openFile('f1');
+  }
+}
+
+function showAnchor(field){
+  document.querySelectorAll('.rail-tab').forEach(t=>t.classList.toggle('on', t.dataset.rail==='anchor'));
+  document.querySelectorAll('.rail-panel').forEach(p=>p.classList.toggle('on', p.dataset.railPanel==='anchor'));
+  document.getElementById('anchorDetail').innerHTML = `
+    <div class="field-card on">
+      <div class="lab"><span>${escapeHtml(field.lab)}</span><span class="conf">${field.conf}%</span></div>
+      <div class="val">${escapeHtml(field.val)}</div>
+      <div class="src"><i class="fas fa-anchor"></i> ${escapeHtml(field.file)}${field.line!=null?` · p${field.page} · L${field.line}`:''}${field.t?' · '+field.t:''}</div>
+    </div>
+    <div style="margin-top:10px;background:#F8FBFD;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:11px;line-height:1.65;color:#334155">
+      <strong style="color:var(--teal)">SourceAnchor 结构</strong><br>
+      <span style="font-family:var(--mono);font-size:10px;word-break:break-all">
+      {<br>
+      &nbsp;fileHash: "${FILES.find(f=>f.name===field.file)?.hash || '—'}",<br>
+      &nbsp;page: ${field.page ?? 'null'},<br>
+      &nbsp;line: ${field.line ?? 'null'},<br>
+      &nbsp;charOffset: ${field.line ? 12 : 'null'},<br>
+      &nbsp;timeRange: "${field.t || ''}",<br>
+      &nbsp;modality: "${field.t ? 'av' : 'text'}"<br>
+      }
+      </span>
+    </div>
+    <button class="btn btn-primary" style="margin-top:10px" onclick="jumpToFieldLine('${field.key}')"><i class="fas fa-bullseye"></i> 跳转原文并高亮</button>
+  `;
+}
+
+function jumpToFieldLine(key){
+  const field = FIELDS.find(f=>f.key===key);
+  if (!field) return;
+  const file = FILES.find(f=>f.name===field.file);
+  if (file){ activeFileId = file.id; renderFiles(); }
+  document.getElementById('kwInput').value = field.lab.includes('金额') ? '申请保全金额' : (field.val.split('，')[0].slice(0,12));
+  switchView('preview');
+  openFile(activeFileId);
+  showAnchor(field);
+  toast('原文溯源完成');
+}
+
+function renderFields(){
+  document.getElementById('fieldGrid').innerHTML = FIELDS.map(f=>`
+    <div class="field-card ${f.cls}" data-key="${f.key}">
+      <div class="lab"><span>${escapeHtml(f.lab)}</span><span class="conf">置信 ${f.conf}%</span></div>
+      <div class="val">${escapeHtml(f.val)}</div>
+      <div class="src"><i class="fas fa-link"></i> ${escapeHtml(f.file)}${f.line!=null?` · L${f.line}`:''}${f.t?' · '+f.t:''} · 点击溯源</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#fieldGrid .field-card').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const f = FIELDS.find(x=>x.key===el.dataset.key);
+      document.querySelectorAll('#fieldGrid .field-card').forEach(c=>c.classList.remove('on'));
+      el.classList.add('on');
+      showAnchor(f);
+      jumpToFieldLine(f.key);
+    });
+  });
+}
+
+function renderIssues(){
+  document.getElementById('issueList').innerHTML = ISSUES.map(i=>`
+    <div class="issue ${i.lvl==='critical'?'critical':i.lvl==='ok'?'ok':''}">
+      <h4>${escapeHtml(i.title)}<span style="font-size:10px;color:${i.lvl==='critical'?'#B91C1C':i.lvl==='ok'?'#047857':'#B45309'}">${i.lvl==='critical'?'严重':i.lvl==='ok'?'通过':'注意'}</span></h4>
+      <p>${escapeHtml(i.desc)}</p>
+      <div class="act">${escapeHtml(i.act)}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#issueList .issue').forEach((el,idx)=>{
+    el.addEventListener('click',()=>{
+      if (idx===0){ document.getElementById('kwInput').value='财产线索'; locateKeyword(); }
+      else if (idx===1){ switchView('struct'); }
+      else if (idx===2){ activeFileId='f4'; renderFiles(); openFile('f4'); switchView('preview'); }
+      else toast(ISSUES[idx].act);
+    });
+  });
+}
+
+function renderMoats(){
+  document.getElementById('moatList').innerHTML = MOATS.map(m=>`
+    <div class="moat" onclick="toast('已记录交底要点：${m.title}')">
+      <h4><i class="fas ${m.icon}"></i> ${m.title}<span class="lvl">${m.lvl}</span></h4>
+      <p>${m.desc}</p>
+    </div>
+  `).join('');
+}
+
+function renderAudit(){
+  document.getElementById('auditLog').innerHTML = AUDIT.map(a=>`<div><span class="t">${a.t}</span>  ${escapeHtml(a.m)}</div>`).join('');
+}
+
+function appendAudit(m){
+  const now = new Date();
+  const t = [now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
+  AUDIT.unshift({t, m});
+  renderAudit();
+}
+
+function renderMergeList(){
+  const items = [
+    {n:'起诉状.pdf', t:'PDF', c:'#E53E3E'},
+    {n:'财产保全申请书.docx', t:'DOCX', c:'#2563EB'},
+    {n:'营业执照.jpg', t:'JPG', c:'#0891B2'},
+    {n:'合同扫描件.png', t:'PNG', c:'#0F4C5C'},
+    {n:'通话录音转写页', t:'ASR→PDF', c:'#7C3AED'},
+  ];
+  document.getElementById('mergeList').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="font-size:13px;color:var(--teal)">待合并材料（可拖拽排序）</strong>
+      <span style="font-size:11px;color:var(--mute)">异质格式 → 统一卷宗</span>
+    </div>
+    ${items.map((it,i)=>`
+      <div class="merge-item">
+        <span class="ord">${i+1}</span>
+        <i class="fas fa-file" style="color:${it.c}"></i>
+        <span style="font-size:12px;font-weight:600">${it.n}</span>
+        <span class="file-badge">${it.t}</span>
+        <button class="icon-btn" onclick="toast('已从合并队列移除')"><i class="fas fa-xmark"></i></button>
+      </div>`).join('')}
+  `;
+}
+
+function renderDraft(type){
+  const map = {
+    '起诉状': `
+      <h3>民 事 起 诉 状</h3>
+      <p class="para">原告：<span class="cite" data-k="applicant">上海某某商贸有限公司</span>，住所地上海市浦东新区世纪大道 100 号。</p>
+      <p class="para">被告：<span class="cite" data-k="respondent">北京朝阳区某某科技有限公司</span>，住所地北京市朝阳区望京街 9 号。</p>
+      <p class="para">诉讼请求：一、判令被告支付货款人民币 <span class="cite" data-k="amount">2,800,000 元</span>；二、支付逾期利息；三、本案诉讼费由被告承担。</p>
+      <p class="para">事实与理由：<span class="cite" data-k="contractDate">2025 年 6 月 18 日</span>双方签订购销合同。被告尚欠货款未付，有<span class="cite" data-k="audioAdmit">通话录音中承认欠款</span>及转账记录为证。为防止转移财产，原告将同步申请保全，线索为<span class="cite" data-k="clue">工行朝阳支行账户</span>。</p>
+      <p class="para">此致<br><span class="cite" data-k="court" style="text-indent:0;display:inline">北京朝阳区人民法院</span></p>
+    `,
+    '保全申请书': `
+      <h3>财产保全申请书</h3>
+      <p class="para">申请人：<span class="cite" data-k="applicant">上海某某商贸有限公司</span></p>
+      <p class="para">被申请人：<span class="cite" data-k="respondent">北京朝阳区某某科技有限公司</span></p>
+      <p class="para">申请事项：请求对价值人民币 <span class="cite" data-k="amount">2,800,000 元</span> 的财产采取保全措施。</p>
+      <p class="para">财产线索：<span class="cite" data-k="clue">工商银行朝阳支行 622202****7890</span>；标的物可能位于<span class="cite" data-k="videoLoc">望京仓库货架区 A3</span>。</p>
+      <p class="para">事实与理由：双方买卖合同纠纷正在/即将起诉，存在转移财产可能。申请人愿提供诉讼保担保。</p>
+      <p class="para">此致<br><span class="cite" data-k="court" style="text-indent:0;display:inline">北京朝阳区人民法院</span></p>
+    `,
+    '答辩状': `
+      <h3>民 事 答 辩 状</h3>
+      <p class="para">答辩人：<span class="slot">（对方主体，待填充）</span></p>
+      <p class="para">因原告 <span class="cite" data-k="applicant">上海某某商贸有限公司</span> 诉答辩人买卖合同纠纷一案，现答辩如下：</p>
+      <p class="para">一、对原告主张的货款金额 <span class="cite" data-k="amount">2,800,000 元</span>，答辩人认为应扣除已付部分及质量异议款项；</p>
+      <p class="para">二、对原告提交的<span class="cite" data-k="audioAdmit">通话录音</span>，其截取片段不完整，不能单独作为定案依据；</p>
+      <p class="para">三、请求驳回原告不合理诉请。</p>
+    `,
+    '证据清单': `
+      <h3>证 据 清 单</h3>
+      <p class="para" style="text-indent:0">证据一：<span class="cite" data-k="contractDate">购销合同及签订日期证明</span> —— 证明合同关系成立。</p>
+      <p class="para" style="text-indent:0">证据二：转账记录 / 对账单 —— 证明尚欠 <span class="cite" data-k="amount">2,800,000 元</span>。</p>
+      <p class="para" style="text-indent:0">证据三：<span class="cite" data-k="audioAdmit">通话录音及 ASR 转写</span> —— 证明被告承认欠款。</p>
+      <p class="para" style="text-indent:0">证据四：<span class="cite" data-k="videoLoc">仓库现场视频</span> —— 证明标的物/财产可能所在位置。</p>
+      <p class="para" style="text-indent:0">证据五：营业执照 —— 证明主体资格。</p>
+    `
+  };
+  const paper = document.getElementById('draftPaper');
+  paper.innerHTML = map[type] || map['起诉状'];
+  const tip = document.getElementById('citeTip');
+  paper.querySelectorAll('.cite').forEach(el=>{
+    el.addEventListener('mouseenter', e=>{
+      const f = FIELDS.find(x=>x.key===el.dataset.k);
+      if (!f) return;
+      tip.style.display='block';
+      tip.textContent = `溯源：${f.file}${f.line!=null?' L'+f.line:''}${f.t?' '+f.t:''} · 点击跳转`;
+      tip.style.left = Math.min(e.clientX + 12, window.innerWidth - 280) + 'px';
+      tip.style.top = (e.clientY + 14) + 'px';
+    });
+    el.addEventListener('mouseleave', ()=>{ tip.style.display='none'; });
+    el.addEventListener('click', ()=> jumpToFieldLine(el.dataset.k));
+  });
+}
+
+function renderGraph(){
+  const canvas = document.getElementById('graphCanvas');
+  const svg = document.getElementById('graphSvg');
+  const nodes = [
+    { id:'c1', cls:'claim', t:'诉请', n:'支付货款 280万', s:'主张核心', x:40, y:40 },
+    { id:'c2', cls:'claim', t:'保全', n:'财产保全申请', s:'同步动作', x:40, y:200 },
+    { id:'p1', cls:'party', t:'主体', n:'原告·商贸公司', s:'申请人', x:40, y:360 },
+    { id:'p2', cls:'party', t:'主体', n:'被告·科技公司', s:'被申请人', x:420, y:360 },
+    { id:'e1', cls:'proof', t:'证据', n:'购销合同', s:'TXT · 强支撑', x:280, y:60 },
+    { id:'e2', cls:'proof', t:'证据', n:'通话录音 ASR', s:'承认欠款', x:480, y:40 },
+    { id:'e3', cls:'proof', t:'证据', n:'仓库视频', s:'财产线索补充', x:480, y:200 },
+    { id:'e4', cls:'proof', t:'证据', n:'起诉状字段', s:'金额/法院', x:280, y:200 },
+    { id:'r1', cls:'risk', t:'风险', n:'线索不足', s:'关联性缺口', x:280, y:360 },
+  ];
+  const edges = [
+    ['c1','e1','strong'], ['c1','e2','strong'], ['c1','e4','strong'],
+    ['c2','e4','strong'], ['c2','e3',''], ['c2','r1','warn'],
+    ['p1','c1',''], ['p2','c1',''], ['e3','r1','warn'], ['e2','c1','strong'],
+  ];
+
+  [...canvas.querySelectorAll('.g-node')].forEach(n=>n.remove());
+  nodes.forEach(n=>{
+    const el = document.createElement('div');
+    el.className = 'g-node ' + n.cls;
+    el.style.left = n.x + 'px';
+    el.style.top = n.y + 'px';
+    el.innerHTML = `<div class="t">${n.t}</div><div class="n">${n.n}</div><div class="s">${n.s}</div>`;
+    el.addEventListener('click', ()=>{
+      canvas.querySelectorAll('.g-node').forEach(x=>x.classList.remove('on'));
+      el.classList.add('on');
+      if (n.id==='e2'){ activeFileId='f4'; renderFiles(); openFile('f4'); switchView('preview'); }
+      else if (n.id==='e4' || n.id==='c1'){ document.getElementById('kwInput').value='申请保全金额'; locateKeyword(); }
+      else if (n.id==='r1'){ switchView('diag'); }
+      else toast('图谱节点：' + n.n);
+    });
+    canvas.appendChild(el);
+  });
+
+  const W = canvas.clientWidth || 800;
+  const H = 520;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const centerOf = (n)=>({ x:n.x+70, y:n.y+36 });
+  svg.innerHTML = edges.map(([a,b,cls])=>{
+    const na = nodes.find(x=>x.id===a), nb = nodes.find(x=>x.id===b);
+    const A = centerOf(na), B = centerOf(nb);
+    const mx = (A.x+B.x)/2, my = (A.y+B.y)/2 - 20;
+    return `<path class="${cls||''}" d="M${A.x},${A.y} Q${mx},${my} ${B.x},${B.y}" />`;
+  }).join('');
+}
+
+function switchView(name){
+  document.querySelectorAll('#mainTabs .tab').forEach(t=>t.classList.toggle('on', t.dataset.view===name));
+  document.querySelectorAll('.view-panel').forEach(p=>p.classList.toggle('on', p.dataset.panel===name));
+  if (name==='graph') setTimeout(renderGraph, 30);
+  if (name==='draft') renderDraft(document.querySelector('#draftTypes .seg.on')?.dataset.d || '起诉状');
+}
+
+function zoomPreview(dir){
+  previewZoom = Math.min(18, Math.max(10, previewZoom + dir));
+  openFile(activeFileId);
+}
+
+function runUnpack(){
+  toast('嵌套压缩包已拆解：17→入库 14，去重 3');
+  appendAudit('UNPACK  nested zip · classified=14 dedupe=3');
+  activeFileId = 'f7';
+  renderFiles();
+  openFile('f7');
+  switchView('preview');
+}
+
+function runExtract(){
+  const log = [
+    '通道 A · 规则词典命中 6 字段',
+    '通道 B · NER 模型命中 5 字段',
+    '通道 C · ASR/OCR 命中 3 字段',
+    '冲突仲裁：amount → 采用起诉状文本',
+    '已写入 SourceAnchor × 14',
+  ];
+  document.getElementById('extractLog').innerHTML = log.map(l=>'› '+l).join('<br>');
+  document.querySelectorAll('.rail-tab').forEach(t=>t.classList.toggle('on', t.dataset.rail==='extract'));
+  document.querySelectorAll('.rail-panel').forEach(p=>p.classList.toggle('on', p.dataset.railPanel==='extract'));
+  toast('多通道抽取完成');
+  appendAudit('EXTRACT multi-channel fields=14');
+  document.getElementById('statAnchors').textContent = '溯源锚点 14';
+  renderFields();
+}
+
+function runMerge(){
+  const steps = [
+    '归一化：DOCX → 中间页树',
+    '归一化：JPG/PNG → A4 嵌入',
+    '归一化：ASR 转写页生成',
+    '按证据清单序号编排',
+    '写入页眉卷宗号 / 页脚',
+    '嵌入字段溯源 PDF Comment',
+    '生成哈希链附录',
+    '输出目标卷宗',
+  ];
+  const pipe = document.getElementById('mergePipe');
+  const prog = document.getElementById('mergeProg');
+  let i = 0;
+  pipe.innerHTML = steps.map(s=>`<li>${s}</li>`).join('');
+  const lis = [...pipe.querySelectorAll('li')];
+  const timer = setInterval(()=>{
+    if (i>0) lis[i-1].classList.remove('run'), lis[i-1].classList.add('done');
+    if (i>=steps.length){
+      clearInterval(timer);
+      prog.style.width = '100%';
+      toast('合并导出完成：卷宗_' + document.getElementById('mergeTarget').value.toUpperCase());
+      appendAudit('MERGE  target='+document.getElementById('mergeTarget').value+' items=5 hashchain=ok');
+      return;
+    }
+    lis[i].classList.add('run');
+    prog.style.width = Math.round(((i+1)/steps.length)*100) + '%';
+    i++;
+  }, 380);
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('on'); }
+
+/* ========== Bindings ========== */
+document.getElementById('dropzone').addEventListener('click', ()=> document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', (e)=>{
+  const n = e.target.files?.length || 0;
+  if (!n) return;
+  toast('已加入 '+n+' 个文件（原型演示，未实际上传）');
+  appendAudit('INGEST  local files × '+n);
+  e.target.value = '';
+});
+['dragenter','dragover'].forEach(ev=>{
+  document.getElementById('dropzone').addEventListener(ev, e=>{ e.preventDefault(); e.currentTarget.classList.add('drag'); });
+});
+['dragleave','drop'].forEach(ev=>{
+  document.getElementById('dropzone').addEventListener(ev, e=>{
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag');
+    if (ev==='drop') toast('已接收拖拽文件（原型）');
+  });
+});
+
+document.getElementById('fileFilters').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  activeFilter = chip.dataset.f;
+  document.querySelectorAll('#fileFilters .chip').forEach(c=>c.classList.toggle('on', c===chip));
+  renderFiles();
+});
+
+document.getElementById('mainTabs').addEventListener('click', e=>{
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  switchView(tab.dataset.view);
+});
+
+document.getElementById('railTabs').addEventListener('click', e=>{
+  const tab = e.target.closest('.rail-tab');
+  if (!tab) return;
+  document.querySelectorAll('.rail-tab').forEach(t=>t.classList.toggle('on', t===tab));
+  document.querySelectorAll('.rail-panel').forEach(p=>p.classList.toggle('on', p.dataset.railPanel===tab.dataset.rail));
+});
+
+document.getElementById('btnLocate').addEventListener('click', locateKeyword);
+document.getElementById('kwInput').addEventListener('keydown', e=>{ if (e.key==='Enter') locateKeyword(); });
+
+document.getElementById('draftTypes').addEventListener('click', e=>{
+  const seg = e.target.closest('.seg');
+  if (!seg) return;
+  document.querySelectorAll('#draftTypes .seg').forEach(s=>s.classList.toggle('on', s===seg));
+  renderDraft(seg.dataset.d);
+  appendAudit('DRAFT   type='+seg.dataset.d);
+});
+
+document.getElementById('btnRunMerge').addEventListener('click', runMerge);
+document.getElementById('btnExport').addEventListener('click', ()=>{ switchView('merge'); toast('已打开跨格式合并面板'); });
+document.getElementById('btnPatent').addEventListener('click', ()=> document.getElementById('patentModal').classList.add('on'));
+document.getElementById('btnAudit').addEventListener('click', ()=>{
+  document.querySelectorAll('.rail-tab').forEach(t=>t.classList.toggle('on', t.dataset.rail==='audit'));
+  document.querySelectorAll('.rail-panel').forEach(p=>p.classList.toggle('on', p.dataset.railPanel==='audit'));
+  toast('存证审计链已打开');
+});
+document.getElementById('patentModal').addEventListener('click', e=>{
+  if (e.target.id==='patentModal') closeModal('patentModal');
+});
+
+window.addEventListener('resize', ()=>{
+  if (document.querySelector('.view-panel.on')?.dataset.panel==='graph') renderGraph();
+});
+
+/* init */
+renderFiles();
+openFile(activeFileId);
+renderFields();
+renderIssues();
+renderMoats();
+renderAudit();
+renderMergeList();
+renderDraft('起诉状');
+showAnchor(FIELDS.find(f=>f.key==='amount'));
+document.getElementById('statAnchors').textContent = '溯源锚点 14';
+</script>
+</body>
+</html>
