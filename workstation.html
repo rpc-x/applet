@@ -1031,10 +1031,7 @@ const body=`<p class="ev-chain-hint">${r.tpl.summary}<br>依据案由「${(order
 <div class="sp-card-title" style="font-size:12px;margin-bottom:8px">证据节点核对</div>
 ${nodesHtml}
 <div class="ev-diag-box"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>${r.diag}</p></div>
-<div class="ev-chain-actions">
-<button type="button" class="sp-btn-secondary" data-action="ev-chain-rules"><i class="fas fa-balance-scale"></i> 评分规则</button>
-<button type="button" class="sp-btn-secondary" data-action="ev-chain-supplement"><i class="fas fa-folder-plus"></i> 按缺项补材料</button>
-</div>`;
+`;
 return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>证据链诊断`,body,{
 extraClass:'ev-chain-card',prd:'evidence-chain',
 tools:`<span class="ev-chain-type ${r.tpl.typeClass}">${r.tpl.label}</span>`
