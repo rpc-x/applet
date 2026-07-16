@@ -125,6 +125,9 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .od-hero-meta i{margin-right:4px;opacity:.85}
 .od-mat-actions{display:flex;gap:6px;flex-shrink:0}
 .od-mat-actions .sp-btn-secondary{padding:6px 10px;font-size:11px;border-radius:20px}
+.od-mat-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left}
+.od-mat-name{font-size:13px;font-weight:600;color:#1C2E36;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.od-mat-cat{display:inline-flex;align-self:flex-start;font-size:10px;font-weight:700;color:#1A6B7C;background:#F0F9FB;border:1px solid #D4EDE8;padding:2px 8px;border-radius:10px;line-height:1.4}
 .mat-preview-page{padding:0 0 8px}
 .mat-preview-meta{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border-radius:18px;border:1px solid #EDF2F9;margin-bottom:12px}
 .mat-preview-meta .ico{width:44px;height:44px;border-radius:14px;background:#F0F9FB;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
@@ -601,6 +604,16 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sp-modal{background:#fff;border-radius:24px;padding:20px;width:100%;max-width:300px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
 .sp-modal h3{font-size:16px;font-weight:800;color:#1C2E36;margin-bottom:8px}
 .sp-modal.sp-modal-form{max-width:320px;text-align:left;max-height:78%;overflow-y:auto;padding:16px 16px 18px}
+.sp-label .req{color:#DC2626;margin-right:2px;font-weight:800}
+.issue-upload{border:1.5px dashed #B8D4E8;border-radius:14px;padding:14px 10px;text-align:center;background:#F8FBFD;cursor:pointer;margin-bottom:10px}
+.issue-upload i{font-size:22px;color:#1A6B7C;display:block;margin-bottom:6px}
+.issue-upload strong{display:block;font-size:12px;color:#0F4C5C}
+.issue-upload span{display:block;font-size:10px;color:#94A3B8;margin-top:3px}
+.issue-upload.done{border-style:solid;border-color:#6EE7B7;background:#ECFDF5}
+.issue-upload.done i{color:#059669}
+.issue-mat-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.issue-mat-opts label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#334155;font-weight:600;padding:8px 12px;border-radius:12px;background:#F8FAFC;border:1px solid #E2E8F0;cursor:pointer}
+.issue-mat-opts label input{accent-color:#1A6B7C}
 .sp-modal-close{margin-top:14px;width:100%}
 .staff-role-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;background:#EEF2FF;color:#4338CA;margin-left:6px;vertical-align:middle}
 .staff-role-chip.admin{background:#FEF3C7;color:#B45309}
@@ -894,12 +907,12 @@ respondentType:'企业',companyName:'北京朝阳区某某科技有限公司',cr
 contactName:'北京朝阳区某某科技有限公司',respondentPhone:'',respondentAddress:'',
 propertyClue:'工商银行朝阳支行 6222021234567890',
 materials:[
-{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
-{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
-{name:'买卖合同.pdf',icon:'fa-file-contract',color:'#0F766E'},
-{name:'送货验收单.pdf',icon:'fa-file-alt',color:'#2563EB'},
-{name:'增值税发票.pdf',icon:'fa-file-invoice',color:'#B45309'},
-{name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED'}
+{name:'起诉状.pdf',originalName:'张三_民事起诉状_扫描件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',originalName:'财产保全申请书_签字版.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'买卖合同.pdf',originalName:'购销合同_2024版_双方盖章.pdf',category:'合同协议',icon:'fa-file-contract',color:'#0F766E'},
+{name:'送货验收单.pdf',originalName:'送货单及验收记录合订.pdf',category:'履约证明',icon:'fa-file-alt',color:'#2563EB'},
+{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'发票凭证',icon:'fa-file-invoice',color:'#B45309'},
+{name:'营业执照.jpg',originalName:'被申请人营业执照副本.jpg',category:'主体资格',icon:'fa-file-image',color:'#7C3AED'}
 ],
 /* 字段溯源：点击提取值 → 打开原文预览并高亮对应行 */
 fieldSources:{
@@ -908,8 +921,8 @@ applicant:{file:'起诉状.pdf',label:'起诉状',docField:'原告'},
 respondent:{file:'保全申请书.pdf',label:'保全申请书',docField:'被申请人'},
 caseNo:{file:'起诉状.pdf',label:'起诉状',docField:'案号'},
 cause:{file:'起诉状.pdf',label:'起诉状',docField:'案由'},
-type:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全类型'},
-preserveCategory:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全类别'},
+type:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全产品'},
+preserveCategory:{file:'保全申请书.pdf',label:'保全申请书',docField:'保全类型'},
 targetAmount:{file:'保全申请书.pdf',label:'保全申请书',docField:'申请保全金额'},
 applicantType:{file:'起诉状.pdf',label:'起诉状',docField:'原告类型'},
 idType:{file:'起诉状.pdf',label:'起诉状',docField:'证件类型'},
@@ -935,8 +948,8 @@ lines:[
 {n:6,text:'案号：（2025）京0105民初1234号',field:'案号'},
 {n:7,text:'受理法院：北京朝阳区人民法院',field:'受理法院'},
 {n:8,text:''},
-{n:9,text:'保全类型：财产保全',field:'保全类型'},
-{n:10,text:'保全类别：诉前保全',field:'保全类别'},
+{n:9,text:'保全产品：财产保全',field:'保全产品'},
+{n:10,text:'保全类型：诉前保全',field:'保全类型'},
 {n:11,text:'申请保全金额：500',field:'申请保全金额'},
 {n:12,text:'财产线索：工商银行朝阳支行 6222021234567890',field:'财产线索'},
 {n:13,text:''},
@@ -1034,9 +1047,10 @@ ${ctx.omitAfter}
 <p class="src-hit-tip">黄色高亮为系统识别并写入订单的原文位置，请核对是否准确。大文件仅展示命中行附近上下文，不会整篇下发。</p>`,{source:true});
 setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
-let MAT_PREVIEW_STATE={name:''};
+let MAT_PREVIEW_STATE={name:'',display:''};
 function openMaterialPreview(fileName){
-MAT_PREVIEW_STATE={name:fileName||'材料文件'};
+const mat=(ORDER_STATE.materials||[]).find(m=>m.name===fileName);
+MAT_PREVIEW_STATE={name:fileName||'材料文件',display:mat?getMaterialDisplayName(mat):(fileName||'材料文件')};
 openSubPage('materialPreview',{pushStack:true});
 }
 function renderMaterialPreviewPage(){
@@ -1063,19 +1077,33 @@ viewer=`<div class="mat-preview-img-demo"><i class="fas fa-image"></i><strong st
 }else{
 viewer=`<div class="mat-preview-img-demo"><i class="fas ${icon}" style="color:${color}"></i><strong style="color:#1C2E36;margin-bottom:6px">${name}</strong><p style="font-size:12px;line-height:1.6">${kind}预览（演示占位）<br>正式环境将打开文件查看器</p></div>`;
 }
+const dispName=getMaterialDisplayName(mat)||name;
+const cat=getMaterialCategory(mat);
 return`<div class="mat-preview-page">
 <div class="mat-preview-meta">
 <div class="ico"><i class="fas ${icon}" style="color:${color}"></i></div>
-<div style="min-width:0;flex:1"><strong>${name}</strong><span>${kind} · ${sizeHint} · ${ORDER_STATE.caseNo||ORDER_STATE.id||''}</span></div>
+<div style="min-width:0;flex:1"><strong>${dispName}</strong><span>${cat} · ${kind} · ${sizeHint} · ${ORDER_STATE.caseNo||ORDER_STATE.id||''}</span></div>
 </div>
 <div class="mat-preview-viewer">${viewer}</div>
 <button type="button" class="sp-btn-secondary" style="width:100%;margin-top:14px" data-action="toast" data-msg="${name} 下载中…"><i class="fas fa-download"></i> 下载此文件</button>
 </div>`;
 }
+function getMaterialDisplayName(m){
+if(!m)return'材料文件';
+return m.originalName||m.name||'材料文件';
+}
+function getMaterialCategory(m){
+if(!m)return'未分类';
+return m.category||m.type||'未分类';
+}
 function renderOrderMaterialList(materials){
 const mats=materials||[];
 if(!mats.length)return'<p style="font-size:12px;color:#94A3B8;padding:4px 0">暂无材料</p>';
-return mats.map((m,i)=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><div class="od-mat-actions"><button type="button" class="sp-btn-secondary" data-action="mat-preview" data-mat-name="${m.name}" data-mat-idx="${i}">预览</button><button type="button" class="sp-btn-secondary" data-action="toast" data-msg="${m.name} 下载中…">下载</button></div></div>`).join('');
+return mats.map((m,i)=>{
+const disp=getMaterialDisplayName(m);
+const cat=getMaterialCategory(m);
+return`<div class="sp-list-item"><i class="fas ${m.icon||'fa-file-alt'}" style="color:${m.color||'#1A6B7C'}"></i><div class="od-mat-meta"><span class="od-mat-name" title="${disp}">${disp}</span><span class="od-mat-cat">${cat}</span></div><div class="od-mat-actions"><button type="button" class="sp-btn-secondary" data-action="mat-preview" data-mat-name="${m.name}" data-mat-idx="${i}">预览</button><button type="button" class="sp-btn-secondary" data-action="toast" data-msg="${disp} 下载中…">下载</button></div></div>`;
+}).join('');
 }
 function renderOrderDetailHero(order){
 const o=order||ORDER_STATE;
@@ -1087,7 +1115,7 @@ const scorePct=ev.score+'%';
 const scoreTip=ev.judge+' · 完整度 '+ev.score+' 分（按申请材料命中证据节点计算）';
 return`<div class="od-hero">
 <div class="od-hero-top">
-<div><div class="od-hero-id">${o.id||'—'}</div><div class="od-hero-type">${o.type||'保全'}保函 · ${o.preserveCategory||'诉前/诉中'}</div></div>
+<div><div class="od-hero-id">${o.id||'—'}</div><div class="od-hero-type">${o.type||'保全'}保函 · ${resolvePreserveCategory(o)}</div></div>
 <span class="od-hero-tag">${meta.label}</span>
 </div>
 <div class="od-hero-metrics">
@@ -1098,7 +1126,7 @@ return`<div class="od-hero">
 <div class="od-hero-meta">
 <span><i class="fas fa-landmark"></i>${o.court||'—'}</span>
 <span><i class="fas fa-balance-scale"></i>${o.cause||'—'}</span>
-<span><i class="fas fa-clock"></i>提交 05-29 09:15</span>
+<span><i class="fas fa-clock"></i>提交 2026-05-29 09:15</span>
 </div>
 </div>`;
 }
@@ -1138,7 +1166,10 @@ if(/合同|买卖|服务|租赁|承揽|建设工程|网络服务/.test(c))return
 return EVIDENCE_CHAIN_TEMPLATES.contract;
 }
 function matchMaterialsForNode(materials,patterns){
-const names=(materials||[]).map(m=>m.name||m);
+const names=(materials||[]).map(m=>{
+if(typeof m==='string')return m;
+return [m.name,m.originalName,m.category].filter(Boolean).join(' ');
+});
 return names.filter(n=>fileMatchesEvidence(n,patterns));
 }
 function analyzeEvidenceChain(order){
@@ -1200,8 +1231,18 @@ const judgeTable=`<div class="prd-section-title">提交判断阈值</div>
 <tbody>${judgeRows}</tbody></table></div>`;
 return formula+nodeTable(EVIDENCE_CHAIN_TEMPLATES.loan)+nodeTable(EVIDENCE_CHAIN_TEMPLATES.contract)+judgeTable;
 }
-/** 订单详情区块折叠态：true=收起 */
+/** 订单详情 / 案件详情区块折叠态：true=收起 */
 let ORDER_DETAIL_FOLD={case:false,materials:false,evidence:false,audit:true};
+function syncOrderDetailFoldByStatus(order){
+const o=order||ORDER_STATE;
+/* 案件信息、申请材料：任意状态均展开；证据链：仅等待确认展开；审核记录默认折叠 */
+ORDER_DETAIL_FOLD={
+case:false,
+materials:false,
+evidence:o.status!=='wait_confirm',
+audit:true
+};
+}
 function renderFoldSection(key,titleHtml,bodyHtml,opts){
 opts=opts||{};
 const collapsed=!!ORDER_DETAIL_FOLD[key];
@@ -1302,24 +1343,156 @@ ORDER_STATE.status='closed';
 showToast('订单已关闭，已通知申请人');
 });
 }
+let ISSUE_FORM_STATE={policyFile:false,guaranteeFile:false,sueFile:false,sueMode:'config'};
+const ISSUE_UPLOAD_META={
+policyFile:['上传保单附件','支持 PDF / 图片'],
+guaranteeFile:['上传保函附件','可选 · 支持 PDF / 图片'],
+sueFile:['上传诉责材料','支持 PDF / 图片 / ZIP']
+};
+function renderIssueUploadZone(key,done){
+const meta=ISSUE_UPLOAD_META[key]||['上传附件','点击上传'];
+return`<div class="issue-upload${done?' done':''}" data-action="issue-upload" data-key="${key}">
+<i class="fas ${done?'fa-check-circle':'fa-cloud-upload-alt'}"></i>
+<strong>${done?'已上传 · 点击重新选择':meta[0]}</strong>
+<span>${done?'演示文件已就绪':meta[1]}</span>
+</div>`;
+}
+function syncLitigationListStatus(id,status,extra){
+const row=ORDER_LIST.find(x=>x.id===id);
+if(row){
+row.status=status;
+if(extra&&extra.guaranteeNo)row.guaranteeNo=extra.guaranteeNo;
+}
+}
+function refreshIssueUploadZones(inner){
+if(!inner)return;
+const map={policyFile:'#issuePolicyUploadWrap',guaranteeFile:'#issueGuaranteeUploadWrap',sueFile:'#issueSueUploadWrap'};
+Object.keys(map).forEach(key=>{
+const wrap=inner.querySelector(map[key]);
+if(wrap)wrap.innerHTML=renderIssueUploadZone(key,!!ISSUE_FORM_STATE[key]);
+});
+const sueWrap=inner.querySelector('#issueSueUploadWrap');
+if(sueWrap)sueWrap.style.display=ISSUE_FORM_STATE.sueMode==='upload'?'block':'none';
+}
+function openIssueLetterModal(){
+const o=ORDER_STATE;
+ISSUE_FORM_STATE={policyFile:false,guaranteeFile:false,sueFile:false,sueMode:'config'};
+const defaultNo='YA'+String(o.id||'').replace(/\D/g,'').slice(-10)+'01';
+showModal(`${renderModalHead('<i class="fas fa-file-signature" style="color:#1A6B7C;margin-right:4px"></i>出函办理',`${o.id} · ${o.type||'保全'} · 等待出函`)}
+<div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
+<span class="sp-label"><span class="req">*</span>保单号</span>
+<input class="sp-input" id="issuePolicyNo" type="text" placeholder="请输入保单号" value="${defaultNo}">
+<span class="sp-label"><span class="req">*</span>保单（附件）</span>
+<div id="issuePolicyUploadWrap">${renderIssueUploadZone('policyFile',false)}</div>
+<span class="sp-label">保函（附件）</span>
+<div id="issueGuaranteeUploadWrap">${renderIssueUploadZone('guaranteeFile',false)}</div>
+<span class="sp-label">诉责材料</span>
+<div class="sp-tag-row" id="issueSueModeRow" style="margin-top:0;margin-bottom:8px">
+<span class="sp-tag selected" data-sue-mode="config">使用配置项</span>
+<span class="sp-tag" data-sue-mode="upload">上传文件</span>
+<span class="sp-tag" data-sue-mode="none">不上传</span>
+</div>
+<div id="issueSueUploadWrap" style="display:none">${renderIssueUploadZone('sueFile',false)}</div>
+<span class="sp-label">审核备注</span>
+<textarea class="sp-textarea" id="issueRemark" placeholder="填写审核备注（选填）…" style="min-height:72px"></textarea>
+<span class="sp-label">材料处理</span>
+<div class="issue-mat-opts">
+<label><input type="checkbox" id="issuePrintColor" checked> 彩色打印</label>
+<label><input type="checkbox" id="issueMailOriginal"> 邮寄原件</label>
+</div>
+</div>
+<button type="button" class="sp-btn-primary" data-action="issue-form-submit" style="margin:0;width:100%;padding:12px;border-radius:40px"><i class="fas fa-check"></i> 确认出函</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+if(!inner)return;
+if(!inner._issueBound){
+inner._issueBound=true;
+inner.addEventListener('click',e=>{
+const sueTag=e.target.closest('[data-sue-mode]');
+if(sueTag&&inner.contains(sueTag)){
+inner.querySelectorAll('[data-sue-mode]').forEach(t=>t.classList.remove('selected'));
+sueTag.classList.add('selected');
+ISSUE_FORM_STATE.sueMode=sueTag.dataset.sueMode||'config';
+refreshIssueUploadZones(inner);
+return;
+}
+const up=e.target.closest('[data-action="issue-upload"]');
+if(up&&inner.contains(up)){
+const key=up.dataset.key;
+if(!key)return;
+ISSUE_FORM_STATE[key]=!ISSUE_FORM_STATE[key];
+refreshIssueUploadZones(inner);
+showToast(ISSUE_FORM_STATE[key]?'已选择附件':'已清除附件');
+return;
+}
+const submit=e.target.closest('[data-action="issue-form-submit"]');
+if(submit&&inner.contains(submit)){
+const policyNo=(inner.querySelector('#issuePolicyNo')?.value||'').trim();
+if(!policyNo){showToast('请填写保单号');return}
+if(!ISSUE_FORM_STATE.policyFile){showToast('请上传保单附件');return}
+if(ISSUE_FORM_STATE.sueMode==='upload'&&!ISSUE_FORM_STATE.sueFile){showToast('请上传诉责材料');return}
+const printColor=!!inner.querySelector('#issuePrintColor')?.checked;
+const mailOriginal=!!inner.querySelector('#issueMailOriginal')?.checked;
+const remark=(inner.querySelector('#issueRemark')?.value||'').trim();
+const handle=[];
+if(printColor)handle.push('彩色打印');
+if(mailOriginal)handle.push('邮寄原件');
+closeModal();
+ORDER_STATE.status='issued';
+ORDER_STATE.guaranteeNo=policyNo;
+syncLitigationListStatus(ORDER_STATE.id,'issued',{guaranteeNo:policyNo});
+showToast('出函成功 · '+policyNo+(handle.length?' · '+handle.join('、'):'')+(remark?' · 已备注':''));
+setTimeout(()=>openSubPage('orderDetail',{keepStack:true}),500);
+}
+});
+}
+refreshIssueUploadZones(inner);
+}
+function openCannotUnderwriteModal(){
+const o=ORDER_STATE;
+showModal(`${renderModalHead('<i class="fas fa-ban" style="color:#B91C1C;margin-right:4px"></i>无法承保',`${o.id} · ${o.type||'保全'} · 等待出函`)}
+<div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
+<span class="sp-label"><span class="req">*</span>审核备注</span>
+<textarea class="sp-textarea" id="cannotUwRemark" placeholder="请填写无法承保原因…" style="min-height:110px;margin-bottom:0"></textarea>
+</div>
+<button type="button" class="sp-btn-danger" data-action="cannot-underwrite-submit" style="margin:0;width:100%;padding:12px;border-radius:40px">确认无法承保</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+if(!inner)return;
+inner.querySelector('[data-action="cannot-underwrite-submit"]')?.addEventListener('click',()=>{
+const remark=(inner.querySelector('#cannotUwRemark')?.value||'').trim();
+if(!remark){showToast('请填写审核备注');return}
+closeModal();
+ORDER_STATE.status='closed';
+syncLitigationListStatus(o.id,'closed');
+showToast('已标记无法承保 · 订单关闭');
+setTimeout(()=>openSubPage('orderDetail',{keepStack:true}),500);
+});
+}
 const DEMO_MATERIALS_BY_CHAIN={
 contract:[
-{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
-{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
-{name:'买卖合同.pdf',icon:'fa-file-contract',color:'#0F766E'},
-{name:'送货验收单.pdf',icon:'fa-file-alt',color:'#2563EB'},
-{name:'增值税发票.pdf',icon:'fa-file-invoice',color:'#B45309'},
-{name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED'}
+{name:'起诉状.pdf',originalName:'张正源_民事起诉状_扫描件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',originalName:'财产保全申请书_签字版.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'买卖合同.pdf',originalName:'购销合同_2024版_双方盖章.pdf',category:'合同协议',icon:'fa-file-contract',color:'#0F766E'},
+{name:'送货验收单.pdf',originalName:'送货单及验收记录合订.pdf',category:'履约证明',icon:'fa-file-alt',color:'#2563EB'},
+{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'发票凭证',icon:'fa-file-invoice',color:'#B45309'},
+{name:'营业执照.jpg',originalName:'被申请人营业执照副本.jpg',category:'主体资格',icon:'fa-file-image',color:'#7C3AED'}
 ],
 loan:[
-{name:'起诉状.pdf',icon:'fa-file-pdf',color:'#E53E3E'},
-{name:'保全申请书.pdf',icon:'fa-file-alt',color:'#2B6CB0'},
-{name:'借款协议.pdf',icon:'fa-file-contract',color:'#0F766E'},
-{name:'借条照片.jpg',icon:'fa-file-image',color:'#D97706'},
-{name:'银行转账流水.pdf',icon:'fa-file-invoice',color:'#2563EB'},
-{name:'微信支付截图.png',icon:'fa-file-image',color:'#07C160'}
+{name:'起诉状.pdf',originalName:'民间借贷起诉状_原件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'保全申请书.pdf',originalName:'诉前保全申请书.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'借款协议.pdf',originalName:'个人借款协议_双方签字.pdf',category:'借款协议',icon:'fa-file-contract',color:'#0F766E'},
+{name:'借条照片.jpg',originalName:'借条原件照片.jpg',category:'借贷合意',icon:'fa-file-image',color:'#D97706'},
+{name:'银行转账流水.pdf',originalName:'工商银行转账流水_2024.pdf',category:'资金交付',icon:'fa-file-invoice',color:'#2563EB'},
+{name:'微信支付截图.png',originalName:'微信转账聊天记录截图.png',category:'沟通佐证',icon:'fa-file-image',color:'#07C160'}
 ]
 };
+const PRESERVE_CATEGORY_OPTS=['诉前保全','诉讼保全','仲裁保全'];
+function resolvePreserveCategory(order){
+const v=(order&&order.preserveCategory)||'';
+if(PRESERVE_CATEGORY_OPTS.includes(v))return v;
+if(/仲裁/.test(v))return'仲裁保全';
+if(/诉讼|诉中/.test(v))return'诉讼保全';
+return'诉前保全';
+}
 function applyLitigationOrderState(orderId){
 const found=ORDER_LIST.find(x=>x.id===orderId);
 if(!found)return;
@@ -1328,6 +1501,7 @@ ORDER_STATE=Object.assign({},ORDER_STATE,{
 id:found.id,status:found.status,amount:found.amount,premium:Math.round((found.amount||0)*0.00085)||ORDER_STATE.premium,
 applicant:found.applicant,respondent:found.respondent,caseNo:found.caseNo,court:found.court,
 type:found.type,cause:found.cause,targetAmount:found.amount?Math.round(found.amount/10000):ORDER_STATE.targetAmount,
+preserveCategory:resolvePreserveCategory(found),
 guaranteeNo:found.guaranteeNo||'',
 materials:(DEMO_MATERIALS_BY_CHAIN[chainKey]||DEMO_MATERIALS_BY_CHAIN.contract).slice()
 });
@@ -1363,7 +1537,7 @@ return`<div class="mat-pick-bar">
 <button type="button" class="sp-link-btn" data-action="mat-pick-none">清空</button></div>
 <span class="mat-pick-count" id="matPickCount">已选 ${on?mats.length:0} / ${mats.length}</span>
 </div>
-<div class="mat-pick-list" id="matPickList">${mats.map((m,i)=>`<label class="mat-pick-row"><input type="checkbox" class="mat-pick-cb" data-mat-idx="${i}" ${on?'checked':''}><i class="fas ${m.icon}" style="color:${m.color}"></i><span>${m.name}</span></label>`).join('')}</div>`;
+<div class="mat-pick-list" id="matPickList">${mats.map((m,i)=>`<label class="mat-pick-row"><input type="checkbox" class="mat-pick-cb" data-mat-idx="${i}" ${on?'checked':''}><i class="fas ${m.icon}" style="color:${m.color}"></i><span>${getMaterialDisplayName(m)}<em style="display:block;font-style:normal;font-size:10px;color:#94A3B8;margin-top:2px">${getMaterialCategory(m)}</em></span></label>`).join('')}</div>`;
 }
 function updateMaterialPickCount(root){
 const list=root||document.getElementById('spModalInner');
@@ -1486,8 +1660,9 @@ return`<div class="od-footer-primary single">
 </div>`;
 }
 if(st==='wait_issue'){
-return`<div class="od-footer-primary single">
-<button type="button" class="sp-btn-primary" data-action="go-issue-letter"><i class="fas fa-file-signature"></i> 确认出函</button>
+return`<div class="od-footer-primary">
+<button type="button" class="sp-btn-danger" data-action="open-cannot-underwrite">无法承保</button>
+<button type="button" class="sp-btn-primary" data-action="open-issue-form"><i class="fas fa-file-signature"></i> 出函</button>
 </div>`;
 }
 if(st==='issued'){
@@ -1546,8 +1721,6 @@ insufficient:{label:'材料不足',tag:'tag-supplement'}
 };
 const ORDER_FILTERS=[
 {key:'all',label:'全部'},
-{key:'wait_select',label:'等待选择'},
-{key:'wait_confirm',label:'等待确认'},
 {key:'wait_sign',label:'等待签章'},
 {key:'partial_sign',label:'部分签章'},
 {key:'wait_pay',label:'等待支付'},
@@ -1561,17 +1734,17 @@ const ORDER_FILTERS=[
 {key:'insufficient',label:'材料不足'}
 ];
 const ORDER_LIST=[
-{id:'SS20250529010',biz:'litigation',status:'wait_select',type:'财产保全',applicant:'刘某',respondent:'天津某某商贸有限公司',court:'天津市滨海新区人民法院',amount:2100000,caseNo:'（2025）津0116民初10010号',cause:'买卖合同纠纷'},
-{id:'SS20250529001',biz:'litigation',status:'wait_confirm',type:'财产保全',applicant:'张正源',respondent:'北京某某贸易有限公司',court:'北京市朝阳区人民法院',amount:8500000,caseNo:'（2025）京0105民初12345号',cause:'买卖合同纠纷'},
-{id:'SS20250528012',biz:'litigation',status:'wait_sign',type:'证据保全',applicant:'赵某',respondent:'苏州某某制造有限公司',court:'苏州市工业园区人民法院',amount:1800000,caseNo:'（2025）苏0591民初28012号',cause:'侵害商业秘密纠纷'},
-{id:'SS20250528009',biz:'litigation',status:'partial_sign',type:'行为保全',applicant:'孙某',respondent:'成都某某文化有限公司',court:'成都市高新区人民法院',amount:960000,caseNo:'（2025）川0191民初28009号',cause:'不正当竞争纠纷'},
-{id:'SS20250528005',biz:'litigation',status:'wait_pay',type:'财产保全',applicant:'周某',respondent:'南京某某科技有限公司',court:'南京市鼓楼区人民法院',amount:4200000,caseNo:'（2025）苏0106民初28005号',cause:'借款合同纠纷'},
-{id:'SS20250528008',biz:'litigation',status:'wait_issue',type:'继续执行',applicant:'李法务',respondent:'上海某某科技有限公司',court:'上海市浦东新区人民法院',amount:3200000,caseNo:'（2024）沪0115民初88721号',cause:'借款合同纠纷'},
-{id:'SS20250518001',biz:'litigation',status:'issued',type:'财产保全',applicant:'张正源',respondent:'杭州某某网络科技有限公司',court:'杭州市西湖区人民法院',amount:5000000,caseNo:'（2025）浙0106民初22018号',cause:'网络服务合同纠纷',guaranteeNo:'YASS20250518001'},
-{id:'SS20250515006',biz:'litigation',status:'cs_intervene',type:'财产保全',applicant:'吴某',respondent:'武汉某某物流有限公司',court:'武汉市江汉区人民法院',amount:1500000,caseNo:'（2025）鄂0103民初15006号',cause:'运输合同纠纷'},
-{id:'SS20250512003',biz:'litigation',status:'closed',type:'行为保全',applicant:'陈企法',respondent:'广州某某物流有限公司',court:'广州市天河区人民法院',amount:980000,caseNo:'（2025）粤0106民初33091号',cause:'不正当竞争纠纷'},
-{id:'SS20250510002',biz:'litigation',status:'wait_cancel',type:'财产保全',applicant:'郑某',respondent:'厦门某某贸易有限公司',court:'厦门市思明区人民法院',amount:2800000,caseNo:'（2025）闽0203民初10002号',cause:'买卖合同纠纷',guaranteeNo:'YASS20250510002'},
-{id:'SS20250509001',biz:'litigation',status:'cancel_processing',type:'继续执行',applicant:'冯某',respondent:'青岛某某实业有限公司',court:'青岛市市南区人民法院',amount:3600000,caseNo:'（2025）鲁0202民初09001号',cause:'借款合同纠纷',guaranteeNo:'YASS20250509001'},
+{id:'SS20250529010',biz:'litigation',status:'wait_select',type:'财产保全',preserveCategory:'诉前保全',applicant:'刘某',respondent:'天津某某商贸有限公司',court:'天津市滨海新区人民法院',amount:2100000,caseNo:'（2025）津0116民初10010号',cause:'买卖合同纠纷'},
+{id:'SS20250529001',biz:'litigation',status:'wait_confirm',type:'财产保全',preserveCategory:'诉前保全',applicant:'张正源',respondent:'北京某某贸易有限公司',court:'北京市朝阳区人民法院',amount:8500000,caseNo:'（2025）京0105民初12345号',cause:'买卖合同纠纷'},
+{id:'SS20250528012',biz:'litigation',status:'wait_sign',type:'证据保全',preserveCategory:'诉讼保全',applicant:'赵某',respondent:'苏州某某制造有限公司',court:'苏州市工业园区人民法院',amount:1800000,caseNo:'（2025）苏0591民初28012号',cause:'侵害商业秘密纠纷'},
+{id:'SS20250528009',biz:'litigation',status:'partial_sign',type:'行为保全',preserveCategory:'诉讼保全',applicant:'孙某',respondent:'成都某某文化有限公司',court:'成都市高新区人民法院',amount:960000,caseNo:'（2025）川0191民初28009号',cause:'不正当竞争纠纷'},
+{id:'SS20250528005',biz:'litigation',status:'wait_pay',type:'财产保全',preserveCategory:'仲裁保全',applicant:'周某',respondent:'南京某某科技有限公司',court:'南京市鼓楼区人民法院',amount:4200000,caseNo:'（2025）苏0106民初28005号',cause:'借款合同纠纷'},
+{id:'SS20250528008',biz:'litigation',status:'wait_issue',type:'继续执行',preserveCategory:'诉讼保全',applicant:'李法务',respondent:'上海某某科技有限公司',court:'上海市浦东新区人民法院',amount:3200000,caseNo:'（2024）沪0115民初88721号',cause:'借款合同纠纷'},
+{id:'SS20250518001',biz:'litigation',status:'issued',type:'财产保全',preserveCategory:'诉前保全',applicant:'张正源',respondent:'杭州某某网络科技有限公司',court:'杭州市西湖区人民法院',amount:5000000,caseNo:'（2025）浙0106民初22018号',cause:'网络服务合同纠纷',guaranteeNo:'YASS20250518001'},
+{id:'SS20250515006',biz:'litigation',status:'cs_intervene',type:'财产保全',preserveCategory:'仲裁保全',applicant:'吴某',respondent:'武汉某某物流有限公司',court:'武汉市江汉区人民法院',amount:1500000,caseNo:'（2025）鄂0103民初15006号',cause:'运输合同纠纷'},
+{id:'SS20250512003',biz:'litigation',status:'closed',type:'行为保全',preserveCategory:'诉讼保全',applicant:'陈企法',respondent:'广州某某物流有限公司',court:'广州市天河区人民法院',amount:980000,caseNo:'（2025）粤0106民初33091号',cause:'不正当竞争纠纷'},
+{id:'SS20250510002',biz:'litigation',status:'wait_cancel',type:'财产保全',preserveCategory:'诉前保全',applicant:'郑某',respondent:'厦门某某贸易有限公司',court:'厦门市思明区人民法院',amount:2800000,caseNo:'（2025）闽0203民初10002号',cause:'买卖合同纠纷',guaranteeNo:'YASS20250510002'},
+{id:'SS20250509001',biz:'litigation',status:'cancel_processing',type:'继续执行',preserveCategory:'诉讼保全',applicant:'冯某',respondent:'青岛某某实业有限公司',court:'青岛市市南区人民法院',amount:3600000,caseNo:'（2025）鲁0202民初09001号',cause:'借款合同纠纷',guaranteeNo:'YASS20250509001'},
 {id:'SS20250508004',biz:'litigation',status:'cancelled',type:'证据保全',applicant:'何某',respondent:'长沙某某电子有限公司',court:'长沙市岳麓区人民法院',amount:1200000,caseNo:'（2025）湘0104民初08004号',cause:'侵害商业秘密纠纷',guaranteeNo:'YASS20250508004'},
 {id:'SS20250527015',biz:'litigation',status:'insufficient',type:'证据保全',applicant:'王某',respondent:'深圳某某电子有限公司',court:'深圳市南山区人民法院',amount:1500000,caseNo:'（2025）粤0305民初44102号',cause:'侵害商业秘密纠纷'}
 ];
@@ -1739,6 +1912,12 @@ if(biz==='xueping')return XUEPING_FILTERS;
 if(biz==='biaohou')return BIAOHUO_FILTERS;
 return ORDER_FILTERS;
 }
+function resolveActiveOrderFilter(biz,filter){
+const f=filter||'all';
+if(biz==='all')return f;
+const filters=getStatusFiltersForBiz(biz);
+return filters.some(x=>x.key===f)?f:'all';
+}
 function renderOrderListSummary(){
 const lit=ORDER_LIST.length,xp=XUEPING_LIST.length,bh=BIAOHUO_LIST.length;
 return``;
@@ -1773,7 +1952,7 @@ return`<div class="biz-line-tabs" id="bizLineTabs">${Object.keys(BIZ_LINE_META).
 function renderOrderStatusTabs(biz,active,id){
 if(biz==='all')return'';
 const filters=getStatusFiltersForBiz(biz);
-const safe=filters.some(f=>f.key===active)?active:'all';
+const safe=resolveActiveOrderFilter(biz,active);
 return`<div class="filter-tabs" id="${id||'orderFilters'}">${filters.map(f=>`<button data-filter="${f.key}"${f.key===safe?' class="on"':''}>${f.label}</button>`).join('')}</div>`;
 }
 function renderXuepingSteps(status){
@@ -2596,6 +2775,16 @@ const ov=document.getElementById('authOverlay');
 if(ov)ov.classList.remove('active');
 if(!currentSubId)document.getElementById('bottomNav').style.display='flex';
 }
+function doLogout(){
+authLoggedIn=false;authStaffName='';
+try{
+sessionStorage.removeItem('ssbao_inst_logged_in');
+sessionStorage.removeItem('ssbao_inst_login_via');
+sessionStorage.removeItem('ssbao_inst_need_ent');
+sessionStorage.removeItem('ssbao_inst_phone');
+}catch(err){}
+location.href='login.html';
+}
 function enterAppAfterAuth(opts){
 opts=opts||{};
 authLoggedIn=true;
@@ -2743,7 +2932,7 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 <div class="stats-dashboard">
 <div class="stats-dashboard-head"><span class="stats-dashboard-title">📊 数据看板</span></div>
 <div class="stats-grid">
-<div class="stat-item stat-pending" data-page="orderList" data-filter="wait_confirm" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-pending.svg" alt="等待确认"></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">等待确认</div></div></div>
+<div class="stat-item stat-pending" data-page="orderList" data-filter="wait_confirm" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-pending.svg" alt="等待审核"></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">等待审核</div></div></div>
 <div class="stat-item stat-issue" data-page="orderList" data-filter="wait_issue" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-issue.svg" alt="等待出函"></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">等待出函</div></div></div>
 <div class="stat-item stat-supplement" data-page="orderList" data-filter="insufficient" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-supplement.svg" alt="材料不足"></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">材料不足</div></div></div>
 <div class="stat-item stat-monthly" data-page="orderList" data-filter="issued" data-biz="litigation" data-period="month"><div class="stat-item-icon"><img src="assets/wb/stat-done.svg" alt="出函成功"></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">出函成功</div></div></div>
@@ -2753,7 +2942,7 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 <div class="section-title"><span>⚡ 快捷操作</span></div>
 <div class="quick-grid">
 <div class="quick-item" data-page="orderList" data-filter="wait_confirm" data-biz="litigation"><div class="quick-icon"><img src="assets/wb/qa-audit.svg" alt="订单审核"></div><span>订单审核</span></div>
-<div class="quick-item" data-page="orderList" data-filter="wait_issue" data-biz="litigation" title="进入诉讼保·等待出函列表"><div class="quick-icon"><img src="assets/wb/qa-issue.svg" alt="业务办理"></div><span>业务办理</span></div>
+<div class="quick-item" data-page="orderList" data-filter="wait_issue" data-biz="litigation" title="进入诉讼保·等待出函列表"><div class="quick-icon"><img src="assets/wb/qa-issue.svg" alt="等待出函"></div><span>等待出函</span></div>
 <div class="quick-item" data-page="orderList" data-biz="xueping"><div class="quick-icon"><img src="assets/wb/qa-xueping.svg" alt="学平业务"></div><span>学平业务</span></div>
 <div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><img src="assets/wb/qa-tools.svg" alt="工具助手"></div><span>工具助手</span></div>
 </div>
@@ -2763,6 +2952,8 @@ ${BIAOHUO_LIST.filter(o=>o.status==='bidding'||o.status==='issuing').slice(0,1).
 ${XUEPING_LIST.filter(o=>o.status==='wait_confirm'||o.status==='wait_underwrite').slice(0,1).map(o=>renderXuepingCard(o,{soft:true,showBiz:true})).join('')}`;
 
 function renderOrdersTab(){
+const flt=resolveActiveOrderFilter(currentBizLine,currentOrderFilter);
+if(flt!==currentOrderFilter)currentOrderFilter=flt;
 return`<div class="header-flex"><div class="greeting"><h2>📂 订单中心</h2><p>诉讼保 · 学平险 · 标后</p></div><div class="icon-btn" data-page="searchPage"><i class="fas fa-search"></i></div></div>
 ${currentBizLine==='all'?renderOrderListSummary():''}
 ${renderBizLineTabs(currentBizLine)}
@@ -2882,11 +3073,15 @@ ${filtered.length?groupBlock('今天',today)+groupBlock('更早',earlier):empty}
 }
 
 const PAGES={
-orderList:{title:'订单中心',sub:'诉讼保 · 学平险 · 标后',render:()=>`
+orderList:{title:'订单中心',sub:'诉讼保 · 学平险 · 标后',render:()=>{
+const flt=resolveActiveOrderFilter(currentBizLine,currentOrderFilter);
+if(flt!==currentOrderFilter)currentOrderFilter=flt;
+return`
 ${currentBizLine==='all'?renderOrderListSummary():''}
 ${renderBizLineTabs(currentBizLine)}
 ${renderOrderStatusTabs(currentBizLine,currentOrderFilter,'orderFiltersSub')}
-<div id="orderListArea">${renderUnifiedOrderList(currentBizLine,currentOrderFilter)}</div>`},
+<div id="orderListArea">${renderUnifiedOrderList(currentBizLine,currentOrderFilter)}</div>`;
+}},
 enterpriseAuth:{title:'企业认证',sub:'企业信息 · 法人信息 · 提交审核',render:()=>renderEnterpriseAuthPage()},
 biaohouDetail:{title:'标后订单详情',sub:'订单详情',render:()=>{
 const o=BIAOHUO_STATE;const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
@@ -2908,15 +3103,17 @@ ${renderInfoRow('截止时间',o.deadline)}
 ${o.status==='bidding'?`<button class="sp-btn-primary" data-action="toast" data-msg="报价已提交">提交报价</button>`:''}
 ${o.status==='issuing'?`<button class="sp-btn-primary" data-action="toast" data-msg="已确认出函">确认出函</button>`:''}
 ${o.status==='done'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
-materialPreview:{title:'材料预览',sub:()=>MAT_PREVIEW_STATE.name||'申请材料',render:()=>renderMaterialPreviewPage()},
+materialPreview:{title:'材料预览',sub:()=>MAT_PREVIEW_STATE.display||MAT_PREVIEW_STATE.name||'申请材料',render:()=>renderMaterialPreviewPage()},
 orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>{
+syncOrderDetailFoldByStatus(ORDER_STATE);
 const ev=analyzeEvidenceChain(ORDER_STATE);
 const matN=(ORDER_STATE.materials||[]).length;
 const caseBody=`
 ${renderCaseSummaryLine('申请人',ORDER_STATE.applicant,'applicant')}
 ${renderCaseSummaryLine('被申请人',ORDER_STATE.respondent,'respondent')}
 ${renderCaseSummaryLine('法院',ORDER_STATE.court,'court')}
-${renderCaseSummaryLine('保全类型',ORDER_STATE.type,'type')}
+${renderCaseSummaryLine('保全类型',resolvePreserveCategory(ORDER_STATE),'preserveCategory')}
+${renderCaseSummaryLine('保全产品',ORDER_STATE.type,'type')}
 ${renderCaseSummaryLine('标的金额','¥'+Number(ORDER_STATE.targetAmount).toLocaleString(),'targetAmount')}
 ${renderCaseSummaryLine('案号',ORDER_STATE.caseNo,'caseNo')}
 ${renderCaseSummaryLine('案由',ORDER_STATE.cause,'cause')}`;
@@ -2940,6 +3137,7 @@ ${renderOrderPrimaryActions(ORDER_STATE)}
 </div>`}},
 caseInfoDetail:{title:'案件详情',sub:ORDER_STATE.caseNo,render:()=>{
 const o=ORDER_STATE;
+syncOrderDetailFoldByStatus(o);
 const ev=analyzeEvidenceChain(o);
 const matUtils=renderOrderMaterialUtils(o.status);
 const auditBody=`<div class="sp-timeline">
@@ -2952,8 +3150,8 @@ return`
 <div class="sp-card">
 <div class="sp-section-label">法院信息</div>
 ${renderInfoRow('法院',o.court,'court')}
-${renderInfoRow('保全类型',o.type,'type')}
-${renderInfoRow('保全类别',o.preserveCategory,'preserveCategory')}
+${renderInfoRow('保全类型',resolvePreserveCategory(o),'preserveCategory')}
+${renderInfoRow('保全产品',o.type,'type')}
 ${renderInfoRow('标的金额(元)',Number(o.targetAmount).toLocaleString(),'targetAmount')}
 ${renderInfoRow('案由',o.cause,'cause')}
 ${renderInfoRow('案件号',o.caseNo,'caseNo')}
@@ -3003,7 +3201,7 @@ issueGuarantee:{title:'出函办理',sub:'电子保函生成 · 链上存证',re
 <div class="sp-list-item"><div style="flex:1"><strong>SS20250528008</strong><p style="font-size:11px;color:#6F8FAA">继续执行 · ¥3,680</p></div><span class="sp-tag selected">选中</span></div></div>
 <div class="sp-card"><span class="sp-label">保函编号（自动生成）</span><input class="sp-input" value="YASS20250529001234" readonly>
 <span class="sp-label">出函模板</span><select class="sp-select"><option>标准诉讼财产保全保函</option><option>继续执行专项保函</option></select>
-<div class="sp-check-row" style="display:flex;align-items:center;gap:8px;padding:8px 0"><input type="checkbox" checked id="chainCheck"> <label for="chainCheck" style="font-size:13px">同步司法区块链存证</label></div></div>
+<div class="sp-check-row" style="display:flex;align-items:center;gap:8px;padding:8px 0"></div></div>
 <button class="sp-btn-primary" data-action="issue-letter">确认出函</button>`},
 supplementRequest:{title:'要求补材料',sub:'通知申请人补充',render:()=>{
 const ev=analyzeEvidenceChain(ORDER_STATE);
@@ -3237,7 +3435,7 @@ if(pg)openSubPage(pg,{fromHub:el.closest('.inst-mat-hub,.inst-mat-grid')&&TOOL_C
 });
 document.querySelectorAll('#tabContent [data-action="auth-logout"]').forEach(el=>{
 if(el._logoutBound)return;el._logoutBound=true;
-el.addEventListener('click',e=>{e.stopPropagation();authLoggedIn=false;authStaffName='';try{sessionStorage.removeItem('ssbao_inst_logged_in');sessionStorage.removeItem('ssbao_inst_login_via');sessionStorage.removeItem('ssbao_inst_need_ent');sessionStorage.removeItem('ssbao_inst_phone')}catch(err){}closeSubPage();showToast('已退出登录');setActiveNav('profile')});
+el.addEventListener('click',e=>{e.stopPropagation();doLogout()});
 });
 document.querySelectorAll('#tabContent [data-action="auth-open"]').forEach(el=>{
 if(el._authOpenBound)return;el._authOpenBound=true;
@@ -3537,7 +3735,8 @@ return;
 if(act==='case-pack-download'){openPackDownloadModal();return}
 if(act==='case-send-email'){openEmailModal('案件材料 · '+ORDER_STATE.caseNo,{pickMaterials:true});return}
 if(act==='case-push-pc'){openPushPcModal();return}
-if(act==='go-issue-letter'){openSubPage('issueGuarantee',{pushStack:true});return}
+if(act==='go-issue-letter'||act==='open-issue-form'){openIssueLetterModal();return}
+if(act==='open-cannot-underwrite'){openCannotUnderwriteModal();return}
 if(act==='rar-process')runRarProcess();
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
@@ -3649,7 +3848,7 @@ document.getElementById('subpageBack').addEventListener('click',subPageBack);
 
 const PRD_SPECS={
 'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页。首页文案规避保函/保险/法院/司法/律师等敏感字眼，用「等待出函/办结/受理单位」等中性表述；待办区可混排诉讼保全、学平、标后订单。',logic:['四项指标口径：等待确认/等待出函/材料不足=当前存量；出函成功=自然月已出函笔数（非全量历史）','快捷：订单审核→wait_confirm；业务办理→wait_issue；学平业务；工具助手','待办卡片 soft 文案渲染'],acceptance:['首页无敏感字眼','统计与快捷可跳转订单列表','出函成功跳转已出函列表','待办可进入详情'],api:'GET /api/inst/dashboard'},
-'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换；选具体业务线时显示对应状态筛选，诉讼保含等待选择/等待确认/等待签章/部分签章/等待支付/等待出函/出函成功/客服介入/订单关闭/等待退保/退保受理中/退保成功/材料不足；「全部」时隐藏状态筛选并展示全部订单。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图隐藏状态 Tab，直接列全部订单','诉讼保/学平险/标后各自显示对应状态筛选','点击进入对应详情页'],acceptance:['三类订单字段可读且不拥挤','业务线为全部时无状态筛选','选具体业务线后显示对应状态并与列表同步','出函成功可下载文件'],api:'GET /api/inst/orders?bizLine='},
+'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换；选具体业务线时显示对应状态筛选，诉讼保含等待签章/部分签章/等待支付/等待出函/出函成功/客服介入/订单关闭/等待退保/退保受理中/退保成功/材料不足（已移除等待选择、等待确认）；「全部」时隐藏状态筛选并展示全部订单。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图隐藏状态 Tab，直接列全部订单','诉讼保状态筛选不含等待选择/等待确认','点击进入对应详情页'],acceptance:['诉讼保筛选无等待选择/等待确认','业务线为全部时无状态筛选','选具体业务线后显示对应状态并与列表同步'],api:'GET /api/inst/orders?bizLine='},
 'enterprise-auth':{title:'企业认证',module:'账号',page:'enterpriseAuth',priority:'P0',business:'单页提交：企业基本信息（类型/名称/信用代码/注册资本/地址/营业执照/经营许可证）+ 法人信息（姓名/身份证号/手机号/身份证）→ 提交后状态=待审核。无开户、无打款。认证通过后「我的」才展示机构名称；人员姓名由团队/个人信息补齐，注册环节不采集。',logic:['企业类型三选一','执照 OCR 回填名称/代码/地址/法人','必填校验后提交','状态 pending→reviewing','审核中可修改重提','通过后绑定机构名到账号'],acceptance:['无开户打款步骤','必填缺项阻断提交','提交后展示待审核','「我的」同步待审核状态','未认证不展示机构名/业务员姓名'],api:'POST /api/ent/auth/submit'},
 'auth-login':{title:'登录注册',module:'账号',page:'我的 · 登录弹层',priority:'P0',business:'首次访问可浏览小程序；「我的」为未登录排版。点击登录后弹出半透明登录层（样式对齐 login.html）：手机号 + 短信验证码 + 图形验证码 + 微信一键授权。注册仅手机号/验证码/密码，不含机构名与人员姓名。',logic:['未登录「我的」展示空态与登录入口','点击弹出 authOverlay','图形验证码 Canvas 绘制，点击可刷新，登录前校验','自动唤起微信授权弹层','授权/登录后刷新「我的」','企业认证通过后才展示机构名与业务员姓名'],acceptance:['登录需校验图形验证码','点击图码可刷新','错误时提示并刷新','微信授权可允许/拒绝'],api:'POST /api/auth/wx · /sms · /login · /captcha · /register'},
 'stat-pending':{title:'等待确认统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示等待机构确认的订单数量（当前存量），点击直达等待确认列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=wait_confirm'],acceptance:['数字与列表等待确认数一致'],api:'GET /api/inst/stats/wait_confirm'},
@@ -3657,7 +3856,7 @@ const PRD_SPECS={
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入等待确认订单列表，缩短操作路径。',logic:['跳转 orderList filter=wait_confirm','自动选中「等待确认」筛选 Tab'],acceptance:['点击打开订单列表且仅显示等待确认'],api:'GET /api/inst/orders?status=wait_confirm'},
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入诉讼保「等待出函」订单列表，办理审核通过后的出函动作（非审核、非补材料）。',logic:['跳转 orderList filter=wait_issue biz=litigation','自动选中「等待出函」筛选 Tab','与数据看板「等待出函」同一数据源'],acceptance:['点击打开订单列表且仅显示等待出函','入口语义=出函办理'],api:'GET /api/inst/orders?status=wait_issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'顶部订单概要卡（订单号/状态/标的/材料完整度/材料数/法院案由），下接案件信息摘要、申请材料（预览进独立页）、证据链诊断与审核记录；四块内容可折叠展开。底部主操作不含「要求补材料」。',logic:['顶部材料完整度 = analyzeEvidenceChain(score)，与证据链同源','申请材料预览 → materialPreview 二级页（pushStack 可返回）','材料工具栏：pack/email/pushPc','底部主操作随状态变化'],acceptance:['完整度随订单材料变化','预览为新页面非弹层','底部无要求补材料'],api:'GET /api/inst/order/{id} · POST /api/inst/material/push-pc · POST /api/inst/material/download/zip · POST /api/inst/material/email'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'顶部订单概要卡（订单号/状态/标的/材料完整度/材料数/法院案由），下接案件信息摘要、申请材料（预览进独立页）、证据链诊断与审核记录。等待出函底部为「出函」「无法承保」。',logic:['顶部材料完整度与证据链同源','申请材料预览 → materialPreview 二级页','等待出函：出函表单（*保单号 *保单附件 保函附件 诉责材料 审核备注 材料处理）/ 无法承保（*审核备注）'],acceptance:['等待出函双按钮','出函必填校验保单号与保单附件','无法承保必填审核备注'],api:'GET /api/inst/order/{id} · POST /api/inst/order/{id}/issue · POST /api/inst/order/{id}/reject-underwrite'},
 'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链，输出诊断分析、材料完整度评分（百分制，总分 100）与提交判断。页内不放「评分规则」按钮；悬停证据链区域 1 秒后，本侧栏以表格展示完整评分规则与单项计算逻辑。',logic:['按案由匹配借贷 / 合同模板','节点权重加权命中计分（满分 100）','必填缺件优先补材料','fail 档阻断进入审核'],scoreTables:true,acceptance:['页内无「评分规则」按钮','悬停 1 秒后右侧 PRD 以表格展示规则','借贷/合同节点权重合计均为 100','每项含 keywords 命中计分说明','分数与节点命中状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；案件材料区内按状态显示打包下载、邮件发送、投送电脑端；含证据链诊断与审核记录；底部主操作与订单详情一致（进入审核等，无「要求补材料」）。',logic:['od-page：上滚下固','法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作在材料卡片内：驳回仅打包；其余含邮件与投送PC','打包/邮件/投送弹层支持勾选附件','证据链诊断 + 审核记录','底部主操作：renderOrderPrimaryActions','邮件发送弹层无取消按钮，点遮罩或关闭图标退出'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮在材料区内按状态显隐','底部无要求补材料','邮件弹层无取消按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
