@@ -158,7 +158,7 @@ clearTimeout(showToast._t);showToast._t=setTimeout(()=>toastEl.classList.remove(
 function enterApp(via){
 try{sessionStorage.setItem('ssbao_inst_logged_in','1');sessionStorage.setItem('ssbao_inst_login_via',via||'sms')}catch(e){}
 showToast(via==='wechat'?'微信授权成功':'登录成功');
-setTimeout(()=>{location.href='诉讼保.html?from=login'},450);
+setTimeout(()=>{location.href='workstation.html?from=login'},450);
 }
 function switchTab(tab){
 const isLogin=tab==='login';
