@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>诉讼保·工作台-PRD·原型</title>
+<title>函信保函通·PRD·原型</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <style>
@@ -110,9 +110,15 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .subpage-body.has-od-layout{padding:0;overflow:hidden;display:flex;flex-direction:column}
 .od-page{display:flex;flex-direction:column;flex:1;min-height:0;height:100%}
 .od-scroll{flex:1;overflow-y:auto;padding:16px 18px 12px;-webkit-overflow-scrolling:touch}
-.od-footer{flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 18px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.96);border-top:1px solid #E8EEF4;box-shadow:0 -6px 20px rgba(15,76,92,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.od-footer{flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding:10px 18px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.96);border-top:1px solid #E8EEF4;box-shadow:0 -6px 20px rgba(15,76,92,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.od-footer-primary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.od-footer-primary.single{grid-template-columns:1fr}
 .od-footer .sp-btn-primary,.od-footer .sp-btn-danger{margin:0;width:100%;padding:13px 10px;border-radius:40px;font-size:14px}
 .od-footer .sp-btn-danger{background:#FEE2E2;color:#B91C1C}
+.od-footer-utils{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.od-footer-utils .sp-btn-secondary{width:100%;margin:0;padding:10px 4px;border-radius:40px;font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.od-footer-utils .sp-btn-secondary i{font-size:12px}
+.ev-chain-card{cursor:default}
 .sp-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;border:1px solid #EDF2F9}
 .sp-card-title{font-size:14px;font-weight:700;color:#1C2E36;margin-bottom:10px}
 .sp-fold{padding:0;overflow:hidden}
@@ -278,6 +284,11 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .ent-upload.done i{color:#059669}
 .ent-tip{font-size:11px;color:#B45309;background:#FFFBEB;border-radius:12px;padding:10px 12px;line-height:1.55;margin-bottom:12px}
 .ent-tip i{margin-right:4px}
+.ent-tip.muted{color:#475569;background:#F1F5F9}
+.ent-ocr-hint{font-size:11px;color:#059669;background:#ECFDF5;border-radius:10px;padding:8px 10px;margin:0 0 10px;line-height:1.5;display:flex;align-items:flex-start;gap:6px}
+.ent-ocr-hint i{margin-top:2px;flex-shrink:0}
+.ent-field-hint{font-size:11px;color:#94A3B8;margin:-4px 0 10px;line-height:1.45}
+.ent-sms-ok{font-size:11px;color:#059669;font-weight:600;margin:-4px 0 10px;display:flex;align-items:center;gap:4px}
 .settings-list{background:#fff;border-radius:28px;border:1px solid #EDF2F9;overflow:hidden;margin-top:12px}
 .settings-item{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #F0F2F8;cursor:pointer}
 .settings-item:last-child{border-bottom:none}
@@ -292,6 +303,9 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .profile-auth-go{border:none;background:#1A6B7C;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:inherit;line-height:1.2}
 .setting-right.auth-done{color:#059669;font-weight:700;font-size:13px}
 .setting-right.auth-todo{color:#1A6B7C;font-weight:700;font-size:13px}
+.setting-right.auth-review{color:#B45309;font-weight:700;font-size:13px}
+.profile-auth-row .auth-review{font-size:11px;color:#B45309;font-weight:600}
+.sp-label .req{color:#DC2626;margin-left:2px}
 .switch-toggle{width:46px;height:24px;background:#CBD5E1;border-radius:40px;position:relative;cursor:pointer}
 .switch-toggle::after{content:"";width:20px;height:20px;background:#fff;border-radius:20px;position:absolute;top:2px;left:3px;transition:.2s}
 .switch-toggle.active{background:#1A6B7C}.switch-toggle.active::after{left:23px}
@@ -438,12 +452,21 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .prd-list{list-style:none}.prd-list li{font-size:12px;color:#334155;line-height:1.65;padding:6px 0 6px 18px;position:relative;border-bottom:1px solid #F1F5F9}
 .prd-list li::before{content:"✓";position:absolute;left:0;color:#1A6B7C;font-weight:700}
 .prd-api-box{background:#0F172A;color:#E2E8F0;border-radius:10px;padding:12px;font-size:11px;font-family:Consolas,monospace}
+.prd-rule-table-wrap{overflow-x:auto;margin-bottom:10px;border:1px solid #E2E8F0;border-radius:12px;background:#fff}
+.prd-rule-table{width:100%;border-collapse:collapse;font-size:11px;min-width:320px}
+.prd-rule-table th{text-align:left;padding:8px 10px;background:#F1F5F9;color:#475569;font-weight:700;border-bottom:1px solid #E2E8F0;white-space:nowrap}
+.prd-rule-table td{padding:8px 10px;color:#334155;border-bottom:1px solid #F1F5F9;vertical-align:top;line-height:1.55}
+.prd-rule-table tr:last-child td{border-bottom:none}
+.prd-rule-table .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:#0F4C5C;white-space:nowrap}
+.prd-rule-table .tag-req{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:#FEE2E2;color:#B91C1C}
+.prd-rule-table .tag-opt{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:#E0F2FE;color:#0369A1}
+.prd-rule-hint{font-size:11px;color:#64748B;line-height:1.6;margin:0 0 10px;padding:10px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px}
 .prd-highlight{outline:2px solid #F59E0B!important;outline-offset:2px;background:rgba(245,158,11,.08)!important}
 .prd-pending{outline:2px dashed #94A3B8!important;animation:prd-pulse 1s infinite}
 @keyframes prd-pulse{0%,100%{outline-color:#94A3B8}50%{outline-color:#64748B}}
 .prd-tooltip{position:fixed;z-index:99999;pointer-events:none;background:#1E293B;color:#fff;font-size:11px;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .15s}
 .prd-tooltip.show{opacity:1}
-.prd-pending-hint{position:fixed;z-index:99997;background:rgba(15,76,92,.92);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;opacity:0}
+.prd-pending-hint{position:fixed;z-index:99997;background:rgba(15,76,92,.92);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .15s}
 .prd-pending-hint.show{opacity:1}
 .prd-mode-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(15,76,92,.95);color:#fff;padding:8px 20px;border-radius:30px;font-size:12px;font-weight:600;z-index:99998}
 .sp-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(30,50,70,.92);color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;z-index:200;display:none}
@@ -705,7 +728,7 @@ body.embed-mode #authOverlay{display:none!important}
 <div class="wx-sheet-head">
 <div class="wx-app-ico"><i class="fas fa-shield-alt"></i></div>
 <div>
-<h3>诉讼保 申请</h3>
+<h3>函信保函通 申请</h3>
 <p>获取你的微信授权以完成登录</p>
 </div>
 </div>
@@ -744,7 +767,7 @@ body.embed-mode #authOverlay{display:none!important}
 <div class="pc-main" id="pcMain"></div>
 </div>
 </div>
-<aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 诉讼保机构端小程序 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR归类·结构化预览·机构匹配·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V8</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
+<aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 函信保函通 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR归类·结构化预览·机构匹配·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V8</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
 </div>
 <div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V8 · 未登录可进「我的」空态 · 点击弹出登录（对齐 <a href="login.html" style="color:#A5F3FC">login.html</a>）· 文件空间站 · <a href="version/诉讼保-文件助手.html" target="_blank" style="color:#A5F3FC">诉讼保-文件助手.html</a></div>
 <div class="prd-tooltip" id="prdTooltip"></div>
@@ -754,8 +777,19 @@ body.embed-mode #authOverlay{display:none!important}
 (function(){
 const scroll=document.getElementById('mainScroll'),tabContent=document.getElementById('tabContent'),subOverlay=document.getElementById('subpageOverlay'),subBody=document.getElementById('subpageBody'),subTitle=document.getElementById('subpageTitle'),subSubtitle=document.getElementById('subpageSubtitle'),spToast=document.getElementById('spToast');
 let currentNav='workbench',currentOrderFilter='all',currentXuepingFilter='all',currentBizLine='all',currentSubId=null,subPageStack=[];
-let authMode='login',authLoggedIn=false,entAuthStep=0,entAuthStatus='pending';
+let authMode='login',authLoggedIn=false,entAuthStatus='pending';
+let authUserPhone='13800138000',authLoginVia='sms',authStaffName='';
 let msgFilter='all';
+function maskPhone(p){
+const s=String(p||'').replace(/\D/g,'');
+if(s.length<7)return p||'—';
+return s.slice(0,3)+'****'+s.slice(-4);
+}
+function profileDisplayName(){
+if(entAuthStatus==='passed'&&authStaffName)return authStaffName;
+if(authLoginVia==='wx')return '微信用户';
+return maskPhone(authUserPhone);
+}
 const MSG_TYPE_META={
 audit:{label:'审核',chip:'audit',ico:'fa-clipboard-check',cls:'audit'},
 biz:{label:'业务',chip:'biz',ico:'fa-file-signature',cls:'biz'},
@@ -772,11 +806,25 @@ const MESSAGE_LIST=[
 {id:'m6',type:'system',title:'企业认证进度提醒',desc:'贵司企业认证尚未完成，完成后方可开通完整业务权限。',time:'2天前',group:'earlier',unread:false,action:'去认证',page:'enterpriseAuth'},
 {id:'m7',type:'audit',title:'学平险待确认',desc:'XP20250521003 · 北京某中学团体投保，等待机构确认承保方案。',time:'3天前',group:'earlier',unread:false,action:'去确认',page:'orderList'}
 ];
-const ENT_AUTH_STATE={license:false,idFront:false,idBack:false,permit:false,bankName:'中国工商银行',bankAccount:'6222 **** **** 8899',companyName:'北京某某科技有限公司',creditCode:'91110105MA01234567',legalName:'张三',payAmount:''};
+const ENT_AUTH_STATE={
+license:false,bizPermit:false,idFront:false,idBack:false,
+entType:'',companyName:'',creditCode:'',regCapital:'',address:'',
+legalName:'',legalIdNo:'',legalPhone:''
+};
+const ENT_TYPE_OPTS=[
+{key:'bank',label:'银行'},
+{key:'insurance',label:'保险'},
+{key:'guarantee',label:'担保'}
+];
+function entAuthStatusMeta(){
+if(entAuthStatus==='passed')return{label:'已认证',cls:'auth-done',profile:'ok',profileText:ENT_AUTH_STATE.companyName||'企业已认证'};
+if(entAuthStatus==='reviewing')return{label:'待审核',cls:'auth-review',profile:'review',profileText:'认证资料审核中'};
+return{label:'去认证',cls:'auth-todo',profile:'pending',profileText:'待完成企业认证'};
+}
 const TOOL_CHILD_PAGES=new Set(['rarBatchPack','structExtract','smartAnalysis','crossDeviceSync']);
 const TOOL_HUB_ID='toolAssistantHub';
 let ORDER_STATE={
-id:'SS20250529001',status:'review',amount:8500000,premium:7225,
+id:'SS20250529001',status:'pending',amount:8500000,premium:7225,
 applicant:'张三',respondent:'北京朝阳区某某科技有限公司',
 caseNo:'（2025）京0105民初1234号',court:'北京朝阳区人民法院',
 type:'财产保全',preserveCategory:'诉前保全',cause:'买卖合同纠纷',targetAmount:500,
@@ -951,9 +999,9 @@ nodes:[
 ]}
 };
 const EVIDENCE_SCORE_RULES=[
-{range:'≥ 80 分',level:'可提交审核',tip:'关键节点齐全，缺项均为建议项；可进入核保审核'},
-{range:'60 ~ 79 分',level:'建议补材料后提交',tip:'主链基本成立，但仍有影响证明力的缺口，建议补件后再审'},
-{range:'< 60 分',level:'材料不足 · 暂缓提交',tip:'关键必填节点缺失，证据链无法闭环，应先要求补材料'}
+{range:'≥ 80 分',level:'可提交审核',calc:'完整度≥80 且必填节点全部命中',tip:'关键节点齐全，缺项仅为建议项；可进入核保审核'},
+{range:'60 ~ 79 分',level:'建议补材料后提交',calc:'完整度∈[60,79]，或必填缺件≤1 且完整度≥50',tip:'主链基本成立，仍有证明力缺口，建议补件后再审'},
+{range:'< 60 分',level:'材料不足 · 暂缓提交',calc:'完整度<60，或关键必填节点缺失',tip:'证据链无法闭环，应先要求补材料；阻断进入审核'}
 ];
 function resolveEvidenceChainType(cause){
 const c=String(cause||'');
@@ -994,6 +1042,35 @@ if(!missRequired.length&&!missOptional.length)diagParts.push('证据链闭环完
 else if(tpl.key==='loan')diagParts.push('借贷案件需同时覆盖「合意/协议」与「资金实际交付」，缺一则证明力不足。');
 else diagParts.push('合同案件需优先固定「合同关系成立」与「履约证明」，沟通记录用于补强。');
 return{tpl,nodes,score,level,judge,judgeTip,diag:diagParts.join(''),missRequired,missOptional};
+}
+/** 右侧 PRD：评分规则表格（百分制 · 与模板权重同源） */
+function renderEvidenceChainScoreTablesHtml(){
+const formula=`<p class="prd-rule-hint"><strong style="color:#0F4C5C">总分 100 分 · 计算公式</strong><br>
+完整度 = 已命中节点权重之和 ÷ 模板节点总权重 × 100（四舍五入取整）<br>
+① 按案由匹配模板（借贷 / 合同，默认合同）；② 材料文件名命中该节点任一 keywords → 得该节点<strong>全部</strong>权重分；③ 未命中 → 0 分；④ 同一节点多份材料<strong>不重复加分</strong>；⑤ 必填缺件优先补材料，fail 档阻断「进入审核」。</p>`;
+const nodeTable=(tpl)=>{
+const total=tpl.nodes.reduce((s,n)=>s+n.weight,0);
+const rows=tpl.nodes.map((n,i)=>`<tr>
+<td>${i+1}</td>
+<td><strong>${n.title}</strong><br><span style="color:#94A3B8;font-size:10px">${n.desc}</span></td>
+<td class="num">${n.weight}</td>
+<td>${n.required?'<span class="tag-req">必填</span>':'<span class="tag-opt">建议</span>'}</td>
+<td>命中 keywords「${(n.patterns||[]).join(' / ')}」任一 → <strong>+${n.weight} 分</strong>；未命中 → <strong>0 分</strong>；多份命中仍只计一次</td>
+</tr>`).join('');
+return`<div class="prd-section-title" style="margin-top:4px">${tpl.label} · 节点权重（合计 ${total} = 100）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>#</th><th>证据节点</th><th class="num">权重分</th><th>类型</th><th>单项计算规则</th></tr></thead>
+<tbody>${rows}<tr><td colspan="2" style="font-weight:800;color:#0F4C5C">合计</td><td class="num">${total}</td><td colspan="2" style="color:#64748B">该模板满分 100；完整度按上表加权汇总</td></tr></tbody></table></div>`;
+};
+const judgeRows=EVIDENCE_SCORE_RULES.map(x=>`<tr>
+<td class="num">${x.range}</td>
+<td><strong>${x.level}</strong></td>
+<td>${x.calc}</td>
+<td>${x.tip}</td>
+</tr>`).join('');
+const judgeTable=`<div class="prd-section-title">提交判断阈值</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th class="num">完整度</th><th>判断</th><th>判定规则</th><th>说明</th></tr></thead>
+<tbody>${judgeRows}</tbody></table></div>`;
+return formula+nodeTable(EVIDENCE_CHAIN_TEMPLATES.loan)+nodeTable(EVIDENCE_CHAIN_TEMPLATES.contract)+judgeTable;
 }
 /** 订单详情区块折叠态：true=收起 */
 let ORDER_DETAIL_FOLD={case:false,materials:true,evidence:false,audit:true};
@@ -1036,14 +1113,6 @@ return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"
 extraClass:'ev-chain-card',prd:'evidence-chain',
 tools:`<span class="ev-chain-type ${r.tpl.typeClass}">${r.tpl.label}</span>`
 });
-}
-function openEvidenceScoreRules(){
-const r=analyzeEvidenceChain(ORDER_STATE);
-const rows=EVIDENCE_SCORE_RULES.map(x=>`<div class="sp-info-row"><span class="k">${x.range}</span><span class="v" style="text-align:left">${x.level}<br><span style="font-weight:500;color:#64748B;font-size:11px">${x.tip}</span></span></div>`).join('');
-const nodeWeights=r.tpl.nodes.map(n=>`<div class="sp-info-row"><span class="k">${n.title}</span><span class="v">${n.weight}分 · ${n.required?'必填':'建议'}</span></div>`).join('');
-showModal(`${renderModalHead('<i class="fas fa-balance-scale" style="color:#1A6B7C;margin-right:4px"></i>材料完整度评分规则',`当前模板：${r.tpl.label}。按节点权重加权计分（命中即得分），再给出提交判断。`)}
-<div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">提交判断阈值</div>${rows}</div>
-<div class="sp-card" style="margin:0;text-align:left;padding:12px"><div class="sp-card-title" style="margin-bottom:6px">节点权重（本订单）</div>${nodeWeights}</div>`,{form:true});
 }
 function openEvidenceSupplementModal(){
 const ev=analyzeEvidenceChain(ORDER_STATE);
@@ -1128,8 +1197,61 @@ ORDER_STATE=Object.assign({},ORDER_STATE,{
 id:found.id,status:found.status,amount:found.amount,premium:Math.round((found.amount||0)*0.00085)||ORDER_STATE.premium,
 applicant:found.applicant,respondent:found.respondent,caseNo:found.caseNo,court:found.court,
 type:found.type,cause:found.cause,targetAmount:found.amount?Math.round(found.amount/10000):ORDER_STATE.targetAmount,
+guaranteeNo:found.guaranteeNo||'',
 materials:(DEMO_MATERIALS_BY_CHAIN[chainKey]||DEMO_MATERIALS_BY_CHAIN.contract).slice()
 });
+}
+
+/** 订单材料操作：按状态显示打包下载 / 邮件发送 / 投送电脑端 */
+function getOrderMaterialActionFlags(status){
+const st=status||'pending';
+return{
+pack:['pending','review','supplement','issue','done','reject'].includes(st),
+email:['pending','review','supplement','issue','done'].includes(st),
+pushPc:['pending','review','supplement','issue','done'].includes(st)
+};
+}
+function renderOrderMaterialUtils(status){
+const f=getOrderMaterialActionFlags(status);
+const btns=[];
+if(f.pack)btns.push(`<button type="button" class="sp-btn-secondary" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>`);
+if(f.email)btns.push(`<button type="button" class="sp-btn-secondary" data-action="case-send-email"><i class="fas fa-envelope"></i> 邮件发送</button>`);
+if(f.pushPc)btns.push(`<button type="button" class="sp-btn-secondary" data-action="case-push-pc"><i class="fas fa-desktop"></i> 投送电脑端</button>`);
+if(!btns.length)return'';
+const cols=btns.length===1?'1fr':btns.length===2?'1fr 1fr':'repeat(3,1fr)';
+return`<div class="od-footer-utils" style="grid-template-columns:${cols}">${btns.join('')}</div>`;
+}
+function renderOrderPrimaryActions(order){
+const st=order.status||'pending';
+const ev=analyzeEvidenceChain(order);
+const canEnterReview=ev.level!=='fail';
+if(st==='pending'||st==='review'){
+return`<div class="od-footer-primary">
+<button type="button" class="sp-btn-danger" data-action="ev-chain-supplement">要求补材料</button>
+<button type="button" class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'完整度不足'}</button>
+</div>`;
+}
+if(st==='supplement'){
+return`<div class="od-footer-primary single">
+<button type="button" class="sp-btn-primary" data-action="toast" data-msg="已提醒申请人尽快补件">催补材料</button>
+</div>`;
+}
+if(st==='issue'){
+return`<div class="od-footer-primary single">
+<button type="button" class="sp-btn-primary" data-action="go-issue-letter"><i class="fas fa-file-signature"></i> 确认出函</button>
+</div>`;
+}
+if(st==='done'){
+return`<div class="od-footer-primary single">
+<button type="button" class="sp-btn-primary" data-action="download-guarantee" data-gno="${order.guaranteeNo||order.id}"><i class="fas fa-download"></i> 下载保函</button>
+</div>`;
+}
+if(st==='reject'){
+return`<div class="od-footer-primary single">
+<button type="button" class="sp-btn-secondary" style="width:100%;padding:13px;border-radius:40px" data-action="toast" data-msg="订单已驳回，可查看审核记录">已驳回</button>
+</div>`;
+}
+return'';
 }
 
 const ORDER_STATUS_META={
@@ -1243,7 +1365,7 @@ if(v>=10000)return'¥'+(v/10000).toLocaleString('zh-CN',{maximumFractionDigits:v
 return formatPreserveAmt(v);
 }
 function softStatusLabel(status){
-const map={pending:'待审核',issue:'待办理',supplement:'待补材料',done:'已办结',reject:'已驳回',review:'审核中'};
+const map={pending:'待审核',issue:'待出函',supplement:'待补材料',done:'已出函',reject:'已驳回',review:'审核中'};
 return map[status]||(ORDER_STATUS_META[status]&&ORDER_STATUS_META[status].label)||status;
 }
 function matchAllBizFilter(status,filter){
@@ -2024,7 +2146,10 @@ if(id==='orderList'){
 const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
 subTitle.textContent=currentOrderFilter==='all'?(bizLabel+'订单'):(bizLabel+' · '+currentOrderFilter);
 }
-if(id==='enterpriseAuth')subSubtitle.textContent=entAuthStatus==='passed'?'已认证':'证照上传 · 打款验证';
+if(id==='enterpriseAuth'){
+const meta=entAuthStatusMeta();
+subSubtitle.textContent=entAuthStatus==='pending'?'填写企业与法人资料':meta.label;
+}
 if(id==='biaohouDetail')subSubtitle.textContent=BIAOHUO_STATE.id||'';
 if(id==='xuepingOrders'){
 const meta=XUEPING_FILTERS.find(f=>f.key===currentXuepingFilter);
@@ -2032,7 +2157,13 @@ subTitle.textContent=currentXuepingFilter==='all'?'学平险订单':('学平险 
 }
 if(id==='xuepingDetail')subSubtitle.textContent=XUEPING_STATE.id||'';
 if(id==='crossDeviceSync'){syncMobileTab=syncLoggedIn?'files':'scanLogin';showPcPanel(syncLoggedIn?'workbench':'pair');}else if(!TOOL_CHILD_PAGES.has(id))hidePcPanel();
-bindSubEvents(id)}
+bindSubEvents(id);
+if(id==='orderDetail'){
+setTimeout(()=>{
+try{window.__bindEvidenceChainPrdHover&&window.__bindEvidenceChainPrdHover()}catch(e){}
+},0);
+}
+}
 function closeSubPage(){closeModal();subOverlay.classList.remove('active');document.getElementById('bottomNav').style.display='flex';currentSubId=null;subPageStack=[];document.getElementById('subpageCrumb').style.display='none';subBody.classList.remove('has-od-layout');hidePcPanel()}
 function subPageBack(){
 if(subPageStack.length){const prev=subPageStack.pop();openSubPage(prev,{keepStack:true});return}
@@ -2041,7 +2172,7 @@ closeSubPage()}
 function renderAuthPage(){
 const isLogin=authMode==='login';
 return`<div class="auth-brand"><div class="auth-brand-logo"><i class="fas fa-shield-alt"></i></div>
-<h1>诉讼保</h1><p>机构业务工作台<br>安全登录 · 高效协同</p></div>
+<h1>函信保函通</h1><p>机构业务协同<br>安全登录 · 高效办理</p></div>
 <div class="auth-panel">
 <div class="auth-tabs">
 <button type="button" class="${isLogin?'on':''}" data-auth-tab="login">登录</button>
@@ -2095,7 +2226,15 @@ if(!currentSubId)document.getElementById('bottomNav').style.display='flex';
 function enterAppAfterAuth(opts){
 opts=opts||{};
 authLoggedIn=true;
-try{sessionStorage.setItem('ssbao_inst_logged_in','1');if(opts.via)sessionStorage.setItem('ssbao_inst_login_via',opts.via)}catch(e){}
+authLoginVia=opts.via||'sms';
+if(opts.phone)authUserPhone=opts.phone;
+else{
+const phoneEl=document.getElementById(opts.via==='register'?'regPhone':'authPhone');
+if(phoneEl&&phoneEl.value)authUserPhone=phoneEl.value.trim();
+}
+/* 注册/登录仅手机号，人员姓名待企业认证通过后由团队/个人信息补齐 */
+if(opts.via==='register')authStaffName='';
+try{sessionStorage.setItem('ssbao_inst_logged_in','1');if(opts.via)sessionStorage.setItem('ssbao_inst_login_via',opts.via);sessionStorage.setItem('ssbao_inst_phone',authUserPhone)}catch(e){}
 hideAuthOverlay();
 setActiveNav(currentNav||'profile');
 if(opts.needEntAuth&&entAuthStatus!=='passed'){
@@ -2135,58 +2274,103 @@ enterAppAfterAuth({needEntAuth:true,via:'register'});
 function renderEntUpload(key,icon,title,sub){
 const done=!!ENT_AUTH_STATE[key];
 return`<div class="ent-upload${done?' done':''}" data-action="ent-upload" data-key="${key}">
-<i class="fas ${done?'fa-check-circle':icon}"></i><strong>${title}</strong><span>${done?'已上传 · 识别成功':sub}</span></div>`;
+<i class="fas ${done?'fa-check-circle':icon}"></i><strong>${title}</strong><span>${done?'已上传':sub}</span></div>`;
+}
+function saveEntAuthForm(){
+const typeEl=document.querySelector('#entTypeRow .sp-tag.selected');
+if(typeEl)ENT_AUTH_STATE.entType=typeEl.dataset.entType||'';
+const map={
+entCompanyName:'companyName',entCreditCode:'creditCode',entRegCapital:'regCapital',entAddress:'address',
+entLegalName:'legalName',entLegalIdNo:'legalIdNo',entLegalPhone:'legalPhone'
+};
+Object.keys(map).forEach(id=>{const el=document.getElementById(id);if(el)ENT_AUTH_STATE[map[id]]=el.value.trim()});
+}
+function validateEntAuthForm(){
+saveEntAuthForm();
+if(!ENT_AUTH_STATE.entType){showToast('请选择企业类型');return false}
+if(!ENT_AUTH_STATE.companyName){showToast('请填写企业名称');return false}
+if(!ENT_AUTH_STATE.creditCode){showToast('请填写统一社会信用代码');return false}
+if(!ENT_AUTH_STATE.address){showToast('请填写详细地址');return false}
+if(!ENT_AUTH_STATE.license){showToast('请上传营业执照');return false}
+if(!ENT_AUTH_STATE.bizPermit){showToast('请上传经营许可证');return false}
+if(!ENT_AUTH_STATE.legalName){showToast('请填写法人姓名');return false}
+if(!/^1\d{10}$/.test(ENT_AUTH_STATE.legalPhone)){showToast('请填写正确的法人手机号');return false}
+if(!ENT_AUTH_STATE.idFront||!ENT_AUTH_STATE.idBack){showToast('请上传法人身份证正反面');return false}
+return true;
 }
 function renderEnterpriseAuthPage(){
-const steps=['上传证照','开户信息','打款验证','认证结果'];
-const stepBar=`<div class="ent-step-bar">${steps.map((s,i)=>`<div class="ent-step${i<entAuthStep?' done':(i===entAuthStep?' on':'')}">${i+1}. ${s}</div>`).join('')}</div>`;
-const tip=`<div class="ent-tip"><i class="fas fa-info-circle"></i>与保函通一致（7.31）：营业执照 + 法人身份证 + 开户许可证 → 小额打款验证。</div>`;
-if(entAuthStep===0)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">① 上传营业执照及法人身份证</div>
-${renderEntUpload('license','fa-id-card','企业营业执照','拍照/相册上传，自动识别企业信息')}
-${renderEntUpload('idFront','fa-address-card','法人身份证 · 人像面','系统自动识别姓名与证件号')}
-${renderEntUpload('idBack','fa-address-card','法人身份证 · 国徽面','请确保边角完整、文字清晰')}
-${ENT_AUTH_STATE.license?`<div class="sp-card" style="background:#F8FAFC;margin:0"><div class="sp-info-row"><span class="k">企业名称</span><span class="v">${ENT_AUTH_STATE.companyName}</span></div>
-<div class="sp-info-row"><span class="k">信用代码</span><span class="v">${ENT_AUTH_STATE.creditCode}</span></div>
-<div class="sp-info-row"><span class="k">法定代表人</span><span class="v">${ENT_AUTH_STATE.legalName}</span></div></div>`:''}
-</div><button type="button" class="sp-btn-primary" data-action="ent-next">下一步</button>`;
-if(entAuthStep===1)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">② 企业基本开户信息</div>
-${renderEntUpload('permit','fa-university','开户许可证','上传后自动识别开户行与账号')}
-<span class="sp-label">开户银行</span><input class="sp-input" id="entBankName" value="${ENT_AUTH_STATE.bankName}">
-<span class="sp-label">基本户账号</span><input class="sp-input" id="entBankAccount" value="${ENT_AUTH_STATE.bankAccount}">
-<p style="font-size:11px;color:#64748B;line-height:1.55;margin-bottom:4px">请核对开户信息无误后再进入打款验证。</p></div>
-<div class="sp-grid-2"><button type="button" class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="ent-prev">上一步</button>
-<button type="button" class="sp-btn-primary" style="margin:0" data-action="ent-next">下一步</button></div>`;
-if(entAuthStep===2)return tip+stepBar+`<div class="sp-card"><div class="sp-card-title">③ 打款验证</div>
-<p style="font-size:13px;color:#334155;line-height:1.7;margin-bottom:12px">系统已向贵司基本户 <strong>${ENT_AUTH_STATE.bankAccount}</strong> 打入一笔小额款项。请财务登录网银确认到账金额后回填。</p>
-<span class="sp-label">到账金额（元）</span><input class="sp-input" id="entPayAmount" type="text" placeholder="例如 0.12" value="${ENT_AUTH_STATE.payAmount}">
-<p style="font-size:11px;color:#94A3B8">演示可填任意金额后提交</p></div>
-<div class="sp-grid-2"><button type="button" class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="ent-prev">上一步</button>
-<button type="button" class="sp-btn-primary" style="margin:0" data-action="ent-submit">提交验证</button></div>`;
-const ok=entAuthStatus==='passed';
-return stepBar+`<div class="sp-result-box" style="padding:28px 16px">
-<i class="fas ${ok?'fa-check-circle':'fa-times-circle'}" style="font-size:48px;color:${ok?'#059669':'#DC2626'}"></i>
-<p style="font-size:18px;font-weight:800;color:#0F4C5C;margin:12px 0 6px">${ok?'企业认证成功':'企业认证失败'}</p>
-<p style="font-size:12px;color:#64748B;line-height:1.6">${ok?'已开通完整业务权限，可返回工作台处理订单。':'请核对资料后重新提交。'}</p>
+const typeLabel=(ENT_TYPE_OPTS.find(t=>t.key===ENT_AUTH_STATE.entType)||{}).label||'—';
+if(entAuthStatus==='reviewing'||entAuthStatus==='passed'){
+const reviewing=entAuthStatus==='reviewing';
+return`<div class="sp-result-box" style="padding:28px 16px">
+<i class="fas ${reviewing?'fa-clock':'fa-check-circle'}" style="font-size:48px;color:${reviewing?'#D97706':'#059669'}"></i>
+<p style="font-size:18px;font-weight:800;color:#0F4C5C;margin:12px 0 6px">${reviewing?'已提交 · 待审核':'企业认证已通过'}</p>
+<p style="font-size:12px;color:#64748B;line-height:1.6">${reviewing?'资料已提交平台审核，审核通过后将开通完整业务权限。':'已开通完整业务权限，可返回工作台处理订单。'}</p>
+<div class="sp-card" style="background:#F8FAFC;margin:16px 0 0;text-align:left">
+<div class="sp-info-row"><span class="k">企业类型</span><span class="v">${typeLabel}</span></div>
+<div class="sp-info-row"><span class="k">企业名称</span><span class="v">${ENT_AUTH_STATE.companyName||'—'}</span></div>
+<div class="sp-info-row"><span class="k">信用代码</span><span class="v">${ENT_AUTH_STATE.creditCode||'—'}</span></div>
+<div class="sp-info-row"><span class="k">注册资本</span><span class="v">${ENT_AUTH_STATE.regCapital?ENT_AUTH_STATE.regCapital+' 万元':'—'}</span></div>
+<div class="sp-info-row"><span class="k">详细地址</span><span class="v">${ENT_AUTH_STATE.address||'—'}</span></div>
+<div class="sp-info-row"><span class="k">法人</span><span class="v">${ENT_AUTH_STATE.legalName||'—'} · ${ENT_AUTH_STATE.legalPhone||'—'}</span></div>
 </div>
-${ok?`<button type="button" class="sp-btn-primary" data-action="ent-done">进入工作台</button>`:
-`<button type="button" class="sp-btn-primary" data-action="ent-retry">重新提交资料</button>`}`;
+</div>
+${reviewing
+?`<button type="button" class="sp-btn-secondary" style="width:100%;margin-top:12px" data-action="ent-retry">修改并重新提交</button>
+<button type="button" class="sp-btn-primary" data-action="ent-done">返回</button>`
+:`<button type="button" class="sp-btn-primary" data-action="ent-done">进入工作台</button>`}`;
+}
+const typeTags=ENT_TYPE_OPTS.map(t=>`<span class="sp-tag${ENT_AUTH_STATE.entType===t.key?' selected':''}" data-select data-ent-type="${t.key}">${t.label}</span>`).join('');
+const ocrHint=ENT_AUTH_STATE.license
+?`<div class="ent-ocr-hint"><i class="fas fa-magic"></i><span>营业执照已识别，企业名称、信用代码、地址等已回填，请核对后可修改。</span></div>`
+:`<p class="ent-field-hint">上传营业执照后，可自动识别并回填企业名称、统一社会信用代码、注册资本、详细地址及法人姓名。</p>`;
+return`<div class="ent-tip"><i class="fas fa-info-circle"></i>请完善企业基本信息与法人信息并上传证照，提交后进入待审核，无需开户打款。</div>
+<div class="sp-card"><div class="sp-card-title">企业基本信息</div>
+<span class="sp-label">企业类型<span class="req">*</span></span>
+<div class="sp-tag-row" id="entTypeRow">${typeTags}</div>
+<span class="sp-label">企业名称<span class="req">*</span></span>
+<input class="sp-input" id="entCompanyName" placeholder="上传执照后自动回填，可修改" value="${ENT_AUTH_STATE.companyName}">
+<span class="sp-label">统一社会信用代码<span class="req">*</span></span>
+<input class="sp-input" id="entCreditCode" placeholder="上传执照后自动回填，可修改" value="${ENT_AUTH_STATE.creditCode}" maxlength="18">
+<span class="sp-label">注册资本（万元）</span>
+<input class="sp-input" id="entRegCapital" type="number" inputmode="decimal" placeholder="选填，如 10000" value="${ENT_AUTH_STATE.regCapital}">
+<span class="sp-label">详细地址<span class="req">*</span></span>
+<input class="sp-input" id="entAddress" placeholder="注册地址 / 经营地址" value="${ENT_AUTH_STATE.address}">
+<span class="sp-label">营业执照<span class="req">*</span></span>
+${renderEntUpload('license','fa-id-card','营业执照','拍照/相册上传，自动识别企业信息')}
+${ocrHint}
+<span class="sp-label">经营许可证<span class="req">*</span></span>
+${renderEntUpload('bizPermit','fa-file-contract','经营许可证','上传金融/保险/担保业务经营许可证明')}
+</div>
+<div class="sp-card"><div class="sp-card-title">企业法人信息</div>
+<span class="sp-label">法人姓名<span class="req">*</span></span>
+<input class="sp-input" id="entLegalName" placeholder="OCR 回填或手动填写" value="${ENT_AUTH_STATE.legalName}">
+<span class="sp-label">法人身份证号</span>
+<input class="sp-input" id="entLegalIdNo" placeholder="选填，上传身份证后可回填" value="${ENT_AUTH_STATE.legalIdNo}" maxlength="18">
+<span class="sp-label">手机号<span class="req">*</span></span>
+<input class="sp-input" id="entLegalPhone" type="tel" maxlength="11" inputmode="tel" placeholder="法人联系手机号" value="${ENT_AUTH_STATE.legalPhone}">
+<span class="sp-label">身份证<span class="req">*</span></span>
+${renderEntUpload('idFront','fa-address-card','身份证 · 人像面','系统自动识别姓名与证件号')}
+${renderEntUpload('idBack','fa-address-card','身份证 · 国徽面','请确保边角完整、文字清晰')}
+</div>
+<button type="button" class="sp-btn-primary" data-action="ent-submit">提交认证</button>`;
 }
 
-const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作台</h2><p>永安机构 · 业务协同</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
+const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作台</h2><p>业务协同工作台</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
 <div class="stats-dashboard">
 <div class="stats-dashboard-head"><span class="stats-dashboard-title">📊 数据看板</span></div>
 <div class="stats-grid">
 <div class="stat-item stat-pending" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-pending.svg" alt="待审核"></div><div class="stat-item-body"><div class="stat-number">12</div><div class="stat-label">待审核</div></div></div>
-<div class="stat-item stat-issue" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-issue.svg" alt="待办理"></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待办理</div></div></div>
+<div class="stat-item stat-issue" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-issue.svg" alt="待办理"></div><div class="stat-item-body"><div class="stat-number">5</div><div class="stat-label">待出函</div></div></div>
 <div class="stat-item stat-supplement" data-page="orderList" data-filter="supplement" data-biz="litigation"><div class="stat-item-icon"><img src="assets/wb/stat-supplement.svg" alt="待补材料"></div><div class="stat-item-body"><div class="stat-number">3</div><div class="stat-label">待补材料</div></div></div>
-<div class="stat-item stat-monthly" data-page="statsReport"><div class="stat-item-icon"><img src="assets/wb/stat-done.svg" alt="本月办结"></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月办结</div></div></div>
+<div class="stat-item stat-monthly" data-page="orderList" data-filter="done" data-biz="litigation" data-period="month"><div class="stat-item-icon"><img src="assets/wb/stat-done.svg" alt="本月办结"></div><div class="stat-item-body"><div class="stat-number">86</div><div class="stat-label">本月出函</div></div></div>
 </div></div>
 <div class="alert-banner" data-page="orderList" data-filter="pending" data-biz="litigation"><strong style="font-size:15px;"><i class="fas fa-exclamation-circle"></i> 12 笔订单待审核，请尽快处理</strong><span class="alert-badge">去处理</span></div>
 
 <div class="section-title"><span>⚡ 快捷操作</span></div>
 <div class="quick-grid">
 <div class="quick-item" data-page="orderList" data-filter="pending" data-biz="litigation"><div class="quick-icon"><img src="assets/wb/qa-audit.svg" alt="订单审核"></div><span>订单审核</span></div>
-<div class="quick-item" data-page="orderList" data-filter="issue" data-biz="litigation"><div class="quick-icon"><img src="assets/wb/qa-issue.svg" alt="业务办理"></div><span>业务办理</span></div>
+<div class="quick-item" data-page="orderList" data-filter="issue" data-biz="litigation" title="进入诉讼保·待出函列表"><div class="quick-icon"><img src="assets/wb/qa-issue.svg" alt="业务办理"></div><span>业务办理</span></div>
 <div class="quick-item" data-page="orderList" data-biz="xueping"><div class="quick-icon"><img src="assets/wb/qa-xueping.svg" alt="学平业务"></div><span>学平业务</span></div>
 <div class="quick-item" data-page="toolAssistantHub"><div class="quick-icon"><img src="assets/wb/qa-tools.svg" alt="工具助手"></div><span>工具助手</span></div>
 </div>
@@ -2230,20 +2414,32 @@ if(!authLoggedIn){
 return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>登录后同步机构账号</p></div></div>
 <div class="profile-guest-card">
 <div class="profile-guest-avatar"><i class="fas fa-user-lock"></i></div>
-<h3>欢迎使用诉讼保机构端</h3>
+<h3>欢迎使用函信保函通</h3>
 <p>登录后可进行企业认证、查看业务报表、<br>管理团队成员与账号安全设置</p>
 <button type="button" class="profile-login-btn" data-action="auth-open"><i class="fab fa-weixin"></i> 微信登录 / 手机号登录</button>
 </div>
 <div class="section-title">⚙️ 更多</div>
 <div class="settings-list">
-<div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于机构端</span></div><div class="setting-right">v1.4.0 ></div></div>
+<div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于函信保函通</span></div><div class="setting-right">v1.4.0 ></div></div>
 </div>`;
 }
-return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>机构账号 · 业务权限</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
-<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar"><i class="fas fa-user-tie"></i></div><div style="flex:1;min-width:0"><h3 style="font-size:20px;font-weight:800;color:#102A3C">王审核员</h3><p style="font-size:13px;color:#54708F">永安机构 · 业务专员</p>
-${entAuthStatus==='passed'
-?`<div class="profile-auth-row"><span class="auth-ok"><i class="fas fa-check-circle"></i> 企业已认证</span></div>`
-:`<div class="profile-auth-row"><span class="auth-pending"><i class="fas fa-exclamation-circle"></i> 待完成企业认证</span><button type="button" class="profile-auth-go" data-page="enterpriseAuth">去认证</button></div>`}
+/* 未认证：注册仅手机号，不展示虚构机构名/人员名；认证通过后才展示机构与业务员姓名 */
+const m=entAuthStatusMeta();
+const certified=entAuthStatus==='passed';
+const title=certified?(authStaffName||'王审核员'):profileDisplayName();
+const sub=certified
+?((ENT_AUTH_STATE.companyName||'已认证机构')+' · 业务专员')
+:(entAuthStatus==='reviewing'
+?'已登录 · '+maskPhone(authUserPhone)+' · 认证资料审核中'
+:'已登录 · '+maskPhone(authUserPhone)+' · 待完成企业认证');
+const avatarIco=certified?'fa-user-tie':(authLoginVia==='wx'?'fa-weixin':'fa-mobile-alt');
+return`<div class="header-flex"><div class="greeting"><h2>👤 我的</h2><p>${certified?'机构账号 · 业务权限':'账号已登录 · 待企业认证'}</p></div><div class="icon-btn" data-page="messageCenter"><i class="fas fa-bell"></i></div></div>
+<div class="profile-card"><div style="display:flex;gap:16px;align-items:center"><div class="profile-avatar${certified?'':' guest'}"><i class="fas ${avatarIco}"></i></div><div style="flex:1;min-width:0"><h3 style="font-size:20px;font-weight:800;color:#102A3C">${title}</h3><p style="font-size:13px;color:#54708F">${sub}</p>
+${(()=>{
+if(m.profile==='ok')return`<div class="profile-auth-row"><span class="auth-ok"><i class="fas fa-check-circle"></i> ${m.profileText}</span></div>`;
+if(m.profile==='review')return`<div class="profile-auth-row"><span class="auth-review"><i class="fas fa-clock"></i> ${m.profileText}</span><button type="button" class="profile-auth-go" data-page="enterpriseAuth">查看</button></div>`;
+return`<div class="profile-auth-row"><span class="auth-pending"><i class="fas fa-exclamation-circle"></i> ${m.profileText}</span><button type="button" class="profile-auth-go" data-page="enterpriseAuth">去认证</button></div>`;
+})()}
 </div></div></div>
 <div class="quick-grid">
 <div class="quick-item" data-page="enterpriseAuth"><div class="quick-icon"><i class="fas fa-building"></i></div><span>企业认证</span></div>
@@ -2253,9 +2449,9 @@ ${entAuthStatus==='passed'
 </div>
 <div class="section-title">⚙️ 账号设置</div>
 <div class="settings-list">
-<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>${entAuthStatus==='passed'?'已认证':'企业认证'}</span></div><div class="setting-right ${entAuthStatus==='passed'?'auth-done':'auth-todo'}">${entAuthStatus==='passed'?'<i class="fas fa-check-circle"></i>':'去认证 >'}</div></div>
+<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>企业认证</span></div><div class="setting-right ${entAuthStatusMeta().cls}">${entAuthStatus==='passed'?'<i class="fas fa-check-circle"></i> '+entAuthStatusMeta().label:entAuthStatusMeta().label+(entAuthStatus==='pending'?' >':'')}</div></div>
 <div class="settings-item" id="notifyItem"><div class="setting-left"><i class="fas fa-bell"></i><span>消息通知</span></div><div class="setting-right"><div class="switch-toggle active" id="notifySwitch"></div></div></div>
-<div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于机构端</span></div><div class="setting-right">v1.4.0 ></div></div>
+<div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于函信保函通</span></div><div class="setting-right">v1.4.0 ></div></div>
 <div class="settings-item" data-action="auth-logout"><div class="setting-left"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></div><div class="setting-right">></div></div>
 </div>`;
 }
@@ -2310,7 +2506,7 @@ ${currentBizLine==='all'?renderOrderListSummary():''}
 ${renderBizLineTabs(currentBizLine)}
 ${renderOrderStatusTabs(currentBizLine,currentOrderFilter,'orderFiltersSub')}
 <div id="orderListArea">${renderUnifiedOrderList(currentBizLine,currentOrderFilter)}</div>`},
-enterpriseAuth:{title:'企业认证',sub:'与保函通一致 · 7.31',render:()=>renderEnterpriseAuthPage()},
+enterpriseAuth:{title:'企业认证',sub:'企业信息 · 法人信息 · 提交审核',render:()=>renderEnterpriseAuthPage()},
 biaohouDetail:{title:'标后订单详情',sub:'订单详情',render:()=>{
 const o=BIAOHUO_STATE;const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
 return`<div class="sp-card"><div class="flex-between"><strong>${o.type}保函</strong><span class="tag ${meta.tag}">${meta.label}</span></div>
@@ -2333,8 +2529,8 @@ ${o.status==='issuing'?`<button class="sp-btn-primary" data-action="toast" data-
 ${o.status==='done'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
 orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>{
 const ev=analyzeEvidenceChain(ORDER_STATE);
-const canEnterReview=ev.level!=='fail';
 const matN=(ORDER_STATE.materials||[]).length;
+const stMeta=ORDER_STATUS_META[ORDER_STATE.status]||ORDER_STATUS_META.pending;
 const caseBody=`
 ${renderCaseSummaryLine('申请人',ORDER_STATE.applicant,'applicant')}
 ${renderCaseSummaryLine('被申请人',ORDER_STATE.respondent,'respondent')}
@@ -2348,11 +2544,12 @@ const auditBody=`<div class="sp-timeline">
 <div class="sp-timeline-item"><strong>用户提交</strong><br>2025-05-29 09:15</div>
 <div class="sp-timeline-item"><strong>证据链诊断</strong><br>2025-05-29 09:16 · 完整度 ${ev.score} 分 · ${ev.judge}</div>
 <div class="sp-timeline-item"><strong>AI预审通过</strong><br>2025-05-29 09:16 · 3项建议</div></div>`;
+const stepActive=ORDER_STATE.status==='done'?3:(ORDER_STATE.status==='issue'?2:(ORDER_STATE.status==='reject'?1:1));
 return`
 <div class="od-page">
 <div class="od-scroll">
-<div class="sp-steps"><div class="sp-step done">提交</div><div class="sp-step active">审核</div><div class="sp-step">出函</div><div class="sp-step">完成</div></div>
-<div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag tag-review">待审核</span></div>
+<div class="sp-steps"><div class="sp-step done">提交</div><div class="sp-step ${stepActive>=1?'active':''}">审核</div><div class="sp-step ${stepActive>=2?'active':''}">出函</div><div class="sp-step ${stepActive>=3?'done':''}">完成</div></div>
+<div class="sp-card"><div class="flex-between"><strong>${ORDER_STATE.type}保函</strong><span class="tag ${stMeta.tag}">${stMeta.label}</span></div>
 <p style="font-size:12px;color:#6F8FAA;margin:8px 0">保费 ¥${ORDER_STATE.premium.toLocaleString()}</p>
 <p style="font-size:11px;color:#94A3B8;margin-top:4px">订单号 ${ORDER_STATE.id} · 诉讼保</p></div>
 ${renderFoldSection('case',`<i class="fas fa-briefcase fold-lead"></i>案件信息`,caseBody,{tools:`<span class="sp-link-detail" data-page="caseInfoDetail" data-push-stack="1">详情 <i class="fas fa-chevron-right" style="font-size:10px"></i></span>`})}
@@ -2361,13 +2558,18 @@ ${renderEvidenceChainCard(ORDER_STATE)}
 ${renderFoldSection('audit',`<i class="fas fa-history fold-lead"></i>审核记录`,auditBody)}
 </div>
 <div class="od-footer">
-<button type="button" class="sp-btn-danger" data-action="ev-chain-supplement">要求补材料</button>
-<button type="button" class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'完整度不足'}</button>
+${renderOrderPrimaryActions(ORDER_STATE)}
+${renderOrderMaterialUtils(ORDER_STATE.status)}
 </div>
 </div>`}},
 caseInfoDetail:{title:'案件详情',sub:ORDER_STATE.caseNo,render:()=>{
 const o=ORDER_STATE;
 const canApprove=o.status==='pending'||o.status==='review';
+const f=getOrderMaterialActionFlags(o.status);
+const utilBtns=[];
+if(f.pack)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>`);
+if(f.email)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-send-email"><i class="fas fa-envelope"></i> 邮件发送</button>`);
+if(f.pushPc)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-push-pc"><i class="fas fa-desktop"></i> 投送电脑端</button>`);
 return`
 <div class="sp-card">
 <div class="sp-section-label">法院信息</div>
@@ -2401,10 +2603,7 @@ ${renderInfoRow('地址',o.respondentAddress)}
 <div class="sp-section-label">案件材料</div>
 ${(o.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="${m.name} 下载中…"><i class="fas fa-download"></i> 下载</button></div>`).join('')}
 </div>
-<div class="sp-grid-2" style="margin-top:4px">
-<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>
-<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-send-email"><i class="fas fa-envelope"></i> 发送邮件</button>
-</div>
+${utilBtns.length?`<div class="${utilBtns.length===3?'od-footer-utils':'sp-grid-2'}" style="margin-top:4px">${utilBtns.join('')}</div>`:''}
 ${canApprove?`<button class="sp-btn-primary" data-page="orderReview" data-push-stack="1" style="margin-top:10px"><i class="fas fa-clipboard-check"></i> 审批</button>`:''}`}},
 orderReview:{title:'订单审核',sub:'核保 · 风险评估 · 审批',render:()=>`
 <div class="sp-steps"><div class="sp-step done">材料核验</div><div class="sp-step active">核保评估</div><div class="sp-step">审批</div><div class="sp-step">出函</div></div>
@@ -2501,7 +2700,7 @@ trainingHelp:{title:'操作培训',sub:'机构端使用指南',render:()=>`
 searchPage:{title:'搜索',sub:'订单 · 客户 · 保函号',render:()=>`<input class="sp-input" placeholder="输入订单号/客户名/保函号…"><div class="sp-card"><p style="font-size:12px;color:#94A3B8;margin-bottom:8px">最近搜索</p><div class="sp-tag-row"><span class="sp-tag" data-page="orderDetail">SS20250529001</span><span class="sp-tag" data-page="customerDetail">张正源</span></div></div>`},
 profileInfo:{title:'个人信息',sub:'机构账号信息',render:()=>`<div class="sp-card"><span class="sp-label">姓名</span><input class="sp-input" value="王审核员"><span class="sp-label">所属机构</span><input class="sp-input" value="永安保险" readonly><span class="sp-label">角色</span><input class="sp-input" value="核保专员" readonly><button class="sp-btn-primary" data-action="toast" data-msg="信息已保存">保存</button></div>`},
 securityCenter:{title:'安全中心',sub:'密码 · 登录设备',render:()=>`<div class="settings-list"><div class="settings-item" data-action="toast" data-msg="修改密码页"><div class="setting-left"><i class="fas fa-key"></i><span>修改密码</span></div><div class="setting-right">></div></div><div class="settings-item"><div class="setting-left"><i class="fas fa-mobile-alt"></i><span>登录设备</span></div><div class="setting-right">2台 ></div></div></div>`},
-aboutInst:{title:'关于机构端',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">诉讼保 · 机构端</h3><p style="font-size:13px;color:#6F8FAA">版本 6.0.0 · 工具助手 · 文件空间站</p></div>`},
+aboutInst:{title:'关于',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">函信保函通</h3><p style="font-size:13px;color:#6F8FAA">版本 6.0.0 · 工具助手 · 文件空间站</p></div>`},
 toolAssistantHub:{title:'工具助手',sub:'机构端材料智能处理 · 二级功能入口',render:()=>
 hero('linear-gradient(125deg,#0F4C5C,#1A6B7C)','🤖','机构端 · 工具助手','核保收案一站式：RAR 归类 · 字段提取 · 机构匹配 · 缺件分析 · 手机/PC 协同')+
 steps(['上传材料','AI 处理','分析输出','关联订单'],1)+
@@ -2641,6 +2840,7 @@ if(el.dataset.bhId){
 const found=BIAOHUO_LIST.find(x=>x.id===el.dataset.bhId);
 if(found)BIAOHUO_STATE=Object.assign({},found);
 }
+if(el.dataset.orderId)applyLitigationOrderState(el.dataset.orderId);
 openSubPage(el.dataset.page,{pushStack:el.dataset.pushStack==='1'});
 });
 });
@@ -2669,7 +2869,7 @@ if(pg)openSubPage(pg,{fromHub:el.closest('.inst-mat-hub,.inst-mat-grid')&&TOOL_C
 });
 document.querySelectorAll('#tabContent [data-action="auth-logout"]').forEach(el=>{
 if(el._logoutBound)return;el._logoutBound=true;
-el.addEventListener('click',e=>{e.stopPropagation();authLoggedIn=false;try{sessionStorage.removeItem('ssbao_inst_logged_in');sessionStorage.removeItem('ssbao_inst_login_via');sessionStorage.removeItem('ssbao_inst_need_ent')}catch(err){}closeSubPage();showToast('已退出登录');setActiveNav('profile')});
+el.addEventListener('click',e=>{e.stopPropagation();authLoggedIn=false;authStaffName='';try{sessionStorage.removeItem('ssbao_inst_logged_in');sessionStorage.removeItem('ssbao_inst_login_via');sessionStorage.removeItem('ssbao_inst_need_ent');sessionStorage.removeItem('ssbao_inst_phone')}catch(err){}closeSubPage();showToast('已退出登录');setActiveNav('profile')});
 });
 document.querySelectorAll('#tabContent [data-action="auth-open"]').forEach(el=>{
 if(el._authOpenBound)return;el._authOpenBound=true;
@@ -2877,36 +3077,40 @@ e.stopPropagation();
 const act=btn.dataset.action,msg=btn.dataset.msg;
 if(act==='toast'&&msg)showToast(msg);
 if(act==='ent-upload'){
-ENT_AUTH_STATE[btn.dataset.key]=true;
-showToast('上传成功 · 已自动识别');
+saveEntAuthForm();
+const key=btn.dataset.key;
+ENT_AUTH_STATE[key]=true;
+if(key==='license'){
+if(!ENT_AUTH_STATE.companyName)ENT_AUTH_STATE.companyName='永安财产保险股份有限公司';
+if(!ENT_AUTH_STATE.creditCode)ENT_AUTH_STATE.creditCode='91110000100001366X';
+if(!ENT_AUTH_STATE.regCapital)ENT_AUTH_STATE.regCapital='1940000';
+if(!ENT_AUTH_STATE.address)ENT_AUTH_STATE.address='北京市西城区金融大街23号';
+if(!ENT_AUTH_STATE.legalName)ENT_AUTH_STATE.legalName='李某某';
+if(!ENT_AUTH_STATE.entType)ENT_AUTH_STATE.entType='insurance';
+showToast('营业执照识别成功 · 已回填企业信息');
+}else if(key==='idFront'){
+if(!ENT_AUTH_STATE.legalName)ENT_AUTH_STATE.legalName='李某某';
+if(!ENT_AUTH_STATE.legalIdNo)ENT_AUTH_STATE.legalIdNo='110101198001011234';
+showToast('身份证识别成功 · 已回填法人信息');
+}else if(key==='bizPermit'){
+showToast('经营许可证上传成功');
+}else{
+showToast('上传成功');
+}
 openSubPage('enterpriseAuth',{keepStack:true});
 return;
 }
-if(act==='ent-next'){
-if(entAuthStep===0&&!(ENT_AUTH_STATE.license&&ENT_AUTH_STATE.idFront&&ENT_AUTH_STATE.idBack)){showToast('请先上传营业执照与法人身份证正反面');return}
-if(entAuthStep===1){
-if(!ENT_AUTH_STATE.permit){showToast('请先上传开户许可证');return}
-const bn=document.getElementById('entBankName'),ba=document.getElementById('entBankAccount');
-if(bn)ENT_AUTH_STATE.bankName=bn.value;
-if(ba)ENT_AUTH_STATE.bankAccount=ba.value;
-}
-entAuthStep=Math.min(entAuthStep+1,3);
-openSubPage('enterpriseAuth',{keepStack:true});
-return;
-}
-if(act==='ent-prev'){entAuthStep=Math.max(entAuthStep-1,0);openSubPage('enterpriseAuth',{keepStack:true});return}
 if(act==='ent-submit'){
-const amt=document.getElementById('entPayAmount')?.value?.trim();
-if(!amt){showToast('请填写到账金额');return}
-ENT_AUTH_STATE.payAmount=amt;
-entAuthStatus='passed';
-entAuthStep=3;
-showToast('打款验证通过');
+if(!validateEntAuthForm())return;
+entAuthStatus='reviewing';
+showToast('已提交 · 待审核');
 openSubPage('enterpriseAuth',{keepStack:true});
 return;
 }
-if(act==='ent-retry'){entAuthStep=0;entAuthStatus='pending';['license','idFront','idBack','permit'].forEach(k=>ENT_AUTH_STATE[k]=false);openSubPage('enterpriseAuth',{keepStack:true});return}
-if(act==='ent-done'){closeSubPage();setActiveNav('workbench');showToast('企业认证已完成');return}
+if(act==='ent-retry'){
+entAuthStatus='pending';
+openSubPage('enterpriseAuth',{keepStack:true});return}
+if(act==='ent-done'){closeSubPage();setActiveNav(entAuthStatus==='passed'?'workbench':'profile');showToast(entAuthStatus==='reviewing'?'认证审核中':'已返回');return}
 if(act==='open-source'){openSourcePreview(btn.dataset.srcKey);return}
 if(act==='approve-order'){showToast('审核通过，订单进入待出函');setTimeout(()=>openSubPage('issueGuarantee'),800)}
 if(act==='fold-toggle'){
@@ -2915,9 +3119,11 @@ if(!card)return;
 const key=card.dataset.fold;
 const collapsed=card.classList.toggle('collapsed');
 if(key)ORDER_DETAIL_FOLD[key]=collapsed;
+if(card.classList.contains('ev-chain-card')||card.dataset.prd==='evidence-chain'){
+try{window.__showPrdSpec&&window.__showPrdSpec('evidence-chain',card)}catch(e){}
+}
 return;
 }
-if(act==='ev-chain-rules'){openEvidenceScoreRules();return}
 if(act==='ev-chain-supplement'){openEvidenceSupplementModal();return}
 if(act==='enter-order-review'){
 const ev=analyzeEvidenceChain(ORDER_STATE);
@@ -2961,6 +3167,12 @@ return;
 }
 if(act==='case-pack-download')showToast('案件材料打包下载中…');
 if(act==='case-send-email')openEmailModal('案件材料包 · '+ORDER_STATE.caseNo);
+if(act==='case-push-pc'){
+showToast('已投送至 PC 核保工作台 · '+ORDER_STATE.id);
+try{appendSyncRecord((ORDER_STATE.caseNo||ORDER_STATE.id)+' 材料包','小程序 → PC · 刚刚')}catch(err){}
+return;
+}
+if(act==='go-issue-letter'){openSubPage('issueGuarantee',{pushStack:true});return}
 if(act==='rar-process')runRarProcess();
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
@@ -3032,7 +3244,11 @@ if(['rarBatchPack','structExtract','toolAssistantHub','crossDeviceSync','smartAn
 if(id==='statsReport')bindStatsReportEvents();
 if(id==='structExtract'||id==='rarBatchPack')bindPreviewTypeTags();
 subBody.querySelectorAll('.sp-tag[data-select]').forEach(tag=>{
-tag.addEventListener('click',()=>{tag.parentElement.querySelectorAll('.sp-tag').forEach(t=>t.classList.remove('selected'));tag.classList.add('selected')});
+tag.addEventListener('click',()=>{
+tag.parentElement.querySelectorAll('.sp-tag').forEach(t=>t.classList.remove('selected'));
+tag.classList.add('selected');
+if(tag.dataset.entType)ENT_AUTH_STATE.entType=tag.dataset.entType;
+});
 });
 if(id==='orderList')bindOrderListInteractions('orderFiltersSub');
 const xpFilters=document.getElementById('xuepingFilters');
@@ -3059,17 +3275,18 @@ nav.addEventListener('click',()=>{closeSubPage();setActiveNav(nav.dataset.nav)})
 document.getElementById('subpageBack').addEventListener('click',subPageBack);
 
 const PRD_SPECS={
-'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页。首页文案规避保函/保险/法院/司法/律师等敏感字眼，用「待办理/办结/受理单位」等中性表述；待办区可混排诉讼保全、学平、标后订单。',logic:['四项指标：待审核/待办理/待补材料/本月办结','快捷：订单审核/业务办理/学平业务/工具助手','待办卡片 soft 文案渲染'],acceptance:['首页无敏感字眼','统计与快捷可跳转订单列表','待办可进入详情'],api:'GET /api/inst/dashboard'},
+'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页。首页文案规避保函/保险/法院/司法/律师等敏感字眼，用「待出函/办结/受理单位」等中性表述；待办区可混排诉讼保全、学平、标后订单。',logic:['四项指标口径：待审核/待出函/待补材料=当前存量；本月出函=自然月已出函笔数（非全量历史）','快捷：订单审核→pending；业务办理→issue(待出函)；学平业务；工具助手','待办卡片 soft 文案渲染'],acceptance:['首页无敏感字眼','统计与快捷可跳转订单列表','本月出函跳转已出函列表','待办可进入详情'],api:'GET /api/inst/dashboard'},
 'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换 + 状态筛选；「全部」视图用待处理/办理中/已办结/异常分桶。卡片统一为色条+标题+主信息+金额行。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图汇总条 + 跨业务状态分桶','单业务线保留原状态筛选','点击进入对应详情页'],acceptance:['三类订单字段可读且不拥挤','业务线切换后列表与筛选同步','已办结可下载文件'],api:'GET /api/inst/orders?bizLine='},
-'enterprise-auth':{title:'企业认证',module:'账号',page:'enterpriseAuth',priority:'P0',business:'7.31 与保函通对齐：上传营业执照+法人身份证→开户许可证→小额打款验证→认证结果。',logic:['四步 ent-step-bar','证照 OCR 回填企业信息','开户信息确认','打款金额回填','成功开通业务权限'],acceptance:['四步可前进/回退','缺件阻断下一步','验证通过后状态=已认证'],api:'POST /api/ent/auth/*'},
-'auth-login':{title:'登录注册',module:'账号',page:'我的 · 登录弹层',priority:'P0',business:'首次访问可浏览小程序；「我的」为未登录排版。点击登录后弹出半透明登录层（样式对齐 login.html）：手机号验证码 + 微信一键授权。',logic:['未登录「我的」展示空态与登录入口','点击弹出 authOverlay','自动唤起微信授权弹层','授权/登录后刷新「我的」为已登录态','退出回到未登录「我的」'],acceptance:['未登录无个人信息','点击才弹出登录','微信授权可允许/拒绝','登录后展示账号信息'],api:'POST /api/auth/wx · /sms · /login · /register'},
-'stat-pending':{title:'待审核统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示待机构审核的订单数量，点击直达待审核列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=pending'],acceptance:['数字与列表待审核数一致'],api:'GET /api/inst/stats/pending'},
+'enterprise-auth':{title:'企业认证',module:'账号',page:'enterpriseAuth',priority:'P0',business:'单页提交：企业基本信息（类型/名称/信用代码/注册资本/地址/营业执照/经营许可证）+ 法人信息（姓名/身份证号/手机号/身份证）→ 提交后状态=待审核。无开户、无打款。认证通过后「我的」才展示机构名称；人员姓名由团队/个人信息补齐，注册环节不采集。',logic:['企业类型三选一','执照 OCR 回填名称/代码/地址/法人','必填校验后提交','状态 pending→reviewing','审核中可修改重提','通过后绑定机构名到账号'],acceptance:['无开户打款步骤','必填缺项阻断提交','提交后展示待审核','「我的」同步待审核状态','未认证不展示机构名/业务员姓名'],api:'POST /api/ent/auth/submit'},
+'auth-login':{title:'登录注册',module:'账号',page:'我的 · 登录弹层',priority:'P0',business:'首次访问可浏览小程序；「我的」为未登录排版。点击登录后弹出半透明登录层（样式对齐 login.html）：手机号验证码 + 微信一键授权。注册仅手机号/验证码/密码，不含机构名与人员姓名。',logic:['未登录「我的」展示空态与登录入口','点击弹出 authOverlay','自动唤起微信授权弹层','授权/登录后刷新「我的」：仅展示脱敏手机号（或微信用户），无机构名/人员名','退出回到未登录「我的」','企业认证通过后才展示机构名与业务员姓名'],acceptance:['未登录无个人信息','未认证无机构名/人员名','点击才弹出登录','微信授权可允许/拒绝','登录后展示手机号脱敏'],api:'POST /api/auth/wx · /sms · /login · /register'},
+'stat-pending':{title:'待审核统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示待机构审核的订单数量（当前存量），点击直达待审核列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=pending'],acceptance:['数字与列表待审核数一致'],api:'GET /api/inst/stats/pending'},
+'stat-monthly':{title:'本月出函',module:'工作台',page:'工作台',priority:'P0',business:'自然月内「已出函」订单笔数。与前三项不同：前三项是当前待办存量，本项是本月办结（出函）增量。',logic:['统计 status=done 且出函时间∈本自然月','点击跳转 orderList filter=done biz=litigation','完整经营分析见业务报表'],acceptance:['口径=本月出函而非历史全量','点击进入已出函列表'],api:'GET /api/inst/stats/issued?period=month'},
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
-'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入待办理订单列表。',logic:['跳转 orderList filter=issue biz=litigation','自动选中对应筛选 Tab'],acceptance:['点击打开订单列表且仅显示待办理'],api:'GET /api/inst/orders?status=issue'},
+'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入诉讼保「待出函」订单列表，办理审核通过后的出函动作（非审核、非补材料）。',logic:['跳转 orderList filter=issue biz=litigation','自动选中「待出函」筛选 Tab','与数据看板「待出函」同一数据源'],acceptance:['点击打开订单列表且仅显示待出函','入口语义=出函办理'],api:'GET /api/inst/orders?status=issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、证据链诊断与审核记录；四块内容可折叠展开。底部「要求补材料 / 进入审核」固定于页底，均为弹层：补材料预填缺项，审核含风险等级/意见/费率与通过驳回。案件信息「详情」进入完整案件详情；提取字段可原文溯源。',logic:['od-page：上滚下固','sp-fold 折叠','要求补材料 → openEvidenceSupplementModal','进入审核 → openOrderReviewModal'],acceptance:['四区域可折叠','底部两按钮均为弹层','底部按钮始终可见'],api:'GET /api/inst/order/{id} · GET /api/inst/order/{id}/evidence-chain'},
-'evidence-chain':{title:'证据链诊断',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链：借贷链（合意、借款协议、资金实际交付、微信/支付宝聊天记录）；合同事实链（证明合同关系成立、履约证明、聊天记录等）。输出诊断分析、材料完整度评分与提交判断，支撑核保补件决策。',logic:['resolveEvidenceChainType(案由)','节点 weight 加权命中计分','必填缺件优先提示','提交判断三档阈值','评分规则 / 按缺项补材料均弹层呈现'],acceptance:['合同案突出「证明合同关系成立」','借贷案同时要求合意与交付','两按钮均为弹层','分数与节点状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
-'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部支持打包下载、发送邮件；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','底部：打包下载、发送邮件','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料可下载','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、证据链诊断与审核记录；四块内容可折叠展开。底部主操作随状态变化（审核/催补/出函/下载保函）；材料工具栏按状态显示打包下载、邮件发送、投送电脑端。',logic:['od-page：上滚下固','sp-fold 折叠','主操作：pending/review→补材料+审核；supplement→催补；issue→确认出函；done→下载保函；reject→已驳回','材料工具：pack/email/pushPc 按 getOrderMaterialActionFlags(status)','要求补材料 → openEvidenceSupplementModal','进入审核 → openOrderReviewModal','投送电脑端 → MaterialSpace 推送 PC','证据链诊断悬停 1 秒 → 右侧 PRD 展示百分制评分规则'],acceptance:['四区域可折叠','底部主操作随状态切换','材料三按钮按状态显隐','证据链无页内评分规则按钮，规则见右侧 PRD'],api:'GET /api/inst/order/{id} · POST /api/inst/material/push-pc'},
+'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链，输出诊断分析、材料完整度评分（百分制，总分 100）与提交判断。页内不放「评分规则」按钮；悬停证据链区域 1 秒后，本侧栏以表格展示完整评分规则与单项计算逻辑。',logic:['按案由匹配借贷 / 合同模板','节点权重加权命中计分（满分 100）','必填缺件优先补材料','fail 档阻断进入审核'],scoreTables:true,acceptance:['页内无「评分规则」按钮','悬停 1 秒后右侧 PRD 以表格展示规则','借贷/合同节点权重合计均为 100','每项含 keywords 命中计分说明','分数与节点命中状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
+'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部按订单状态显示打包下载、邮件发送、投送电脑端；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作随 status：驳回仅打包；其余含邮件与投送PC','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮按状态显隐','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=待补材料'],api:'POST /api/inst/order/{id}/supplement'},
@@ -3097,10 +3314,13 @@ const PRD_SPECS={
 
 const ELEMENT_MAP=[
 {sel:'.nav-item[data-nav="workbench"]',id:'nav-workbench'},{sel:'.nav-item[data-nav="orders"]',id:'nav-orders'},
-{sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.quick-item[data-filter="pending"]',id:'quick-review'},
+{sel:'.stat-item[data-filter="pending"]',id:'stat-pending'},{sel:'.stat-item.stat-monthly',id:'stat-monthly'},{sel:'.quick-item[data-filter="pending"]',id:'quick-review'},
 {sel:'.quick-item[data-filter="issue"]',id:'quick-issue'},{sel:'.order-card[data-page="orderDetail"]',id:'order-detail'},
 {sel:'.ev-chain-card',id:'evidence-chain'},
 {sel:'.sp-link-detail[data-page="caseInfoDetail"]',id:'case-info-detail'},
+{sel:'[data-action="case-pack-download"]',id:'order-detail'},
+{sel:'[data-action="case-send-email"]',id:'order-detail'},
+{sel:'[data-action="case-push-pc"]',id:'order-detail'},
 {sel:'.quick-item[data-page="rateConfig"]',id:'rate-config'},{sel:'.quick-item[data-biz="xueping"]',id:'customer-list'},
 {sel:'.order-card[data-page="xuepingDetail"]',id:'xueping-detail'},
 {sel:'.quick-item[data-page="enterpriseAuth"]',id:'enterprise-auth'},
@@ -3141,38 +3361,157 @@ const ELEMENT_MAP=[
 
 function initPRD(){
 const prdEmpty=document.getElementById('prdEmpty'),prdContent=document.getElementById('prdContent'),prdTooltip=document.getElementById('prdTooltip'),prdPendingHint=document.getElementById('prdPendingHint');
-let activeEl=null,hoverTimer=null,pendingEl=null;
+let activeEl=null,hoverTimer=null,pendingEl=null,currentHitId=null;
 function renderPanel(spec){
-prdEmpty.style.display='none';prdContent.style.display='block';
+if(!spec||!prdEmpty||!prdContent)return;
+try{
+prdEmpty.style.display='none';
+prdContent.style.display='block';
 const techHtml=(spec.techArch||[]).map(t=>`<div style="margin-bottom:8px;padding-left:12px;border-left:2px solid #334155;font-size:11px;color:#CBD5E1;line-height:1.65">${t}</div>`).join('');
 const interactHtml=spec.interact?`<div class="prd-section"><div class="prd-section-title">用户交互路径</div><div class="prd-business-text" style="background:#FFFBEB;border-color:#FDE68A;color:#78350F">${spec.interact}</div></div>`:'';
+const scoreTablesHtml=spec.scoreTables?`<div class="prd-section"><div class="prd-section-title">② 评分规则表（总分 100）</div>${renderEvidenceChainScoreTablesHtml()}</div>`:'';
+const logicHtml=spec.scoreTables?'':`<div class="prd-section"><div class="prd-section-title">② 功能详细逻辑</div>${(spec.logic||[]).map(l=>`<div class="prd-logic-item">${l}</div>`).join('')}</div>`;
 prdContent.innerHTML=`<div class="prd-section"><div class="prd-title">${spec.title}</div><div class="prd-meta"><span class="prd-meta-tag prd-meta-module">${spec.module}</span><span class="prd-meta-tag prd-meta-p0">${spec.priority}</span><span class="prd-meta-tag prd-meta-page">${spec.page}</span></div></div>
 <div class="prd-section"><div class="prd-section-title">① 业务需求</div><div class="prd-business-text">${spec.business}</div></div>
-<div class="prd-section"><div class="prd-section-title">② 功能详细逻辑</div>${(spec.logic||[]).map(l=>`<div class="prd-logic-item">${l}</div>`).join('')}</div>
+${scoreTablesHtml}${logicHtml}
 ${techHtml?`<div class="prd-section"><div class="prd-section-title">技术架构要点</div><div class="prd-api-box">${techHtml}</div></div>`:''}${interactHtml}
 <div class="prd-section"><div class="prd-section-title">③ 验收标准</div><ul class="prd-list">${(spec.acceptance||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>
 ${spec.api?`<div class="prd-section"><div class="prd-section-title">接口</div><div class="prd-api-box">${spec.api}</div></div>`:''}`;
+prdContent.scrollTop=0;
+document.getElementById('prdPanelBody')&&(document.getElementById('prdPanelBody').scrollTop=0);
+}catch(err){
+prdEmpty.style.display='none';prdContent.style.display='block';
+prdContent.innerHTML=`<div class="prd-section"><div class="prd-title">PRD 渲染异常</div><div class="prd-business-text">${String((err&&err.message)||err)}</div></div>`;
+}
+}
+function showPrdById(id,el){
+const spec=PRD_SPECS[id];
+if(!spec)return false;
+if(activeEl&&activeEl!==el)activeEl.classList.remove('prd-highlight');
+if(el){activeEl=el;el.classList.add('prd-highlight')}
+renderPanel(spec);
+prdTooltip.textContent=spec.title;prdTooltip.classList.add('show');
+return true;
+}
+window.__showPrdSpec=showPrdById;
+function asElement(node){
+if(!node)return null;
+if(node.nodeType===1)return node;
+return node.parentElement||null;
+}
+function resolvePrdHit(node){
+const el=asElement(node);
+if(!el||!el.closest)return null;
+const prdHost=el.closest('[data-prd]');
+if(prdHost&&prdHost.dataset.prd&&PRD_SPECS[prdHost.dataset.prd]){
+return{el:prdHost,id:prdHost.dataset.prd,spec:PRD_SPECS[prdHost.dataset.prd]};
+}
+const chain=el.closest('.ev-chain-card');
+if(chain&&PRD_SPECS['evidence-chain'])return{el:chain,id:'evidence-chain',spec:PRD_SPECS['evidence-chain']};
+for(let i=0;i<ELEMENT_MAP.length;i++){
+const m=ELEMENT_MAP[i];
+let hit=null;
+try{hit=el.closest(m.sel)}catch(err){hit=null}
+if(hit&&PRD_SPECS[m.id])return{el:hit,id:m.id,spec:PRD_SPECS[m.id]};
+}
+return null;
+}
+function clearPrdHover(keepHighlight){
+if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}
+if(pendingEl){pendingEl.classList.remove('prd-pending');pendingEl=null}
+prdTooltip.classList.remove('show');
+prdPendingHint.classList.remove('show');
+currentHitId=null;
+if(!keepHighlight&&activeEl){/* 保留高亮直至下一次命中 */}
+}
+function armPrdHover(hit,clientX,clientY){
+if(!hit){clearPrdHover();return}
+if(currentHitId===hit.id){
+if(prdPendingHint.classList.contains('show')&&clientX!=null){
+prdPendingHint.style.left=(clientX+12)+'px';prdPendingHint.style.top=(clientY+12)+'px';
+}
+return;
+}
+if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}
+if(pendingEl)pendingEl.classList.remove('prd-pending');
+currentHitId=hit.id;
+pendingEl=hit.el;
+hit.el.classList.add('prd-pending');
+prdPendingHint.textContent='停留中… 1 秒后显示评分规则';
+prdPendingHint.classList.add('show');
+if(clientX!=null){prdPendingHint.style.left=(clientX+12)+'px';prdPendingHint.style.top=(clientY+12)+'px'}
+hoverTimer=setTimeout(()=>{
+hit.el.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+showPrdById(hit.id,hit.el);
+if(clientX!=null){prdTooltip.style.left=(clientX+12)+'px';prdTooltip.style.top=(clientY+12)+'px'}
+},1000);
+}
+/* 全局委托：覆盖子页面内证据链（mousemove 在部分环境下不可靠，改用 mouseover） */
+if(!document._prdGlobalDelegated){
+document._prdGlobalDelegated=true;
+document.addEventListener('mouseover',e=>{
+const hit=resolvePrdHit(e.target);
+if(!hit)return;
+armPrdHover(hit,e.clientX,e.clientY);
+},true);
+document.addEventListener('mouseout',e=>{
+const from=resolvePrdHit(e.target);
+if(!from)return;
+const to=resolvePrdHit(e.relatedTarget);
+if(to&&to.id===from.id)return;
+if(currentHitId===from.id)clearPrdHover(true);
+},true);
 }
 function bindSpecs(){
-document.querySelectorAll('button,.nav-item,.stat-item,.stat-block,.quick-item,.order-card,.alert-banner,.icon-btn,.settings-item,.sp-btn-primary,.sp-btn-secondary,.sp-btn-danger,.inst-mat-hub,.inst-mat-tile,.sync-scenario,[data-page]').forEach(el=>{
+document.querySelectorAll('button,.nav-item,.stat-item,.stat-block,.quick-item,.order-card,.alert-banner,.icon-btn,.settings-item,.inst-mat-hub,.inst-mat-tile,.sync-scenario,[data-page]').forEach(el=>{
 if(el._prdBound)return;el._prdBound=true;
-let specId=null;
-ELEMENT_MAP.forEach(m=>{if(el.matches(m.sel)||el.closest(m.sel))specId=m.id});
-if(!specId&&el.dataset&&el.dataset.page)specId=el.dataset.page.replace(/([A-Z])/g,'-$1').toLowerCase().replace(/^-/,'');
-const spec=specId&&PRD_SPECS[specId];
-if(!spec)return;
-el.addEventListener('mouseenter',()=>{
-if(hoverTimer)clearTimeout(hoverTimer);
-if(pendingEl)pendingEl.classList.remove('prd-pending');
-pendingEl=el;el.classList.add('prd-pending');
-hoverTimer=setTimeout(()=>{el.classList.remove('prd-pending');if(activeEl&&activeEl!==el)activeEl.classList.remove('prd-highlight');activeEl=el;el.classList.add('prd-highlight');renderPanel(spec);prdTooltip.textContent=spec.title;prdTooltip.classList.add('show')},1000);
+if(el.closest('#subpageBody'))return;
+const hit=resolvePrdHit(el);
+if(!hit||hit.el!==el)return;
+el.addEventListener('mouseenter',e=>armPrdHover(hit,e.clientX,e.clientY));
+el.addEventListener('mouseleave',e=>{
+const relHit=resolvePrdHit(e.relatedTarget);
+if(relHit&&relHit.id===hit.id)return;
+if(currentHitId===hit.id)clearPrdHover(true);
 });
-el.addEventListener('mouseleave',()=>{if(hoverTimer)clearTimeout(hoverTimer);if(pendingEl===el){el.classList.remove('prd-pending');pendingEl=null}prdTooltip.classList.remove('show')});
 });
 }
-const obs=new MutationObserver(()=>bindSpecs());
+function bindEvidenceChainPrdHover(){
+const card=document.querySelector('#subpageBody [data-prd="evidence-chain"], #subpageBody .ev-chain-card');
+if(!card||card._evPrdBound)return;
+card._evPrdBound=true;
+card.style.cursor='help';
+card.title='停留 1 秒查看评分规则 · 点击立即显示';
+let localTimer=null;
+card.addEventListener('mouseenter',()=>{
+if(localTimer)clearTimeout(localTimer);
+card.classList.add('prd-pending');
+prdPendingHint.textContent='停留中… 1 秒后显示评分规则';
+prdPendingHint.classList.add('show');
+localTimer=setTimeout(()=>{
+card.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+showPrdById('evidence-chain',card);
+},1000);
+});
+card.addEventListener('mouseleave',()=>{
+if(localTimer){clearTimeout(localTimer);localTimer=null}
+card.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+});
+card.addEventListener('click',e=>{
+if(e.target.closest('[data-action="fold-toggle"]')&&!e.target.closest('.ev-chain-type')){
+/* 允许折叠，同时仍展示 PRD */
+}
+showPrdById('evidence-chain',card);
+});
+}
+window.__bindEvidenceChainPrdHover=bindEvidenceChainPrdHover;
+const obs=new MutationObserver(()=>{bindSpecs();bindEvidenceChainPrdHover()});
 obs.observe(document.body,{childList:true,subtree:true});
 bindSpecs();
+bindEvidenceChainPrdHover();
 }
 renderPcMain();
 bindPcEvents();
@@ -3189,14 +3528,23 @@ try{if(history.replaceState)history.replaceState(null,'',location.href.split('?'
 /* 关闭登录弹层 */
 document.getElementById('authClose')?.addEventListener('click',()=>{hideAuthOverlay();if(currentNav==='profile')setActiveNav('profile')});
 document.getElementById('wxDeny')?.addEventListener('click',()=>{hideWxAuth();showToast('已取消微信授权，可改用手机号登录')});
-document.getElementById('wxAllow')?.addEventListener('click',()=>{hideWxAuth();showToast('微信授权成功');enterAppAfterAuth({via:'wechat'})});
+document.getElementById('wxAllow')?.addEventListener('click',()=>{hideWxAuth();showToast('微信授权成功');enterAppAfterAuth({via:'wx'})});
 if(isEmbed){
 document.body.classList.add('embed-mode');
 authLoggedIn=true;
+authStaffName='王审核员';
+entAuthStatus='passed';
+ENT_AUTH_STATE.companyName=ENT_AUTH_STATE.companyName||'永安财产保险股份有限公司';
 setActiveNav('workbench');
 return;
 }
 authLoggedIn=!!loggedIn;
+try{
+if(authLoggedIn){
+authLoginVia=sessionStorage.getItem('ssbao_inst_login_via')||'sms';
+authUserPhone=sessionStorage.getItem('ssbao_inst_phone')||authUserPhone;
+}
+}catch(e){}
 setActiveNav('workbench');
 try{
 if(authLoggedIn&&sessionStorage.getItem('ssbao_inst_need_ent')==='1'){
