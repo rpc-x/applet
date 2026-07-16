@@ -115,9 +115,26 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .od-footer-primary.single{grid-template-columns:1fr}
 .od-footer .sp-btn-primary,.od-footer .sp-btn-danger{margin:0;width:100%;padding:13px 10px;border-radius:40px;font-size:14px}
 .od-footer .sp-btn-danger{background:#FEE2E2;color:#B91C1C}
-.od-footer-utils{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.od-footer-utils .sp-btn-secondary{width:100%;margin:0;padding:10px 4px;border-radius:40px;font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
-.od-footer-utils .sp-btn-secondary i{font-size:12px}
+.od-mat-toolbar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #F1F5F9}
+.od-mat-toolbar.cols-1{grid-template-columns:1fr}
+.od-mat-toolbar.cols-2{grid-template-columns:1fr 1fr}
+.od-mat-toolbar .sp-btn-secondary{width:100%;margin:0;padding:10px 4px;border-radius:40px;font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.od-mat-toolbar .sp-btn-secondary i{font-size:12px}
+.mat-pick-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 6px}
+.mat-pick-bar .sp-link-btn{border:none;background:none;color:#1A6B7C;font-size:12px;font-weight:600;cursor:pointer;padding:0;font-family:inherit}
+.mat-pick-count{font-size:11px;color:#94A3B8}
+.mat-pick-list{max-height:200px;overflow-y:auto;margin:0 0 4px;text-align:left;border:1px solid #EDF2F9;border-radius:14px;padding:2px 10px;background:#FAFCFE}
+.mat-pick-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F1F5F9;cursor:pointer;font-size:13px;color:#1C2E36;margin:0}
+.mat-pick-row:last-child{border-bottom:none}
+.mat-pick-row input{flex-shrink:0;accent-color:#1A6B7C}
+.mat-pick-row i{width:18px;text-align:center;flex-shrink:0}
+.mat-pick-row span{flex:1;min-width:0;line-height:1.35;text-align:left}
+.push-pc-status{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:linear-gradient(135deg,#F0F9FB,#EEF4F8);border:1px solid #D4E4F0;margin-bottom:12px;text-align:left}
+.push-pc-status .ico{width:36px;height:36px;border-radius:12px;background:#fff;color:#1A6B7C;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(15,76,92,.08)}
+.push-pc-status strong{display:block;font-size:13px;color:#1C2E36}
+.push-pc-status p{font-size:11px;color:#6F8FAA;margin:3px 0 0;line-height:1.4}
+.push-pc-status .ok{color:#059669}
+.push-pc-status .warn{color:#B45309}
 .ev-chain-card{cursor:default}
 .sp-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;border:1px solid #EDF2F9}
 .sp-card-title{font-size:14px;font-weight:700;color:#1C2E36;margin-bottom:10px}
@@ -1073,7 +1090,7 @@ const judgeTable=`<div class="prd-section-title">提交判断阈值</div>
 return formula+nodeTable(EVIDENCE_CHAIN_TEMPLATES.loan)+nodeTable(EVIDENCE_CHAIN_TEMPLATES.contract)+judgeTable;
 }
 /** 订单详情区块折叠态：true=收起 */
-let ORDER_DETAIL_FOLD={case:false,materials:true,evidence:false,audit:true};
+let ORDER_DETAIL_FOLD={case:false,materials:false,evidence:false,audit:true};
 function renderFoldSection(key,titleHtml,bodyHtml,opts){
 opts=opts||{};
 const collapsed=!!ORDER_DETAIL_FOLD[key];
@@ -1218,8 +1235,116 @@ if(f.pack)btns.push(`<button type="button" class="sp-btn-secondary" data-action=
 if(f.email)btns.push(`<button type="button" class="sp-btn-secondary" data-action="case-send-email"><i class="fas fa-envelope"></i> 邮件发送</button>`);
 if(f.pushPc)btns.push(`<button type="button" class="sp-btn-secondary" data-action="case-push-pc"><i class="fas fa-desktop"></i> 投送电脑端</button>`);
 if(!btns.length)return'';
-const cols=btns.length===1?'1fr':btns.length===2?'1fr 1fr':'repeat(3,1fr)';
-return`<div class="od-footer-utils" style="grid-template-columns:${cols}">${btns.join('')}</div>`;
+const colsCls=btns.length===1?'cols-1':btns.length===2?'cols-2':'';
+return`<div class="od-mat-toolbar ${colsCls}">${btns.join('')}</div>`;
+}
+function renderMaterialPickList(checkedDefault){
+const mats=ORDER_STATE.materials||[];
+if(!mats.length)return'<p style="font-size:12px;color:#94A3B8;padding:8px 0;text-align:left">暂无申请材料</p>';
+const on=checkedDefault!==false;
+return`<div class="mat-pick-bar">
+<div><button type="button" class="sp-link-btn" data-action="mat-pick-all">全选</button>
+<span style="color:#CBD5E1;margin:0 6px">|</span>
+<button type="button" class="sp-link-btn" data-action="mat-pick-none">清空</button></div>
+<span class="mat-pick-count" id="matPickCount">已选 ${on?mats.length:0} / ${mats.length}</span>
+</div>
+<div class="mat-pick-list" id="matPickList">${mats.map((m,i)=>`<label class="mat-pick-row"><input type="checkbox" class="mat-pick-cb" data-mat-idx="${i}" ${on?'checked':''}><i class="fas ${m.icon}" style="color:${m.color}"></i><span>${m.name}</span></label>`).join('')}</div>`;
+}
+function updateMaterialPickCount(root){
+const list=root||document.getElementById('spModalInner');
+if(!list)return;
+const total=list.querySelectorAll('.mat-pick-cb').length;
+const n=list.querySelectorAll('.mat-pick-cb:checked').length;
+const el=list.querySelector('#matPickCount');
+if(el)el.textContent='已选 '+n+' / '+total;
+}
+function getSelectedMaterials(root){
+const list=root||document.getElementById('spModalInner');
+const mats=ORDER_STATE.materials||[];
+if(!list)return[];
+return Array.from(list.querySelectorAll('.mat-pick-cb:checked')).map(cb=>mats[+cb.dataset.matIdx]).filter(Boolean);
+}
+function bindMaterialPickEvents(inner){
+if(!inner)return;
+const refresh=()=>updateMaterialPickCount(inner);
+inner.querySelectorAll('.mat-pick-cb').forEach(cb=>cb.addEventListener('change',refresh));
+inner.querySelector('[data-action="mat-pick-all"]')?.addEventListener('click',()=>{
+inner.querySelectorAll('.mat-pick-cb').forEach(cb=>{cb.checked=true});
+refresh();
+});
+inner.querySelector('[data-action="mat-pick-none"]')?.addEventListener('click',()=>{
+inner.querySelectorAll('.mat-pick-cb').forEach(cb=>{cb.checked=false});
+refresh();
+});
+refresh();
+}
+function openPackDownloadModal(){
+const mats=ORDER_STATE.materials||[];
+const o=ORDER_STATE;
+showModal(`${renderModalHead('<i class="fas fa-file-archive" style="color:#1A6B7C;margin-right:4px"></i>打包下载',`${o.caseNo||o.id} · 共 ${mats.length} 份材料 · 勾选后打包 ZIP`)}
+<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left">
+<span class="sp-label">选择附件</span>
+${renderMaterialPickList(true)}
+</div>
+<button type="button" class="sp-btn-primary" data-action="pack-download-confirm" style="margin-top:4px"><i class="fas fa-download"></i> 开始打包下载</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+bindMaterialPickEvents(inner);
+inner?.querySelector('[data-action="pack-download-confirm"]')?.addEventListener('click',()=>{
+const sel=getSelectedMaterials(inner);
+if(!sel.length){showToast('请至少勾选一份材料');return}
+closeModal();
+showToast('正在打包 '+sel.length+' 份材料 · '+(o.caseNo||o.id)+'（演示）');
+});
+}
+function openPushPcModal(){
+const mats=ORDER_STATE.materials||[];
+const o=ORDER_STATE;
+const paired=!!(typeof pcPaired!=='undefined'&&pcPaired);
+const space=(typeof syncSpaceId!=='undefined'&&syncSpaceId)||'MS_demo';
+showModal(`${renderModalHead('<i class="fas fa-desktop" style="color:#1A6B7C;margin-right:4px"></i>投送电脑端',`${o.id} · 推送至 PC 核保工作台`)}
+<div class="push-pc-status">
+<span class="ico"><i class="fas fa-${paired?'link':'unlink'}"></i></span>
+<div style="flex:1;min-width:0">
+<strong>MaterialSpace · ${space}</strong>
+<p class="${paired?'ok':'warn'}">${paired?'已配对 · WebSocket 在线，可即时投送':'未配对 · 投送后 PC 登录同一空间即可同步'}</p>
+</div>
+</div>
+<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left">
+<span class="sp-label">选择投送材料</span>
+${renderMaterialPickList(true)}
+<span class="sp-label" style="margin-top:10px">投送目标</span>
+<select class="sp-select" id="pushPcTarget" style="margin-bottom:0">
+<option value="workbench">PC 核保工作台 · 材料树</option>
+<option value="inbox">PC 收件箱 · 待归类</option>
+</select>
+</div>
+<button type="button" class="sp-btn-primary" data-action="push-pc-confirm" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 确认投送</button>
+<button type="button" class="sp-btn-secondary" data-action="push-pc-open-sync" style="width:100%;margin-top:8px;padding:11px;border-radius:40px"><i class="fas fa-exchange-alt"></i> 打开文件空间站</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+bindMaterialPickEvents(inner);
+inner?.querySelector('[data-action="push-pc-confirm"]')?.addEventListener('click',()=>{
+const sel=getSelectedMaterials(inner);
+if(!sel.length){showToast('请至少勾选一份材料');return}
+const target=inner.querySelector('#pushPcTarget')?.value||'workbench';
+const targetLabel=target==='inbox'?'PC 收件箱':'PC 核保工作台';
+closeModal();
+const names=sel.map(m=>m.name);
+showToast('已投送 '+sel.length+' 份至 '+targetLabel+' · '+o.id);
+try{
+names.forEach(n=>{
+appendSyncRecord(n,'小程序 → '+targetLabel+' · 刚刚');
+if(typeof pcAddFile==='function'){
+const m=sel.find(x=>x.name===n);
+pcAddFile(n,(m&&m.icon)||'fa-file-alt',(m&&m.color)||'#1A6B7C','小程序');
+}
+});
+if(typeof showPcPanel==='function')showPcPanel(target==='inbox'?'download':'workbench');
+}catch(err){}
+});
+inner?.querySelector('[data-action="push-pc-open-sync"]')?.addEventListener('click',()=>{
+closeModal();
+openSubPage('crossDeviceSync',{pushStack:true});
+});
 }
 function renderOrderPrimaryActions(order){
 const st=order.status||'pending';
@@ -1618,17 +1743,39 @@ const missing=req.filter(ev=>ev.required&&!names.some(n=>fileMatchesEvidence(n,e
 missing.forEach(ev=>{html+=`<span class="sp-tag" style="background:#FEE2E2;color:#B91C1C;">缺：${ev.label}</span>`});
 return html||'<span class="sp-tag" style="background:#FEE2E2;color:#B91C1C;">请先上传材料后分析</span>';
 }
-function openEmailModal(ctx){
+function openEmailModal(ctx,opts){
 ctx=ctx||'案件清单 PDF';
-showModal(`<h3><i class="fas fa-envelope" style="color:#1A6B7C"></i> 发送邮件</h3>
-<p style="font-size:11px;color:#6F8FAA;line-height:1.6;margin:8px 0 14px;">将 ${ctx} 发送至机构业务员邮箱（企微邮件网关 / SMTP 演示）</p>
+opts=opts||{};
+const pickMats=!!opts.pickMaterials;
+const o=ORDER_STATE;
+const matN=(o.materials||[]).length;
+const subj=pickMats?`【诉讼保】案件材料 · ${o.caseNo||o.id}`:`【诉讼保】${ctx} · ${o.id||'SS20250529001'}`;
+const bodyText=pickMats
+?`您好，\n\n附件为订单 ${o.id}（${o.caseNo||''}）的申请材料，请查收并协助跟进。\n\n— 诉讼保机构端`
+:`您好，\n\n附件为批量收案归类后的案件清单 PDF，共 2 个案件、6 份材料，请查收并跟进业务员确认。\n\n— 诉讼保机构端 · 工具助手`;
+const attachHtml=pickMats
+?`<span class="sp-label">附件材料（可勾选）</span>${renderMaterialPickList(true)}`
+:`<div class="sp-card" style="padding:12px;margin:10px 0;text-align:left;"><div class="sp-list-item" style="padding:8px 0;border:none"><i class="fas fa-paperclip" style="color:#1A6B7C"></i><div style="flex:1"><strong style="font-size:12px">批量案件清单.pdf</strong><p style="font-size:10px;color:#94A3B8">约 248 KB · 含案号目录</p></div></div></div>`;
+showModal(`${renderModalHead('<i class="fas fa-envelope" style="color:#1A6B7C;margin-right:4px"></i>发送邮件',pickMats?`${o.caseNo||o.id} · 共 ${matN} 份可选附件`:`将 ${ctx} 发送至机构业务员邮箱`)}
 <span class="sp-label">收件人</span><input class="sp-input" id="emailTo" value="zhang.yewu@yongan-ins.com" placeholder="业务员邮箱">
 <span class="sp-label">抄送</span><input class="sp-input" id="emailCc" value="hebao@yongan-ins.com" placeholder="核保组（可选）">
-<span class="sp-label">邮件主题</span><input class="sp-input" id="emailSub" value="【诉讼保】${ctx} · SS20250529001">
-<span class="sp-label">正文</span><textarea class="sp-textarea" id="emailBody" style="min-height:100px;">您好，\n\n附件为批量收案归类后的案件清单 PDF，共 2 个案件、6 份材料，请查收并跟进业务员确认。\n\n— 诉讼保机构端 · 工具助手</textarea>
-<div class="sp-card" style="padding:12px;margin:10px 0;text-align:left;"><div class="sp-list-item" style="padding:8px 0;border:none"><i class="fas fa-paperclip" style="color:#1A6B7C"></i><div style="flex:1"><strong style="font-size:12px">批量案件清单.pdf</strong><p style="font-size:10px;color:#94A3B8">约 248 KB · 含案号目录</p></div></div></div>
-<button class="sp-btn-primary" data-action="email-send-confirm" style="margin-top:4px"><i class="fas fa-paper-plane"></i> 确认发送</button>
-<button class="sp-btn-secondary sp-modal-close" data-action="modal-close" style="width:100%;margin-top:8px">取消</button>`);
+<span class="sp-label">邮件主题</span><input class="sp-input" id="emailSub" value="${subj}">
+<span class="sp-label">正文</span><textarea class="sp-textarea" id="emailBody" style="min-height:${pickMats?80:100}px;">${bodyText}</textarea>
+${attachHtml}
+<button class="sp-btn-primary" data-action="email-send-confirm" style="margin-top:8px"><i class="fas fa-paper-plane"></i> 确认发送</button>`,{form:true});
+const inner=document.getElementById('spModalInner');
+if(pickMats)bindMaterialPickEvents(inner);
+inner?.querySelector('[data-action="email-send-confirm"]')?.addEventListener('click',()=>{
+if(pickMats){
+const sel=getSelectedMaterials(inner);
+if(!sel.length){showToast('请至少勾选一份附件');return}
+closeModal();
+showToast('邮件已发送 · 附件 '+sel.length+' 份');
+return;
+}
+closeModal();
+showToast('邮件已发送至业务员邮箱');
+});
 }
 function renderStaffPermChips(perms,interactive){
 return STAFF_PERM_KEYS.map(k=>{
@@ -2140,7 +2287,7 @@ if(TOOL_CHILD_PAGES.has(id)){
 crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+p.title;
 }else{crumbEl.style.display='none'}
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
-subBody.classList.toggle('has-od-layout',id==='orderDetail');
+subBody.classList.toggle('has-od-layout',id==='orderDetail'||id==='caseInfoDetail');
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
 if(id==='orderList'){
 const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
@@ -2158,7 +2305,7 @@ subTitle.textContent=currentXuepingFilter==='all'?'学平险订单':('学平险 
 if(id==='xuepingDetail')subSubtitle.textContent=XUEPING_STATE.id||'';
 if(id==='crossDeviceSync'){syncMobileTab=syncLoggedIn?'files':'scanLogin';showPcPanel(syncLoggedIn?'workbench':'pair');}else if(!TOOL_CHILD_PAGES.has(id))hidePcPanel();
 bindSubEvents(id);
-if(id==='orderDetail'){
+if(id==='orderDetail'||id==='caseInfoDetail'){
 setTimeout(()=>{
 try{window.__bindEvidenceChainPrdHover&&window.__bindEvidenceChainPrdHover()}catch(e){}
 },0);
@@ -2539,7 +2686,8 @@ ${renderCaseSummaryLine('保全类型',ORDER_STATE.type,'type')}
 ${renderCaseSummaryLine('标的金额','¥'+Number(ORDER_STATE.targetAmount).toLocaleString(),'targetAmount')}
 ${renderCaseSummaryLine('案号',ORDER_STATE.caseNo,'caseNo')}
 ${renderCaseSummaryLine('案由',ORDER_STATE.cause,'cause')}`;
-const matBody=(ORDER_STATE.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="下载">下载</button></div>`).join('')||'<p style="font-size:12px;color:#94A3B8;padding:4px 0">暂无材料</p>';
+const matList=(ORDER_STATE.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="下载">下载</button></div>`).join('')||'<p style="font-size:12px;color:#94A3B8;padding:4px 0">暂无材料</p>';
+const matBody=matList+renderOrderMaterialUtils(ORDER_STATE.status);
 const auditBody=`<div class="sp-timeline">
 <div class="sp-timeline-item"><strong>用户提交</strong><br>2025-05-29 09:15</div>
 <div class="sp-timeline-item"><strong>证据链诊断</strong><br>2025-05-29 09:16 · 完整度 ${ev.score} 分 · ${ev.judge}</div>
@@ -2559,18 +2707,19 @@ ${renderFoldSection('audit',`<i class="fas fa-history fold-lead"></i>审核记�
 </div>
 <div class="od-footer">
 ${renderOrderPrimaryActions(ORDER_STATE)}
-${renderOrderMaterialUtils(ORDER_STATE.status)}
 </div>
 </div>`}},
 caseInfoDetail:{title:'案件详情',sub:ORDER_STATE.caseNo,render:()=>{
 const o=ORDER_STATE;
-const canApprove=o.status==='pending'||o.status==='review';
-const f=getOrderMaterialActionFlags(o.status);
-const utilBtns=[];
-if(f.pack)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>`);
-if(f.email)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-send-email"><i class="fas fa-envelope"></i> 邮件发送</button>`);
-if(f.pushPc)utilBtns.push(`<button class="sp-btn-secondary" style="width:100%;padding:12px;border-radius:40px" data-action="case-push-pc"><i class="fas fa-desktop"></i> 投送电脑端</button>`);
+const ev=analyzeEvidenceChain(o);
+const matUtils=renderOrderMaterialUtils(o.status);
+const auditBody=`<div class="sp-timeline">
+<div class="sp-timeline-item"><strong>用户提交</strong><br>2025-05-29 09:15</div>
+<div class="sp-timeline-item"><strong>证据链诊断</strong><br>2025-05-29 09:16 · 完整度 ${ev.score} 分 · ${ev.judge}</div>
+<div class="sp-timeline-item"><strong>AI预审通过</strong><br>2025-05-29 09:16 · 3项建议</div></div>`;
 return`
+<div class="od-page">
+<div class="od-scroll">
 <div class="sp-card">
 <div class="sp-section-label">法院信息</div>
 ${renderInfoRow('法院',o.court,'court')}
@@ -2602,9 +2751,15 @@ ${renderInfoRow('地址',o.respondentAddress)}
 <div class="sp-card">
 <div class="sp-section-label">案件材料</div>
 ${(o.materials||[]).map(m=>`<div class="sp-list-item"><i class="fas ${m.icon}" style="color:${m.color}"></i><span style="flex:1;font-size:13px">${m.name}</span><button class="sp-btn-secondary" data-action="toast" data-msg="${m.name} 下载中…"><i class="fas fa-download"></i> 下载</button></div>`).join('')}
+${matUtils}
 </div>
-${utilBtns.length?`<div class="${utilBtns.length===3?'od-footer-utils':'sp-grid-2'}" style="margin-top:4px">${utilBtns.join('')}</div>`:''}
-${canApprove?`<button class="sp-btn-primary" data-page="orderReview" data-push-stack="1" style="margin-top:10px"><i class="fas fa-clipboard-check"></i> 审批</button>`:''}`}},
+${renderEvidenceChainCard(o)}
+${renderFoldSection('audit',`<i class="fas fa-history fold-lead"></i>审核记录`,auditBody)}
+</div>
+<div class="od-footer">
+${renderOrderPrimaryActions(o)}
+</div>
+</div>`}},
 orderReview:{title:'订单审核',sub:'核保 · 风险评估 · 审批',render:()=>`
 <div class="sp-steps"><div class="sp-step done">材料核验</div><div class="sp-step active">核保评估</div><div class="sp-step">审批</div><div class="sp-step">出函</div></div>
 <div class="sp-card"><div class="sp-card-title">核保评估</div>
@@ -3165,26 +3320,21 @@ openSubPage(goto,{pushStack:true});
 }else openSubPage('messageCenter',{keepStack:true});
 return;
 }
-if(act==='case-pack-download')showToast('案件材料打包下载中…');
-if(act==='case-send-email')openEmailModal('案件材料包 · '+ORDER_STATE.caseNo);
-if(act==='case-push-pc'){
-showToast('已投送至 PC 核保工作台 · '+ORDER_STATE.id);
-try{appendSyncRecord((ORDER_STATE.caseNo||ORDER_STATE.id)+' 材料包','小程序 → PC · 刚刚')}catch(err){}
-return;
-}
+if(act==='case-pack-download'){openPackDownloadModal();return}
+if(act==='case-send-email'){openEmailModal('案件材料 · '+ORDER_STATE.caseNo,{pickMaterials:true});return}
+if(act==='case-push-pc'){openPushPcModal();return}
 if(act==='go-issue-letter'){openSubPage('issueGuarantee',{pushStack:true});return}
 if(act==='rar-process')runRarProcess();
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
 if(act==='rar-open-email')openEmailModal('批量案件清单 PDF');
-if(act==='email-send-confirm'){closeModal();showToast('邮件已发送至业务员邮箱');}
+if(act==='email-send-confirm')return;
 if(act==='staff-invite'){openStaffInviteModal();return}
 if(act==='staff-edit'){openStaffEditModal(btn.dataset.staffId);return}
 if(act==='struct-extract')runStructExtract();
 if(act==='struct-apply-order'){showToast('已写入订单 '+ORDER_STATE.id);setTimeout(()=>openSubPage('orderReview'),800)}
 if(act==='smart-analyze-run')runSmartAnalyze();
 if(act==='upload-remove')return;
-if(act==='email-send-confirm')return;
 if(act==='sync-refresh')showToast('机构端与 PC 材料已同步完成');
 if(act==='sync-sim-login')syncDoLogin('scan');
 if(act==='sync-pair-submit'){
@@ -3284,9 +3434,9 @@ const PRD_SPECS={
 'quick-review':{title:'订单审核快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'核保人员一键进入待审核订单列表，缩短操作路径。',logic:['跳转 orderList filter=pending','自动选中「待审核」筛选 Tab'],acceptance:['点击打开订单列表且仅显示待审核'],api:'GET /api/inst/orders?status=pending'},
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入诉讼保「待出函」订单列表，办理审核通过后的出函动作（非审核、非补材料）。',logic:['跳转 orderList filter=issue biz=litigation','自动选中「待出函」筛选 Tab','与数据看板「待出函」同一数据源'],acceptance:['点击打开订单列表且仅显示待出函','入口语义=出函办理'],api:'GET /api/inst/orders?status=issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
-'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、证据链诊断与审核记录；四块内容可折叠展开。底部主操作随状态变化（审核/催补/出函/下载保函）；材料工具栏按状态显示打包下载、邮件发送、投送电脑端。',logic:['od-page：上滚下固','sp-fold 折叠','主操作：pending/review→补材料+审核；supplement→催补；issue→确认出函；done→下载保函；reject→已驳回','材料工具：pack/email/pushPc 按 getOrderMaterialActionFlags(status)','要求补材料 → openEvidenceSupplementModal','进入审核 → openOrderReviewModal','投送电脑端 → MaterialSpace 推送 PC','证据链诊断悬停 1 秒 → 右侧 PRD 展示百分制评分规则'],acceptance:['四区域可折叠','底部主操作随状态切换','材料三按钮按状态显隐','证据链无页内评分规则按钮，规则见右侧 PRD'],api:'GET /api/inst/order/{id} · POST /api/inst/material/push-pc'},
+'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'展示订单概要、案件信息摘要、申请材料、证据链诊断与审核记录；四块内容可折叠展开。底部仅保留主操作（审核/催补/出函/下载保函）；打包下载、邮件发送、投送电脑端归入「申请材料」区块工具栏。',logic:['od-page：上滚下固','sp-fold 折叠','底部主操作：pending/review→补材料+审核；supplement→催补；issue→确认出函；done→下载保函；reject→已驳回','材料工具栏在申请材料区：pack/email/pushPc 按 getOrderMaterialActionFlags(status)','打包下载 → 勾选附件后 ZIP 打包','邮件发送 → 勾选附件后发送','投送电脑端 → 勾选材料+选择目标+确认投送/打开文件空间站','要求补材料 → openEvidenceSupplementModal','进入审核 → openOrderReviewModal','证据链诊断悬停 1 秒 → 右侧 PRD 展示百分制评分规则'],acceptance:['四区域可折叠','底部仅主操作、材料三按钮在申请材料区','打包/邮件可勾选附件','投送电脑端有交互弹层','证据链无页内评分规则按钮，规则见右侧 PRD'],api:'GET /api/inst/order/{id} · POST /api/inst/material/push-pc · POST /api/inst/material/download/zip · POST /api/inst/material/email'},
 'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链，输出诊断分析、材料完整度评分（百分制，总分 100）与提交判断。页内不放「评分规则」按钮；悬停证据链区域 1 秒后，本侧栏以表格展示完整评分规则与单项计算逻辑。',logic:['按案由匹配借贷 / 合同模板','节点权重加权命中计分（满分 100）','必填缺件优先补材料','fail 档阻断进入审核'],scoreTables:true,acceptance:['页内无「评分规则」按钮','悬停 1 秒后右侧 PRD 以表格展示规则','借贷/合同节点权重合计均为 100','每项含 keywords 命中计分说明','分数与节点命中状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
-'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；底部按订单状态显示打包下载、邮件发送、投送电脑端；待审批状态显示「审批」入口。',logic:['法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作随 status：驳回仅打包；其余含邮件与投送PC','status∈{pending,review} 时显示审批按钮 → orderReview'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮按状态显隐','待审批可见审批按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
+'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；案件材料区内按状态显示打包下载、邮件发送、投送电脑端；含证据链诊断与审核记录；底部主操作与订单详情一致（要求补材料/进入审核等）。',logic:['od-page：上滚下固','法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作在材料卡片内：驳回仅打包；其余含邮件与投送PC','打包/邮件/投送弹层支持勾选附件','证据链诊断 + 审核记录','底部主操作：renderOrderPrimaryActions（pending/review→补材料+审核）','邮件发送弹层无取消按钮，点遮罩或关闭图标退出'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮在材料区内按状态显隐','证据链与审核记录可见','底部有要求补材料','邮件弹层无取消按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=已出函'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=待补材料'],api:'POST /api/inst/order/{id}/supplement'},
