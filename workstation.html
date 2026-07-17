@@ -128,14 +128,18 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .od-mat-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left}
 .od-mat-name{font-size:13px;font-weight:600;color:#1C2E36;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .od-mat-cat{display:inline-flex;align-self:flex-start;font-size:10px;font-weight:700;color:#1A6B7C;background:#F0F9FB;border:1px solid #D4EDE8;padding:2px 8px;border-radius:10px;line-height:1.4}
-.mat-preview-page{padding:0 0 8px}
-.mat-preview-meta{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border-radius:18px;border:1px solid #EDF2F9;margin-bottom:12px}
-.mat-preview-meta .ico{width:44px;height:44px;border-radius:14px;background:#F0F9FB;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-.mat-preview-meta strong{display:block;font-size:14px;color:#1C2E36;word-break:break-all;line-height:1.35}
-.mat-preview-meta span{display:block;font-size:11px;color:#6F8FAA;margin-top:4px}
-.mat-preview-viewer{background:#fff;border-radius:18px;border:1px solid #EDF2F9;padding:14px;min-height:360px}
-.mat-preview-img-demo{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;background:linear-gradient(160deg,#F8FAFC,#EEF4F8);border-radius:14px;color:#64748B;text-align:center;padding:24px}
-.mat-preview-img-demo i{font-size:48px;margin-bottom:12px;color:#94A3B8}
+.mat-preview-page{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;background:#FAFBFC}
+.mat-preview-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 16px;background:#FAFBFC}
+.mat-preview-viewer{background:#fff;border-radius:16px;border:1px solid #EEF2F6;padding:18px 16px;min-height:calc(100vh - 220px);box-shadow:0 1px 0 rgba(15,76,92,.03)}
+.mat-preview-viewer .src-doc-sheet{background:#fff;border:none;border-radius:0;padding:8px 4px 4px;font-size:14px;line-height:1.9;color:#1C2E36}
+.mat-preview-viewer .src-doc-sheet .src-doc-title{font-size:17px;margin-bottom:16px;color:#0F4C5C}
+.mat-preview-viewer .src-doc-line{padding:4px 4px;min-height:1.9em}
+.mat-preview-viewer .src-doc-line .src-ln{width:22px;font-size:12px;color:#CBD5E1;line-height:1.9}
+.mat-preview-viewer .src-hit-tip{margin-top:16px;font-size:12px;color:#64748B;background:#F8FAFC;border:1px solid #EEF2F6;border-radius:12px;padding:12px 14px}
+.mat-preview-img-demo{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 240px);background:#fff;border-radius:12px;color:#64748B;text-align:center;padding:32px 20px}
+.mat-preview-img-demo i{font-size:56px;margin-bottom:14px;color:#94A3B8}
+.mat-preview-footer{flex-shrink:0;padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.98);border-top:1px solid #E8EEF4;box-shadow:0 -6px 20px rgba(15,76,92,.06)}
+.mat-preview-footer .sp-btn-secondary{width:100%;margin:0;padding:13px;border-radius:40px;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .od-footer{flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding:10px 18px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.96);border-top:1px solid #E8EEF4;box-shadow:0 -6px 20px rgba(15,76,92,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .od-footer-primary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .od-footer-primary.single{grid-template-columns:1fr}
@@ -549,7 +553,7 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .mat-tech-stack .layer{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #334155}
 .mat-tech-stack .layer:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .mat-tech-stack .api{color:#A5F3FC;font-size:10px;margin-top:4px;display:block}
-.v1-upload-zone{border:2px dashed #B8D4E8;border-radius:24px;padding:28px 16px;text-align:center;background:#FAFCFE;cursor:pointer}
+.v1-upload-zone{border:2px dashed #B8D4E8;border-radius:24px;padding:10px 16px;text-align:center;background:#FAFCFE;cursor:pointer}
 .v1-hidden-input{display:none}
 .sync-flow{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px 0;font-size:10px;color:#5E6F8D;flex-wrap:wrap}
 .sync-flow-box{background:#F0F9FB;border:1px solid #D4EDE8;border-radius:14px;padding:10px 8px;text-align:center;flex:1;min-width:72px}
@@ -881,20 +885,33 @@ return{label:'去认证',cls:'auth-todo',profile:'pending',profileText:'待完�
 }
 const TOOL_CHILD_PAGES=new Set(['structExtract','smartAnalysis','crossDeviceSync']);
 const TOOL_HUB_ID='toolAssistantHub';
+function renderToolBizSelector(){
+const meta=TOOL_BIZ_STRUCT[toolBizLine]||TOOL_BIZ_STRUCT.litigation;
+const tabs=TOOL_BIZ_OPTIONS.map(o=>'<button type="button" data-tool-biz="'+o.key+'"'+(o.key===toolBizLine?' class="on"':'')+'>'+o.label+'</button>').join('');
+const litSub=toolBizLine==='litigation'
+?('<div style="margin-top:10px;">'+previewTypeSelector(currentPreviewType,'data-preview-type')+'</div>')
+:'';
+return'<div class="sp-card" id="toolBizSection" data-prd="tool-assistant-hub" style="margin-bottom:12px;">'+
+'<div class="sp-card-title" style="font-size:12px;">业务类型</div>'+
+'<div class="biz-line-tabs" id="toolBizTabs">'+tabs+'</div>'+
+'<p id="toolBizHint" style="font-size:11px;color:#6F8FAA;margin:0;line-height:1.5;">'+meta.hint+'</p>'+
+litSub+'</div>';
+}
 function renderRarUploadBlock(){
-rarUploadedFiles=[];currentPreviewType='财产保全';
-return'<div class="sp-card" id="rarUploadSection" data-prd="rar-batch-pack"><div class="sp-card-title"><i class="fas fa-file-archive" style="color:#2563EB;margin-right:6px;"></i>RAR 批量打包<small style="font-weight:500;color:#6F8FAA;margin-left:6px;">解压归类 · 案件清单 PDF</small></div>'+
-'<p style="font-size:11px;color:#6F8FAA;margin:-4px 0 12px;line-height:1.5;">上传 RAR/ZIP 混包 → 按案号归类 → 生成清单 PDF 推送业务员</p>'+
-'<div class="sp-card-title" style="font-size:12px;">① 上传材料包（可多选）</div>'+
-'<div class="upload-file-list" id="rarFileList">'+renderUploadFileListHTML([],'rarFileList')+'</div>'+
+rarUploadedFiles=[];
+if(toolBizLine==='litigation')currentPreviewType='财产保全';
+return renderToolBizSelector()+
+'<div class="sp-card" id="rarUploadSection" data-prd="rar-batch-pack">'+
+'<div class="sp-card-title" style="font-size:12px;">① 上传材料（可多选）</div>'+
 '<div class="mat-progress-bar" id="rarProgressWrap" style="display:none;"><div class="mat-progress-fill" id="rarProgressFill" style="width:0%;"></div></div>'+
 '<p id="rarStatusTxt" style="font-size:11px;color:#6F8FAA;margin:8px 0;text-align:center;"></p>'+
-'<div class="v1-upload-zone" id="rarUploadZone" style="border-color:#93C5FD;background:#EFF6FF;"><i class="fas fa-file-archive" style="color:#2563EB;font-size:36px;"></i>'+
-'<p style="font-weight:700;color:#1D4ED8;">点击上传 RAR / ZIP 材料包</p>'+
-'<p style="font-size:11px;color:#6B7280;margin-top:6px;">每选一个文件即显示在列表 · 全部上传完成后点击下方按钮处理</p>'+
-'<input type="file" id="rarFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z" multiple></div>'+
-'<button class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled style="margin-top:12px;">开始解压并归类</button>'+
-'<div id="rarPreviewMount" style="margin-top:16px;"></div></div>';
+'<div class="v1-upload-zone" id="rarUploadZone" style="border-color:#93C5FD;background:#EFF6FF;"><i class="fas fa-cloud-upload-alt" style="color:#2563EB;font-size:36px;"></i>'+
+'<p style="font-weight:700;color:#1D4ED8;">点击上传材料</p>'+
+'<p style="font-size:11px;color:#6B7280;margin-top:6px;">支持 ZIP / RAR / 7Z、PDF、Word、图片等 · 每选一个文件即显示在列表</p>'+
+'<input type="file" id="rarFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.bmp,.webp,.tif,.tiff,.txt,.csv,.ofd" multiple></div>'+
+'<div class="upload-file-list" id="rarFileList">'+renderUploadFileListHTML([],'rarFileList')+'</div>'+
+'<button class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled style="margin-top:12px;">开始处理</button>'+
+'</div><div id="rarPreviewMount" style="margin-top:16px;"></div>';
 }
 let ORDER_STATE={
 id:'SS20250529001',status:'wait_confirm',amount:8500000,premium:7225,
@@ -1063,29 +1080,24 @@ const color=mat?mat.color:'#1A6B7C';
 const isImg=/\.(jpg|jpeg|png|gif|webp)$/i.test(name);
 const isPdf=/\.pdf$/i.test(name);
 const kind=isImg?'图片':(isPdf?'PDF 文档':'文档');
-const sizeHint=isImg?'约 320 KB':'约 186 KB';
+const dispName=getMaterialDisplayName(mat)||name;
 let viewer='';
 if(doc&&doc.lines&&doc.lines.length){
 const linesHtml=doc.lines.map(line=>{
 const blank=!line.text;
 return`<div class="src-doc-line${blank?' blank':''}"><span class="src-ln">${line.n}</span><span class="src-lt">${formatSourceLineText(line.text,false)}</span></div>`;
 }).join('');
-viewer=`<div class="src-doc-sheet"><div class="src-doc-title">${doc.title||name}</div>${linesHtml}</div>
-<p class="src-hit-tip" style="color:#64748B;background:#F8FAFC">材料预览页 · 展示原文节选；正式环境将嵌入 PDF/图片原生查看器。</p>`;
+viewer=`<div class="src-doc-sheet"><div class="src-doc-title">${doc.title||dispName}</div>${linesHtml}</div>`;
 }else if(isImg){
-viewer=`<div class="mat-preview-img-demo"><i class="fas fa-image"></i><strong style="color:#1C2E36;margin-bottom:6px">${name}</strong><p style="font-size:12px;line-height:1.6">图片预览（演示占位）<br>正式环境将展示原图并可缩放</p></div>`;
+viewer=`<div class="mat-preview-img-demo"><i class="fas fa-image" style="color:${color}"></i><p style="font-size:13px;line-height:1.7;color:#94A3B8">图片预览区域<br>正式环境将展示原图</p></div>`;
 }else{
-viewer=`<div class="mat-preview-img-demo"><i class="fas ${icon}" style="color:${color}"></i><strong style="color:#1C2E36;margin-bottom:6px">${name}</strong><p style="font-size:12px;line-height:1.6">${kind}预览（演示占位）<br>正式环境将打开文件查看器</p></div>`;
+viewer=`<div class="mat-preview-img-demo"><i class="fas ${icon}" style="color:${color}"></i><p style="font-size:13px;line-height:1.7;color:#94A3B8">${kind}预览区域<br>正式环境将打开文件查看器</p></div>`;
 }
-const dispName=getMaterialDisplayName(mat)||name;
-const cat=getMaterialCategory(mat);
 return`<div class="mat-preview-page">
-<div class="mat-preview-meta">
-<div class="ico"><i class="fas ${icon}" style="color:${color}"></i></div>
-<div style="min-width:0;flex:1"><strong>${dispName}</strong><span>${cat} · ${kind} · ${sizeHint} · ${ORDER_STATE.caseNo||ORDER_STATE.id||''}</span></div>
+<div class="mat-preview-scroll"><div class="mat-preview-viewer">${viewer}</div></div>
+<div class="mat-preview-footer">
+<button type="button" class="sp-btn-secondary" data-action="toast" data-msg="${dispName} 下载中…"><i class="fas fa-download"></i> 下载此文件</button>
 </div>
-<div class="mat-preview-viewer">${viewer}</div>
-<button type="button" class="sp-btn-secondary" style="width:100%;margin-top:14px" data-action="toast" data-msg="${name} 下载中…"><i class="fas fa-download"></i> 下载此文件</button>
 </div>`;
 }
 function getMaterialDisplayName(m){
@@ -2018,6 +2030,53 @@ const MATERIAL_FILES={
 {icon:'fa-file-pdf',color:'#2563EB',name:'继续执行申请书.pdf',type:'保全申请'},
 {icon:'fa-file-pdf',color:'#64748B',name:'执行依据文书.pdf',type:'执行依据'}]}
 let currentPreviewType='财产保全';
+let toolBizLine='litigation';
+const TOOL_BIZ_OPTIONS=[
+{key:'litigation',label:'诉讼保'},
+{key:'xueping',label:'学平险'},
+{key:'biaohou',label:'标后'}
+];
+const TOOL_BIZ_STRUCT={
+litigation:{
+hint:'按诉讼保全申请书字段解析：申请人、被申请人、案号、法院、金额、财产线索等',
+processSteps:['正在识别诉讼材料…','提取案号与法院信息…','映射保全申请字段…','生成结构化预览…'],
+doneHint:(n)=>'✓ 已按诉讼保结构解析 '+n+' 个文件 · 申请书字段就绪',
+toast:'诉讼保结构化解析完成',
+docTitle:'财产保全申请书',
+fields:[['申请人','张正源'],['被申请人','北京某某贸易有限公司'],['案号','（2025）京0105民初12345号'],['受理法院','北京市朝阳区人民法院'],['申请保全金额','人民币8,500,000元'],['财产线索','工商银行朝阳支行 6222021234567890']],
+materials:[
+{icon:'fa-file-pdf',color:'#E53E3E',name:'起诉状.pdf',type:'起诉状'},
+{icon:'fa-file-pdf',color:'#2563EB',name:'保全申请书.pdf',type:'保全申请'},
+{icon:'fa-file-image',color:'#7C3AED',name:'营业执照.jpg',type:'主体资格'},
+{icon:'fa-file-word',color:'#2B6CB0',name:'财产线索说明.docx',type:'财产线索'}]
+},
+xueping:{
+hint:'按学平险投保字段解析：学生、学校、年级、监护人、产品、保障期间等',
+processSteps:['正在识别学平投保材料…','提取学生与学校信息…','映射投保标准字段…','生成结构化预览…'],
+doneHint:(n)=>'✓ 已按学平险结构解析 '+n+' 个文件 · 投保字段就绪',
+toast:'学平险结构化解析完成',
+docTitle:'学平险投保信息',
+fields:[['学生姓名','王小明'],['学校','北京市朝阳区实验小学'],['年级','三年级'],['监护人','王建国'],['联系电话','138****6621'],['保险产品','意外医疗'],['保障期间','2025-09-01 ~ 2026-08-31'],['保费','¥120']],
+materials:[
+{icon:'fa-file-pdf',color:'#E53E3E',name:'投保确认书.pdf',type:'投保材料'},
+{icon:'fa-file-image',color:'#7C3AED',name:'学生身份证.jpg',type:'身份证明'},
+{icon:'fa-file-image',color:'#2563EB',name:'户口本页.jpg',type:'身份证明'},
+{icon:'fa-file-excel',color:'#059669',name:'班级名册.xlsx',type:'投保清单'}]
+},
+biaohou:{
+hint:'按标后保函字段解析：项目名称、申请人、保函类型、项目金额、截止时间等',
+processSteps:['正在识别标后材料…','提取项目与申请人…','映射保函申请字段…','生成结构化预览…'],
+doneHint:(n)=>'✓ 已按标后结构解析 '+n+' 个文件 · 项目字段就绪',
+toast:'标后结构化解析完成',
+docTitle:'标后保函申请信息',
+fields:[['项目名称','某某市政道路改造工程'],['申请人','某某建设集团有限公司'],['保函类型','履约保函'],['项目金额','人民币5,000,000元'],['截止时间','2025-06-25 18:00'],['报价机构数','12 家'],['订单号','BH20250620001']],
+materials:[
+{icon:'fa-file-pdf',color:'#E53E3E',name:'招标文件.pdf',type:'招标材料'},
+{icon:'fa-file-pdf',color:'#2563EB',name:'中标通知书.pdf',type:'中标材料'},
+{icon:'fa-file-word',color:'#2B6CB0',name:'保函申请表.docx',type:'申请材料'},
+{icon:'fa-file-image',color:'#7C3AED',name:'营业执照.jpg',type:'主体资格'}]
+}
+};
 let syncQrCountdown=null;
 let syncLoggedIn=false,syncMobileTab='scanLogin',syncSpaceId='MS_a8f3',syncLanOn=false,syncLoginTimer=null;
 let syncMobileFiles=[
@@ -2404,6 +2463,27 @@ ${fieldsHtml}
 ${renderMaterialFileList(type)}
 <div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
 }
+function renderBizStructPreview(biz){
+biz=biz||toolBizLine;
+if(biz==='litigation')return renderDocPreview(currentPreviewType);
+const meta=TOOL_BIZ_STRUCT[biz]||TOOL_BIZ_STRUCT.litigation;
+const bizLabel=(TOOL_BIZ_OPTIONS.find(o=>o.key===biz)||{}).label||'业务';
+const fieldsHtml=meta.fields.map(([k,v])=>`<p style="margin:0 0 6px"><b>${k}：</b>${v}</p>`).join('');
+const mats=meta.materials||[];
+const matHtml=`<p style="margin:0 0 6px"><b>文件材料（材料总数：${mats.length}）</b></p>
+<div class="doc-mat-list">${mats.map(f=>`<div class="doc-mat-item"><i class="fas ${f.icon}" style="color:${f.color}"></i><div class="doc-mat-meta"><div class="doc-mat-name">${f.name}</div><div class="doc-mat-type">${f.type}</div></div></div>`).join('')}</div>`;
+return`
+<div id="docPreviewCard" style="background:#fff;border:1px solid #E8ECF0;border-radius:14px;padding:18px 16px;font-size:12px;line-height:1.85;color:#334155;">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
+<span class="sp-tag selected" style="margin:0;">${bizLabel}</span>
+<span style="font-size:11px;color:#94A3B8;">结构化解析结果</span>
+</div>
+<h3 style="text-align:center;font-size:15px;font-weight:800;color:#0F4C5C;margin:0 0 14px;letter-spacing:.5px">${meta.docTitle}</h3>
+${fieldsHtml}
+<div class="doc-preview-divider"></div>
+${matHtml}
+<div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
+}
 function showModal(html,opts){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
 if(!mask||!inner)return;
@@ -2649,7 +2729,7 @@ if(TOOL_CHILD_PAGES.has(id)){
 crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+p.title;
 }else{crumbEl.style.display='none'}
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
-subBody.classList.toggle('has-od-layout',id==='orderDetail'||id==='caseInfoDetail');
+subBody.classList.toggle('has-od-layout',id==='orderDetail'||id==='caseInfoDetail'||id==='materialPreview');
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
 if(id==='orderList'){
 const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
@@ -3283,15 +3363,13 @@ searchPage:{title:'搜索',sub:'订单 · 客户 · 保函号',render:()=>`<inpu
 profileInfo:{title:'个人信息',sub:'机构账号信息',render:()=>`<div class="sp-card"><span class="sp-label">姓名</span><input class="sp-input" value="王审核员"><span class="sp-label">所属机构</span><input class="sp-input" value="永安保险" readonly><span class="sp-label">角色</span><input class="sp-input" value="核保专员" readonly><button class="sp-btn-primary" data-action="toast" data-msg="信息已保存">保存</button></div>`},
 securityCenter:{title:'安全中心',sub:'密码 · 登录设备',render:()=>`<div class="settings-list"><div class="settings-item" data-action="toast" data-msg="修改密码页"><div class="setting-left"><i class="fas fa-key"></i><span>修改密码</span></div><div class="setting-right">></div></div><div class="settings-item"><div class="setting-left"><i class="fas fa-mobile-alt"></i><span>登录设备</span></div><div class="setting-right">2台 ></div></div></div>`},
 aboutInst:{title:'关于',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">函信保函通</h3><p style="font-size:13px;color:#6F8FAA">版本 6.0.0 · 工具助手 · 文件空间站</p></div>`},
-toolAssistantHub:{title:'工具助手',sub:'RAR 批量打包 · 文件空间站',render:()=>
-hero('linear-gradient(125deg,#0F4C5C,#1A6B7C)','🤖','机构端 · 工具助手','本页直接上传打包 · 文件空间站支持手机/PC 协同')+
-steps(['上传材料','解压归类','清单输出','双端互通'],0)+
+toolAssistantHub:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',render:()=>
 renderRarUploadBlock()+
 '<div class="sp-card" style="margin-top:12px;"><div class="sp-card-title">更多能力</div>'+
 '<div class="sync-scenario" data-page="crossDeviceSync"><i class="fas fa-satellite-dish" style="color:#4338CA;"></i><div><strong style="font-size:13px;">文件空间站</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">扫码 / 配对 / 内网 · 手机⇄PC 材料互通</p></div></div>'+
-'<div class="sync-scenario" style="cursor:default;opacity:.95;"><i class="fas fa-briefcase"></i><div><strong style="font-size:13px;">业务员批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">上方上传 RAR → 按案号归类 → 清单 PDF 推送业务员</p></div></div>'+
+'<div class="sync-scenario" style="cursor:default;opacity:.95;"><i class="fas fa-briefcase"></i><div><strong style="font-size:13px;">业务员批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">先选业务类型 → 上传材料 → 按对应结构解析输出</p></div></div>'+
 '<button class="sp-btn-primary" data-action="demo-tool-flow">演示完整流程</button></div>'},
-rarBatchPack:{title:'工具助手',sub:'RAR 批量打包 · 文件空间站',render:()=>PAGES.toolAssistantHub.render()},
+rarBatchPack:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',render:()=>PAGES.toolAssistantHub.render()},
 structExtract:{title:'结构化提取',sub:'Word/图/PDF → 标准字段 · 申请书预览',render:()=>{
 structUploadedFiles=[];currentPreviewType='财产保全';
 return hero('linear-gradient(125deg,#5B21B6,#7C3AED)','🧬','非结构化 → 结构化','OCR + NLP 写入保全/订单标准字段库，并生成申请书预览')+
@@ -3450,17 +3528,57 @@ if(sw&&!sw._bound){sw._bound=true;sw.addEventListener('click',e=>{e.stopPropagat
 }
 
 function runRarProcess(){
-if(!rarUploadedFiles.length){showToast('请先上传 RAR/ZIP 材料包');return}
+if(!rarUploadedFiles.length){showToast('请先上传材料');return}
+const bizMeta=TOOL_BIZ_STRUCT[toolBizLine]||TOOL_BIZ_STRUCT.litigation;
 const wrap=document.getElementById('rarProgressWrap'),fill=document.getElementById('rarProgressFill'),txt=document.getElementById('rarStatusTxt'),btn=document.getElementById('rarStartBtn');
 if(!wrap)return;if(btn)btn.disabled=true;wrap.style.display='block';
-let p=0;const steps=['正在解压 RAR…','识别案号并建目录…','材料智能分类…','生成案件清单 PDF…'];
+let p=0;const steps=bizMeta.processSteps;
 const iv=setInterval(()=>{p+=25;if(fill)fill.style.width=p+'%';if(txt)txt.textContent=steps[Math.min(Math.floor(p/25)-1,3)]||'处理中…';
-if(p>=100){clearInterval(iv);if(txt)txt.textContent='✓ 已处理 '+rarUploadedFiles.length+' 个压缩包 · 2 案件 · 6 份材料';
+if(p>=100){clearInterval(iv);if(txt)txt.textContent=bizMeta.doneHint(rarUploadedFiles.length);
 const cc=document.getElementById('rarClassifyCard'),pc=document.getElementById('rarPdfCard'),prev=document.getElementById('rarPreviewCard'),mount=document.getElementById('rarPreviewMount');
 if(cc)cc.style.display='block';if(pc)pc.style.display='block';if(prev)prev.style.display='block';
-if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
+if(mount)mount.innerHTML=renderBizStructPreview(toolBizLine);
 bindPreviewTypeTags();
-if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast('已生成案件清单 PDF · 可发送邮件或推送业务员');}},600);
+if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast(bizMeta.toast);}},600);
+}
+function bindToolBizTabs(){
+const tabs=document.getElementById('toolBizTabs');
+if(!tabs||tabs._bound)return;tabs._bound=true;
+tabs.addEventListener('click',e=>{
+const btn=e.target.closest('[data-tool-biz]');
+if(!btn)return;
+const key=btn.dataset.toolBiz;
+if(!key||key===toolBizLine)return;
+toolBizLine=key;
+if(toolBizLine==='litigation')currentPreviewType='财产保全';
+tabs.querySelectorAll('[data-tool-biz]').forEach(b=>b.classList.toggle('on',b.dataset.toolBiz===toolBizLine));
+const section=document.getElementById('toolBizSection');
+if(section){
+const meta=TOOL_BIZ_STRUCT[toolBizLine]||TOOL_BIZ_STRUCT.litigation;
+const hint=document.getElementById('toolBizHint');
+if(hint)hint.textContent=meta.hint;
+let sub=section.querySelector('#previewTypeRow')?.closest('div[style]');
+if(toolBizLine==='litigation'){
+if(!sub){
+const wrap=document.createElement('div');
+wrap.style.marginTop='10px';
+wrap.innerHTML=previewTypeSelector(currentPreviewType,'data-preview-type');
+section.appendChild(wrap);
+}else{
+sub.innerHTML=previewTypeSelector(currentPreviewType,'data-preview-type');
+}
+bindPreviewTypeTags();
+}else if(sub){sub.remove()}
+}
+const mount=document.getElementById('rarPreviewMount');
+if(mount)mount.innerHTML='';
+const wrap=document.getElementById('rarProgressWrap'),fill=document.getElementById('rarProgressFill'),txt=document.getElementById('rarStatusTxt');
+if(wrap)wrap.style.display='none';if(fill)fill.style.width='0%';if(txt)txt.textContent='';
+const startBtn=document.getElementById('rarStartBtn');
+if(startBtn){startBtn.textContent='开始处理';startBtn.disabled=!rarUploadedFiles.length}
+const label=(TOOL_BIZ_OPTIONS.find(o=>o.key===toolBizLine)||{}).label||'';
+showToast('已切换业务类型：'+label+' · 将按对应结构解析');
+});
 }
 function runStructExtract(){
 if(!structUploadedFiles.length){showToast('请先上传 Word/图/PDF 材料');return}
@@ -3495,10 +3613,14 @@ if(tag._pt)return;tag._pt=true;
 tag.addEventListener('click',()=>{
 currentPreviewType=tag.dataset.previewType;
 subBody.querySelectorAll('[data-preview-type]').forEach(t=>t.classList.toggle('selected',t===tag));
+const previewHtml=toolBizLine==='litigation'||!document.getElementById('toolBizTabs')
+?renderDocPreview(currentPreviewType)
+:renderBizStructPreview(toolBizLine);
 const card=document.getElementById('docPreviewCard');
-if(card)card.outerHTML=renderDocPreview(currentPreviewType);
+if(card)card.outerHTML=previewHtml;
 const mount=document.getElementById('rarPreviewMount')||document.getElementById('structPreviewMount');
-if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
+if(mount&&document.getElementById('toolBizTabs'))mount.innerHTML=renderBizStructPreview(toolBizLine);
+else if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
 const fld=document.getElementById('structFldType');if(fld)fld.textContent=currentPreviewType;
 bindPreviewTypeTags();
 });
@@ -3601,7 +3723,8 @@ function bindMaterialEvents(id){
 bindUploadRemoveDelegate();
 if(id==='rarBatchPack'||id==='toolAssistantHub'){const zone=document.getElementById('rarUploadZone'),inp=document.getElementById('rarFileInput');
 zone?.addEventListener('click',()=>inp?.click());
-inp?.addEventListener('change',e=>{addFilesToList(rarUploadedFiles,e.target.files);refreshUploadListUI('rarFileList',rarUploadedFiles);if(rarUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个文件 · 共 '+rarUploadedFiles.length+' 个');e.target.value='';});}
+inp?.addEventListener('change',e=>{addFilesToList(rarUploadedFiles,e.target.files);refreshUploadListUI('rarFileList',rarUploadedFiles);if(rarUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个文件 · 共 '+rarUploadedFiles.length+' 个');e.target.value='';});
+bindToolBizTabs();}
 if(id==='structExtract'){const zone=document.getElementById('structUploadZone'),inp=document.getElementById('structFileInput');
 zone?.addEventListener('click',()=>inp?.click());
 inp?.addEventListener('change',e=>{addFilesToList(structUploadedFiles,e.target.files);refreshUploadListUI('structFileList',structUploadedFiles);if(structUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个文件');e.target.value='';});}
@@ -3870,8 +3993,8 @@ const PRD_SPECS={
 'message-center':{title:'消息中心',module:'我的',page:'messageCenter',priority:'P1',business:'审核提醒、费率审批、补材料、PC 材料推送等系统通知；顶部未读汇总 + 分类筛选 + 今天/更早分组列表。',logic:['未读汇总条与全部已读','Tab：全部/审核/业务/材料/系统','消息卡片：类型图标·未读红点·摘要·操作入口','点击消息标已读并跳转业务页'],acceptance:['分类筛选正确','未读态可清空','可跳转订单/认证/文件空间站'],api:'GET /api/inst/messages'},
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
-'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料处理总入口：本页直接完成 RAR 批量打包上传与归类；文件空间站跳转二级页做手机与 PC 材料互通。',logic:['工作台/业务 Tab 进入工具助手','RAR 上传区嵌在当前页无需再跳转','文件空间站入口进二级页','演示完整流程可自动跑归类'],acceptance:['本页可上传并解压归类','文件空间站可跳转','演示有 Toast'],api:'—'},
-'rar-batch-pack':{title:'RAR 批量打包',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'在工具助手当前页上传 RAR/ZIP 混包，解压按案号归类，生成案件清单 PDF 推送给机构业务员；归类后可查看申请书结构化预览。',logic:['嵌在 toolAssistantHub 本页','多文件上传逐条显示','全部上传后点击「开始解压并归类」','进度四步+归类结果','案件清单 PDF+发送邮件弹窗'],acceptance:['无需进入二级页','每文件列表可见','无文件时按钮禁用','处理完展示预览/PDF/邮件'],api:'POST /api/inst/material/rar/process'},
+'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料处理总入口：顶部先选业务类型（诉讼保/学平险/标后），再上传材料并按对应字段结构解析；文件空间站跳转二级页做手机与 PC 材料互通。',logic:['工作台/业务 Tab 进入工具助手','顶部业务类型三选一','按业务线输出不同结构化预览','文件空间站入口进二级页'],acceptance:['业务类型可切换且预览结构不同','本页可上传并处理','文件空间站可跳转'],api:'—'},
+'rar-batch-pack':{title:'材料批量处理',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'在工具助手当前页按所选业务类型上传材料，解析为对应标准字段并生成结构化预览/清单 PDF。',logic:['嵌在 toolAssistantHub 本页','先选诉讼保/学平险/标后','多文件上传逐条显示','开始处理后按业务线渲染不同结构'],acceptance:['诉讼保显示保全申请字段','学平险显示投保字段','标后显示项目保函字段'],api:'POST /api/inst/material/rar/process'},
 'struct-extract':{title:'结构化提取',module:'工具助手',page:'structExtract',priority:'P0',business:'Word/图/PDF 转为订单标准字段；按保全类型生成申请书预览，点击「结构化提取」后才展示结果。',logic:['多文件上传逐条显示','全部上传后点击「结构化提取」','OCR+NLP 标准字段表','保全类型切换预览','一键写入 orderReview'],acceptance:['上传列表+提取按钮联动','结果区默认隐藏','四种类型预览可切换'],api:'POST /api/inst/material/extract'},
 'smart-analysis':{title:'智能分析',module:'工具助手',page:'smartAnalysis',priority:'P0',business:'先选保全类型并上传材料，点击「开始智能分析」后按类型规则输出机构匹配、缺件与证据分类。',logic:['保全类型四选一（影响缺件规则）','多文件上传列表','仅点击分析后展示结果','缺件对照上传文件名匹配','带结果进 orderReview'],acceptance:['未分析前结果隐藏','切换类型重置结果','缺件随类型与上传变化'],api:'POST /api/inst/material/analyze'},
 'doc-preview':{title:'申请书结构化预览',module:'工具助手',page:'structExtract',priority:'P0',business:'排版对齐申请书范本：居中标题、加粗标签字段、法条结语、右下签章日期；下方文件材料列表（图标+文件名+类型）。',logic:['财产保全标题「财产保全申请书」','字段：申请人/被申请人/案号/法院/金额/财产线索','法条结语段落 + 申请人签章/日期右对齐','文件材料（材料总数 N）列表','四种保全类型字段集不同'],acceptance:['范本版式：标题居中、签章右对齐','财产保全含 6 份材料','切换类型字段与附件同步'],api:'GET /api/inst/material/preview?type='},
