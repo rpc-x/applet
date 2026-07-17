@@ -576,10 +576,12 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .doc-preview-foot{font-size:11px;color:#6F8FAA;font-weight:600}
 .doc-mat-list{margin-top:8px}
 .doc-mat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFE;border-radius:14px;margin-bottom:8px;border:1px solid #EDF2F9}
-.doc-mat-item i{font-size:18px;width:24px;text-align:center}
+.doc-mat-item i.mat-ico{font-size:18px;width:24px;text-align:center;flex-shrink:0}
 .doc-mat-meta{flex:1;min-width:0}
 .doc-mat-name{font-size:12px;font-weight:600;color:#1C2E36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .doc-mat-type{font-size:10px;color:#6F8FAA;margin-top:2px}
+.doc-mat-item .od-mat-actions{margin-left:4px}
+.doc-mat-item .od-mat-actions .sp-btn-secondary{padding:5px 9px;font-size:10px}
 .upload-file-list{margin-top:12px}
 .upload-file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#F8FAFC;border-radius:14px;margin-bottom:8px;border:1px solid #EDF2F9;font-size:12px}
 .upload-file-item i.file-ico{width:22px;text-align:center;font-size:16px;flex-shrink:0}
@@ -910,7 +912,6 @@ return renderToolBizSelector()+
 '<p style="font-size:11px;color:#6B7280;margin-top:6px;">支持 ZIP / RAR / 7Z、PDF、Word、图片等 · 每选一个文件即显示在列表</p>'+
 '<input type="file" id="rarFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.bmp,.webp,.tif,.tiff,.txt,.csv,.ofd" multiple></div>'+
 '<div class="upload-file-list" id="rarFileList">'+renderUploadFileListHTML([],'rarFileList')+'</div>'+
-'<button class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled style="margin-top:12px;">开始处理</button>'+
 '</div><div id="rarPreviewMount" style="margin-top:16px;"></div>';
 }
 let ORDER_STATE={
@@ -1065,15 +1066,26 @@ ${ctx.omitAfter}
 setTimeout(()=>document.querySelector('.src-doc-line.hit')?.scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
 let MAT_PREVIEW_STATE={name:'',display:''};
+let MATERIAL_PICK_SOURCE='order';
+let TOOL_PREVIEW_MATERIALS=[];
+function getPickMaterials(){
+return MATERIAL_PICK_SOURCE==='tool'?(TOOL_PREVIEW_MATERIALS||[]):(ORDER_STATE.materials||[]);
+}
+function useToolMaterialContext(){
+MATERIAL_PICK_SOURCE='tool';
+TOOL_PREVIEW_MATERIALS=getToolStructMaterials();
+}
+function useOrderMaterialContext(){MATERIAL_PICK_SOURCE='order'}
 function openMaterialPreview(fileName){
-const mat=(ORDER_STATE.materials||[]).find(m=>m.name===fileName);
+const mats=[...(ORDER_STATE.materials||[]),...(TOOL_PREVIEW_MATERIALS||[])];
+const mat=mats.find(m=>m.name===fileName);
 MAT_PREVIEW_STATE={name:fileName||'材料文件',display:mat?getMaterialDisplayName(mat):(fileName||'材料文件')};
 openSubPage('materialPreview',{pushStack:true});
 }
 function renderMaterialPreviewPage(){
 const name=MAT_PREVIEW_STATE.name||'材料文件';
 const doc=SOURCE_DOCS[name];
-const mats=ORDER_STATE.materials||[];
+const mats=[...(ORDER_STATE.materials||[]),...(TOOL_PREVIEW_MATERIALS||[])];
 const mat=mats.find(m=>m.name===name);
 const icon=mat?mat.icon:'fa-file-alt';
 const color=mat?mat.color:'#1A6B7C';
@@ -1321,39 +1333,162 @@ showToast('补材料通知已发送 · 订单进入材料不足');
 function openOrderReviewModal(){
 const ev=analyzeEvidenceChain(ORDER_STATE);
 const o=ORDER_STATE;
+const targetWan=Number(o.targetAmount)||(o.amount?Math.round(o.amount/10000):0);
+const premium=Number(o.premium)||0;
+const rate=calcGuaranteeRate(premium,targetWan,o.amount);
+if(!REVIEW_PAY_STATE.mode)REVIEW_PAY_STATE.mode='bank';
+REVIEW_PAY_STATE.bankAccount=REVIEW_PAY_STATE.bankAccount||'6222021234567890123';
+REVIEW_PAY_STATE.payee=REVIEW_PAY_STATE.payee||'永安财产保险股份有限公司';
+REVIEW_PAY_STATE.bankName=REVIEW_PAY_STATE.bankName||'中国工商银行北京朝阳支行';
 showModal(`${renderModalHead('<i class="fas fa-clipboard-check" style="color:#1A6B7C;margin-right:4px"></i>进入审核',`${o.id} · ${o.type} · 完整度 ${ev.score} 分 · ${ev.judge}`)}
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
-<span class="sp-label">风险等级</span>
-<div class="sp-tag-row" id="reviewRiskRow"><span class="sp-tag selected" data-review-risk>低风险</span><span class="sp-tag" data-review-risk>中风险</span><span class="sp-tag" data-review-risk>高风险</span></div>
-<span class="sp-label">审核意见</span>
-<textarea class="sp-textarea" id="modalReviewComment" placeholder="填写审核意见…" style="min-height:88px">材料齐全，保全金额合理，建议通过。</textarea>
+<span class="sp-label">标的金额</span>
+<p id="modalTargetAmount" data-target-wan="${targetWan}" style="margin:0 0 12px;font-size:18px;font-weight:800;color:#0F4C5C">¥${targetWan.toLocaleString()} 万</p>
+<span class="sp-label">实际保费（元）</span>
+<input class="sp-input" id="modalActualPremium" type="number" value="${premium}" step="0.01" min="0" placeholder="输入实际保费后自动计算费率">
 <span class="sp-label">担保费率（‰）</span>
-<input class="sp-input" id="modalReviewRate" type="number" value="0.85" step="0.01" style="margin-bottom:0">
+<input class="sp-input" id="modalReviewRate" type="number" value="${rate}" step="0.01" readonly style="background:#F8FAFC;color:#0F4C5C;font-weight:700">
+<p style="font-size:11px;color:#94A3B8;margin:-4px 0 10px;line-height:1.45">费率 = 实际保费 ÷ 标的金额（元） × 1000</p>
+<span class="sp-label">审核意见</span>
+<textarea class="sp-textarea" id="modalReviewComment" placeholder="填写审核意见…" style="min-height:80px">材料齐全，保全金额合理，建议通过。</textarea>
 </div>
-<div class="sp-result-box" style="margin:0 0 12px;padding:12px"><p style="font-size:12px;color:#6F8FAA;margin:0">预估保费</p><strong style="font-size:22px;color:#0F4C5C">¥${Number(o.premium||0).toLocaleString()}</strong></div>
+<div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
+<div class="sp-card-title" style="font-size:13px;margin-bottom:8px"><i class="fas fa-credit-card" style="color:#1A6B7C;margin-right:6px"></i>支付信息</div>
+<p style="font-size:11px;color:#94A3B8;margin:0 0 8px">收款账号与二维码支付二选一</p>
+<div class="sp-tag-row" id="reviewPayModeRow" style="margin-bottom:12px">
+<span class="sp-tag ${REVIEW_PAY_STATE.mode==='bank'?'selected':''}" data-pay-mode="bank">收款账号</span>
+<span class="sp-tag ${REVIEW_PAY_STATE.mode==='qr'?'selected':''}" data-pay-mode="qr">二维码支付</span>
+</div>
+<div id="modalPayBankPanel" style="display:${REVIEW_PAY_STATE.mode==='bank'?'block':'none'}">
+<span class="sp-label">银行账号</span>
+<input class="sp-input" id="modalPayBank" value="${REVIEW_PAY_STATE.bankAccount}" placeholder="收款银行账号">
+<span class="sp-label">收款人</span>
+<input class="sp-input" id="modalPayPayee" value="${REVIEW_PAY_STATE.payee}" placeholder="收款人名称">
+<span class="sp-label">开户银行</span>
+<input class="sp-input" id="modalPayBankName" value="${REVIEW_PAY_STATE.bankName}" placeholder="开户银行" style="margin-bottom:0">
+</div>
+<div id="modalPayQrPanel" style="display:${REVIEW_PAY_STATE.mode==='qr'?'block':'none'}">
+<span class="sp-label">收款二维码</span>
+<div id="modalPayQrWrap">${renderReviewQrUpload(REVIEW_PAY_STATE.qrUploaded)}</div>
+</div>
+</div>
 <div class="sp-grid-2" style="gap:8px">
 <button type="button" class="sp-btn-danger" data-action="modal-reject-order" style="margin:0;width:100%;padding:12px;border-radius:40px">驳回</button>
 <button type="button" class="sp-btn-primary" data-action="modal-approve-order" style="margin:0;width:100%;padding:12px;border-radius:40px">审核通过</button>
 </div>`,{form:true});
-const inner=document.getElementById('spModalInner');
-if(!inner)return;
-inner.querySelectorAll('[data-review-risk]').forEach(tag=>{
+bindOrderReviewForm(document.getElementById('spModalInner'),true);
+}
+let REVIEW_PAY_STATE={mode:'bank',bankAccount:'6222021234567890123',payee:'永安财产保险股份有限公司',bankName:'中国工商银行北京朝阳支行',qrUploaded:false};
+function calcGuaranteeRate(premium,targetWan,amountYuan){
+const yuan=Number(amountYuan)||(Number(targetWan)||0)*10000;
+const p=Number(premium)||0;
+if(!yuan||yuan<=0)return 0;
+return Math.round(p/yuan*1000*100)/100;
+}
+function renderReviewQrUpload(done){
+return`<div class="issue-upload${done?' done':''}" data-action="review-qr-upload">
+<i class="fas ${done?'fa-check-circle':'fa-qrcode'}"></i>
+<strong>${done?'已上传收款二维码 · 点击重新上传':'上传收款二维码'}</strong>
+<span>${done?'支持重新选择图片':'支持 JPG / PNG / 微信收款码截图'}</span>
+</div>`;
+}
+function syncReviewPayPanels(root,isModal){
+if(!root)return;
+const bankPanel=root.querySelector(isModal?'#modalPayBankPanel':'#reviewPayBankPanel');
+const qrPanel=root.querySelector(isModal?'#modalPayQrPanel':'#reviewPayQrPanel');
+if(bankPanel)bankPanel.style.display=REVIEW_PAY_STATE.mode==='bank'?'block':'none';
+if(qrPanel)qrPanel.style.display=REVIEW_PAY_STATE.mode==='qr'?'block':'none';
+root.querySelectorAll('[data-pay-mode]').forEach(t=>t.classList.toggle('selected',t.dataset.payMode===REVIEW_PAY_STATE.mode));
+}
+function validateReviewPay(){
+if(REVIEW_PAY_STATE.mode==='bank'){
+if(!(REVIEW_PAY_STATE.bankAccount||'').trim()){showToast('请填写银行账号');return false}
+if(!(REVIEW_PAY_STATE.payee||'').trim()){showToast('请填写收款人');return false}
+if(!(REVIEW_PAY_STATE.bankName||'').trim()){showToast('请填写开户银行');return false}
+return true;
+}
+if(REVIEW_PAY_STATE.mode==='qr'){
+if(!REVIEW_PAY_STATE.qrUploaded){showToast('请上传收款二维码');return false}
+return true;
+}
+showToast('请选择支付方式');return false;
+}
+function bindReviewQrZone(wrap){
+if(!wrap)return;
+const btn=wrap.querySelector('[data-action="review-qr-upload"]');
+if(!btn||btn._bound)return;btn._bound=true;
+btn.addEventListener('click',()=>{
+REVIEW_PAY_STATE.mode='qr';
+REVIEW_PAY_STATE.qrUploaded=true;
+wrap.innerHTML=renderReviewQrUpload(true);
+bindReviewQrZone(wrap);
+const root=wrap.closest('.sp-modal-form')||subBody;
+syncReviewPayPanels(root,!!wrap.closest('#spModalInner'));
+showToast('收款二维码已上传 · 已切换为二维码支付');
+});
+}
+function bindOrderReviewForm(root,isModal){
+if(!root)return;
+const premiumEl=root.querySelector(isModal?'#modalActualPremium':'#reviewActualPremium');
+const rateEl=root.querySelector(isModal?'#modalReviewRate':'#reviewRate');
+const targetEl=root.querySelector(isModal?'#modalTargetAmount':'#reviewTargetAmount');
+const syncRate=()=>{
+const p=Number(premiumEl?.value)||0;
+const targetWan=Number(targetEl?.dataset?.targetWan)||Number(ORDER_STATE.targetAmount)||0;
+const rate=calcGuaranteeRate(p,targetWan,ORDER_STATE.amount);
+if(rateEl)rateEl.value=rate;
+ORDER_STATE.premium=p;
+};
+if(premiumEl&&!premiumEl._rateBound){
+premiumEl._rateBound=true;
+premiumEl.addEventListener('input',syncRate);
+premiumEl.addEventListener('change',syncRate);
+}
+const bankEl=root.querySelector(isModal?'#modalPayBank':'#reviewPayBank');
+const payeeEl=root.querySelector(isModal?'#modalPayPayee':'#reviewPayPayee');
+const bankNameEl=root.querySelector(isModal?'#modalPayBankName':'#reviewPayBankName');
+const bindField=(el,key)=>{
+if(!el||el._bound)return;el._bound=true;
+el.addEventListener('input',()=>{REVIEW_PAY_STATE[key]=el.value||'';REVIEW_PAY_STATE.mode='bank';syncReviewPayPanels(root,isModal)});
+};
+bindField(bankEl,'bankAccount');
+bindField(payeeEl,'payee');
+bindField(bankNameEl,'bankName');
+root.querySelectorAll('[data-pay-mode]').forEach(tag=>{
+if(tag._bound)return;tag._bound=true;
 tag.addEventListener('click',()=>{
-inner.querySelectorAll('[data-review-risk]').forEach(t=>t.classList.remove('selected'));
-tag.classList.add('selected');
+REVIEW_PAY_STATE.mode=tag.dataset.payMode||'bank';
+if(REVIEW_PAY_STATE.mode==='bank')REVIEW_PAY_STATE.qrUploaded=false;
+syncReviewPayPanels(root,isModal);
+if(REVIEW_PAY_STATE.mode==='qr'){
+const wrap=root.querySelector(isModal?'#modalPayQrWrap':'#reviewPayQrWrap');
+if(wrap){wrap.innerHTML=renderReviewQrUpload(REVIEW_PAY_STATE.qrUploaded);bindReviewQrZone(wrap)}
+}
+showToast(REVIEW_PAY_STATE.mode==='bank'?'已选择收款账号支付':'已选择二维码支付');
 });
 });
-inner.querySelector('[data-action="modal-approve-order"]')?.addEventListener('click',()=>{
+bindReviewQrZone(root.querySelector(isModal?'#modalPayQrWrap':'#reviewPayQrWrap'));
+syncReviewPayPanels(root,isModal);
+if(isModal&&!root._reviewBound){
+root._reviewBound=true;
+root.querySelector('[data-action="modal-approve-order"]')?.addEventListener('click',()=>{
+if(!(Number(premiumEl?.value)>0)){showToast('请填写实际保费');return}
+if(bankEl)REVIEW_PAY_STATE.bankAccount=bankEl.value||REVIEW_PAY_STATE.bankAccount;
+if(payeeEl)REVIEW_PAY_STATE.payee=payeeEl.value||REVIEW_PAY_STATE.payee;
+if(bankNameEl)REVIEW_PAY_STATE.bankName=bankNameEl.value||REVIEW_PAY_STATE.bankName;
+if(!validateReviewPay())return;
+ORDER_STATE.premium=Number(premiumEl?.value)||0;
 closeModal();
 ORDER_STATE.status='wait_issue';
 showToast('审核通过，订单进入等待出函');
 setTimeout(()=>openSubPage('issueGuarantee'),800);
 });
-inner.querySelector('[data-action="modal-reject-order"]')?.addEventListener('click',()=>{
+root.querySelector('[data-action="modal-reject-order"]')?.addEventListener('click',()=>{
 closeModal();
 ORDER_STATE.status='closed';
 showToast('订单已关闭，已通知申请人');
 });
+}
 }
 let ISSUE_FORM_STATE={policyFile:false,guaranteeFile:false,sueFile:false,sueMode:'config'};
 const ISSUE_UPLOAD_META={
@@ -1540,7 +1675,7 @@ const colsCls=btns.length===1?'cols-1':btns.length===2?'cols-2':'';
 return`<div class="od-mat-toolbar ${colsCls}">${btns.join('')}</div>`;
 }
 function renderMaterialPickList(checkedDefault){
-const mats=ORDER_STATE.materials||[];
+const mats=getPickMaterials();
 if(!mats.length)return'<p style="font-size:12px;color:#94A3B8;padding:8px 0;text-align:left">暂无申请材料</p>';
 const on=checkedDefault!==false;
 return`<div class="mat-pick-bar">
@@ -1561,7 +1696,7 @@ if(el)el.textContent='已选 '+n+' / '+total;
 }
 function getSelectedMaterials(root){
 const list=root||document.getElementById('spModalInner');
-const mats=ORDER_STATE.materials||[];
+const mats=getPickMaterials();
 if(!list)return[];
 return Array.from(list.querySelectorAll('.mat-pick-cb:checked')).map(cb=>mats[+cb.dataset.matIdx]).filter(Boolean);
 }
@@ -1580,8 +1715,10 @@ refresh();
 refresh();
 }
 function openPackDownloadModal(){
-const mats=ORDER_STATE.materials||[];
-const o=ORDER_STATE;
+const mats=getPickMaterials();
+const o=MATERIAL_PICK_SOURCE==='tool'
+?{id:'工具助手',caseNo:(TOOL_BIZ_OPTIONS.find(x=>x.key===toolBizLine)||{}).label||'材料打包'}
+:ORDER_STATE;
 showModal(`${renderModalHead('<i class="fas fa-file-archive" style="color:#1A6B7C;margin-right:4px"></i>打包下载',`${o.caseNo||o.id} · 共 ${mats.length} 份材料 · 勾选后打包 ZIP`)}
 <div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left">
 <span class="sp-label">选择附件</span>
@@ -1598,8 +1735,10 @@ showToast('正在打包 '+sel.length+' 份材料 · '+(o.caseNo||o.id)+'（演�
 });
 }
 function openPushPcModal(){
-const mats=ORDER_STATE.materials||[];
-const o=ORDER_STATE;
+const mats=getPickMaterials();
+const o=MATERIAL_PICK_SOURCE==='tool'
+?{id:'工具助手 · '+((TOOL_BIZ_OPTIONS.find(x=>x.key===toolBizLine)||{}).label||'')}
+:ORDER_STATE;
 const paired=!!(typeof pcPaired!=='undefined'&&pcPaired);
 const space=(typeof syncSpaceId!=='undefined'&&syncSpaceId)||'MS_demo';
 showModal(`${renderModalHead('<i class="fas fa-desktop" style="color:#1A6B7C;margin-right:4px"></i>投送电脑端',`${o.id} · 推送至 PC 核保工作台`)}
@@ -2166,11 +2305,16 @@ function openEmailModal(ctx,opts){
 ctx=ctx||'案件清单 PDF';
 opts=opts||{};
 const pickMats=!!opts.pickMaterials;
-const o=ORDER_STATE;
-const matN=(o.materials||[]).length;
-const subj=pickMats?`【诉讼保】案件材料 · ${o.caseNo||o.id}`:`【诉讼保】${ctx} · ${o.id||'SS20250529001'}`;
+const fromTool=MATERIAL_PICK_SOURCE==='tool';
+const o=fromTool
+?{id:'工具助手',caseNo:(TOOL_BIZ_OPTIONS.find(x=>x.key===toolBizLine)||{}).label||'材料'}
+:ORDER_STATE;
+const mats=getPickMaterials();
+const matN=mats.length;
+const bizLabel=fromTool?((TOOL_BIZ_OPTIONS.find(x=>x.key===toolBizLine)||{}).label||'工具助手'):'诉讼保';
+const subj=pickMats?`【${bizLabel}】案件材料 · ${o.caseNo||o.id}`:`【${bizLabel}】${ctx} · ${o.id||'SS20250529001'}`;
 const bodyText=pickMats
-?`您好，\n\n附件为订单 ${o.id}（${o.caseNo||''}）的申请材料，请查收并协助跟进。\n\n— 诉讼保机构端`
+?`您好，\n\n附件为${fromTool?'工具助手解析':('订单 '+o.id)}（${o.caseNo||''}）的申请材料，请查收并协助跟进。\n\n— 诉讼保机构端`
 :`您好，\n\n附件为批量收案归类后的案件清单 PDF，共 2 个案件、6 份材料，请查收并跟进业务员确认。\n\n— 诉讼保机构端 · 工具助手`;
 const attachHtml=pickMats
 ?`<span class="sp-label">附件材料（可勾选）</span>${renderMaterialPickList(true)}`
@@ -2445,23 +2589,103 @@ else showToast('报表已发送至机构管理员邮箱');
 }
 function hero(grad,icon,title,sub){return`<div class="sp-card" style="background:${grad};color:#fff;border:none;"><div style="font-size:32px;margin-bottom:8px">${icon}</div><h2 style="font-size:18px;font-weight:800;margin-bottom:6px">${title}</h2><p style="font-size:12px;opacity:.9;line-height:1.5">${sub}</p></div>`}
 function steps(labels,activeIdx){return`<div class="sp-steps">${labels.map((l,i)=>`<div class="sp-step ${i<activeIdx?'done':i===activeIdx?'active':''}">${l}</div>`).join('')}</div>`}
+function getToolStructMaterials(){
+if(toolBizLine==='litigation'){
+if(currentPreviewType==='财产保全'&&typeof DEMO_MATERIALS_BY_CHAIN!=='undefined'){
+return DEMO_MATERIALS_BY_CHAIN.contract.slice();
+}
+const files=MATERIAL_FILES[currentPreviewType]||MATERIAL_FILES['财产保全']||[];
+return files.map(f=>({name:f.name,originalName:f.name,category:f.type||f.category||'材料',icon:f.icon||'fa-file-alt',color:f.color||'#1A6B7C'}));
+}
+const meta=TOOL_BIZ_STRUCT[toolBizLine]||TOOL_BIZ_STRUCT.litigation;
+return (meta.materials||[]).map(f=>({name:f.name,originalName:f.name,category:f.type||'材料',icon:f.icon||'fa-file-alt',color:f.color||'#1A6B7C'}));
+}
+function renderToolMaterialToolbar(){
+return`<div class="od-mat-toolbar">
+<button type="button" class="sp-btn-secondary" data-action="case-pack-download"><i class="fas fa-file-archive"></i> 打包下载</button>
+<button type="button" class="sp-btn-secondary" data-action="case-send-email"><i class="fas fa-envelope"></i> 邮件发送</button>
+<button type="button" class="sp-btn-secondary" data-action="case-push-pc"><i class="fas fa-desktop"></i> 投送电脑端</button>
+</div>`;
+}
+function renderToolMaterialSection(mats){
+mats=mats||getToolStructMaterials();
+TOOL_PREVIEW_MATERIALS=mats.slice();
+const n=mats.length;
+const list=renderOrderMaterialList(mats);
+return`<div class="sp-card" style="margin:12px 0 0;padding:14px">
+<div class="sp-card-title" style="font-size:13px;margin-bottom:10px"><i class="fas fa-folder-open" style="color:#1A6B7C;margin-right:6px"></i>申请材料 · ${n}份</div>
+${list}
+${n?renderToolMaterialToolbar():''}
+</div>`;
+}
+function buildToolEvidenceOrder(){
+const mats=getToolStructMaterials();
+if(toolBizLine==='litigation'){
+return{cause:'买卖合同纠纷',materials:mats,status:'wait_confirm',type:currentPreviewType||'财产保全'};
+}
+if(toolBizLine==='xueping'){
+return{cause:'学平险投保',materials:mats,status:'wait_confirm',type:'学平险'};
+}
+return{cause:'标后保函',materials:mats,status:'wait_confirm',type:'标后'};
+}
+function renderToolBizEvidenceCard(){
+const mats=getToolStructMaterials();
+if(toolBizLine==='litigation'){
+const prev=ORDER_DETAIL_FOLD.evidence;
+ORDER_DETAIL_FOLD.evidence=false;
+const html=renderEvidenceChainCard(buildToolEvidenceOrder());
+ORDER_DETAIL_FOLD.evidence=prev;
+return`<div style="margin-top:12px">${html}</div>`;
+}
+const bizLabel=(TOOL_BIZ_OPTIONS.find(o=>o.key===toolBizLine)||{}).label||'业务';
+const uploadedNames=(rarUploadedFiles||[]).map(f=>f.name).concat(mats.map(m=>m.name));
+const nodes=mats.map((m,i)=>{
+const patterns=[m.name.replace(/\.[^.]+$/,''),m.category,m.name];
+const hits=uploadedNames.filter(n=>fileMatchesEvidence(n,patterns));
+return{title:m.category||m.name,desc:m.name,required:i<3,ok:true,status:'ok',hits:[m.name],weight:Math.round(100/mats.length)};
+});
+const score=100;
+const body=`<p class="ev-chain-hint">按「${bizLabel}」业务材料清单核验解析结果是否齐备</p>
+<div class="ev-score-row">
+<div class="ev-score-ring"><strong>${score}</strong><span>完整度</span></div>
+<div class="ev-score-meta">
+<div class="ev-judge">材料解析齐全</div>
+<div class="ev-score-bar"><i style="width:${score}%"></i></div>
+<p>已按 ${bizLabel} 结构输出 ${mats.length} 份材料，可预览、打包或投送电脑端。</p>
+</div></div>
+<div class="sp-card-title" style="font-size:12px;margin-bottom:8px">材料节点核对</div>
+${nodes.map(n=>`<div class="ev-node ${n.status}"><div class="ev-node-hd"><span class="ev-st">✓</span><span>${n.title}</span><span class="ev-req">${n.required?'必填·已齐':'建议·已齐'}</span></div><p>已匹配：${n.hits.join('、')}</p></div>`).join('')}
+<div class="ev-diag-box"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>业务类型为「${bizLabel}」，已解析 ${mats.length} 份材料并完成字段映射，可继续打包下载、邮件发送或投送电脑端。</p></div>`;
+const prev=ORDER_DETAIL_FOLD.evidence;
+ORDER_DETAIL_FOLD.evidence=false;
+const html=renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>证据链诊断`,body,{
+extraClass:'ev-chain-card',prd:'evidence-chain',
+tools:`<span class="ev-chain-type contract">${bizLabel}·材料链</span>`
+});
+ORDER_DETAIL_FOLD.evidence=prev;
+return`<div style="margin-top:12px">${html}</div>`;
+}
 function renderMaterialFileList(type){
-const files=MATERIAL_FILES[type]||MATERIAL_FILES['财产保全'];
-return`<p style="margin:0 0 6px"><b>文件材料（材料总数：${files.length}）</b></p>
-<div class="doc-mat-list">${files.map(f=>`<div class="doc-mat-item"><i class="fas ${f.icon}" style="color:${f.color}"></i><div class="doc-mat-meta"><div class="doc-mat-name">${f.name}</div><div class="doc-mat-type">${f.type}</div></div></div>`).join('')}</div>`}
+return renderToolMaterialSection(
+type&&MATERIAL_FILES[type]
+?MATERIAL_FILES[type].map(f=>({name:f.name,originalName:f.name,category:f.type,icon:f.icon,color:f.color}))
+:getToolStructMaterials()
+);
+}
 function renderDocPreview(type){
 const t=PREVIEW_TEMPLATES[type]||PREVIEW_TEMPLATES['财产保全'];
 const docTitle=PREVIEW_DOC_TITLE[type]||'申请书';
-const legal=PREVIEW_LEGAL[type]||'';
-const today=new Date().toLocaleDateString('zh-CN');
 const fieldsHtml=t.fields.map(([k,v])=>`<p style="margin:0 0 6px"><b>${k}：</b>${v}</p>`).join('');
+const mats=getToolStructMaterials();
 return`
-<div class="财产保全申请书"  id="docPreviewCard" style="background:#fff;border:1px solid #E8ECF0;border-radius:14px;padding:18px 16px;font-size:12px;line-height:1.85;color:#334155;">
+<div class="tool-struct-wrap">
+<div class="财产保全申请书" id="docPreviewCard" style="background:#fff;border:1px solid #E8ECF0;border-radius:14px;padding:18px 16px;font-size:12px;line-height:1.85;color:#334155;">
 <h3 style="text-align:center;font-size:15px;font-weight:800;color:#0F4C5C;margin:0 0 14px;letter-spacing:.5px">${docTitle}</h3>
 ${fieldsHtml}
-<div class="doc-preview-divider"></div>
-${renderMaterialFileList(type)}
-<div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
+</div>
+${renderToolMaterialSection(mats)}
+${renderToolBizEvidenceCard()}
+</div>`;
 }
 function renderBizStructPreview(biz){
 biz=biz||toolBizLine;
@@ -2469,10 +2693,9 @@ if(biz==='litigation')return renderDocPreview(currentPreviewType);
 const meta=TOOL_BIZ_STRUCT[biz]||TOOL_BIZ_STRUCT.litigation;
 const bizLabel=(TOOL_BIZ_OPTIONS.find(o=>o.key===biz)||{}).label||'业务';
 const fieldsHtml=meta.fields.map(([k,v])=>`<p style="margin:0 0 6px"><b>${k}：</b>${v}</p>`).join('');
-const mats=meta.materials||[];
-const matHtml=`<p style="margin:0 0 6px"><b>文件材料（材料总数：${mats.length}）</b></p>
-<div class="doc-mat-list">${mats.map(f=>`<div class="doc-mat-item"><i class="fas ${f.icon}" style="color:${f.color}"></i><div class="doc-mat-meta"><div class="doc-mat-name">${f.name}</div><div class="doc-mat-type">${f.type}</div></div></div>`).join('')}</div>`;
+const mats=getToolStructMaterials();
 return`
+<div class="tool-struct-wrap">
 <div id="docPreviewCard" style="background:#fff;border:1px solid #E8ECF0;border-radius:14px;padding:18px 16px;font-size:12px;line-height:1.85;color:#334155;">
 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
 <span class="sp-tag selected" style="margin:0;">${bizLabel}</span>
@@ -2480,9 +2703,10 @@ return`
 </div>
 <h3 style="text-align:center;font-size:15px;font-weight:800;color:#0F4C5C;margin:0 0 14px;letter-spacing:.5px">${meta.docTitle}</h3>
 ${fieldsHtml}
-<div class="doc-preview-divider"></div>
-${matHtml}
-<div class="sp-grid-2" style="margin-top:12px;"><button class="sp-btn-secondary" data-action="preview-doc-export">下载 PDF</button><button class="sp-btn-secondary" data-action="preview-doc-email">发送邮件</button></div></div>`;
+</div>
+${renderToolMaterialSection(mats)}
+${renderToolBizEvidenceCard()}
+</div>`;
 }
 function showModal(html,opts){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
@@ -2498,6 +2722,7 @@ document.getElementById('spModalMask')?.classList.remove('show');
 const inner=document.getElementById('spModalInner');
 inner?.classList.remove('sp-modal-source','sp-modal-form');
 if(syncQrCountdown)clearInterval(syncQrCountdown);
+useOrderMaterialContext();
 }
 function getPcUrl(tab){const u={workbench:'https://inst.workbench.ssbao.cn/material?order=SS20250529001',upload:'https://upload.ssbao.cn/inst/'+pcUploadToken,download:'https://inst.workbench.ssbao.cn/push?order=SS20250529001',chromeQr:'https://upload.ssbao.cn/inst/'+pcUploadToken,pair:'https://inst.workbench.ssbao.cn/auth/qr?s='+syncSpaceId,lan:'http://192.168.1.88:8765/upload?space='+syncSpaceId};return u[tab]||u.workbench}
 function pcShowToast(msg){const bar=document.getElementById('pcToastBar');if(!bar)return;bar.textContent=msg;bar.classList.add('show');clearTimeout(pcShowToast._t);pcShowToast._t=setTimeout(()=>bar.classList.remove('show'),2800)}
@@ -2729,7 +2954,7 @@ if(TOOL_CHILD_PAGES.has(id)){
 crumbEl.style.display='inline-flex';crumbEl.innerHTML='<i class="fas fa-robot"></i> 工具助手 <i class="fas fa-chevron-right"></i> '+p.title;
 }else{crumbEl.style.display='none'}
 subBody.innerHTML=typeof p.render==='function'?p.render():p.html;
-subBody.classList.toggle('has-od-layout',id==='orderDetail'||id==='caseInfoDetail'||id==='materialPreview');
+subBody.classList.toggle('has-od-layout',id==='orderDetail'||id==='caseInfoDetail'||id==='materialPreview'||id==='toolAssistantHub'||id==='rarBatchPack');
 subOverlay.classList.add('active');document.getElementById('bottomNav').style.display='none';
 if(id==='orderList'){
 const bizLabel=(BIZ_LINE_META[currentBizLine]||BIZ_LINE_META.all).label;
@@ -3267,14 +3492,49 @@ ${renderFoldSection('audit',`<i class="fas fa-history fold-lead"></i>审核记�
 ${renderOrderPrimaryActions(o)}
 </div>
 </div>`}},
-orderReview:{title:'订单审核',sub:'核保 · 风险评估 · 审批',render:()=>`
+orderReview:{title:'订单审核',sub:'核保 · 保费费率 · 支付',render:()=>{
+const o=ORDER_STATE;
+const targetWan=Number(o.targetAmount)||(o.amount?Math.round(o.amount/10000):0);
+const premium=Number(o.premium)||0;
+const rate=calcGuaranteeRate(premium,targetWan,o.amount);
+if(!REVIEW_PAY_STATE.mode)REVIEW_PAY_STATE.mode='bank';
+REVIEW_PAY_STATE.bankAccount=REVIEW_PAY_STATE.bankAccount||'6222021234567890123';
+REVIEW_PAY_STATE.payee=REVIEW_PAY_STATE.payee||'永安财产保险股份有限公司';
+REVIEW_PAY_STATE.bankName=REVIEW_PAY_STATE.bankName||'中国工商银行北京朝阳支行';
+return`
 <div class="sp-steps"><div class="sp-step done">材料核验</div><div class="sp-step active">核保评估</div><div class="sp-step">审批</div><div class="sp-step">出函</div></div>
 <div class="sp-card"><div class="sp-card-title">核保评估</div>
-<span class="sp-label">风险等级</span><div class="sp-tag-row"><span class="sp-tag selected" data-select>低风险</span><span class="sp-tag" data-select>中风险</span><span class="sp-tag" data-select>高风险</span></div>
-<span class="sp-label">审核意见</span><textarea class="sp-textarea" id="reviewComment" placeholder="填写审核意见…">材料齐全，保全金额合理，建议通过。</textarea>
-<span class="sp-label">担保费率（‰）</span><input class="sp-input" id="reviewRate" type="number" value="0.85" step="0.01"></div>
-<div class="sp-result-box"><p style="font-size:12px;color:#6F8FAA">预估保费</p><strong style="font-size:24px;color:#0F4C5C">¥${ORDER_STATE.premium.toLocaleString()}</strong></div>
-<div class="sp-grid-2"><button class="sp-btn-danger" data-action="reject-order">驳回</button><button class="sp-btn-primary" data-action="approve-order">审核通过</button></div>`},
+<span class="sp-label">标的金额</span>
+<p id="reviewTargetAmount" data-target-wan="${targetWan}" style="margin:0 0 12px;font-size:18px;font-weight:800;color:#0F4C5C">¥${targetWan.toLocaleString()} 万</p>
+<span class="sp-label">实际保费（元）</span>
+<input class="sp-input" id="reviewActualPremium" type="number" value="${premium}" step="0.01" min="0" placeholder="输入实际保费后自动计算费率">
+<span class="sp-label">担保费率（‰）</span>
+<input class="sp-input" id="reviewRate" type="number" value="${rate}" step="0.01" readonly style="background:#F8FAFC;color:#0F4C5C;font-weight:700">
+<p style="font-size:11px;color:#94A3B8;margin:-4px 0 10px;line-height:1.45">费率 = 实际保费 ÷ 标的金额（元） × 1000</p>
+<span class="sp-label">审核意见</span>
+<textarea class="sp-textarea" id="reviewComment" placeholder="填写审核意见…">材料齐全，保全金额合理，建议通过。</textarea>
+</div>
+<div class="sp-card"><div class="sp-card-title"><i class="fas fa-credit-card" style="color:#1A6B7C;margin-right:6px"></i>支付信息</div>
+<p style="font-size:11px;color:#94A3B8;margin:0 0 8px">收款账号与二维码支付二选一</p>
+<div class="sp-tag-row" id="reviewPayModeRow" style="margin-bottom:12px">
+<span class="sp-tag ${REVIEW_PAY_STATE.mode==='bank'?'selected':''}" data-pay-mode="bank">收款账号</span>
+<span class="sp-tag ${REVIEW_PAY_STATE.mode==='qr'?'selected':''}" data-pay-mode="qr">二维码支付</span>
+</div>
+<div id="reviewPayBankPanel" style="display:${REVIEW_PAY_STATE.mode==='bank'?'block':'none'}">
+<span class="sp-label">银行账号</span>
+<input class="sp-input" id="reviewPayBank" value="${REVIEW_PAY_STATE.bankAccount}" placeholder="收款银行账号">
+<span class="sp-label">收款人</span>
+<input class="sp-input" id="reviewPayPayee" value="${REVIEW_PAY_STATE.payee}" placeholder="收款人名称">
+<span class="sp-label">开户银行</span>
+<input class="sp-input" id="reviewPayBankName" value="${REVIEW_PAY_STATE.bankName}" placeholder="开户银行">
+</div>
+<div id="reviewPayQrPanel" style="display:${REVIEW_PAY_STATE.mode==='qr'?'block':'none'}">
+<span class="sp-label">收款二维码</span>
+<div id="reviewPayQrWrap">${renderReviewQrUpload(REVIEW_PAY_STATE.qrUploaded)}</div>
+</div>
+</div>
+<div class="sp-grid-2"><button class="sp-btn-danger" data-action="reject-order">驳回</button><button class="sp-btn-primary" data-action="approve-order">审核通过</button></div>`;
+}},
 issueGuarantee:{title:'出函办理',sub:'电子保函生成 · 链上存证',render:()=>`
 <div class="sp-steps"><div class="sp-step done">审核通过</div><div class="sp-step active">生成保函</div><div class="sp-step">链上存证</div><div class="sp-step">通知用户</div></div>
 <div class="sp-card"><div class="sp-card-title">等待出函订单</div>
@@ -3364,11 +3624,16 @@ profileInfo:{title:'个人信息',sub:'机构账号信息',render:()=>`<div clas
 securityCenter:{title:'安全中心',sub:'密码 · 登录设备',render:()=>`<div class="settings-list"><div class="settings-item" data-action="toast" data-msg="修改密码页"><div class="setting-left"><i class="fas fa-key"></i><span>修改密码</span></div><div class="setting-right">></div></div><div class="settings-item"><div class="setting-left"><i class="fas fa-mobile-alt"></i><span>登录设备</span></div><div class="setting-right">2台 ></div></div></div>`},
 aboutInst:{title:'关于',sub:'版本与备案',render:()=>`<div class="sp-card" style="text-align:center;padding:32px"><i class="fas fa-building" style="font-size:48px;color:#1A6B7C"></i><h3 style="margin:12px 0 6px">函信保函通</h3><p style="font-size:13px;color:#6F8FAA">版本 6.0.0 · 工具助手 · 文件空间站</p></div>`},
 toolAssistantHub:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',render:()=>
+'<div class="od-page">'+
+'<div class="od-scroll">'+
 renderRarUploadBlock()+
 '<div class="sp-card" style="margin-top:12px;"><div class="sp-card-title">更多能力</div>'+
 '<div class="sync-scenario" data-page="crossDeviceSync"><i class="fas fa-satellite-dish" style="color:#4338CA;"></i><div><strong style="font-size:13px;">文件空间站</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">扫码 / 配对 / 内网 · 手机⇄PC 材料互通</p></div></div>'+
 '<div class="sync-scenario" style="cursor:default;opacity:.95;"><i class="fas fa-briefcase"></i><div><strong style="font-size:13px;">业务员批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">先选业务类型 → 上传材料 → 按对应结构解析输出</p></div></div>'+
-'<button class="sp-btn-primary" data-action="demo-tool-flow">演示完整流程</button></div>'},
+'</div></div>'+
+'<div class="od-footer"><div class="od-footer-primary single">'+
+'<button type="button" class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled>开始处理</button>'+
+'</div></div></div>'},
 rarBatchPack:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',render:()=>PAGES.toolAssistantHub.render()},
 structExtract:{title:'结构化提取',sub:'Word/图/PDF → 标准字段 · 申请书预览',render:()=>{
 structUploadedFiles=[];currentPreviewType='财产保全';
@@ -3613,14 +3878,17 @@ if(tag._pt)return;tag._pt=true;
 tag.addEventListener('click',()=>{
 currentPreviewType=tag.dataset.previewType;
 subBody.querySelectorAll('[data-preview-type]').forEach(t=>t.classList.toggle('selected',t===tag));
-const previewHtml=toolBizLine==='litigation'||!document.getElementById('toolBizTabs')
-?renderDocPreview(currentPreviewType)
-:renderBizStructPreview(toolBizLine);
+const previewHtml=document.getElementById('toolBizTabs')
+?renderBizStructPreview(toolBizLine)
+:renderDocPreview(currentPreviewType);
+const mount=document.getElementById('rarPreviewMount')||document.getElementById('structPreviewMount');
+const wrap=subBody.querySelector('.tool-struct-wrap');
+if(mount)mount.innerHTML=previewHtml;
+else if(wrap)wrap.outerHTML=previewHtml;
+else{
 const card=document.getElementById('docPreviewCard');
 if(card)card.outerHTML=previewHtml;
-const mount=document.getElementById('rarPreviewMount')||document.getElementById('structPreviewMount');
-if(mount&&document.getElementById('toolBizTabs'))mount.innerHTML=renderBizStructPreview(toolBizLine);
-else if(mount)mount.innerHTML=renderDocPreview(currentPreviewType);
+}
 const fld=document.getElementById('structFldType');if(fld)fld.textContent=currentPreviewType;
 bindPreviewTypeTags();
 });
@@ -3760,11 +4028,15 @@ pushStack:pushStack
 });
 });
 });
-subBody.querySelectorAll('[data-action]').forEach(btn=>{
-btn.addEventListener('click',e=>{
+if(!subBody._actionDel){
+subBody._actionDel=true;
+subBody.addEventListener('click',e=>{
+const btn=e.target.closest('[data-action]');
+if(!btn||!subBody.contains(btn))return;
+if(btn.dataset.action==='upload-remove')return;
 e.stopPropagation();
 const act=btn.dataset.action,msg=btn.dataset.msg;
-if(act==='toast'&&msg)showToast(msg);
+if(act==='toast'&&msg){showToast(msg);return}
 if(act==='ent-upload'){
 saveEntAuthForm();
 const key=btn.dataset.key;
@@ -3802,7 +4074,20 @@ openSubPage('enterpriseAuth',{keepStack:true});return}
 if(act==='ent-done'){closeSubPage();setActiveNav(entAuthStatus==='passed'?'workbench':'profile');showToast(entAuthStatus==='reviewing'?'认证审核中':'已返回');return}
 if(act==='open-source'){openSourcePreview(btn.dataset.srcKey);return}
 if(act==='mat-preview'){openMaterialPreview(btn.dataset.matName);return}
-if(act==='approve-order'){showToast('审核通过，订单进入等待出函');ORDER_STATE.status='wait_issue';setTimeout(()=>openSubPage('issueGuarantee'),800)}
+if(act==='approve-order'){
+const premiumEl=document.getElementById('reviewActualPremium');
+const p=Number(premiumEl?.value);
+if(!(p>0)){showToast('请填写实际保费');return}
+const bankEl=document.getElementById('reviewPayBank');
+const payeeEl=document.getElementById('reviewPayPayee');
+const bankNameEl=document.getElementById('reviewPayBankName');
+if(bankEl)REVIEW_PAY_STATE.bankAccount=bankEl.value||REVIEW_PAY_STATE.bankAccount;
+if(payeeEl)REVIEW_PAY_STATE.payee=payeeEl.value||REVIEW_PAY_STATE.payee;
+if(bankNameEl)REVIEW_PAY_STATE.bankName=bankNameEl.value||REVIEW_PAY_STATE.bankName;
+if(!validateReviewPay())return;
+ORDER_STATE.premium=p;
+showToast('审核通过，订单进入等待出函');ORDER_STATE.status='wait_issue';setTimeout(()=>openSubPage('issueGuarantee'),800)
+}
 if(act==='fold-toggle'){
 const card=btn.closest('.sp-fold');
 if(!card)return;
@@ -3855,9 +4140,21 @@ openSubPage(goto,{pushStack:true});
 }else openSubPage('messageCenter',{keepStack:true});
 return;
 }
-if(act==='case-pack-download'){openPackDownloadModal();return}
-if(act==='case-send-email'){openEmailModal('案件材料 · '+ORDER_STATE.caseNo,{pickMaterials:true});return}
-if(act==='case-push-pc'){openPushPcModal();return}
+if(act==='case-pack-download'){
+if(currentSubId==='toolAssistantHub'||currentSubId==='rarBatchPack'||document.getElementById('toolBizTabs'))useToolMaterialContext();
+else useOrderMaterialContext();
+openPackDownloadModal();return}
+if(act==='case-send-email'){
+if(currentSubId==='toolAssistantHub'||currentSubId==='rarBatchPack'||document.getElementById('toolBizTabs'))useToolMaterialContext();
+else useOrderMaterialContext();
+openEmailModal((MATERIAL_PICK_SOURCE==='tool'?'工具助手 · 解析材料':'案件材料 · '+ORDER_STATE.caseNo),{pickMaterials:true});return}
+if(act==='case-push-pc'){
+if(currentSubId==='toolAssistantHub'||currentSubId==='rarBatchPack'||document.getElementById('toolBizTabs'))useToolMaterialContext();
+else useOrderMaterialContext();
+openPushPcModal();return}
+if(act==='tool-pack-download'){useToolMaterialContext();openPackDownloadModal();return}
+if(act==='tool-send-email'){useToolMaterialContext();openEmailModal('工具助手 · 解析材料',{pickMaterials:true});return}
+if(act==='tool-push-pc'){useToolMaterialContext();openPushPcModal();return}
 if(act==='go-issue-letter'||act==='open-issue-form'){openIssueLetterModal();return}
 if(act==='open-cannot-underwrite'){openCannotUnderwriteModal();return}
 if(act==='rar-process')runRarProcess();
@@ -3923,19 +4220,10 @@ if(act==='sync-continue-pc')showToast('已在 PC 打开核保工作台 — 材�
 if(act==='modal-close')closeModal();
 if(act==='preview-doc-export')showToast('申请书预览 PDF 已导出');
 if(act==='preview-doc-email')openEmailModal('申请书结构化预览');
-if(act==='demo-tool-flow'){
-showToast('演示：上传 RAR → 解压归类 → 文件空间站');
-const sec=document.getElementById('rarUploadSection');
-if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
-if(!rarUploadedFiles.length){
-addFilesToList(rarUploadedFiles,[{name:'演示案件材料包.rar',size:1024*860}]);
-refreshUploadListUI('rarFileList',rarUploadedFiles);
-}
-setTimeout(()=>runRarProcess(),500);
-}
 });
-});
+}
 if(['rarBatchPack','structExtract','toolAssistantHub','crossDeviceSync','smartAnalysis'].includes(id))bindMaterialEvents(id);
+if(id==='orderReview')bindOrderReviewForm(subBody,false);
 if(id==='statsReport')bindStatsReportEvents();
 if(id==='structExtract'||id==='rarBatchPack'||id==='toolAssistantHub')bindPreviewTypeTags();
 subBody.querySelectorAll('.sp-tag[data-select]').forEach(tag=>{
@@ -3982,7 +4270,7 @@ const PRD_SPECS={
 'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'顶部订单概要卡（订单号/状态/标的/材料完整度/材料数/法院案由），下接案件信息摘要、申请材料（预览进独立页）、证据链诊断与审核记录。等待出函底部为「出函」「无法承保」。',logic:['顶部材料完整度与证据链同源','申请材料预览 → materialPreview 二级页','等待出函：出函表单（*保单号 *保单附件 保函附件 诉责材料 审核备注 材料处理）/ 无法承保（*审核备注）'],acceptance:['等待出函双按钮','出函必填校验保单号与保单附件','无法承保必填审核备注'],api:'GET /api/inst/order/{id} · POST /api/inst/order/{id}/issue · POST /api/inst/order/{id}/reject-underwrite'},
 'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链，输出诊断分析、材料完整度评分（百分制，总分 100）与提交判断。页内不放「评分规则」按钮；悬停证据链区域 1 秒后，本侧栏以表格展示完整评分规则与单项计算逻辑。',logic:['按案由匹配借贷 / 合同模板','节点权重加权命中计分（满分 100）','必填缺件优先补材料','fail 档阻断进入审核'],scoreTables:true,acceptance:['页内无「评分规则」按钮','悬停 1 秒后右侧 PRD 以表格展示规则','借贷/合同节点权重合计均为 100','每项含 keywords 命中计分说明','分数与节点命中状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；案件材料区内按状态显示打包下载、邮件发送、投送电脑端；含证据链诊断与审核记录；底部主操作与订单详情一致（进入审核等，无「要求补材料」）。',logic:['od-page：上滚下固','法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作在材料卡片内：驳回仅打包；其余含邮件与投送PC','打包/邮件/投送弹层支持勾选附件','证据链诊断 + 审核记录','底部主操作：renderOrderPrimaryActions','邮件发送弹层无取消按钮，点遮罩或关闭图标退出'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮在材料区内按状态显隐','底部无要求补材料','邮件弹层无取消按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
-'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：评估风险、填写意见、确定费率，通过或驳回。',logic:['风险等级三选一','审核意见 textarea','费率 input 联动保费计算','通过→issueGuarantee 驳回→通知用户'],acceptance:['审核通过跳转出函','驳回 Toast 并通知'],api:'POST /api/inst/order/{id}/approve'},
+'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：标的金额纯文本只读，填写实际保费自动计算担保费率，录入审核意见；支付为收款账号（银行账号/收款人/开户银行）与二维码支付二选一。',logic:['标的金额无输入框','实际保费→费率‰自动计算','支付方式 Tab 二选一','通过→issueGuarantee'],acceptance:['标的无文本框','账号与二维码互斥','审核通过跳转出函'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=出函成功'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
 'supplement-request':{title:'要求补材料',module:'订单',page:'supplementRequest',priority:'P1',business:'审核中发现材料不全时，通知用户补充指定材料。',logic:['材料多选 checkbox','补充说明 textarea','发送 push+短信'],acceptance:['发送后订单状态=材料不足'],api:'POST /api/inst/order/{id}/supplement'},
 'rate-config':{title:'费率配置',module:'业务',page:'rateConfig',priority:'P1',business:'机构配置产品费率，变更需平台审批后生效。',logic:['基础费率/最低保费/最高额度','提交审批 workflow'],acceptance:['提交后 Toast 已提交审批'],api:'POST /api/inst/rate/apply'},
@@ -3994,7 +4282,7 @@ const PRD_SPECS={
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
 'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料处理总入口：顶部先选业务类型（诉讼保/学平险/标后），再上传材料并按对应字段结构解析；文件空间站跳转二级页做手机与 PC 材料互通。',logic:['工作台/业务 Tab 进入工具助手','顶部业务类型三选一','按业务线输出不同结构化预览','文件空间站入口进二级页'],acceptance:['业务类型可切换且预览结构不同','本页可上传并处理','文件空间站可跳转'],api:'—'},
-'rar-batch-pack':{title:'材料批量处理',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'在工具助手当前页按所选业务类型上传材料，解析为对应标准字段并生成结构化预览/清单 PDF。',logic:['嵌在 toolAssistantHub 本页','先选诉讼保/学平险/标后','多文件上传逐条显示','开始处理后按业务线渲染不同结构'],acceptance:['诉讼保显示保全申请字段','学平险显示投保字段','标后显示项目保函字段'],api:'POST /api/inst/material/rar/process'},
+'rar-batch-pack':{title:'材料批量处理',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'在工具助手当前页按所选业务类型上传材料，解析为对应标准字段并生成结构化预览；材料区支持单文件预览/下载，底部可打包下载、邮件发送、投送电脑端，并展示证据链诊断。',logic:['嵌在 toolAssistantHub 本页','先选诉讼保/学平险/标后','多文件上传后开始处理','材料行预览+下载','底部三操作复用订单详情弹层','诉讼保走案由证据链，其它业务线走材料链诊断'],acceptance:['每文件有预览/下载','底部三按钮可用','证据链诊断可见且可折叠'],api:'POST /api/inst/material/rar/process'},
 'struct-extract':{title:'结构化提取',module:'工具助手',page:'structExtract',priority:'P0',business:'Word/图/PDF 转为订单标准字段；按保全类型生成申请书预览，点击「结构化提取」后才展示结果。',logic:['多文件上传逐条显示','全部上传后点击「结构化提取」','OCR+NLP 标准字段表','保全类型切换预览','一键写入 orderReview'],acceptance:['上传列表+提取按钮联动','结果区默认隐藏','四种类型预览可切换'],api:'POST /api/inst/material/extract'},
 'smart-analysis':{title:'智能分析',module:'工具助手',page:'smartAnalysis',priority:'P0',business:'先选保全类型并上传材料，点击「开始智能分析」后按类型规则输出机构匹配、缺件与证据分类。',logic:['保全类型四选一（影响缺件规则）','多文件上传列表','仅点击分析后展示结果','缺件对照上传文件名匹配','带结果进 orderReview'],acceptance:['未分析前结果隐藏','切换类型重置结果','缺件随类型与上传变化'],api:'POST /api/inst/material/analyze'},
 'doc-preview':{title:'申请书结构化预览',module:'工具助手',page:'structExtract',priority:'P0',business:'排版对齐申请书范本：居中标题、加粗标签字段、法条结语、右下签章日期；下方文件材料列表（图标+文件名+类型）。',logic:['财产保全标题「财产保全申请书」','字段：申请人/被申请人/案号/法院/金额/财产线索','法条结语段落 + 申请人签章/日期右对齐','文件材料（材料总数 N）列表','四种保全类型字段集不同'],acceptance:['范本版式：标题居中、签章右对齐','财产保全含 6 份材料','切换类型字段与附件同步'],api:'GET /api/inst/material/preview?type='},
