@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片文字定位与高亮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #1a2332;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .upload-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fc;
+            border-radius: 8px;
+        }
+        .upload-section label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #fff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-section label:hover {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            min-width: 300px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .btn {
+            padding: 10px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #64748b;
+        }
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        .image-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            background: #f1f5f9;
+            border-radius: 8px;
+            overflow: auto;
+            min-height: 400px;
+        }
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .image-wrapper img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        .highlight-overlay {
+            position: absolute;
+            border: 1px solid #ffeb3b;
+            background: rgba(255, 235, 59, 0.2);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .highlight-overlay.active {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.15);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { border-color: #ffeb3b; }
+            50% { border-color: #f44336; }
+        }
+        .highlight-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 20;
+            display: none;
+        }
+        .highlight-tooltip.show {
+            display: block;
+        }
+        .info-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .info-panel h3 {
+            margin-bottom: 10px;
+            color: #1a2332;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .info-item {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .info-item strong {
+            color: #1a2332;
+            display: block;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .status-message.show {
+            display: block;
+        }
+        .status-message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        .status-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .status-message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+        .ocr-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .stat-item {
+            padding: 6px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .stat-item strong {
+            color: #1a2332;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .upload-section { flex-direction: column; }
+            .search-box { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            🖼️ 图片文字定位与高亮
+            <span style="font-size:14px;color:#64748b;font-weight:normal;">支持拖拽/点击上传</span>
+        </h1>
+
+        <!-- 状态消息 -->
+        <div id="statusMessage" class="status-message"></div>
+
+        <!-- 上传和搜索区域 -->
+        <div class="upload-section">
+            <label for="imageInput">
+                📤 选择图片
+                <input type="file" id="imageInput" accept="image/*" style="display:none;">
+            </label>
+            <div class="search-box">
+                <input type="text" id="searchText" placeholder="输入要查找的文字，如：受理法院" />
+                <button class="btn" onclick="searchAndHighlight()">🔍 查找</button>
+                <button class="btn btn-secondary" onclick="clearHighlights()">✕ 清除</button>
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress-bar" id="progressBar" style="display:none;">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- 图片显示区域 -->
+        <div class="image-container" id="imageContainer">
+            <div class="image-wrapper" id="imageWrapper">
+                <img id="previewImage" src="" alt="预览图片" style="display:none;" />
+                <!-- 高亮覆盖层将由JS动态创建 -->
+                <div class="highlight-tooltip" id="tooltip"></div>
+            </div>
+            <div style="text-align:center;padding:60px 20px;color:#94a3b8;" id="placeholderText">
+                <div style="font-size:48px;margin-bottom:16px;">🖼️</div>
+                <div>请上传图片开始文字定位</div>
+                <div style="font-size:13px;margin-top:8px;">支持 JPG, PNG, BMP, WebP 等格式</div>
+            </div>
+        </div>
+
+        <!-- 信息面板 -->
+        <div class="info-panel" id="infoPanel" style="display:none;">
+            <h3>📊 识别结果</h3>
+            <div class="info-grid" id="infoGrid"></div>
+            <div class="ocr-stats" id="ocrStats"></div>
+        </div>
+    </div>
+
+    <!-- 引入 Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+    <script>
+        let currentImage = null;
+        let ocrData = null;
+        let highlights = [];
+        let imageNaturalWidth = 0;
+        let imageNaturalHeight = 0;
+
+        // ========== 图片上传处理 ==========
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+        });
+
+        // 拖拽上传
+        const container = document.getElementById('imageContainer');
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            container.style.borderColor = '#3b82f6';
+        });
+        container.addEventListener('dragleave', () => {
+            container.style.borderColor = '#cbd5e1';
+        });
+        container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            container.style.borderColor = '#cbd5e1';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageUpload(file);
+            }
+        });
+
+        // ========== 图片上传处理 ==========
+        async function handleImageUpload(file) {
+            showStatus('正在加载图片...', 'info');
+            
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const img = document.getElementById('previewImage');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('placeholderText').style.display = 'none';
+                currentImage = file;
+
+                // 等待图片加载完成获取尺寸
+                await new Promise((resolve) => {
+                    img.onload = () => {
+                        imageNaturalWidth = img.naturalWidth;
+                        imageNaturalHeight = img.naturalHeight;
+                        resolve();
+                    };
+                });
+
+                showStatus('图片加载完成，正在识别文字...', 'info');
+                document.getElementById('progressBar').style.display = 'block';
+                
+                // 执行OCR识别
+                await performOCR(img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ========== OCR识别 ==========
+        async function performOCR(imgElement) {
+            try {
+                const worker = await Tesseract.createWorker('chi_sim', 1, {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const progress = Math.round(m.progress * 100);
+                            document.getElementById('progressFill').style.width = progress + '%';
+                            showStatus(`正在识别文字... ${progress}%`, 'info');
+                        }
+                    }
+                });
+
+                const ret = await worker.recognize(imgElement);
+                await worker.terminate();
+
+                ocrData = ret.data;
+                document.getElementById('progressBar').style.display = 'none';
+                
+                // 显示识别结果统计
+                displayOCRStats(ocrData);
+                showStatus(`✅ 识别完成！共识别 ${ocrData.words?.length || 0} 个文字`, 'success');
+                
+                // 自动查找第一个预设关键词
+                const defaultSearch = document.getElementById('searchText').value || '法院';
+                if (defaultSearch) {
+                    setTimeout(() => searchAndHighlight(), 500);
+                }
+
+            } catch (error) {
+                console.error('OCR识别失败:', error);
+                document.getElementById('progressBar').style.display = 'none';
+                showStatus('❌ OCR识别失败: ' + error.message, 'error');
+            }
+        }
+
+        // ========== 显示OCR统计信息 ==========
+        function displayOCRStats(data) {
+            const panel = document.getElementById('infoPanel');
+            panel.style.display = 'block';
+            
+            const grid = document.getElementById('infoGrid');
+            grid.innerHTML = '';
+            
+            const stats = [
+                { label: '识别文字数', value: data.words?.length || 0 },
+                { label: '识别段落数', value: data.paragraphs?.length || 0 },
+                { label: '识别行数', value: data.lines?.length || 0 },
+                { label: '置信度', value: (data.confidence || 0).toFixed(1) + '%' }
+            ];
+            
+            stats.forEach(stat => {
+                const div = document.createElement('div');
+                div.className = 'info-item';
+                div.innerHTML = `<strong>${stat.label}</strong>${stat.value}`;
+                grid.appendChild(div);
+            });
+
+            // 显示所有识别文字（调试用）
+            const statsDiv = document.getElementById('ocrStats');
+            if (data.text) {
+                statsDiv.innerHTML = `<div style="margin-top:10px;padding:12px;background:white;border-radius:6px;font-size:13px;max-height:100px;overflow-y:auto;color:#475569;">
+                    <strong>识别文本预览：</strong> ${data.text.substring(0, 200)}${data.text.length > 200 ? '...' : ''}
+                </div>`;
+            }
+        }
+
+        // ========== 搜索并高亮 ==========
+        function searchAndHighlight() {
+            if (!ocrData) {
+                showStatus('⚠️ 请先上传图片并完成OCR识别', 'error');
+                return;
+            }
+
+            const searchText = document.getElementById('searchText').value.trim();
+            if (!searchText) {
+                showStatus('⚠️ 请输入要查找的文字', 'error');
+                return;
+            }
+
+            // 清除之前的高亮
+            clearHighlights();
+
+            const words = ocrData.words || [];
+            const matches = [];
+            
+            // 查找匹配的文字（支持中文分词匹配）
+            words.forEach((word, index) => {
+                // 精确匹配
+                if (word.text.includes(searchText)) {
+                    matches.push({
+                        word: word,
+                        index: index,
+                        type: 'exact'
+                    });
+                }
+            });
+
+            // 如果精确匹配没有结果，尝试模糊匹配
+            if (matches.length === 0) {
+                words.forEach((word, index) => {
+                    // 模糊匹配（包含关系）
+                    if (searchText.includes(word.text) || word.text.includes(searchText)) {
+                        matches.push({
+                            word: word,
+                            index: index,
+                            type: 'fuzzy'
+                        });
+                    }
+                });
+            }
+
+            if (matches.length === 0) {
+                showStatus(`🔍 未找到 "${searchText}"`, 'error');
+                return;
+            }
+
+            // 显示匹配结果
+            showStatus(`✅ 找到 ${matches.length} 处匹配 "${searchText}"`, 'success');
+            
+            // 在图片上绘制高亮
+            matches.forEach((match, idx) => {
+                const word = match.word;
+                const bbox = word.bbox;
+                
+                if (bbox) {
+                    const highlight = createHighlight(
+                        bbox.x0, bbox.y0,
+                        bbox.x1 - bbox.x0,
+                        bbox.y1 - bbox.y0,
+                        word.text,
+                        idx === 0 // 第一个匹配高亮为激活状态
+                    );
+                    highlights.push(highlight);
+                }
+            });
+
+            // 如果只有1个匹配，显示详细信息
+            if (matches.length === 1) {
+                const word = matches[0].word;
+                showStatus(`📍 找到 "${searchText}" 在位置 (${Math.round(word.bbox.x0)}, ${Math.round(word.bbox.y0)})`, 'success');
+            }
+        }
+
+        // ========== 创建高亮层 ==========
+        function createHighlight(x, y, width, height, text, isActive = false) {
+            const wrapper = document.getElementById('imageWrapper');
+            const img = document.getElementById('previewImage');
+            
+            // 计算相对于图片显示尺寸的比例
+            const displayWidth = img.offsetWidth || img.clientWidth;
+            const displayHeight = img.offsetHeight || img.clientHeight;
+            const scaleX = displayWidth / imageNaturalWidth;
+            const scaleY = displayHeight / imageNaturalHeight;
+
+            // 创建高亮DIV
+            const div = document.createElement('div');
+            div.className = `highlight-overlay ${isActive ? 'active' : ''}`;
+            div.style.left = (x * scaleX) + 'px';
+            div.style.top = (y * scaleY) + 'px';
+            div.style.width = (width * scaleX) + 'px';
+            div.style.height = (height * scaleY) + 'px';
+            
+            // 添加文字标签
+            if (text) {
+                div.title = text;
+            }
+
+            // 鼠标悬浮显示文字
+            div.addEventListener('mouseenter', (e) => {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.textContent = `${text} (${Math.round(x)}, ${Math.round(y)})`;
+                tooltip.style.left = (e.clientX - wrapper.getBoundingClientRect().left + 10) + 'px';
+                tooltip.style.top = (e.clientY - wrapper.getBoundingClientRect().top - 30) + 'px';
+                tooltip.classList.add('show');
+            });
+            
+            div.addEventListener('mouseleave', () => {
+                document.getElementById('tooltip').classList.remove('show');
+            });
+
+            // 点击高亮显示详细信息
+            div.addEventListener('click', () => {
+                // 切换激活状态
+                div.classList.toggle('active');
+                showStatus(`📌 选中: "${text}" 位置 (${Math.round(x)}, ${Math.round(y)})`, 'info');
+            });
+
+            wrapper.appendChild(div);
+            return div;
+        }
+
+        // ========== 清除所有高亮 ==========
+        function clearHighlights() {
+            document.querySelectorAll('.highlight-overlay').forEach(el => el.remove());
+            document.getElementById('tooltip').classList.remove('show');
+            highlights = [];
+        }
+
+        // ========== 显示状态消息 ==========
+        function showStatus(message, type = 'info') {
+            const el = document.getElementById('statusMessage');
+            el.textContent = message;
+            el.className = `status-message show ${type}`;
+            
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    el.classList.remove('show');
+                }, 8000);
+            }
+        }
+
+        // ========== 预设关键词快速查找 ==========
+        const presetKeywords = ['受理法院', '申请人', '被申请人', '案号', '保全金额', '财产线索'];
+        let currentPresetIndex = 0;
+
+        // 自动演示功能
+        function autoDemo() {
+            if (!ocrData) return;
+            
+            const keyword = presetKeywords[currentPresetIndex % presetKeywords.length];
+            document.getElementById('searchText').value = keyword;
+            searchAndHighlight();
+            currentPresetIndex++;
+            
+            if (currentPresetIndex < presetKeywords.length * 2) {
+                setTimeout(autoDemo, 3000);
+            }
+        }
+
+        // 页面加载完成后，如果有图片自动演示
+        document.addEventListener('DOMContentLoaded', () => {
+            // 支持键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    document.getElementById('searchText').focus();
+                }
+                if (e.key === 'Enter' && document.activeElement === document.getElementById('searchText')) {
+                    searchAndHighlight();
+                }
+                if (e.key === 'Escape') {
+                    clearHighlights();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
