@@ -74,7 +74,7 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .order-card-amt{font-size:15px;font-weight:800;color:#0F4C5C;letter-spacing:-.2px}
 .order-card-amt em{font-style:normal;font-size:11px;font-weight:600;color:#94A3B8;margin-left:4px}
 .order-card-side{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.order-id-hint{font-size:10px;color:#94A3B8;font-weight:500;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.order-id-hint{font-size:10px;color:#94A3B8;font-weight:500;max-width:168px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
 .order-dl-btn{border:none;background:#ECFDF5;color:#047857;font-size:10px;font-weight:700;padding:5px 10px;border-radius:16px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;flex-shrink:0}
 .order-dl-btn:active{transform:scale(.97)}
 .order-biz-badge{display:none}
@@ -833,7 +833,6 @@ body.embed-mode #authOverlay{display:none!important}
 </div>
 <aside class="prd-sidebar"><div class="prd-sidebar-header"><h1>🏢 函信保函通 · 产品需求文档</h1><p>面向<strong>保险机构/担保公司</strong>：订单审核、核保出函、<strong>工具助手</strong>（RAR批量打包·文件空间站·手机/PC/Chrome扫码互通）。悬停功能区域<strong>停留 1 秒</strong>查看完整 PRD。</p><div class="prd-badge-row"><span class="prd-badge">机构端 V8</span><span class="prd-badge">PC 演示页</span><span class="prd-badge">工具助手</span><span class="prd-badge">Chrome 扫码</span><span class="prd-badge">闭环交互</span></div></div><div class="prd-sidebar-body" id="prdPanelBody"><div class="prd-empty" id="prdEmpty"><i class="fas fa-hand-pointer"></i><p>悬停左侧原型功能区域 1 秒，查看业务需求、功能逻辑与验收标准。</p></div><div id="prdContent" style="display:none"></div></div></aside>
 </div>
-<div class="prd-mode-bar"><i class="fas fa-info-circle"></i> 机构端 PRD V8 · 未登录可进「我的」空态 · 点击弹出登录（对齐 <a href="login.html" style="color:#A5F3FC">login.html</a>）· 文件空间站 · <a href="version/诉讼保-文件助手.html" target="_blank" style="color:#A5F3FC">诉讼保-文件助手.html</a></div>
 <div class="prd-tooltip" id="prdTooltip"></div>
 <div class="prd-pending-hint" id="prdPendingHint">停留中… 1 秒后显示需求</div>
 <div class="sp-toast" id="spToast"></div>
@@ -1900,26 +1899,47 @@ const ORDER_LIST=[
 {id:'SS20250527015',biz:'litigation',status:'insufficient',type:'证据保全',applicant:'王某',respondent:'深圳某某电子有限公司',court:'深圳市南山区人民法院',amount:1500000,caseNo:'（2025）粤0305民初44102号',cause:'侵害商业秘密纠纷'}
 ];
 const BIAOHUO_STATUS_META={
-bidding:{label:'竞价中',tag:'tag-review'},
-issuing:{label:'办理中',tag:'tag-issue'},
-done:{label:'已办结',tag:'tag-done'},
-refunded:{label:'已退保',tag:'tag-cancel'},
-cancelled:{label:'已取消',tag:'tag-closed'}
+bidding:{label:'竞价中',tag:'tag-pending'},
+wait_review:{label:'等待审核',tag:'tag-review'},
+insufficient:{label:'材料不足',tag:'tag-supplement'},
+wait_sign:{label:'等待签章',tag:'tag-sign'},
+wait_pay:{label:'等待支付',tag:'tag-pay'},
+wait_issue:{label:'等待出函',tag:'tag-issue'},
+issued:{label:'出函成功',tag:'tag-done'},
+closed:{label:'订单关闭',tag:'tag-closed'},
+cs_intervene:{label:'客服介入',tag:'tag-cs'},
+wait_cancel:{label:'等待退保',tag:'tag-cancel'},
+cancel_processing:{label:'退保受理中',tag:'tag-cancel'},
+cancelled:{label:'退保成功',tag:'tag-cancel-ok'}
 };
 const BIAOHUO_FILTERS=[
 {key:'all',label:'全部'},
 {key:'bidding',label:'竞价中'},
-{key:'issuing',label:'办理中'},
-{key:'done',label:'已办结'},
-{key:'refunded',label:'已退保'},
-{key:'cancelled',label:'已取消'}
+{key:'wait_review',label:'等待审核'},
+{key:'insufficient',label:'材料不足'},
+{key:'wait_sign',label:'等待签章'},
+{key:'wait_pay',label:'等待支付'},
+{key:'wait_issue',label:'等待出函'},
+{key:'issued',label:'出函成功'},
+{key:'closed',label:'订单关闭'},
+{key:'cs_intervene',label:'客服介入'},
+{key:'wait_cancel',label:'等待退保'},
+{key:'cancel_processing',label:'退保受理中'},
+{key:'cancelled',label:'退保成功'}
 ];
 const BIAOHUO_LIST=[
-{id:'BH20250620001',biz:'biaohou',status:'bidding',type:'履约',project:'某某市政道路改造工程',applicant:'某某建设集团有限公司',amount:5000000,deadline:'2025-06-25 18:00',quotes:12},
-{id:'BH20250618008',biz:'biaohou',status:'issuing',type:'投标',project:'智慧园区弱电工程',applicant:'某某科技股份有限公司',amount:2000000,deadline:'2025-06-28 12:00',quotes:8},
-{id:'BH20250610003',biz:'biaohou',status:'done',type:'农民工工资',project:'保障房三期土建',applicant:'某某建筑劳务有限公司',amount:8000000,deadline:'—',quotes:15,guaranteeNo:'YABH20250610003'},
-{id:'BH20250605002',biz:'biaohou',status:'refunded',type:'预付款',project:'设备采购项目',applicant:'某某机电有限公司',amount:1200000,deadline:'—',quotes:6},
-{id:'BH20250528009',biz:'biaohou',status:'cancelled',type:'质量',project:'绿化养护服务',applicant:'某某园林工程有限公司',amount:600000,deadline:'—',quotes:3}
+{id:'BH20250620001',biz:'biaohou',status:'bidding',product:'履约保函',projectType:'市政工程',company:'某某建设集团有限公司',qualification:'一级资质',project:'某某市政道路改造工程',amount:5000000,quotes:12,period:'2025-06-01 ~ 2026-05-31',deadline:'2025-06-25 18:00'},
+{id:'BH20250619002',biz:'biaohou',status:'wait_review',product:'投标保函',projectType:'信息化建设',company:'某某科技股份有限公司',qualification:'二级资质',project:'智慧园区弱电工程',amount:2000000,quotes:8,period:'2025-07-01 ~ 2026-06-30',deadline:'2025-06-28 12:00'},
+{id:'BH20250618008',biz:'biaohou',status:'insufficient',product:'履约保函',projectType:'房屋建筑',company:'某某建工集团有限公司',qualification:'特级资质',project:'保障房配套工程',amount:3500000,quotes:5,period:'2025-08-01 ~ 2026-07-31'},
+{id:'BH20250617005',biz:'biaohou',status:'wait_sign',product:'预付款保函',projectType:'设备采购',company:'某某机电有限公司',qualification:'一级资质',project:'设备采购项目',amount:1200000,quotes:6,period:'2025-06-15 ~ 2026-06-14'},
+{id:'BH20250616004',biz:'biaohou',status:'wait_pay',product:'质量保函',projectType:'园林绿化',company:'某某园林工程有限公司',qualification:'二级资质',project:'绿化养护服务',amount:600000,quotes:3,period:'2025-05-01 ~ 2026-04-30'},
+{id:'BH20250615003',biz:'biaohou',status:'wait_issue',product:'农民工工资保函',projectType:'房屋建筑',company:'某某建筑劳务有限公司',qualification:'一级资质',project:'保障房三期土建',amount:8000000,quotes:15,period:'2025-06-01 ~ 2026-05-31'},
+{id:'BH20250610003',biz:'biaohou',status:'issued',product:'履约保函',projectType:'市政工程',company:'某某建设集团有限公司',qualification:'一级资质',project:'某某市政道路改造工程',amount:5000000,quotes:12,period:'2025-04-01 ~ 2026-03-31',guaranteeNo:'YABH20250610003'},
+{id:'BH20250608007',biz:'biaohou',status:'closed',product:'投标保函',projectType:'信息化建设',company:'某某网络科技有限公司',qualification:'三级资质',project:'政务云平台运维',amount:900000,quotes:4,period:'—'},
+{id:'BH20250607006',biz:'biaohou',status:'cs_intervene',product:'履约保函',projectType:'水利水电',company:'某某水利工程有限公司',qualification:'一级资质',project:'河道整治工程',amount:4500000,quotes:9,period:'2025-03-01 ~ 2026-02-28'},
+{id:'BH20250605002',biz:'biaohou',status:'wait_cancel',product:'预付款保函',projectType:'设备采购',company:'某某机电有限公司',qualification:'一级资质',project:'设备采购项目',amount:1200000,quotes:6,period:'2025-02-01 ~ 2026-01-31',guaranteeNo:'YABH20250605002'},
+{id:'BH20250604001',biz:'biaohou',status:'cancel_processing',product:'质量保函',projectType:'市政工程',company:'某某路桥有限公司',qualification:'二级资质',project:'道路大修工程',amount:2800000,quotes:7,period:'2025-01-01 ~ 2025-12-31',guaranteeNo:'YABH20250604001'},
+{id:'BH20250528009',biz:'biaohou',status:'cancelled',product:'履约保函',projectType:'园林绿化',company:'某某园林工程有限公司',qualification:'二级资质',project:'绿化养护服务',amount:600000,quotes:3,period:'2024-12-01 ~ 2025-11-30',guaranteeNo:'YABH20250528009'}
 ];
 let BIAOHUO_STATE=Object.assign({},BIAOHUO_LIST[0]);
 const XUEPING_STATUS_META={
@@ -1983,9 +2003,9 @@ const ALL_BIZ_FILTERS=[
 {key:'abnormal',label:'异常'}
 ];
 const ALL_STATUS_BUCKET={
-todo:new Set(['wait_select','wait_confirm','bidding']),
-doing:new Set(['wait_sign','partial_sign','wait_pay','wait_issue','wait_underwrite','wait_effective','issuing','wait_cancel','cancel_processing']),
-done_bucket:new Set(['issued','effective','terminated','cancelled','refunded','done']),
+todo:new Set(['wait_select','wait_confirm','wait_review','bidding']),
+doing:new Set(['wait_sign','partial_sign','wait_pay','wait_issue','wait_underwrite','wait_effective','wait_cancel','cancel_processing']),
+done_bucket:new Set(['issued','effective','terminated','cancelled']),
 abnormal:new Set(['cs_intervene','closed','insufficient'])
 };
 function formatPreserveAmt(n){return'¥'+Number(n).toLocaleString('zh-CN')}
@@ -2038,7 +2058,7 @@ return orderCardShell({
 biz:'xueping',status:o.status,page:'xuepingDetail',idAttr:`data-xp-id="${o.id}" data-push-stack="1"`,
 showBiz:!!opts.showBiz,title:o.product,statusLabel:meta.label,statusTag:meta.tag,
 primary:`${o.student}<span class="arrow">·</span>${o.grade}`,
-meta:`${o.school}<span class="dot">·</span>监护人 ${o.guardian}`,
+meta:`${o.school}<span class="dot">·</span>投保人 ${o.guardian}`,
 amtHtml:`¥${o.premium}${soft?'':'<em>保费</em>'}`,
 sideHtml:`<span class="order-id-hint">${o.policyNo||o.id}</span>`
 });
@@ -2046,15 +2066,19 @@ sideHtml:`<span class="order-id-hint">${o.policyNo||o.id}</span>`
 function renderBiaohouCard(o,opts){
 opts=opts||{};
 const soft=!!opts.soft;
-const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
-const dl=(!soft&&o.status==='done')?`<button type="button" class="order-dl-btn" data-action="download-guarantee" data-id="${o.id}" data-gno="${o.guaranteeNo||''}"><i class="fas fa-download"></i> 下载</button>`:`<span class="order-id-hint">${o.deadline&&o.deadline!=='—'?'截止 '+o.deadline:o.id}</span>`;
+const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.wait_review;
+const product=o.product||((o.type||'标后')+(String(o.type||'').endsWith('保函')?'':'保函'));
+const company=o.company||o.applicant||'—';
+const projectType=o.projectType||'—';
+const qualification=o.qualification||'—';
+const period=o.period&&o.period!=='—'?o.period:'—';
 return orderCardShell({
 biz:'biaohou',status:o.status,page:'biaohouDetail',idAttr:`data-bh-id="${o.id}" data-push-stack="1"`,
-showBiz:!!opts.showBiz,title:soft?o.type:(o.type+'保函'),statusLabel:meta.label,statusTag:meta.tag,
-primary:o.project,
-meta:`${o.applicant}<span class="dot">·</span>${o.quotes} 家报价`,
-amtHtml:`${formatAmtShort(o.amount)}${soft?'':'<em>项目额</em>'}`,
-sideHtml:dl
+showBiz:!!opts.showBiz,title:product,statusLabel:meta.label,statusTag:meta.tag,
+primary:company,
+meta:`${projectType}<span class="dot">·</span>${qualification}<span class="dot">·</span>${o.quotes||0} 家报价`,
+amtHtml:`${formatAmtShort(o.amount)}${soft?'':'<em>担保额</em>'}`,
+sideHtml:`<span class="order-id-hint">保期 ${period}</span>`
 });
 }
 function getStatusFiltersForBiz(biz){
@@ -2190,12 +2214,12 @@ materials:[
 {icon:'fa-file-word',color:'#2B6CB0',name:'财产线索说明.docx',type:'财产线索'}]
 },
 xueping:{
-hint:'按学平险投保字段解析：学生、学校、年级、监护人、产品、保障期间等',
+hint:'按学平险投保字段解析：学生、学校、年级、投保人、产品、保障期间等',
 processSteps:['正在识别学平投保材料…','提取学生与学校信息…','映射投保标准字段…','生成结构化预览…'],
 doneHint:(n)=>'✓ 已按学平险结构解析 '+n+' 个文件 · 投保字段就绪',
 toast:'学平险结构化解析完成',
 docTitle:'学平险投保信息',
-fields:[['学生姓名','王小明'],['学校','北京市朝阳区实验小学'],['年级','三年级'],['监护人','王建国'],['联系电话','138****6621'],['保险产品','意外医疗'],['保障期间','2025-09-01 ~ 2026-08-31'],['保费','¥120']],
+fields:[['学生姓名','王小明'],['学校','北京市朝阳区实验小学'],['年级','三年级'],['投保人','王建国'],['联系电话','138****6621'],['保险产品','意外医疗'],['保障期间','2025-09-01 ~ 2026-08-31'],['保费','¥120']],
 materials:[
 {icon:'fa-file-pdf',color:'#E53E3E',name:'投保确认书.pdf',type:'投保材料'},
 {icon:'fa-file-image',color:'#7C3AED',name:'学生身份证.jpg',type:'身份证明'},
@@ -2203,12 +2227,12 @@ materials:[
 {icon:'fa-file-excel',color:'#059669',name:'班级名册.xlsx',type:'投保清单'}]
 },
 biaohou:{
-hint:'按标后保函字段解析：项目名称、申请人、保函类型、项目金额、截止时间等',
-processSteps:['正在识别标后材料…','提取项目与申请人…','映射保函申请字段…','生成结构化预览…'],
+hint:'按标后保函字段解析：保函品种、项目类型、企业名称、企业资质、担保额、保期等',
+processSteps:['正在识别标后材料…','提取企业与项目信息…','映射保函申请字段…','生成结构化预览…'],
 doneHint:(n)=>'✓ 已按标后结构解析 '+n+' 个文件 · 项目字段就绪',
 toast:'标后结构化解析完成',
 docTitle:'标后保函申请信息',
-fields:[['项目名称','某某市政道路改造工程'],['申请人','某某建设集团有限公司'],['保函类型','履约保函'],['项目金额','人民币5,000,000元'],['截止时间','2025-06-25 18:00'],['报价机构数','12 家'],['订单号','BH20250620001']],
+fields:[['保函品种','履约保函'],['项目类型','市政工程'],['企业名称','某某建设集团有限公司'],['企业资质','一级资质'],['报价数','12 家'],['担保额','人民币5,000,000元'],['保期','2025-06-01 ~ 2026-05-31'],['订单号','BH20250620001']],
 materials:[
 {icon:'fa-file-pdf',color:'#E53E3E',name:'招标文件.pdf',type:'招标材料'},
 {icon:'fa-file-pdf',color:'#2563EB',name:'中标通知书.pdf',type:'中标材料'},
@@ -3253,7 +3277,7 @@ const WORKBENCH=`<div class="header-flex"><div class="greeting"><h2>🏢 工作�
 </div>
 <div class="section-title"><span>📋 待办订单</span><a href="#" data-page="orderList" data-biz="all">订单中心 →</a></div>
 ${ORDER_LIST.filter(o=>o.status==='wait_confirm'||o.status==='wait_issue'||o.status==='insufficient').map(o=>renderOrderCard(o,{soft:true})).join('')}
-${BIAOHUO_LIST.filter(o=>o.status==='bidding'||o.status==='issuing').slice(0,1).map(o=>renderBiaohouCard(o,{soft:true,showBiz:true})).join('')}
+${BIAOHUO_LIST.filter(o=>o.status==='bidding'||o.status==='wait_review'||o.status==='insufficient').slice(0,1).map(o=>renderBiaohouCard(o,{soft:true,showBiz:true})).join('')}
 ${XUEPING_LIST.filter(o=>o.status==='wait_confirm'||o.status==='wait_underwrite').slice(0,1).map(o=>renderXuepingCard(o,{soft:true,showBiz:true})).join('')}`;
 
 function renderOrdersTab(){
@@ -3324,9 +3348,8 @@ return`<div class="profile-auth-row"><span class="auth-pending"><i class="fas fa
 <div class="quick-item" data-page="messageCenter"><div class="quick-icon"><i class="fas fa-envelope"></i></div><span>消息中心</span></div>
 <div class="quick-item" data-page="staffManage"><div class="quick-icon"><i class="fas fa-users-cog"></i></div><span>团队管理</span></div>
 </div>
-<div class="section-title">⚙️ 账号设置</div>
+<div class="section-title">⚙️ 通用</div>
 <div class="settings-list">
-<div class="settings-item" data-page="enterpriseAuth"><div class="setting-left"><i class="fas fa-id-card"></i><span>企业认证</span></div><div class="setting-right ${entAuthStatusMeta().cls}">${entAuthStatus==='passed'?'<i class="fas fa-check-circle"></i> '+entAuthStatusMeta().label:entAuthStatusMeta().label+(entAuthStatus==='pending'?' >':'')}</div></div>
 <div class="settings-item" id="notifyItem"><div class="setting-left"><i class="fas fa-bell"></i><span>消息通知</span></div><div class="setting-right"><div class="switch-toggle active" id="notifySwitch"></div></div></div>
 <div class="settings-item" data-page="aboutInst"><div class="setting-left"><i class="fas fa-info-circle"></i><span>关于函信保函通</span></div><div class="setting-right">v1.4.0 ></div></div>
 <div class="settings-item" data-action="auth-logout"><div class="setting-left"><i class="fas fa-sign-out-alt"></i><span>退出登录</span></div><div class="setting-right">></div></div>
@@ -3389,25 +3412,30 @@ ${renderOrderStatusTabs(currentBizLine,currentOrderFilter,'orderFiltersSub')}
 }},
 enterpriseAuth:{title:'企业认证',sub:'企业信息 · 法人信息 · 提交审核',render:()=>renderEnterpriseAuthPage()},
 biaohouDetail:{title:'标后订单详情',sub:'订单详情',render:()=>{
-const o=BIAOHUO_STATE;const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.bidding;
-return`<div class="sp-card"><div class="flex-between"><strong>${o.type}保函</strong><span class="tag ${meta.tag}">${meta.label}</span></div>
-<p style="font-size:12px;color:#6F8FAA;margin:8px 0">金额 ${formatPreserveAmt(o.amount)}${o.guaranteeNo?' · 编号 '+o.guaranteeNo:''}</p>
-<p style="font-size:11px;color:#94A3B8">订单号 ${o.id}</p></div>
-<div class="sp-card"><div class="sp-card-title">项目信息</div>
-${renderInfoRow('项目名称',o.project)}
-${renderInfoRow('申请人',o.applicant)}
-${renderInfoRow('业务类型',o.type)}
-${renderInfoRow('项目金额',formatPreserveAmt(o.amount))}
-${renderInfoRow('报价机构',o.quotes+' 家')}
-${renderInfoRow('截止时间',o.deadline)}
+const o=BIAOHUO_STATE;const meta=BIAOHUO_STATUS_META[o.status]||BIAOHUO_STATUS_META.wait_review;
+const product=o.product||((o.type||'标后')+(String(o.type||'').endsWith('保函')?'':'保函'));
+return`<div class="sp-card"><div class="flex-between"><strong>${product}</strong><span class="tag ${meta.tag}">${meta.label}</span></div>
+<p style="font-size:12px;color:#6F8FAA;margin:8px 0">担保额 ${formatPreserveAmt(o.amount)}${o.guaranteeNo?' · 编号 '+o.guaranteeNo:''}</p>
+<p style="font-size:11px;color:#94A3B8">保期 ${o.period||'—'} · 订单号 ${o.id}</p></div>
+<div class="sp-card"><div class="sp-card-title">审核要素</div>
+${renderInfoRow('保函品种',product)}
+${renderInfoRow('项目类型',o.projectType||'—')}
+${renderInfoRow('企业名称',o.company||o.applicant||'—')}
+${renderInfoRow('企业资质',o.qualification||'—')}
+${renderInfoRow('报价数',(o.quotes||0)+' 家')}
+${renderInfoRow('担保额',formatPreserveAmt(o.amount))}
+${renderInfoRow('保期',o.period||'—')}
+${renderInfoRow('项目名称',o.project||'—')}
+${o.deadline?renderInfoRow('截止时间',o.deadline):''}
 </div>
 <div class="sp-card"><div class="sp-card-title">办理进度</div><div class="sp-timeline">
 <div class="sp-timeline-item"><strong>发布需求</strong><br>企业发起标后业务申请</div>
-<div class="sp-timeline-item"><strong>当前 · ${meta.label}</strong><br>机构端可报价、出函或退保受理</div>
+<div class="sp-timeline-item"><strong>当前 · ${meta.label}</strong><br>机构端可报价、审核、出函或退保受理</div>
 </div></div>
 ${o.status==='bidding'?`<button class="sp-btn-primary" data-action="toast" data-msg="报价已提交">提交报价</button>`:''}
-${o.status==='issuing'?`<button class="sp-btn-primary" data-action="toast" data-msg="已确认出函">确认出函</button>`:''}
-${o.status==='done'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
+${o.status==='wait_review'?`<button class="sp-btn-primary" data-action="toast" data-msg="审核已通过">通过审核</button>`:''}
+${o.status==='wait_issue'?`<button class="sp-btn-primary" data-action="toast" data-msg="已确认出函">确认出函</button>`:''}
+${o.status==='issued'?`<button class="sp-btn-secondary" style="width:100%" data-action="download-guarantee" data-gno="${o.guaranteeNo||o.id}"><i class="fas fa-download"></i> 下载文件</button>`:''}`}},
 materialPreview:{title:'材料预览',sub:()=>MAT_PREVIEW_STATE.display||MAT_PREVIEW_STATE.name||'申请材料',render:()=>renderMaterialPreviewPage()},
 orderDetail:{title:'订单详情',sub:ORDER_STATE.caseNo,render:()=>{
 syncOrderDetailFoldByStatus(ORDER_STATE);
@@ -3574,12 +3602,12 @@ ${renderXuepingSteps(o.status)}
 ${renderInfoRow('学生姓名',o.student)}
 ${renderInfoRow('学校',o.school)}
 ${renderInfoRow('年级',o.grade)}
-${renderInfoRow('监护人',o.guardian)}
+${renderInfoRow('投保人',o.guardian)}
 ${renderInfoRow('联系电话',o.phone)}
 ${renderInfoRow('保障期间',o.period)}
 </div>
 <div class="sp-card"><div class="sp-card-title">订单进度</div><div class="sp-timeline">
-<div class="sp-timeline-item"><strong>提交投保</strong><br>监护人线上提交 · ${o.id}</div>
+<div class="sp-timeline-item"><strong>提交投保</strong><br>投保人线上提交 · ${o.id}</div>
 ${o.status!=='closed'?`<div class="sp-timeline-item"><strong>当前状态 · ${meta.label}</strong><br>机构端可按状态办理确认/承保/退保</div>`:`<div class="sp-timeline-item"><strong>订单关闭</strong><br>用户取消或超时关闭</div>`}
 </div></div>
 ${renderXuepingActions(o)}`}},
@@ -4259,7 +4287,7 @@ document.getElementById('subpageBack').addEventListener('click',subPageBack);
 
 const PRD_SPECS={
 'nav-workbench':{title:'工作台 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'机构端默认 landing 页。首页文案规避保函/保险/法院/司法/律师等敏感字眼，用「等待出函/办结/受理单位」等中性表述；待办区可混排诉讼保全、学平、标后订单。',logic:['四项指标口径：等待确认/等待出函/材料不足=当前存量；出函成功=自然月已出函笔数（非全量历史）','快捷：订单审核→wait_confirm；业务办理→wait_issue；学平业务；工具助手','待办卡片 soft 文案渲染'],acceptance:['首页无敏感字眼','统计与快捷可跳转订单列表','出函成功跳转已出函列表','待办可进入详情'],api:'GET /api/inst/dashboard'},
-'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换；选具体业务线时显示对应状态筛选，诉讼保含等待签章/部分签章/等待支付/等待出函/出函成功/客服介入/订单关闭/等待退保/退保受理中/退保成功/材料不足（已移除等待选择、等待确认）；「全部」时隐藏状态筛选并展示全部订单。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图隐藏状态 Tab，直接列全部订单','诉讼保状态筛选不含等待选择/等待确认','点击进入对应详情页'],acceptance:['诉讼保筛选无等待选择/等待确认','业务线为全部时无状态筛选','选具体业务线后显示对应状态并与列表同步'],api:'GET /api/inst/orders?bizLine='},
+'nav-orders':{title:'订单 Tab',module:'全局导航',page:'TabBar',priority:'P0',business:'多业务线统一订单中心：诉讼保、学平险、标后共用列表。顶部业务线切换；选具体业务线时显示对应状态筛选。诉讼保含等待签章/部分签章/等待支付/等待出函/出函成功/客服介入/订单关闭/等待退保/退保受理中/退保成功/材料不足；标后含竞价中/等待审核/材料不足/等待签章/等待支付/等待出函/出函成功/订单关闭/客服介入/等待退保/退保受理中/退保成功；「全部」时隐藏状态筛选并展示全部订单。',logic:['biz-line-tabs：全部/诉讼保/学平险/标后','全部视图隐藏状态 Tab，直接列全部订单','诉讼保状态筛选不含等待选择/等待确认','标后卡片审核要素：保函品种/项目类型/企业名称/企业资质/报价数/担保额，底部显示保期与状态','点击进入对应详情页'],acceptance:['诉讼保筛选无等待选择/等待确认','标后含竞价中等完整状态','业务线为全部时无状态筛选','选具体业务线后显示对应状态并与列表同步'],api:'GET /api/inst/orders?bizLine='},
 'enterprise-auth':{title:'企业认证',module:'账号',page:'enterpriseAuth',priority:'P0',business:'单页提交：企业基本信息（类型/名称/信用代码/注册资本/地址/营业执照/经营许可证）+ 法人信息（姓名/身份证号/手机号/身份证）→ 提交后状态=待审核。无开户、无打款。认证通过后「我的」才展示机构名称；人员姓名由团队/个人信息补齐，注册环节不采集。',logic:['企业类型三选一','执照 OCR 回填名称/代码/地址/法人','必填校验后提交','状态 pending→reviewing','审核中可修改重提','通过后绑定机构名到账号'],acceptance:['无开户打款步骤','必填缺项阻断提交','提交后展示待审核','「我的」同步待审核状态','未认证不展示机构名/业务员姓名'],api:'POST /api/ent/auth/submit'},
 'auth-login':{title:'登录注册',module:'账号',page:'我的 · 登录弹层',priority:'P0',business:'首次访问可浏览小程序；「我的」为未登录排版。点击登录后弹出半透明登录层（样式对齐 login.html）：手机号 + 短信验证码 + 图形验证码 + 微信一键授权。注册仅手机号/验证码/密码，不含机构名与人员姓名。',logic:['未登录「我的」展示空态与登录入口','点击弹出 authOverlay','图形验证码 Canvas 绘制，点击可刷新，登录前校验','自动唤起微信授权弹层','授权/登录后刷新「我的」','企业认证通过后才展示机构名与业务员姓名'],acceptance:['登录需校验图形验证码','点击图码可刷新','错误时提示并刷新','微信授权可允许/拒绝'],api:'POST /api/auth/wx · /sms · /login · /captcha · /register'},
 'stat-pending':{title:'等待确认统计',module:'工作台',page:'工作台',priority:'P0',business:'实时展示等待机构确认的订单数量（当前存量），点击直达等待确认列表。',logic:['数据 T+0 或近实时更新','点击跳转 orderList filter=wait_confirm'],acceptance:['数字与列表等待确认数一致'],api:'GET /api/inst/stats/wait_confirm'},
