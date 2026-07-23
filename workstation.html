@@ -561,6 +561,44 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .sync-conv-card strong{font-size:12px;color:#92400E;display:block;margin-bottom:6px}
 .sync-scenario{display:flex;gap:10px;padding:12px;background:#F8FAFE;border-radius:16px;margin-bottom:10px;cursor:pointer;border:1px solid #EDF2F9}
 .sync-scenario i{font-size:22px;color:#1A6B7C;margin-top:2px}
+.sync-scenario .ar-badge{margin-left:auto;align-self:center;background:#EEF2FF;color:#4338CA;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;flex-shrink:0}
+.ar-record-card{padding:14px;border:1px solid #EDF2F9;border-radius:16px;margin-bottom:10px;background:#fff}
+.ar-record-hd{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.ar-record-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ar-record-ico.tool{background:#F0F9FB;color:#1A6B7C}
+.ar-record-ico.batch{background:#EFF6FF;color:#2563EB}
+.ar-record-meta{flex:1;min-width:0}
+.ar-record-meta strong{font-size:13px;color:#1C2E36;display:block;line-height:1.35}
+.ar-record-meta p{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.45}
+.ar-record-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ar-record-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ar-record-actions .sp-btn-secondary{width:100%;margin:0;padding:8px 4px;font-size:10px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;gap:3px}
+.ar-record-actions .sp-btn-secondary i{font-size:11px}
+.ar-filter-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.ar-filter-row button{flex-shrink:0;border:none;padding:7px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;background:#F1F5F9;color:#5E6F8D;font-family:inherit}
+.ar-filter-row button.on{background:#1A6B7C;color:#fff}
+.process-gate{display:none;margin-top:16px}
+.process-gate.is-open{display:block}
+.sb-group-card{border:1px solid #EDF2F9;border-radius:16px;padding:14px;margin-bottom:10px;background:#fff;transition:border-color .15s,background .15s}
+.sb-group-card.done{border-color:#D4EDE8;background:#F8FDFB}
+.sb-group-card.active{border-color:#93C5FD;background:#EFF6FF}
+.sb-group-hd{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.sb-group-ico{width:40px;height:40px;border-radius:12px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-group-meta{flex:1;min-width:0}
+.sb-group-meta strong{font-size:13px;color:#1C2E36;display:block;line-height:1.35;word-break:break-all}
+.sb-group-meta p{font-size:11px;color:#6F8FAA;margin-top:4px;line-height:1.45}
+.sb-group-status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;flex-shrink:0;align-self:flex-start}
+.sb-group-status.pending{background:#FEF3C7;color:#B45309}
+.sb-group-status.parsed{background:#DBEAFE;color:#1D4ED8}
+.sb-group-status.done{background:#D4EDE8;color:#1D7A6E}
+.sb-group-actions{display:flex;gap:8px;margin-top:4px}
+.sb-group-actions .sp-btn-secondary,.sb-group-actions .sp-btn-primary{flex:1;margin:0;padding:9px 8px;font-size:11px;border-radius:20px}
+.sb-batch-summary{display:flex;gap:8px;margin-bottom:12px}
+.sb-batch-summary .sum-pill{flex:1;background:#F8FAFC;border:1px solid #EDF2F9;border-radius:12px;padding:8px 6px;text-align:center}
+.sb-batch-summary .sum-pill strong{display:block;font-size:16px;font-weight:800;color:#0F4C5C;line-height:1.2}
+.sb-batch-summary .sum-pill span{font-size:10px;color:#64748B;font-weight:600}
+.sb-detail-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#1A6B7C;cursor:pointer;margin-bottom:12px;border:none;background:none;padding:0;font-family:inherit}
+.sb-archive-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#2563EB;background:#EFF6FF;border:1px solid #BFDBFE;padding:3px 9px;border-radius:10px;margin-bottom:10px}
 .sync-qr-mini{width:100px;height:100px;margin:12px auto;border:2px dashed #1A6B7C;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;color:#0F4C5C}
 .doc-preview-box{background:linear-gradient(180deg,#FAFCFE,#FFF);border:1px solid #D4EDE8!important}
 .doc-preview-apply{background:#fff;border:1px solid #E8ECF0;border-radius:14px;padding:18px 16px;margin-bottom:4px}
@@ -884,7 +922,7 @@ if(entAuthStatus==='passed')return{label:'已认证',cls:'auth-done',profile:'ok
 if(entAuthStatus==='reviewing')return{label:'待审核',cls:'auth-review',profile:'review',profileText:'认证资料审核中'};
 return{label:'去认证',cls:'auth-todo',profile:'pending',profileText:'待完成企业认证'};
 }
-const TOOL_CHILD_PAGES=new Set(['structExtract','smartAnalysis','crossDeviceSync']);
+const TOOL_CHILD_PAGES=new Set(['structExtract','smartAnalysis','crossDeviceSync','analysisRecords','salesBatchCollect']);
 const TOOL_HUB_ID='toolAssistantHub';
 function renderToolBizSelector(){
 const meta=TOOL_BIZ_STRUCT[toolBizLine]||TOOL_BIZ_STRUCT.litigation;
@@ -2252,6 +2290,15 @@ let pcFiles=[
 {name:'保全申请书.pdf',icon:'fa-file-pdf',color:'#2563EB',from:'PC',time:'09:18'},
 {name:'营业执照.jpg',icon:'fa-file-image',color:'#7C3AED',from:'手机',time:'09:32'}];
 let rarUploadedFiles=[],structUploadedFiles=[],smartUploadedFiles=[];
+let salesBatchFiles=[],salesBatchDone=false,salesBatchGroups=[],salesBatchActiveGroup=null,salesBatchCurrentRecordId=null;
+let analysisRecordFilter='all';
+let ANALYSIS_RECORDS=[
+{id:'AR20250723001',type:'tool',bizLine:'litigation',preserveType:'财产保全',title:'诉讼保 · 财产保全',fileCount:4,caseCount:1,operator:'王审核员',time:'2025-07-23 09:15',status:'done',summary:'张正源 vs 北京某某贸易 · 4份材料已解析',files:['起诉状.pdf','保全申请书.pdf','营业执照.jpg','财产线索说明.docx']},
+{id:'AR20250722003',type:'batch',bizLine:'litigation',preserveType:'',title:'批量收案',fileCount:5,caseCount:3,operator:'李业务员',time:'2025-07-22 16:40',status:'done',summary:'2个压缩包 · 3案5材料 · 已全部逐个处理',files:['客户材料包_0722.rar','外勤收案_0720.zip'],cases:['（2025）京0105民初12345号','（2025）沪0115民初8821号','（2025）粤0305民初44102号']},
+{id:'AR20250721002',type:'tool',bizLine:'xueping',preserveType:'',title:'学平险 · 投保解析',fileCount:3,caseCount:1,operator:'陈学平',time:'2025-07-21 11:20',status:'done',summary:'王小明 · 朝阳实验小学 · 投保字段就绪',files:['投保确认书.pdf','学生身份证.jpg','班级名册.xlsx']},
+{id:'AR20250720001',type:'batch',bizLine:'litigation',preserveType:'',title:'批量收案',fileCount:4,caseCount:1,operator:'王审核员',time:'2025-07-20 14:05',status:'done',summary:'1案4材料 · 按案号归类完成',files:['外勤收案_0720.zip'],cases:['（2025）粤0305民初44102号']},
+{id:'AR20250718001',type:'tool',bizLine:'biaohou',preserveType:'',title:'标后 · 保函申请解析',fileCount:4,caseCount:1,operator:'周标后',time:'2025-07-18 10:30',status:'done',summary:'某某建设集团 · 履约保函 · 市政工程',files:['招标文件.pdf','中标通知书.pdf','保函申请表.docx','营业执照.jpg']}
+];
 let smartAnalysisType='财产保全';
 const REQUIRED_EVIDENCE_BY_TYPE={
 '财产保全':[
@@ -2297,7 +2344,7 @@ return`<div class="upload-file-item" data-upload-idx="${i}" data-upload-list="${
 function refreshUploadListUI(listId,files){
 const el=document.getElementById(listId);
 if(el)el.innerHTML=renderUploadFileListHTML(files,listId);
-const btnMap={rarFileList:'rarStartBtn',structFileList:'structStartBtn',smartFileList:'smartStartBtn'};
+const btnMap={rarFileList:'rarStartBtn',structFileList:'structStartBtn',smartFileList:'smartStartBtn',salesBatchFileList:'salesBatchStartBtn'};
 const btn=document.getElementById(btnMap[listId]);
 if(btn)btn.disabled=!files.length;
 }
@@ -2731,6 +2778,424 @@ ${fieldsHtml}
 ${renderToolMaterialSection(mats)}
 ${renderToolBizEvidenceCard()}
 </div>`;
+}
+function genAnalysisRecordId(){
+return'AR'+new Date().toISOString().slice(0,10).replace(/-/g,'')+String(Math.floor(Math.random()*900+100));
+}
+function saveAnalysisRecord(data){
+const rec=Object.assign({
+id:genAnalysisRecordId(),
+operator:authStaffName||'王审核员',
+time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-'),
+status:'done'
+},data);
+ANALYSIS_RECORDS.unshift(rec);
+return rec;
+}
+function getAnalysisTypeLabel(type){
+return type==='batch'?'批量收案':'材料解析';
+}
+function filterAnalysisRecords(filter){
+if(filter==='all')return ANALYSIS_RECORDS.slice();
+if(filter==='batch')return ANALYSIS_RECORDS.filter(r=>r.type==='batch');
+if(filter==='tool')return ANALYSIS_RECORDS.filter(r=>r.type==='tool');
+return ANALYSIS_RECORDS.filter(r=>r.bizLine===filter);
+}
+function renderAnalysisRecordCard(r){
+const icoCls=r.type==='batch'?'batch':'tool';
+const ico=r.type==='batch'?'fa-briefcase':'fa-robot';
+const bizLabel=(TOOL_BIZ_OPTIONS.find(o=>o.key===r.bizLine)||{}).label||'业务';
+return`<div class="ar-record-card" data-ar-id="${r.id}" data-prd="analysis-records">
+<div class="ar-record-hd">
+<span class="ar-record-ico ${icoCls}"><i class="fas ${ico}"></i></span>
+<div class="ar-record-meta">
+<strong>${r.title||bizLabel}</strong>
+<p>${r.summary||''}</p>
+</div>
+</div>
+<div class="ar-record-tags">
+<span class="sp-tag selected" style="margin:0;font-size:10px;padding:4px 10px">${getAnalysisTypeLabel(r.type)}</span>
+${r.type==='batch'&&r.batchPhase==='parsed'?'<span class="sp-tag" style="margin:0;font-size:10px;padding:4px 10px;background:#FEF3C7;color:#B45309">待逐个处理</span>':''}
+<span class="sp-tag" style="margin:0;font-size:10px;padding:4px 10px;background:#F1F5F9;color:#64748B">${bizLabel}</span>
+${r.preserveType?`<span class="sp-tag" style="margin:0;font-size:10px;padding:4px 10px;background:#FEF3C7;color:#B45309">${r.preserveType}</span>`:''}
+<span style="font-size:10px;color:#94A3B8;margin-left:auto;align-self:center">${r.time||''}</span>
+</div>
+<div class="ar-record-actions">
+<button type="button" class="sp-btn-secondary" data-action="ar-preview" data-ar-id="${r.id}"><i class="fas fa-eye"></i> 预览</button>
+<button type="button" class="sp-btn-secondary" data-action="ar-download" data-ar-id="${r.id}"><i class="fas fa-download"></i> 下载</button>
+<button type="button" class="sp-btn-secondary" data-action="ar-reprocess" data-ar-id="${r.id}"><i class="fas fa-redo"></i> 重处理</button>
+<button type="button" class="sp-btn-secondary" data-action="ar-delete" data-ar-id="${r.id}" style="color:#B91C1C;background:#FEE2E2"><i class="fas fa-trash-alt"></i> 删除</button>
+</div>
+<p style="font-size:10px;color:#94A3B8;margin-top:8px">${r.fileCount||0} 份材料 · ${r.caseCount||1} 个案件 · ${r.operator||'—'}</p>
+</div>`;
+}
+function renderAnalysisRecordsPage(){
+const list=filterAnalysisRecords(analysisRecordFilter);
+const filters=[
+{key:'all',label:'全部'},
+{key:'tool',label:'材料解析'},
+{key:'batch',label:'批量收案'},
+{key:'litigation',label:'诉讼保'},
+{key:'xueping',label:'学平险'},
+{key:'biaohou',label:'标后'}
+];
+return hero('linear-gradient(125deg,#4338CA,#6366F1)','📋','分析记录','查看历史材料解析与批量收案结果，支持预览、下载、重新处理')+
+'<div class="sp-card" style="padding:12px 14px">'+
+'<div class="flex-between" style="margin-bottom:10px"><span class="sp-card-title" style="margin:0">历史记录</span><span style="font-size:11px;color:#64748B">共 '+ANALYSIS_RECORDS.length+' 条</span></div>'+
+'<div class="ar-filter-row" id="arFilterRow">'+filters.map(f=>'<button type="button" class="'+(analysisRecordFilter===f.key?'on':'')+'" data-ar-filter="'+f.key+'">'+f.label+'</button>').join('')+'</div>'+
+(list.length?list.map(renderAnalysisRecordCard).join(''):'<div class="sp-result-box" style="padding:32px 16px"><i class="fas fa-inbox" style="font-size:36px;color:#CBD5E1"></i><p style="font-size:13px;color:#94A3B8;margin-top:10px">暂无符合条件的分析记录</p></div>')+
+'</div>';
+}
+function openAnalysisRecordPreview(id){
+const r=ANALYSIS_RECORDS.find(x=>x.id===id);
+if(!r){showToast('记录不存在');return}
+const bizLabel=(TOOL_BIZ_OPTIONS.find(o=>o.key===r.bizLine)||{}).label||'业务';
+const filesHtml=(r.files||[]).map(n=>{
+const ic=getFileIconInfo(n);
+return`<div class="mat-classify-row"><i class="fas ${ic.icon}" style="color:${ic.color}"></i><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n}</span></div>`;
+}).join('');
+const casesHtml=(r.cases||[]).map(c=>`<div class="mat-classify-row"><span class="mat-tag mat-tag-indict">案号</span><span style="flex:1">${c}</span></div>`).join('');
+const groupsHtml=(r.groups||[]).map(g=>{
+const itemsPreview=(g.items||[]).slice(0,4).map(it=>`<span class="sp-tag" style="margin:2px 4px 2px 0;font-size:10px;padding:3px 8px;background:#F8FAFC;color:#64748B">${it.caseNo}/${it.file}</span>`).join('');
+const more=(g.items||[]).length>4?`<span style="font-size:10px;color:#94A3B8">等 ${g.items.length} 份材料</span>`:'';
+return`<div class="sp-card" style="margin:0 0 8px;padding:10px 12px;text-align:left;background:#F8FAFC;border:1px solid #E2E8F0">
+<div class="flex-between" style="margin-bottom:6px"><strong style="font-size:12px;color:#1E40AF"><i class="fas fa-file-archive" style="margin-right:4px"></i>${g.archiveName}</strong><span style="font-size:10px;color:#64748B">${g.caseCount||0}案 · ${g.materialCount||0}材料</span></div>
+<div style="margin-bottom:4px">${(g.cases||[]).map(c=>`<span class="sp-tag" style="margin:0 4px 4px 0;font-size:10px;padding:3px 8px;background:#EEF2FF;color:#4338CA">${c}</span>`).join('')}</div>
+<div>${itemsPreview}${more}</div>
+</div>`;
+}).join('');
+showModal(`${renderModalHead('<i class="fas fa-history" style="color:#4338CA;margin-right:4px"></i>分析记录预览',r.id+' · '+r.time)}
+<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left">
+<div class="sp-info-row"><span class="k">类型</span><span class="v">${getAnalysisTypeLabel(r.type)} · ${bizLabel}</span></div>
+<div class="sp-info-row"><span class="k">摘要</span><span class="v">${r.summary||'—'}</span></div>
+<div class="sp-info-row"><span class="k">操作人</span><span class="v">${r.operator||'—'}</span></div>
+<div class="sp-info-row"><span class="k">材料/案件</span><span class="v">${r.fileCount||0} 份 · ${r.caseCount||1} 案</span></div>
+</div>
+${casesHtml?`<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left"><span class="sp-label">归类案件</span>${casesHtml}</div>`:''}
+${groupsHtml?`<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left;max-height:220px;overflow-y:auto"><span class="sp-label">解压归类 · 按压缩包</span>${groupsHtml}</div>`:''}
+${filesHtml?`<div class="sp-card" style="margin:0 0 10px;padding:12px;text-align:left;max-height:180px;overflow-y:auto"><span class="sp-label">材料清单</span>${filesHtml}</div>`:''}
+<div class="sp-grid-2">
+<button type="button" class="sp-btn-secondary" data-action="ar-download" data-ar-id="${r.id}"><i class="fas fa-download"></i> 下载</button>
+<button type="button" class="sp-btn-primary" data-action="ar-reprocess" data-ar-id="${r.id}" style="margin:0"><i class="fas fa-redo"></i> 重新处理</button>
+</div>`,{form:true});
+const inner=document.getElementById('spModalInner');
+inner?.querySelectorAll('[data-action="ar-download"],[data-action="ar-reprocess"]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const act=btn.dataset.action,rid=btn.dataset.arId;
+closeModal();
+if(act==='ar-download'){showToast('分析结果包下载中… '+rid);return}
+reprocessAnalysisRecord(rid);
+});
+});
+}
+function reprocessAnalysisRecord(id){
+const r=ANALYSIS_RECORDS.find(x=>x.id===id);
+if(!r){showToast('记录不存在');return}
+if(r.bizLine)toolBizLine=r.bizLine;
+if(r.preserveType)currentPreviewType=r.preserveType;
+if(r.type==='batch'){
+salesBatchFiles=(r.files||[]).map(n=>({name:n,size:1024000}));
+if(r.groups&&r.groups.length){
+salesBatchGroups=r.groups.map(g=>Object.assign({},g,{cases:(g.cases||[]).slice(),items:(g.items||[]).slice()}));
+}else{
+salesBatchGroups=buildSalesBatchGroupsFromFiles(salesBatchFiles);
+}
+salesBatchDone=true;
+salesBatchActiveGroup=null;
+salesBatchCurrentRecordId=r.id;
+closeModal();
+openSubPage('salesBatchCollect',{fromHub:true});
+setTimeout(()=>{
+const mount=document.getElementById('salesBatchResultMount');
+if(mount)mount.innerHTML=renderSalesBatchResult();
+const gate=document.getElementById('salesBatchGate');
+if(gate)gate.classList.add('is-open');
+const btn=document.getElementById('salesBatchStartBtn');
+if(btn){btn.disabled=false;btn.textContent='重新解析'}
+showToast('已载入历史记录 · 共 '+salesBatchGroups.length+' 个压缩包分组');
+},80);
+return;
+}
+rarUploadedFiles=(r.files||[]).map(n=>({name:n,size:512000}));
+closeModal();
+openSubPage('toolAssistantHub',{fromHub:true});
+setTimeout(()=>{
+refreshUploadListUI('rarFileList',rarUploadedFiles);
+const mount=document.getElementById('rarPreviewMount');
+if(mount)mount.innerHTML=renderBizStructPreview(toolBizLine);
+bindPreviewTypeTags();
+const btn=document.getElementById('rarStartBtn');
+if(btn){btn.disabled=false;btn.textContent='重新处理'}
+showToast('已载入历史记录 · '+rarUploadedFiles.length+' 份材料');
+},80);
+}
+function deleteAnalysisRecord(id){
+const idx=ANALYSIS_RECORDS.findIndex(x=>x.id===id);
+if(idx<0){showToast('记录不存在');return}
+ANALYSIS_RECORDS.splice(idx,1);
+showToast('分析记录已删除');
+if(currentSubId==='analysisRecords')openSubPage('analysisRecords',{keepStack:true,fromHub:true});
+}
+function getSalesBatchArchiveDemoData(archiveName,idx){
+const presets=[
+{caseCount:2,materialCount:3,cases:['（2025）京0105民初12345号','（2025）沪0115民初8821号'],items:[
+{caseNo:'（2025）京0105民初12345号',file:'起诉状.pdf',tag:'起诉状',tagCls:'mat-tag-indict',icon:'fa-file-pdf',color:'#E53E3E'},
+{caseNo:'（2025）京0105民初12345号',file:'保全申请书.pdf',tag:'保全申请',tagCls:'mat-tag-guarantee',icon:'fa-file-pdf',color:'#2563EB'},
+{caseNo:'（2025）京0105民初12345号',file:'营业执照.jpg',tag:'主体资格',tagCls:'mat-tag-evidence',icon:'fa-file-image',color:'#7C3AED'}]},
+{caseCount:1,materialCount:2,cases:['（2025）沪0115民初8821号'],items:[
+{caseNo:'（2025）沪0115民初8821号',file:'起诉状.pdf',tag:'起诉状',tagCls:'mat-tag-indict',icon:'fa-file-pdf',color:'#E53E3E'},
+{caseNo:'（2025）沪0115民初8821号',file:'情况说明.docx',tag:'情况说明',tagCls:'mat-tag-evidence',icon:'fa-file-word',color:'#2B6CB0'}]},
+{caseCount:1,materialCount:4,cases:['（2025）粤0305民初44102号'],items:[
+{caseNo:'（2025）粤0305民初44102号',file:'起诉状.pdf',tag:'起诉状',tagCls:'mat-tag-indict',icon:'fa-file-pdf',color:'#E53E3E'},
+{caseNo:'（2025）粤0305民初44102号',file:'保全申请书.pdf',tag:'保全申请',tagCls:'mat-tag-guarantee',icon:'fa-file-pdf',color:'#2563EB'},
+{caseNo:'（2025）粤0305民初44102号',file:'营业执照.jpg',tag:'主体资格',tagCls:'mat-tag-evidence',icon:'fa-file-image',color:'#7C3AED'},
+{caseNo:'（2025）粤0305民初44102号',file:'财产线索说明.docx',tag:'财产线索',tagCls:'mat-tag-guarantee',icon:'fa-file-word',color:'#2B6CB0'}]}
+];
+if(/0722|客户|batch/i.test(archiveName))return presets[0];
+if(/0720|外勤|field/i.test(archiveName))return presets[2];
+return presets[idx%presets.length];
+}
+function buildSalesBatchGroupsFromFiles(files){
+return(files||[]).map((f,i)=>{
+const demo=getSalesBatchArchiveDemoData(f.name,i);
+return{
+archiveName:f.name,
+size:f.size,
+caseCount:demo.caseCount,
+materialCount:demo.materialCount,
+cases:demo.cases.slice(),
+items:demo.items.slice(),
+status:'parsed',
+processedAt:''
+};
+});
+}
+function buildSalesBatchAnalysisSummary(groups,phase){
+const totalCases=(groups||[]).reduce((n,g)=>n+g.caseCount,0);
+const totalMats=(groups||[]).reduce((n,g)=>n+g.materialCount,0);
+const archiveN=(groups||[]).length;
+if(phase==='done')return archiveN+'个压缩包 · '+totalCases+'案'+totalMats+'材料 · 已全部逐个处理';
+return archiveN+'个压缩包 · '+totalCases+'案'+totalMats+'材料 · 已解析归类';
+}
+function serializeSalesBatchGroups(groups){
+return(groups||[]).map(g=>({
+archiveName:g.archiveName,
+size:g.size,
+caseCount:g.caseCount,
+materialCount:g.materialCount,
+cases:g.cases.slice(),
+items:g.items.slice(),
+status:g.status,
+processedAt:g.processedAt||''
+}));
+}
+function refreshAnalysisRecordHubBadge(){
+const badge=document.querySelector('.sync-scenario[data-page="analysisRecords"] .ar-badge');
+if(badge)badge.textContent=String(ANALYSIS_RECORDS.length);
+const countEl=document.querySelector('#arListCount');
+if(countEl)countEl.textContent='共 '+ANALYSIS_RECORDS.length+' 条';
+}
+function saveSalesBatchParseRecord(){
+const totalCases=salesBatchGroups.reduce((n,g)=>n+g.caseCount,0);
+const totalMats=salesBatchGroups.reduce((n,g)=>n+g.materialCount,0);
+const rec=saveAnalysisRecord({
+type:'batch',
+bizLine:'litigation',
+title:'批量收案',
+fileCount:totalMats,
+caseCount:totalCases,
+archiveCount:salesBatchGroups.length,
+summary:buildSalesBatchAnalysisSummary(salesBatchGroups,'parsed'),
+files:salesBatchGroups.map(x=>x.archiveName),
+cases:[...new Set(salesBatchGroups.flatMap(x=>x.cases))],
+groups:serializeSalesBatchGroups(salesBatchGroups),
+batchPhase:'parsed'
+});
+salesBatchCurrentRecordId=rec.id;
+refreshAnalysisRecordHubBadge();
+return rec;
+}
+function updateSalesBatchAnalysisRecord(){
+if(!salesBatchCurrentRecordId)return;
+const r=ANALYSIS_RECORDS.find(x=>x.id===salesBatchCurrentRecordId);
+if(!r)return;
+const totalCases=salesBatchGroups.reduce((n,g)=>n+g.caseCount,0);
+const totalMats=salesBatchGroups.reduce((n,g)=>n+g.materialCount,0);
+r.fileCount=totalMats;
+r.caseCount=totalCases;
+r.archiveCount=salesBatchGroups.length;
+r.summary=buildSalesBatchAnalysisSummary(salesBatchGroups,'done');
+r.files=salesBatchGroups.map(x=>x.archiveName);
+r.cases=[...new Set(salesBatchGroups.flatMap(x=>x.cases))];
+r.groups=serializeSalesBatchGroups(salesBatchGroups);
+r.batchPhase='done';
+r.time=new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-');
+refreshAnalysisRecordHubBadge();
+}
+function syncSalesBatchAnalysisRecordProgress(){
+if(!salesBatchCurrentRecordId)return;
+const r=ANALYSIS_RECORDS.find(x=>x.id===salesBatchCurrentRecordId);
+if(!r)return;
+r.groups=serializeSalesBatchGroups(salesBatchGroups);
+}
+function getSalesBatchGroup(archiveName){
+return salesBatchGroups.find(g=>g.archiveName===archiveName);
+}
+function getSalesBatchGroupStatusLabel(st){
+if(st==='done')return'已处理';
+if(st==='processing')return'处理中';
+return'待处理';
+}
+function renderSalesBatchClassifyRows(items){
+return(items||[]).map(row=>`<div class="mat-classify-row"><i class="fas ${row.icon}" style="color:${row.color}"></i><span style="flex:1;min-width:0;font-size:11px;line-height:1.4">${row.caseNo}/${row.file}</span><span class="mat-tag ${row.tagCls}">${row.tag}</span></div>`).join('');
+}
+function renderSalesBatchGroupSummary(){
+const totalCases=salesBatchGroups.reduce((n,g)=>n+g.caseCount,0);
+const totalMats=salesBatchGroups.reduce((n,g)=>n+g.materialCount,0);
+const doneN=salesBatchGroups.filter(g=>g.status==='done').length;
+return'<div class="sb-batch-summary">'+
+'<div class="sum-pill"><strong>'+salesBatchGroups.length+'</strong><span>压缩包</span></div>'+
+'<div class="sum-pill"><strong>'+totalCases+'</strong><span>识别案件</span></div>'+
+'<div class="sum-pill"><strong>'+totalMats+'</strong><span>归类材料</span></div>'+
+'<div class="sum-pill"><strong>'+doneN+'/'+salesBatchGroups.length+'</strong><span>已逐个处理</span></div></div>';
+}
+function renderSalesBatchGroupCard(g,idx){
+const stCls=g.status==='done'?'done':(salesBatchActiveGroup===g.archiveName?'active':'');
+const statusCls=g.status==='done'?'done':(g.status==='processing'?'parsed':'pending');
+const btnLabel=g.status==='done'?'查看结果':'逐个处理';
+const btnAct=g.status==='done'?'sales-batch-open-group':'sales-batch-group-process';
+return`<div class="sb-group-card ${stCls}" data-sb-archive="${g.archiveName}">
+<div class="sb-group-hd">
+<span class="sb-group-ico"><i class="fas fa-file-archive"></i></span>
+<div class="sb-group-meta">
+<strong>${g.archiveName}</strong>
+<p>${g.caseCount} 个案件 · ${g.materialCount} 份材料 · ${formatFileSize(g.size)}</p>
+</div>
+<span class="sb-group-status ${statusCls}">${getSalesBatchGroupStatusLabel(g.status)}</span>
+</div>
+<div class="ar-record-tags" style="margin-bottom:8px">
+${g.cases.map(c=>`<span class="sp-tag" style="margin:0;font-size:10px;padding:3px 8px;background:#F1F5F9;color:#64748B">${c}</span>`).join('')}
+</div>
+<div class="sb-group-actions">
+<button type="button" class="sp-btn-primary" data-action="${btnAct}" data-sb-archive="${g.archiveName}"><i class="fas fa-${g.status==='done'?'eye':'play'}"></i> ${btnLabel}</button>
+<button type="button" class="sp-btn-secondary" data-action="sales-batch-open-group" data-sb-archive="${g.archiveName}"><i class="fas fa-folder-open"></i> 查看归类</button>
+</div>
+<p style="font-size:10px;color:#94A3B8;margin-top:8px">压缩包 ${idx+1} / ${salesBatchGroups.length}${g.processedAt?' · 处理于 '+g.processedAt:''}</p>
+</div>`;
+}
+function renderSalesBatchGroupList(){
+if(!salesBatchGroups.length)return'<p style="font-size:12px;color:#94A3B8;text-align:center;padding:20px 0">暂无压缩包分组</p>';
+return renderSalesBatchGroupSummary()+
+'<div class="sp-card" style="padding:12px 14px"><div class="sp-card-title" style="margin-bottom:10px"><i class="fas fa-layer-group" style="color:#2563EB;margin-right:6px"></i>按压缩包分组 · 逐个处理</div>'+
+'<p style="font-size:11px;color:#6F8FAA;line-height:1.55;margin-bottom:12px">已按<strong>压缩文件名</strong>完成解析归类，请点击各压缩包卡片进入详情，逐个生成清单并推送业务员。</p>'+
+salesBatchGroups.map(renderSalesBatchGroupCard).join('')+'</div>';
+}
+function renderSalesBatchGroupDetail(archiveName){
+const g=getSalesBatchGroup(archiveName);
+if(!g)return'<p style="font-size:12px;color:#94A3B8">压缩包不存在</p>';
+const ts=g.processedAt||new Date().toLocaleString('zh-CN');
+const pdfName=g.archiveName.replace(/\.(rar|zip|7z)$/i,'')+'_案件清单.pdf';
+const caseLines=g.cases.map((c,i)=>{
+const cnt=g.items.filter(x=>x.caseNo===c).length;
+const miss=i===g.cases.length-1&&g.cases.length>1?'（缺担保函）':'';
+return (i+1)+' '+c+' — '+cnt+'份'+miss;
+}).join('<br>');
+return'<button type="button" class="sb-detail-back" data-action="sales-batch-back-list"><i class="fas fa-chevron-left"></i> 返回压缩包列表</button>'+
+'<span class="sb-archive-tag"><i class="fas fa-file-archive"></i> '+g.archiveName+'</span>'+
+'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-folder-tree"></i> 归类结果 · 本压缩包</div>'+
+renderSalesBatchClassifyRows(g.items)+
+'<p style="font-size:11px;color:#6F8FAA;margin-top:8px;">本包识别 <strong>'+g.caseCount+'</strong> 个案件 · <strong>'+g.materialCount+'</strong> 份材料</p></div>'+
+'<div class="sp-card"><div class="sp-card-title"><i class="fas fa-file-pdf"></i> 案件清单 PDF</div>'+
+'<div class="sp-result-box" style="text-align:left;"><p style="font-size:12px;line-height:1.8;color:#334155;"><strong>'+pdfName+'</strong><br>来源压缩包：'+g.archiveName+'<br>生成时间：'+ts+'<br>案件数：'+g.caseCount+' · 材料总数：'+g.materialCount+'<br>'+caseLines+'</p></div>'+
+'<div class="sp-grid-2" style="margin-top:12px;"><button type="button" class="sp-btn-secondary" data-action="sales-batch-preview-pdf" data-sb-archive="'+g.archiveName+'"><i class="fas fa-eye"></i> 预览 PDF</button><button type="button" class="sp-btn-secondary" data-action="sales-batch-open-email" data-sb-archive="'+g.archiveName+'"><i class="fas fa-envelope"></i> 发邮件</button></div>'+
+'<button type="button" class="sp-btn-primary" data-action="sales-batch-send-sales" data-sb-archive="'+g.archiveName+'" style="margin-top:8px"><i class="fas fa-paper-plane"></i> 推送业务员并完成</button></div>';
+}
+function renderSalesBatchResult(){
+if(salesBatchActiveGroup)return renderSalesBatchGroupDetail(salesBatchActiveGroup);
+return renderSalesBatchGroupList();
+}
+function refreshSalesBatchResultMount(){
+const mount=document.getElementById('salesBatchResultMount');
+if(mount)mount.innerHTML=renderSalesBatchResult();
+}
+function openSalesBatchGroup(archiveName){
+salesBatchActiveGroup=archiveName;
+refreshSalesBatchResultMount();
+const g=getSalesBatchGroup(archiveName);
+if(g&&g.status==='parsed'){g.status='processing'}
+showToast('进入压缩包：'+archiveName);
+}
+function backSalesBatchGroupList(){
+salesBatchActiveGroup=null;
+refreshSalesBatchResultMount();
+}
+function processSalesBatchGroup(archiveName){
+const g=getSalesBatchGroup(archiveName);
+if(!g){showToast('压缩包不存在');return}
+g.status='processing';
+salesBatchActiveGroup=archiveName;
+refreshSalesBatchResultMount();
+showToast('开始处理 · '+archiveName);
+}
+function completeSalesBatchGroup(archiveName){
+const g=getSalesBatchGroup(archiveName);
+if(!g)return;
+g.status='done';
+g.processedAt=new Date().toLocaleString('zh-CN');
+syncSalesBatchAnalysisRecordProgress();
+const allDone=salesBatchGroups.length>0&&salesBatchGroups.every(x=>x.status==='done');
+if(allDone)updateSalesBatchAnalysisRecord();
+showToast('「'+archiveName+'」已推送业务员 · '+(allDone?'全部压缩包处理完成':'继续处理下一个'));
+salesBatchActiveGroup=null;
+refreshSalesBatchResultMount();
+}
+function renderSalesBatchCollectPage(){
+const doneCount=salesBatchGroups.filter(g=>g.status==='done').length;
+const stepIdx=!salesBatchDone?0:(salesBatchActiveGroup?3:(doneCount===salesBatchGroups.length&&salesBatchGroups.length?3:2));
+return hero('linear-gradient(125deg,#1E40AF,#3B82F6)','📦','批量收案','按压缩包文件名批量解析 → 分组展示 → 逐个处理推送')+
+steps(['上传压缩包','按包名解析','分组展示','逐个处理'],stepIdx)+
+'<div class="sp-card" data-prd="sales-batch-collect"><div class="sp-card-title">① 上传压缩包（RAR / ZIP / 7Z，可多选）</div>'+
+'<div class="upload-file-list" id="salesBatchFileList">'+renderUploadFileListHTML(salesBatchFiles,'salesBatchFileList')+'</div>'+
+'<div class="mat-progress-bar" id="salesBatchProgressWrap" style="display:none;"><div class="mat-progress-fill" id="salesBatchProgressFill" style="width:0%;"></div></div>'+
+'<p id="salesBatchStatusTxt" style="font-size:11px;color:#6F8FAA;margin:8px 0;text-align:center;"></p>'+
+'<div class="v1-upload-zone" id="salesBatchUploadZone" style="border-color:#93C5FD;background:#EFF6FF;"><i class="fas fa-file-archive" style="color:#2563EB;font-size:36px;"></i>'+
+'<p style="font-weight:700;color:#1D4ED8;">点击上传 RAR / ZIP 材料包</p>'+
+'<p style="font-size:11px;color:#6B7280;margin-top:6px;">每个压缩包独立解析归类 · 解析完成后按<strong>压缩文件名</strong>分组，再逐个进入处理</p>'+
+'<input type="file" id="salesBatchFileInput" class="v1-hidden-input" accept=".rar,.zip,.7z" multiple></div></div>'+
+'<button type="button" class="sp-btn-primary" id="salesBatchStartBtn" data-action="sales-batch-process" '+(salesBatchFiles.length?'':'disabled')+'>'+(salesBatchDone?'重新解析':'批量解析压缩包')+'</button>'+
+'<div id="salesBatchGate" class="process-gate'+(salesBatchDone?' is-open':'')+'">'+
+'<div id="salesBatchResultMount">'+(salesBatchDone?renderSalesBatchResult():'')+'</div></div>';
+}
+function runSalesBatchProcess(){
+if(!salesBatchFiles.length){showToast('请先上传 RAR/ZIP 材料包');return}
+const wrap=document.getElementById('salesBatchProgressWrap'),fill=document.getElementById('salesBatchProgressFill'),statusEl=document.getElementById('salesBatchStatusTxt'),btn=document.getElementById('salesBatchStartBtn');
+if(!wrap)return;if(btn)btn.disabled=true;wrap.style.display='block';
+salesBatchActiveGroup=null;
+salesBatchCurrentRecordId=null;
+let tick=0;
+const total=salesBatchFiles.length;
+const subSteps=['正在解压…','识别案号…','材料归类…','写入分组…'];
+const iv=setInterval(()=>{
+tick++;
+const fileIdx=Math.min(total-1,Math.floor((tick-1)/4));
+const cur=salesBatchFiles[fileIdx];
+const pct=Math.min(100,Math.round(tick*100/(total*4+1)));
+if(cur&&statusEl)statusEl.textContent='('+(fileIdx+1)+'/'+total+') '+cur.name+' · '+subSteps[(tick-1)%4];
+if(fill)fill.style.width=pct+'%';
+if(pct>=100){
+clearInterval(iv);
+salesBatchDone=true;
+salesBatchGroups=buildSalesBatchGroupsFromFiles(salesBatchFiles);
+const totalCases=salesBatchGroups.reduce((n,g)=>n+g.caseCount,0);
+const totalMats=salesBatchGroups.reduce((n,g)=>n+g.materialCount,0);
+const rec=saveSalesBatchParseRecord();
+if(statusEl)statusEl.textContent='✓ 已解析 '+total+' 个压缩包 · 分为 '+total+' 组 · '+totalCases+' 案 · '+totalMats+' 份材料 · 已写入分析记录';
+const gate=document.getElementById('salesBatchGate'),mount=document.getElementById('salesBatchResultMount');
+if(gate)gate.classList.add('is-open');
+if(mount)mount.innerHTML=renderSalesBatchResult();
+if(btn){btn.disabled=false;btn.textContent='重新解析'}
+showToast('解析完成 · 已归集至分析记录 '+rec.id+' · 请逐个处理');
+}},380);
 }
 function showModal(html,opts){
 const mask=document.getElementById('spModalMask'),inner=document.getElementById('spModalInner');
@@ -3657,12 +4122,15 @@ toolAssistantHub:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',re
 renderRarUploadBlock()+
 '<div class="sp-card" style="margin-top:12px;"><div class="sp-card-title">更多能力</div>'+
 '<div class="sync-scenario" data-page="crossDeviceSync"><i class="fas fa-satellite-dish" style="color:#4338CA;"></i><div><strong style="font-size:13px;">文件空间站</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">扫码 / 配对 / 内网 · 手机⇄PC 材料互通</p></div></div>'+
-'<div class="sync-scenario" style="cursor:default;opacity:.95;"><i class="fas fa-briefcase"></i><div><strong style="font-size:13px;">业务员批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">先选业务类型 → 上传材料 → 按对应结构解析输出</p></div></div>'+
+'<div class="sync-scenario" data-page="salesBatchCollect"><i class="fas fa-briefcase" style="color:#2563EB;"></i><div><strong style="font-size:13px;">批量收案</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">按压缩包文件名解析 → 分组展示 → 逐个处理推送</p></div></div>'+
+'<div class="sync-scenario" data-page="analysisRecords"><i class="fas fa-history" style="color:#6366F1;"></i><div><strong style="font-size:13px;">分析记录</strong><p style="font-size:11px;color:#6F8FAA;margin-top:4px;">查看历史解析与收案记录 · 预览 / 下载 / 重新处理</p></div><span class="ar-badge">'+ANALYSIS_RECORDS.length+'</span></div>'+
 '</div></div>'+
 '<div class="od-footer"><div class="od-footer-primary single">'+
 '<button type="button" class="sp-btn-primary" id="rarStartBtn" data-action="rar-process" disabled>开始处理</button>'+
 '</div></div></div>'},
 rarBatchPack:{title:'工具助手',sub:'诉讼保 · 学平险 · 标后',render:()=>PAGES.toolAssistantHub.render()},
+analysisRecords:{title:'分析记录',sub:'历史解析 · 预览 · 重处理',render:()=>renderAnalysisRecordsPage()},
+salesBatchCollect:{title:'批量收案',sub:'按压缩包分组 · 逐个处理',render:()=>renderSalesBatchCollectPage()},
 structExtract:{title:'结构化提取',sub:'Word/图/PDF → 标准字段 · 申请书预览',render:()=>{
 structUploadedFiles=[];currentPreviewType='财产保全';
 return hero('linear-gradient(125deg,#5B21B6,#7C3AED)','🧬','非结构化 → 结构化','OCR + NLP 写入保全/订单标准字段库，并生成申请书预览')+
@@ -3832,7 +4300,8 @@ const cc=document.getElementById('rarClassifyCard'),pc=document.getElementById('
 if(cc)cc.style.display='block';if(pc)pc.style.display='block';if(prev)prev.style.display='block';
 if(mount)mount.innerHTML=renderBizStructPreview(toolBizLine);
 bindPreviewTypeTags();
-if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast(bizMeta.toast);}},600);
+saveAnalysisRecord({type:'tool',bizLine:toolBizLine,preserveType:toolBizLine==='litigation'?currentPreviewType:'',title:((TOOL_BIZ_OPTIONS.find(o=>o.key===toolBizLine)||{}).label||'业务')+(toolBizLine==='litigation'?' · '+currentPreviewType:''),fileCount:rarUploadedFiles.length,caseCount:1,summary:bizMeta.doneHint(rarUploadedFiles.length),files:rarUploadedFiles.map(f=>f.name)});
+if(btn){btn.disabled=false;btn.textContent='重新处理'}showToast(bizMeta.toast+' · 已写入分析记录');}},600);
 }
 function bindToolBizTabs(){
 const tabs=document.getElementById('toolBizTabs');
@@ -4009,8 +4478,10 @@ const list=btn.dataset.list,idx=parseInt(btn.dataset.idx,10);
 let arr=rarUploadedFiles;
 if(list==='structFileList')arr=structUploadedFiles;
 else if(list==='smartFileList')arr=smartUploadedFiles;
+else if(list==='salesBatchFileList')arr=salesBatchFiles;
 arr.splice(idx,1);
 refreshUploadListUI(list,arr);
+if(list==='salesBatchFileList'){salesBatchDone=false;salesBatchGroups=[];salesBatchActiveGroup=null;salesBatchCurrentRecordId=null;const gate=document.getElementById('salesBatchGate');if(gate)gate.classList.remove('is-open');const mount=document.getElementById('salesBatchResultMount');if(mount)mount.innerHTML=''}
 showToast('已移除文件');
 const res=document.getElementById('smartAnalyzeResult');if(res&&list==='smartFileList')res.style.display='none';
 });
@@ -4027,35 +4498,71 @@ inp?.addEventListener('change',e=>{addFilesToList(structUploadedFiles,e.target.f
 if(id==='smartAnalysis'){const zone=document.getElementById('smartUploadZone'),inp=document.getElementById('smartFileInput');
 zone?.addEventListener('click',()=>inp?.click());
 inp?.addEventListener('change',e=>{addFilesToList(smartUploadedFiles,e.target.files);refreshUploadListUI('smartFileList',smartUploadedFiles);document.getElementById('smartAnalyzeResult')&&(document.getElementById('smartAnalyzeResult').style.display='none');if(smartUploadedFiles.length)showToast('已添加 '+e.target.files.length+' 个材料');e.target.value='';});}
+if(id==='salesBatchCollect'){const zone=document.getElementById('salesBatchUploadZone'),inp=document.getElementById('salesBatchFileInput');
+zone?.addEventListener('click',()=>inp?.click());
+inp?.addEventListener('change',e=>{addFilesToList(salesBatchFiles,e.target.files);salesBatchDone=false;salesBatchGroups=[];salesBatchActiveGroup=null;salesBatchCurrentRecordId=null;const gate=document.getElementById('salesBatchGate');if(gate)gate.classList.remove('is-open');const mount=document.getElementById('salesBatchResultMount');if(mount)mount.innerHTML='';refreshUploadListUI('salesBatchFileList',salesBatchFiles);if(salesBatchFiles.length)showToast('已添加 '+e.target.files.length+' 个压缩包 · 共 '+salesBatchFiles.length+' 个');e.target.value='';});}
+if(id==='analysisRecords')bindAnalysisRecordEvents();
 if(id==='crossDeviceSync')bindSyncTabs();
-subBody.querySelectorAll('.inst-mat-tile[data-page],.sync-scenario[data-page]').forEach(el=>{
-el.addEventListener('click',e=>{e.stopPropagation();openSubPage(el.dataset.page,{fromHub:true});});
-});
 bindPreviewTypeTags();
 }
-function bindSubEvents(id){
-subBody.querySelectorAll('[data-page]').forEach(el=>{
+function bindHubScenarioClicks(){
+subBody.querySelectorAll('.sync-scenario[data-page],.inst-mat-tile[data-page]').forEach(el=>{
+if(el._hubNavBound)return;
+el._hubNavBound=true;
+el.style.cursor='pointer';
 el.addEventListener('click',e=>{
-if(e.target.closest('[data-action="download-guarantee"]'))return;
+if(e.target.closest('[data-action]'))return;
 e.stopPropagation();
-/* 折叠标题内的「详情」等跳转，避免连带触发展开/收起 */
 const pg=el.dataset.page;
-const pushStack=el.dataset.pushStack==='1'||el.dataset.pushStack==='true';
-if(pg==='xuepingDetail'&&el.dataset.xpId){
-const found=XUEPING_LIST.find(x=>x.id===el.dataset.xpId);
+if(pg)openSubPage(pg,{fromHub:true});
+});
+});
+}
+function bindAnalysisRecordEvents(){
+const row=document.getElementById('arFilterRow');
+if(row&&!row._bound){
+row._bound=true;
+row.querySelectorAll('[data-ar-filter]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+analysisRecordFilter=btn.dataset.arFilter||'all';
+openSubPage('analysisRecords',{keepStack:true,fromHub:true});
+});
+});
+}
+}
+function bindSubPageNavigation(){
+if(subBody._pageNavBound)return;
+subBody._pageNavBound=true;
+subBody.addEventListener('click',e=>{
+if(e.target.closest('[data-action="download-guarantee"]'))return;
+const hit=e.target.closest('.sync-scenario[data-page],.inst-mat-tile[data-page],.inst-mat-hub[data-page],.quick-item[data-page],.icon-btn[data-page],.settings-item[data-page],.alert-banner[data-page],.stat-item[data-page],.order-card[data-page],.sp-tag[data-page]');
+if(!hit||!subBody.contains(hit))return;
+if(hit.classList.contains('order-card')&&e.target.closest('[data-action]'))return;
+const pg=hit.dataset.page;
+if(!pg)return;
+e.preventDefault();
+e.stopPropagation();
+if(pg==='orderList'){
+if(hit.dataset.filter)currentOrderFilter=hit.dataset.filter;
+if(hit.dataset.biz)currentBizLine=hit.dataset.biz;
+}
+if(pg==='xuepingDetail'&&hit.dataset.xpId){
+const found=XUEPING_LIST.find(x=>x.id===hit.dataset.xpId);
 if(found)XUEPING_STATE=Object.assign({},found);
 }
-if(pg==='biaohouDetail'&&el.dataset.bhId){
-const found=BIAOHUO_LIST.find(x=>x.id===el.dataset.bhId);
+if(pg==='biaohouDetail'&&hit.dataset.bhId){
+const found=BIAOHUO_LIST.find(x=>x.id===hit.dataset.bhId);
 if(found)BIAOHUO_STATE=Object.assign({},found);
 }
-if(pg==='orderDetail'&&el.dataset.orderId)applyLitigationOrderState(el.dataset.orderId);
+if(pg==='orderDetail'&&hit.dataset.orderId)applyLitigationOrderState(hit.dataset.orderId);
 openSubPage(pg,{
-fromHub:TOOL_CHILD_PAGES.has(pg)||!!el.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario'),
-pushStack:pushStack
+fromHub:TOOL_CHILD_PAGES.has(pg)||!!hit.closest('.inst-mat-hub,.inst-mat-grid,.sync-scenario'),
+pushStack:hit.dataset.pushStack==='1'||hit.dataset.pushStack==='true'
 });
 });
-});
+}
+function bindSubEvents(id){
+bindSubPageNavigation();
 if(!subBody._actionDel){
 subBody._actionDel=true;
 subBody.addEventListener('click',e=>{
@@ -4186,6 +4693,23 @@ if(act==='tool-push-pc'){useToolMaterialContext();openPushPcModal();return}
 if(act==='go-issue-letter'||act==='open-issue-form'){openIssueLetterModal();return}
 if(act==='open-cannot-underwrite'){openCannotUnderwriteModal();return}
 if(act==='rar-process')runRarProcess();
+if(act==='sales-batch-process')runSalesBatchProcess();
+if(act==='sales-batch-open-group'){openSalesBatchGroup(btn.dataset.sbArchive);return}
+if(act==='sales-batch-back-list'){backSalesBatchGroupList();return}
+if(act==='sales-batch-group-process'){processSalesBatchGroup(btn.dataset.sbArchive);return}
+if(act==='sales-batch-preview-pdf'){showToast('案件清单 PDF 预览 · '+btn.dataset.sbArchive);return}
+if(act==='sales-batch-open-email'){openEmailModal('批量案件清单 · '+btn.dataset.sbArchive);return}
+if(act==='sales-batch-send-sales'){completeSalesBatchGroup(btn.dataset.sbArchive);return}
+if(act==='ar-preview'){openAnalysisRecordPreview(btn.dataset.arId);return}
+if(act==='ar-download'){showToast('分析结果包下载中… '+(btn.dataset.arId||''));return}
+if(act==='ar-reprocess'){reprocessAnalysisRecord(btn.dataset.arId);return}
+if(act==='ar-delete'){
+const rid=btn.dataset.arId;
+showModal(`${renderModalHead('<i class="fas fa-trash-alt" style="color:#B91C1C;margin-right:4px"></i>删除分析记录','删除后不可恢复，确认继续？')}
+<button type="button" class="sp-btn-danger" data-action="ar-delete-confirm" data-ar-id="${rid}" style="width:100%;padding:12px;border-radius:40px;margin-top:8px">确认删除</button>
+<button type="button" class="sp-btn-secondary" data-action="modal-close" style="width:100%;margin-top:8px;padding:11px;border-radius:40px">取消</button>`,{form:true});
+document.getElementById('spModalInner')?.querySelector('[data-action="ar-delete-confirm"]')?.addEventListener('click',()=>{closeModal();deleteAnalysisRecord(rid)});
+return}
 if(act==='rar-preview-pdf')showToast('案件清单 PDF 预览已打开');
 if(act==='rar-send-sales')showToast('案件清单 PDF 已推送给业务员（企微/站内信）');
 if(act==='rar-open-email')openEmailModal('批量案件清单 PDF');
@@ -4250,7 +4774,8 @@ if(act==='preview-doc-export')showToast('申请书预览 PDF 已导出');
 if(act==='preview-doc-email')openEmailModal('申请书结构化预览');
 });
 }
-if(['rarBatchPack','structExtract','toolAssistantHub','crossDeviceSync','smartAnalysis'].includes(id))bindMaterialEvents(id);
+if(['rarBatchPack','structExtract','toolAssistantHub','crossDeviceSync','smartAnalysis','salesBatchCollect','analysisRecords'].includes(id))bindMaterialEvents(id);
+if(id==='toolAssistantHub'||id==='rarBatchPack')bindHubScenarioClicks();
 if(id==='orderReview')bindOrderReviewForm(subBody,false);
 if(id==='statsReport')bindStatsReportEvents();
 if(id==='structExtract'||id==='rarBatchPack'||id==='toolAssistantHub')bindPreviewTypeTags();
@@ -4309,13 +4834,15 @@ const PRD_SPECS={
 'message-center':{title:'消息中心',module:'我的',page:'messageCenter',priority:'P1',business:'审核提醒、费率审批、补材料、PC 材料推送等系统通知；顶部未读汇总 + 分类筛选 + 今天/更早分组列表。',logic:['未读汇总条与全部已读','Tab：全部/审核/业务/材料/系统','消息卡片：类型图标·未读红点·摘要·操作入口','点击消息标已读并跳转业务页'],acceptance:['分类筛选正确','未读态可清空','可跳转订单/认证/文件空间站'],api:'GET /api/inst/messages'},
 'product-list':{title:'产品管理',module:'业务',page:'productList',priority:'P1',business:'机构保函产品上下架与编辑。',logic:['已上架/已下架状态','编辑/上架按钮'],acceptance:['上下架 Toast'],api:'GET /api/inst/products'},
 'court-coverage':{title:'法院覆盖',module:'业务',page:'courtCoverage',priority:'P2',business:'展示机构已接入法院及申请新法院接入。',logic:['搜索法院','已开通/申请中状态'],acceptance:['申请接入 Toast'],api:'GET /api/inst/courts'},
-'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料处理总入口：顶部先选业务类型（诉讼保/学平险/标后），再上传材料并按对应字段结构解析；文件空间站跳转二级页做手机与 PC 材料互通。',logic:['工作台/业务 Tab 进入工具助手','顶部业务类型三选一','按业务线输出不同结构化预览','文件空间站入口进二级页'],acceptance:['业务类型可切换且预览结构不同','本页可上传并处理','文件空间站可跳转'],api:'—'},
+'tool-assistant-hub':{title:'工具助手中枢',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'机构端材料处理总入口：顶部先选业务类型（诉讼保/学平险/标后），再上传材料并按对应字段结构解析；更多能力含文件空间站、批量收案、分析记录。',logic:['工作台/业务 Tab 进入工具助手','顶部业务类型三选一','按业务线输出不同结构化预览','更多能力：文件空间站 / 批量收案 / 分析记录','处理完成后自动写入分析记录'],acceptance:['业务类型可切换且预览结构不同','本页可上传并处理','更多能力三项均可跳转','分析记录徽章显示历史条数'],api:'—'},
 'rar-batch-pack':{title:'材料批量处理',module:'工具助手',page:'toolAssistantHub',priority:'P0',business:'在工具助手当前页按所选业务类型上传材料，解析为对应标准字段并生成结构化预览；材料区支持单文件预览/下载，底部可打包下载、邮件发送、投送电脑端，并展示证据链诊断。',logic:['嵌在 toolAssistantHub 本页','先选诉讼保/学平险/标后','多文件上传后开始处理','材料行预览+下载','底部三操作复用订单详情弹层','诉讼保走案由证据链，其它业务线走材料链诊断'],acceptance:['每文件有预览/下载','底部三按钮可用','证据链诊断可见且可折叠'],api:'POST /api/inst/material/rar/process'},
 'struct-extract':{title:'结构化提取',module:'工具助手',page:'structExtract',priority:'P0',business:'Word/图/PDF 转为订单标准字段；按保全类型生成申请书预览，点击「结构化提取」后才展示结果。',logic:['多文件上传逐条显示','全部上传后点击「结构化提取」','OCR+NLP 标准字段表','保全类型切换预览','一键写入 orderReview'],acceptance:['上传列表+提取按钮联动','结果区默认隐藏','四种类型预览可切换'],api:'POST /api/inst/material/extract'},
 'smart-analysis':{title:'智能分析',module:'工具助手',page:'smartAnalysis',priority:'P0',business:'先选保全类型并上传材料，点击「开始智能分析」后按类型规则输出机构匹配、缺件与证据分类。',logic:['保全类型四选一（影响缺件规则）','多文件上传列表','仅点击分析后展示结果','缺件对照上传文件名匹配','带结果进 orderReview'],acceptance:['未分析前结果隐藏','切换类型重置结果','缺件随类型与上传变化'],api:'POST /api/inst/material/analyze'},
 'doc-preview':{title:'申请书结构化预览',module:'工具助手',page:'structExtract',priority:'P0',business:'排版对齐申请书范本：居中标题、加粗标签字段、法条结语、右下签章日期；下方文件材料列表（图标+文件名+类型）。',logic:['财产保全标题「财产保全申请书」','字段：申请人/被申请人/案号/法院/金额/财产线索','法条结语段落 + 申请人签章/日期右对齐','文件材料（材料总数 N）列表','四种保全类型字段集不同'],acceptance:['范本版式：标题居中、签章右对齐','财产保全含 6 份材料','切换类型字段与附件同步'],api:'GET /api/inst/material/preview?type='},
 'quick-tool-assistant':{title:'工具助手快捷入口',module:'工作台',page:'工作台',priority:'P0',business:'替换原「操作培训」，一键进入工具助手中枢及两大子能力（RAR 批量打包、文件空间站）。',logic:['工作台快捷操作第 4 格','点击进入 toolAssistantHub','面包屑支持二级返回'],acceptance:['工作台显示工具助手非操作培训','可进入两子功能'],api:'—'},
 'cross-device-sync':{title:'文件空间站',module:'工具助手',page:'crossDeviceSync',priority:'P0',business:'机构小程序与 PC 工作台共享 MaterialSpace：扫码登录后手机⇄PC 材料互通，支持本地上传、打包下载、配对码绑定、内网无外网传输。',logic:['V8 小程序页：靛紫顶栏 + 四宫格 Seg 导航（文件/扫码/配对/内网）','未登录时「文件列表」「内网直连」Seg 带锁，扫码或配对码后解锁','文件列表：横向上传条 + 勾选打包下载 + 本地上传','扫描登录：取景框动效 + MS 码 + 5min 倒计时','内网直连：无外网徽章 + LAN URL + 中继启动','PC 演示面板六 Tab 与小程序 Tab 联动'],techArch:['扫码：GET /api/inst/auth/qrcode · POST /auth/poll','上传：wx.uploadFile / OSS multipart · WSS file.added','内网：LAN Relay 0.0.0.0:8765 · ws://{lanIp}:8765/material','打包：POST /api/inst/material/download/zip'],interact:'① 扫描登录绑定 spaceId；② 文件列表上传/打包下载；③ 配对码手动绑定 PC；④ 内网直连无外网传材料；⑤ PC 演示面板联动切换。',acceptance:['四 Tab 可切换且登录门禁正确','上传后双端列表与 PC 树闪绿','配对码确认后 Toast 双端提示','内网模拟上传成功','PC 六 Tab 可交互'],api:'WSS /ws/material · POST /api/inst/material/upload/complete · GET /auth/qrcode · POST /lan/upload'},
+'analysis-records':{title:'分析记录',module:'工具助手',page:'analysisRecords',priority:'P0',business:'查看工具助手历史材料解析与批量收案记录；支持按类型/业务线筛选，单条可预览详情、下载结果包、重新载入处理或删除。',logic:['入口在工具助手「更多能力」','筛选：全部/材料解析/批量收案/诉讼保/学平险/标后','卡片展示摘要、材料数、案件数、操作人与时间','预览弹层展示归类案件与材料清单','重新处理：批量收案→salesBatchCollect；材料解析→toolAssistantHub 并回填文件','主流程处理完成后自动写入分析记录'],acceptance:['更多能力可进入分析记录','筛选与列表联动','预览/下载/重处理/删除可用','材料处理完成后记录数增加'],api:'GET /api/inst/tool/analysis-records · DELETE /api/inst/tool/analysis-records/{id}'},
+'sales-batch-collect':{title:'批量收案',module:'工具助手',page:'salesBatchCollect',priority:'P0',business:'业务员从微信收到多个 RAR/ZIP 压缩包：先按压缩文件名批量解析归类，解析结果以压缩包为单位分组展示，再逐个进入各压缩包生成案件清单 PDF 并推送业务员。',logic:['入口在工具助手「更多能力」','仅接受 RAR/ZIP/7Z','批量解析时按压缩包文件名逐个解压归类','解析完成后解压归类结果自动写入分析记录（含各压缩包分组、案号、材料明细）','解析完成后展示分组列表（每包一案或多案）','点击「逐个处理」进入该压缩包详情','详情内：归类结果 / 清单 PDF / 发邮件 / 推送并完成','全部压缩包推送完成后更新同一条分析记录为已完成'],acceptance:['多压缩包上传后可批量解析','解析完成后分析记录自动增加一条','分析记录可预览各压缩包解压归类明细','可逐个进入处理各压缩包','全部推送后分析记录状态更新为已完成'],api:'POST /api/inst/material/batch/classify · POST /api/inst/material/batch/push-sales'},
 'pc-lan-page':{title:'PC 内网直连',module:'文件空间站',page:'PC lan',priority:'P0',business:'PC 在法院/机构内网启动 LAN Relay，手机扫内网二维码传材料，无需公网。',logic:['展示内网 URL 与二维码','启动中继与模拟内网上传'],acceptance:['URL 含 spaceId','上传后材料树更新'],api:'POST /lan/upload · WS ws://{ip}:8765/material'},
 'pc-upload-page':{title:'PC H5 扫码上传页',module:'文件空间站',page:'PC upload',priority:'P0',business:'PC 浏览器打开的轻量上传页，与 Chrome「为此页面创建二维码」配合，手机扫码免登录传材料。',logic:['URL upload.ssbao.cn/inst/{token}','token 绑定 MaterialSpaceId 15min','点击上传区模拟 H5 上传','完成后工作台材料树刷新'],acceptance:['可模拟上传','URL 随 token 更新'],api:'POST /api/inst/material/upload/complete'},
 'pc-download-page':{title:'PC 下发材料页',module:'文件空间站',page:'PC push',priority:'P0',business:'PC 将归类结果、案件清单 PDF 推送到机构小程序。',logic:['展示待推送文件','一键推送企微/站内信'],acceptance:['推送 Toast 双端提示'],api:'POST /api/inst/material/push'},
@@ -4367,6 +4894,11 @@ const ELEMENT_MAP=[
 {sel:'[data-fs-tab="lan"]',id:'cross-device-sync'},
 {sel:'[data-action="sync-pack-download"]',id:'cross-device-sync'},
 {sel:'[data-action="sync-sim-login"]',id:'cross-device-sync'},
+{sel:'.sync-scenario[data-page="analysisRecords"]',id:'analysis-records'},
+{sel:'.sync-scenario[data-page="salesBatchCollect"]',id:'sales-batch-collect'},
+{sel:'.ar-record-card',id:'analysis-records'},
+{sel:'[data-prd="sales-batch-collect"]',id:'sales-batch-collect'},
+{sel:'.sb-group-card',id:'sales-batch-collect'},
 {sel:'[data-pc-action="sim-h5-upload"]',id:'pc-upload-page'},
 {sel:'[data-pc-action="push-to-phone"]',id:'pc-download-page'}
 ];
