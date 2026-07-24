@@ -5026,4 +5026,185 @@ prdContent.innerHTML=`<div class="prd-section"><div class="prd-title">${spec.tit
 ${scoreTablesHtml}${logicHtml}
 ${techHtml?`<div class="prd-section"><div class="prd-section-title">技术架构要点</div><div class="prd-api-box">${techHtml}</div></div>`:''}${interactHtml}
 <div class="prd-section"><div class="prd-section-title">③ 验收标准</div><ul class="prd-list">${(spec.acceptance||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>
-${spec.api?`<div class="prd-section"><div class="prd-section-titl
+${spec.api?`<div class="prd-section"><div class="prd-section-title">接口</div><div class="prd-api-box">${spec.api}</div></div>`:''}`;
+prdContent.scrollTop=0;
+document.getElementById('prdPanelBody')&&(document.getElementById('prdPanelBody').scrollTop=0);
+}catch(err){
+prdEmpty.style.display='none';prdContent.style.display='block';
+prdContent.innerHTML=`<div class="prd-section"><div class="prd-title">PRD 渲染异常</div><div class="prd-business-text">${String((err&&err.message)||err)}</div></div>`;
+}
+}
+function showPrdById(id,el){
+const spec=PRD_SPECS[id];
+if(!spec)return false;
+if(activeEl&&activeEl!==el)activeEl.classList.remove('prd-highlight');
+if(el){activeEl=el;el.classList.add('prd-highlight')}
+renderPanel(spec);
+prdTooltip.textContent=spec.title;prdTooltip.classList.add('show');
+return true;
+}
+window.__showPrdSpec=showPrdById;
+function asElement(node){
+if(!node)return null;
+if(node.nodeType===1)return node;
+return node.parentElement||null;
+}
+function resolvePrdHit(node){
+const el=asElement(node);
+if(!el||!el.closest)return null;
+const prdHost=el.closest('[data-prd]');
+if(prdHost&&prdHost.dataset.prd&&PRD_SPECS[prdHost.dataset.prd]){
+return{el:prdHost,id:prdHost.dataset.prd,spec:PRD_SPECS[prdHost.dataset.prd]};
+}
+const chain=el.closest('.ev-chain-card');
+if(chain&&PRD_SPECS['evidence-chain'])return{el:chain,id:'evidence-chain',spec:PRD_SPECS['evidence-chain']};
+for(let i=0;i<ELEMENT_MAP.length;i++){
+const m=ELEMENT_MAP[i];
+let hit=null;
+try{hit=el.closest(m.sel)}catch(err){hit=null}
+if(hit&&PRD_SPECS[m.id])return{el:hit,id:m.id,spec:PRD_SPECS[m.id]};
+}
+return null;
+}
+function clearPrdHover(keepHighlight){
+if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}
+if(pendingEl){pendingEl.classList.remove('prd-pending');pendingEl=null}
+prdTooltip.classList.remove('show');
+prdPendingHint.classList.remove('show');
+currentHitId=null;
+if(!keepHighlight&&activeEl){/* 保留高亮直至下一次命中 */}
+}
+function armPrdHover(hit,clientX,clientY){
+if(!hit){clearPrdHover();return}
+if(currentHitId===hit.id){
+if(prdPendingHint.classList.contains('show')&&clientX!=null){
+prdPendingHint.style.left=(clientX+12)+'px';prdPendingHint.style.top=(clientY+12)+'px';
+}
+return;
+}
+if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null}
+if(pendingEl)pendingEl.classList.remove('prd-pending');
+currentHitId=hit.id;
+pendingEl=hit.el;
+hit.el.classList.add('prd-pending');
+prdPendingHint.textContent='停留中… 1 秒后显示评分规则';
+prdPendingHint.classList.add('show');
+if(clientX!=null){prdPendingHint.style.left=(clientX+12)+'px';prdPendingHint.style.top=(clientY+12)+'px'}
+hoverTimer=setTimeout(()=>{
+hit.el.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+showPrdById(hit.id,hit.el);
+if(clientX!=null){prdTooltip.style.left=(clientX+12)+'px';prdTooltip.style.top=(clientY+12)+'px'}
+},1000);
+}
+/* 全局委托：覆盖子页面内证据链（mousemove 在部分环境下不可靠，改用 mouseover） */
+if(!document._prdGlobalDelegated){
+document._prdGlobalDelegated=true;
+document.addEventListener('mouseover',e=>{
+const hit=resolvePrdHit(e.target);
+if(!hit)return;
+armPrdHover(hit,e.clientX,e.clientY);
+},true);
+document.addEventListener('mouseout',e=>{
+const from=resolvePrdHit(e.target);
+if(!from)return;
+const to=resolvePrdHit(e.relatedTarget);
+if(to&&to.id===from.id)return;
+if(currentHitId===from.id)clearPrdHover(true);
+},true);
+}
+function bindSpecs(){
+document.querySelectorAll('button,.nav-item,.stat-item,.stat-block,.quick-item,.order-card,.alert-banner,.icon-btn,.settings-item,.inst-mat-hub,.inst-mat-tile,.sync-scenario,[data-page]').forEach(el=>{
+if(el._prdBound)return;el._prdBound=true;
+if(el.closest('#subpageBody'))return;
+const hit=resolvePrdHit(el);
+if(!hit||hit.el!==el)return;
+el.addEventListener('mouseenter',e=>armPrdHover(hit,e.clientX,e.clientY));
+el.addEventListener('mouseleave',e=>{
+const relHit=resolvePrdHit(e.relatedTarget);
+if(relHit&&relHit.id===hit.id)return;
+if(currentHitId===hit.id)clearPrdHover(true);
+});
+});
+}
+function bindEvidenceChainPrdHover(){
+const card=document.querySelector('#subpageBody [data-prd="evidence-chain"], #subpageBody .ev-chain-card');
+if(!card||card._evPrdBound)return;
+card._evPrdBound=true;
+card.style.cursor='help';
+card.title='停留 1 秒查看评分规则 · 点击立即显示';
+let localTimer=null;
+card.addEventListener('mouseenter',()=>{
+if(localTimer)clearTimeout(localTimer);
+card.classList.add('prd-pending');
+prdPendingHint.textContent='停留中… 1 秒后显示评分规则';
+prdPendingHint.classList.add('show');
+localTimer=setTimeout(()=>{
+card.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+showPrdById('evidence-chain',card);
+},1000);
+});
+card.addEventListener('mouseleave',()=>{
+if(localTimer){clearTimeout(localTimer);localTimer=null}
+card.classList.remove('prd-pending');
+prdPendingHint.classList.remove('show');
+});
+card.addEventListener('click',e=>{
+if(e.target.closest('[data-action="fold-toggle"]')&&!e.target.closest('.ev-chain-type')){
+/* 允许折叠，同时仍展示 PRD */
+}
+showPrdById('evidence-chain',card);
+});
+}
+window.__bindEvidenceChainPrdHover=bindEvidenceChainPrdHover;
+const obs=new MutationObserver(()=>{bindSpecs();bindEvidenceChainPrdHover()});
+obs.observe(document.body,{childList:true,subtree:true});
+bindSpecs();
+bindEvidenceChainPrdHover();
+}
+renderPcMain();
+bindPcEvents();
+(function bootApp(){
+const qs=new URLSearchParams(location.search);
+const isEmbed=qs.get('embed')==='1';
+let loggedIn=false;
+try{loggedIn=sessionStorage.getItem('ssbao_inst_logged_in')==='1'}catch(e){}
+if(qs.get('from')==='login'){
+loggedIn=true;
+try{sessionStorage.setItem('ssbao_inst_logged_in','1')}catch(e){}
+try{if(history.replaceState)history.replaceState(null,'',location.href.split('?')[0]+(location.hash||''))}catch(e){}
+}
+/* 关闭登录弹层 */
+document.getElementById('authClose')?.addEventListener('click',()=>{hideAuthOverlay();if(currentNav==='profile')setActiveNav('profile')});
+document.getElementById('wxDeny')?.addEventListener('click',()=>{hideWxAuth();showToast('已取消微信授权，可改用手机号登录')});
+document.getElementById('wxAllow')?.addEventListener('click',()=>{hideWxAuth();showToast('微信授权成功');enterAppAfterAuth({via:'wx'})});
+if(isEmbed){
+document.body.classList.add('embed-mode');
+authLoggedIn=true;
+authStaffName='王审核员';
+entAuthStatus='passed';
+ENT_AUTH_STATE.companyName=ENT_AUTH_STATE.companyName||'永安财产保险股份有限公司';
+setActiveNav('workbench');
+return;
+}
+authLoggedIn=!!loggedIn;
+try{
+if(authLoggedIn){
+authLoginVia=sessionStorage.getItem('ssbao_inst_login_via')||'sms';
+authUserPhone=sessionStorage.getItem('ssbao_inst_phone')||authUserPhone;
+}
+}catch(e){}
+setActiveNav('workbench');
+try{
+if(authLoggedIn&&sessionStorage.getItem('ssbao_inst_need_ent')==='1'){
+sessionStorage.removeItem('ssbao_inst_need_ent');
+setTimeout(()=>openSubPage('enterpriseAuth'),400);
+}
+}catch(e){}
+initPRD();
+})();
+})();
+</script>
+</body>
+</html>
