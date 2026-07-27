@@ -1,0 +1,3200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>保函通 · 标后履约线上化 UI 原型 V3</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1A4A6E;
+      --primary-mid: #22668D;
+      --primary-light: #EFF8FC;
+      --accent: #2A8F7E;
+      --success: #1D7A6E;
+      --warning: #D48806;
+      --danger: #B91C1C;
+      --text: #1C2E36;
+      --text-secondary: #5E6F8D;
+      --text-tertiary: #94A3B8;
+      --border: #E8EEF4;
+      --bg: #F0F4F8;
+      --card: #FFFFFF;
+      --radius: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(160deg, #DCE6EF 0%, #C5D4E0 50%, #B8C9D8 100%);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 40px;
+    }
+
+    .demo-bar {
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .demo-bar h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .demo-bar h1 span {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    .role-switch {
+      display: flex;
+      background: #E8EEF4;
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .role-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .role-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .stage-hint {
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .stage-chip {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.55);
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .stage-chip.done {
+      background: rgba(29,122,110,0.15);
+      color: var(--success);
+    }
+    .stage-chip.current {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .workspace {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 780px;
+      background: var(--bg);
+      border-radius: 44px;
+      box-shadow: 0 28px 60px -18px rgba(26,74,110,0.45), 0 0 0 8px #E8ECF0, 0 0 0 11px #1E293B;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .dynamic-bar {
+      padding: 12px 22px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .dynamic-bar .time { font-weight: 600; font-size: 14px; color: #1E293B; }
+    .dynamic-notch { background: #111; width: 100px; height: 26px; border-radius: 20px; }
+    .right-icons { display: flex; gap: 5px; color: #334155; font-size: 11px; }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+      animation: fadeIn 0.22s ease;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes stamp {
+      0% { opacity: 0; transform: scale(1.6) rotate(-12deg); }
+      60% { opacity: 1; transform: scale(0.95) rotate(-8deg); }
+      100% { opacity: 1; transform: scale(1) rotate(-8deg); }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .nav-bar {
+      height: 48px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .nav-bar .back {
+      position: absolute;
+      left: 14px;
+      font-size: 14px;
+      color: var(--primary-mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+    .nav-bar .nav-action {
+      position: absolute;
+      right: 14px;
+      font-size: 13px;
+      color: var(--primary-mid);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px calc(20px + var(--safe-bottom));
+      scroll-behavior: smooth;
+    }
+    .scroll-content.with-tab { padding-bottom: calc(72px + var(--safe-bottom)); }
+    .scroll-content.with-footer { padding-bottom: calc(80px + var(--safe-bottom)); }
+    .scroll-content::-webkit-scrollbar { width: 0; }
+
+    .tab-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: calc(58px + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 50;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .tab-item.active { color: var(--primary); }
+    .tab-item i { font-size: 18px; }
+    .tab-item .badge {
+      position: absolute;
+      top: 6px;
+      margin-left: 18px;
+      background: var(--danger);
+      color: #fff;
+      font-size: 9px;
+      min-width: 14px;
+      height: 14px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #143A58; }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-outline {
+      background: #fff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+    .btn-ghost {
+      background: var(--primary-light);
+      color: var(--primary-mid);
+    }
+    .btn-wechat { background: #07C160; color: #fff; }
+    .btn-block { width: 100%; }
+    .btn-lg { padding: 14px 20px; font-size: 15px; border-radius: 14px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-wait { background: #FFF7E6; color: #D48806; }
+    .tag-doing { background: #E6F4FF; color: #1677FF; }
+    .tag-done { background: #E8F8F5; color: var(--success); }
+    .tag-share { background: #F0FDF4; color: #07C160; }
+    .tag-warn { background: #FFF1F0; color: var(--danger); }
+    .tag-pay { background: #FFF7E6; color: #D48806; }
+    .tag-issue { background: #F0F5FF; color: #2F54EB; }
+    .tag-muted { background: #F5F5F5; color: #8C8C8C; }
+    .tag-purple { background: #F9F0FF; color: #722ED1; }
+    .tag-refund { background: #FFF0F6; color: #C41D7F; }
+
+    .footer-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 12px 16px calc(12px + var(--safe-bottom));
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      z-index: 40;
+    }
+
+    /* —— 运营首页 —— */
+    .op-header {
+      background: linear-gradient(135deg, #1A4A6E 0%, #22668D 100%);
+      padding: 8px 16px 28px;
+      color: #fff;
+      margin: -12px -16px 0;
+      border-radius: 0 0 24px 24px;
+    }
+    .op-header .hi { font-size: 13px; opacity: 0.8; }
+    .op-header h2 { font-size: 20px; font-weight: 800; margin: 4px 0 14px; }
+    .op-stats {
+      display: flex;
+      gap: 8px;
+    }
+    .op-stat {
+      flex: 1;
+      background: rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .op-stat .n { font-size: 22px; font-weight: 800; }
+    .op-stat .l { font-size: 10px; opacity: 0.85; margin-top: 2px; }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin: 14px 0 10px;
+      overflow-x: auto;
+    }
+    .filter-chip {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #fff;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .filter-chip.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .doc-item {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .doc-item:active { border-color: var(--primary-mid); }
+    .doc-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .doc-item-top h3 { font-size: 14px; font-weight: 700; flex: 1; padding-right: 8px; }
+    .doc-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .doc-meta i { width: 14px; color: var(--text-tertiary); }
+    .doc-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .doc-amount { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .doc-amount small { font-size: 11px; font-weight: 500; color: var(--text-tertiary); }
+
+    /* —— 订单卡片（列表） —— */
+    .order-card {
+      position: relative;
+      display: flex;
+      background: #fff;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .order-card:active {
+      border-color: #C5D4E0;
+      box-shadow: 0 4px 14px rgba(26,74,110,0.08);
+    }
+    .order-card-accent {
+      width: 4px;
+      flex-shrink: 0;
+      background: var(--primary-mid);
+    }
+    .order-card[data-status="review"] .order-card-accent,
+    .order-card[data-status="pay"] .order-card-accent,
+    .order-card[data-status="refund_wait"] .order-card-accent { background: #D48806; }
+    .order-card[data-status="materials"] .order-card-accent,
+    .order-card[data-status="closed"] .order-card-accent { background: #B91C1C; }
+    .order-card[data-status="sign"] .order-card-accent,
+    .order-card[data-status="issue"] .order-card-accent,
+    .order-card[data-status="refund_doing"] .order-card-accent { background: #1677FF; }
+    .order-card[data-status="success"] .order-card-accent,
+    .order-card[data-status="refund_done"] .order-card-accent { background: #1D7A6E; }
+    .order-card[data-status="cs"] .order-card-accent { background: #722ED1; }
+    .order-card-main {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px 12px 12px;
+    }
+    .order-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .order-card-title-wrap { min-width: 0; }
+    .order-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .order-card-primary {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .order-card-meta {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .order-card-meta .dot {
+      margin: 0 4px;
+      color: #CBD5E1;
+    }
+    .order-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .order-card-amt {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .order-card-amt em {
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      margin-left: 4px;
+    }
+    .order-card-side {
+      text-align: right;
+      min-width: 0;
+    }
+    .order-id-hint {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+    .tag-pending { background: #FFF7E6; color: #D48806; }
+
+    /* —— 材料不足 / 催补 / 补件 —— */
+    .mat-alert {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #FFF1F0;
+      border: 1px solid #FFCCC7;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #A8071A;
+      line-height: 1.55;
+    }
+    .mat-alert i { margin-top: 2px; flex-shrink: 0; }
+    .mat-alert.urge {
+      background: #FFF7E6;
+      border-color: #FFE58F;
+      color: #AD6800;
+    }
+    .mat-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: #fff;
+      transition: all 0.15s;
+    }
+    .mat-check-item.selected {
+      border-color: var(--danger);
+      background: #FFF1F0;
+    }
+    .mat-check-item .mc-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 1.5px solid #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 11px;
+      color: transparent;
+    }
+    .mat-check-item.selected .mc-box {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+    .mat-check-item h4 { font-size: 13px; font-weight: 700; }
+    .mat-check-item p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .mat-reason {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      background: #FAFBFC;
+    }
+    .mat-reason:focus { border-color: var(--primary-mid); background: #fff; }
+    .mat-sup-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .mat-sup-item .msi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .mat-sup-item h4 { font-size: 13px; font-weight: 700; }
+    .mat-sup-item .req { font-size: 11px; color: var(--danger); font-weight: 600; }
+    .mat-sup-item .msi-desc { font-size: 11px; color: var(--text-tertiary); margin-bottom: 10px; }
+    .mat-upload-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px;
+      border: 1.5px dashed #CBD5E1;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary-mid);
+      cursor: pointer;
+      background: #FAFBFC;
+    }
+    .mat-upload-btn.done {
+      border-style: solid;
+      border-color: var(--success);
+      background: #F0FDF9;
+      color: var(--success);
+    }
+    .urge-msg {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .urge-msg .um-title { font-weight: 700; margin-bottom: 8px; color: var(--danger); }
+    .urge-msg ul { padding-left: 18px; margin: 8px 0; color: var(--text-secondary); font-size: 12px; }
+    .urge-msg li { margin-bottom: 4px; }
+
+    /* —— 时间轴 —— */
+    .timeline { padding: 4px 0; }
+    .tl-item {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 18px;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 24px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .tl-item.done:not(:last-child)::before { background: var(--success); }
+    .tl-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #E8EEF4;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .tl-item.done .tl-dot { background: var(--success); color: #fff; }
+    .tl-item.current .tl-dot { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(26,74,110,0.15); }
+    .tl-body h4 { font-size: 13px; font-weight: 700; }
+    .tl-body p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+    /* —— 详情字段 —— */
+    .info-rows { display: flex; flex-direction: column; gap: 10px; }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 13px;
+      gap: 12px;
+    }
+    .info-row .k { color: var(--text-tertiary); flex-shrink: 0; }
+    .info-row .v { color: var(--text); font-weight: 500; text-align: right; }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 4px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-label::before {
+      content: '';
+      width: 3px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* —— 分享面板 —— */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15,23,42,0.45);
+      z-index: 80;
+      display: none;
+      align-items: flex-end;
+    }
+    .overlay.show { display: flex; }
+    .sheet {
+      width: 100%;
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 16px 16px calc(20px + var(--safe-bottom));
+      animation: slideUp 0.28s ease;
+    }
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: #D1D5DB;
+      border-radius: 2px;
+      margin: 0 auto 14px;
+    }
+    .sheet h3 { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .sheet .sub { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-bottom: 16px; }
+
+    .group-list { max-height: 240px; overflow-y: auto; margin-bottom: 14px; }
+    .group-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      margin-bottom: 6px;
+    }
+    .group-item.selected {
+      background: var(--primary-light);
+      border-color: var(--primary-mid);
+    }
+    .group-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #07C160, #06AD56);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .group-info { flex: 1; }
+    .group-info h4 { font-size: 14px; font-weight: 600; }
+    .group-info p { font-size: 11px; color: var(--text-tertiary); }
+    .check-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: transparent;
+    }
+    .group-item.selected .check-box {
+      background: #07C160;
+      border-color: #07C160;
+      color: #fff;
+    }
+
+    /* —— 分享渠道 —— */
+    .share-panel { display: none; }
+    .share-panel.active { display: block; }
+    .share-channels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 8px 0 18px;
+    }
+    .share-channel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 8px 10px;
+      border-radius: 14px;
+      background: #F7F9FB;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .share-channel:active { transform: scale(0.96); }
+    .share-channel .ch-ico {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #fff;
+    }
+    .share-channel .ch-ico.img { background: linear-gradient(135deg, #22668D, #1A4A6E); }
+    .share-channel .ch-ico.wx { background: linear-gradient(135deg, #07C160, #06AD56); }
+    .share-channel .ch-ico.moment { background: linear-gradient(135deg, #F5A623, #E67E22); }
+    .share-channel span { font-size: 12px; font-weight: 600; color: var(--text); }
+    .share-channel p { font-size: 10px; color: var(--text-tertiary); text-align: center; line-height: 1.3; }
+
+    .share-poster {
+      background: linear-gradient(160deg, #1A4A6E 0%, #22668D 55%, #2A8F7E 100%);
+      border-radius: 14px;
+      padding: 18px 16px 16px;
+      color: #fff;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .share-poster::after {
+      content: '';
+      position: absolute;
+      right: -30px; top: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .share-poster .brand {
+      font-size: 11px;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .share-poster h4 {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .share-poster .poster-rows {
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    .share-poster .poster-rows span { opacity: 0.75; }
+    .share-poster .poster-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .share-poster .qr-fake {
+      width: 52px;
+      height: 52px;
+      background: #fff;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 6px;
+    }
+    .share-poster .qr-fake i {
+      background: #1A4A6E;
+      border-radius: 1px;
+    }
+    .share-poster .qr-fake i:nth-child(even) { opacity: 0.35; }
+    .share-poster .tip { font-size: 10px; opacity: 0.8; line-height: 1.5; max-width: 160px; }
+
+    .moment-preview {
+      background: #F7F9FB;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .moment-preview .mp-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .moment-preview .mp-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1A4A6E, #2A8F7E);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .moment-preview .mp-user h5 { font-size: 13px; font-weight: 700; }
+    .moment-preview .mp-user p { font-size: 11px; color: var(--text-tertiary); }
+    .moment-preview .mp-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .moment-preview .mp-card {
+      display: flex;
+      gap: 10px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid var(--border);
+    }
+    .moment-preview .mp-card .thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #1A4A6E, #22668D);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .moment-preview .mp-card h5 { font-size: 13px; font-weight: 700; }
+    .moment-preview .mp-card p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+    .sheet-back {
+      position: absolute;
+      left: 16px;
+      top: 28px;
+      font-size: 13px;
+      color: var(--primary-mid);
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 2px;
+    }
+    .sheet-back.show { display: flex; }
+    .sheet { position: relative; }
+
+    .toast {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(28,46,54,0.88);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 100;
+      display: none;
+      text-align: center;
+      max-width: 220px;
+      animation: popIn 0.2s ease;
+    }
+    .toast.show { display: block; }
+
+    /* —— 客户端入口 —— */
+    .wx-entry {
+      text-align: center;
+      padding: 28px 8px 16px;
+    }
+    .wx-bubble {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .wx-bubble::before {
+      content: '项目履约群';
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: #07C160;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .wx-card-link {
+      display: flex;
+      gap: 10px;
+      background: #F7F8FA;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      margin-top: 10px;
+    }
+    .wx-card-link .ico {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1A4A6E, #22668D);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .wx-card-link h4 { font-size: 13px; font-weight: 700; }
+    .wx-card-link p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .no-login-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #E8F8F5;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* —— 告知书 —— */
+    .notice-paper {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 16px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .notice-paper h3 {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .notice-paper .body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .notice-paper .body strong { color: var(--text); }
+    .check-agree {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .check-agree input { margin-top: 3px; accent-color: var(--primary); }
+
+    /* —— 签单 —— */
+    .sign-pad {
+      background: #FAFBFC;
+      border: 1.5px dashed #CBD5E1;
+      border-radius: 12px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .sign-pad.signed {
+      border-style: solid;
+      border-color: var(--success);
+      background: #F0FDF9;
+    }
+    .sign-pad canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .sign-preview {
+      font-family: "STKaiti", "KaiTi", "楷体", serif;
+      font-size: 36px;
+      color: var(--primary);
+      font-weight: 700;
+      display: none;
+    }
+    .sign-pad.signed .sign-preview { display: block; }
+    .sign-pad.signed .sign-hint { display: none; }
+
+    /* —— 支付 —— */
+    .pay-amount-block {
+      text-align: center;
+      padding: 20px 0 8px;
+    }
+    .pay-amount-block .label { font-size: 13px; color: var(--text-tertiary); }
+    .pay-amount-block .amount {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 6px 0;
+    }
+    .pay-amount-block .amount span { font-size: 18px; font-weight: 600; }
+    .pay-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .pay-method.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .pay-method .pm-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .pay-method .pm-ico.wx { background: #E8F8F0; color: #07C160; }
+    .pay-method .pm-ico.bank { background: #E6F4FF; color: #1677FF; }
+    .pay-method h4 { font-size: 14px; font-weight: 600; }
+    .pay-method p { font-size: 11px; color: var(--text-tertiary); }
+    .pay-radio {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #CBD5E1;
+    }
+    .pay-method.selected .pay-radio {
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+
+    /* —— 上传 —— */
+    .upload-zone {
+      border: 1.5px dashed #CBD5E1;
+      border-radius: 14px;
+      padding: 28px 16px;
+      text-align: center;
+      background: #FAFBFC;
+      cursor: pointer;
+    }
+    .upload-zone i { font-size: 32px; color: var(--primary-mid); margin-bottom: 8px; }
+    .upload-zone h4 { font-size: 14px; font-weight: 600; }
+    .upload-zone p { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+    .upload-zone.done {
+      border-color: var(--success);
+      background: #F0FDF9;
+    }
+    .file-chip {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .upload-zone.done .file-chip { display: flex; }
+    .file-chip i { color: var(--success); }
+
+    /* —— 缴费清单 / 凭证 —— */
+    .receipt-paper {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 16px 24px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .receipt-paper .header-line {
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid var(--text);
+    }
+    .receipt-paper .header-line .org {
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+    }
+    .receipt-paper .header-line h3 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      margin-top: 4px;
+    }
+    .receipt-table {
+      width: 100%;
+      font-size: 12px;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    .receipt-table th,
+    .receipt-table td {
+      border: 1px solid #D1D5DB;
+      padding: 8px 6px;
+      text-align: left;
+    }
+    .receipt-table th {
+      background: #F8FAFC;
+      font-weight: 600;
+      color: var(--text-secondary);
+      width: 28%;
+    }
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 13px;
+    }
+    .receipt-total .sum {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--danger);
+    }
+
+    .e-seal {
+      position: absolute;
+      right: 24px;
+      bottom: 48px;
+      width: 88px;
+      height: 88px;
+      border: 3px solid #C0392B;
+      border-radius: 50%;
+      color: #C0392B;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.82;
+      transform: rotate(-8deg);
+      animation: stamp 0.55s ease forwards;
+      pointer-events: none;
+    }
+    .e-seal .star { font-size: 14px; line-height: 1; }
+    .e-seal .seal-name { font-size: 9px; font-weight: 800; text-align: center; line-height: 1.25; margin-top: 2px; }
+    .e-seal .seal-sub { font-size: 8px; margin-top: 2px; letter-spacing: 1px; }
+    .e-seal::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1.5px solid #C0392B;
+      border-radius: 50%;
+    }
+
+    .success-banner {
+      text-align: center;
+      padding: 20px 8px 8px;
+    }
+    .success-banner .icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #E8F8F5;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 12px;
+    }
+    .success-banner h3 { font-size: 18px; font-weight: 800; }
+    .success-banner p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+    /* —— 侧栏流程说明 —— */
+    .guide-panel {
+      flex: 1;
+      min-width: 260px;
+      max-width: 360px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+    .guide-panel h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .guide-panel .lead {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .guide-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+    .guide-step.active { background: var(--primary-light); }
+    .guide-step .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: #E8EEF4;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .guide-step.active .num,
+    .guide-step.done .num {
+      background: var(--primary);
+      color: #fff;
+    }
+    .guide-step.done .num { background: var(--success); }
+    .guide-step h4 { font-size: 13px; font-weight: 700; }
+    .guide-step p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .guide-tip {
+      margin-top: 8px;
+      padding: 12px;
+      background: #FFFBEB;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #92400E;
+      line-height: 1.6;
+    }
+    .guide-tip strong { color: #78350F; }
+
+    .empty-filter {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      display: none;
+    }
+
+    /* —— 项目材料附件 —— */
+    .attach-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .attach-toolbar .count {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+      gap: 4px;
+    }
+    .attach-list { display: flex; flex-direction: column; gap: 8px; }
+    .attach-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #F7F9FB;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .attach-item.selected {
+      border-color: var(--primary-mid);
+      background: var(--primary-light);
+    }
+    .attach-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.5px solid #CBD5E1;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      font-size: 10px;
+      color: transparent;
+    }
+    .attach-item.selected .attach-check {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .attach-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .attach-ico.pdf { background: #FFF1F0; color: #CF1322; }
+    .attach-ico.doc { background: #E6F4FF; color: #1677FF; }
+    .attach-ico.img { background: #F6FFED; color: #389E0D; }
+    .attach-ico.zip { background: #FFF7E6; color: #D48806; }
+    .attach-meta { flex: 1; min-width: 0; }
+    .attach-meta h4 {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .attach-meta p { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .attach-dl {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: #fff;
+      color: var(--primary-mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .attach-dl:active { background: var(--primary-light); }
+    .attach-batch-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 12px;
+      animation: slideUp 0.22s ease;
+    }
+    .attach-batch-bar.show { display: flex; }
+    .attach-batch-bar span { font-size: 12px; font-weight: 600; }
+    .attach-batch-bar .btn {
+      background: #fff;
+      color: var(--primary);
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .pack-progress {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: #F0FDF9;
+      border: 1px solid #B7E4C7;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--success);
+    }
+    .pack-progress.show { display: block; }
+    .pack-bar {
+      height: 4px;
+      background: #D8F3E7;
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .pack-bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--success);
+      border-radius: 2px;
+      transition: width 0.35s ease;
+    }
+    .dl-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15,23,42,0.35);
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .dl-overlay.show { display: flex; }
+    .dl-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      width: 240px;
+      text-align: center;
+      animation: popIn 0.22s ease;
+    }
+    .dl-card .spin {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #E8EEF4;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .dl-card h4 { font-size: 14px; font-weight: 700; }
+    .dl-card p { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; word-break: break-all; }
+
+    @media (max-width: 720px) {
+      .guide-panel { display: none; }
+      .demo-bar { flex-direction: column; align-items: stretch; }
+      .role-switch { width: 100%; }
+      .role-btn { flex: 1; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="workspace">
+    <div class="phone-frame" id="phone">
+      <div class="dynamic-bar">
+        <div class="time">21:20</div>
+        <div class="dynamic-notch"></div>
+        <div class="right-icons">
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </div>
+      </div>
+
+      <!-- ========== 运营：订单列表 ========== -->
+      <div class="screen active" id="op-list">
+        <div class="nav-bar">订单列表</div>
+        <div class="scroll-content">
+          <div class="filter-row" id="filterRow">
+            <div class="filter-chip active" data-filter="all" onclick="filterDocs('all', this)">全部</div>
+            <div class="filter-chip" data-filter="review" onclick="filterDocs('review', this)">等待审核</div>
+            <div class="filter-chip" data-filter="materials" onclick="filterDocs('materials', this)">材料不足</div>
+            <div class="filter-chip" data-filter="sign" onclick="filterDocs('sign', this)">等待签章</div>
+            <div class="filter-chip" data-filter="pay" onclick="filterDocs('pay', this)">等待支付</div>
+            <div class="filter-chip" data-filter="issue" onclick="filterDocs('issue', this)">等待出函</div>
+            <div class="filter-chip" data-filter="success" onclick="filterDocs('success', this)">出函成功</div>
+            <div class="filter-chip" data-filter="closed" onclick="filterDocs('closed', this)">订单关闭</div>
+            <div class="filter-chip" data-filter="cs" onclick="filterDocs('cs', this)">客服介入</div>
+            <div class="filter-chip" data-filter="refund_wait" onclick="filterDocs('refund_wait', this)">等待退保</div>
+            <div class="filter-chip" data-filter="refund_doing" onclick="filterDocs('refund_doing', this)">退保受理中</div>
+            <div class="filter-chip" data-filter="refund_done" onclick="filterDocs('refund_done', this)">退保成功</div>
+          </div>
+          <div id="docList"></div>
+          <div class="empty-filter" id="emptyFilter">该状态下暂无单据</div>
+        </div>
+      </div>
+
+      <!-- ========== 运营：订单详情 ========== -->
+      <div class="screen" id="op-detail">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('op-list')"><i class="fas fa-chevron-left"></i> 返回</span>
+          订单详情
+          <span class="nav-action" onclick="openShare()">分享</span>
+        </div>
+        <div class="scroll-content with-footer">
+          <!-- a) 项目信息 -->
+          <div class="card" style="margin-top:4px">
+            <div class="section-label" style="margin-top:0">项目信息</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px">
+              <h3 style="font-size:15px;font-weight:800;flex:1;line-height:1.4" id="d-title">城南污水管网改造工程</h3>
+              <span class="tag tag-wait" id="d-status" style="flex-shrink:0">等待审核</span>
+            </div>
+            <div class="info-rows">
+              <div class="info-row"><span class="k">项目编号</span><span class="v" id="d-proj-no">XM-CS-2026-0418</span></div>
+              <div class="info-row"><span class="k">项目性质</span><span class="v">市政公用工程</span></div>
+              <div class="info-row"><span class="k">发包人</span><span class="v">城南水务集团有限公司</span></div>
+              <div class="info-row"><span class="k">合同金额（元）</span><span class="v" id="d-contract">50,000,000.00</span></div>
+            </div>
+          </div>
+
+          <!-- b) 企业信息 -->
+          <div class="section-label">企业信息</div>
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">投保企业</span><span class="v">某某建设集团有限公司</span></div>
+              <div class="info-row"><span class="k">统一社会信用代码</span><span class="v">91440300MA5FXXXX1X</span></div>
+              <div class="info-row"><span class="k">法人名称</span><span class="v">王建国</span></div>
+              <div class="info-row"><span class="k">联系人</span><span class="v">张伟 · 138****6621</span></div>
+              <div class="info-row"><span class="k">企业地址</span><span class="v" style="text-align:right;max-width:58%">广东省深圳市南山区科技园南路 88 号</span></div>
+            </div>
+          </div>
+
+          <!-- c) 保函信息 -->
+          <div class="section-label">保函信息</div>
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">保函类型</span><span class="v">履约保函</span></div>
+              <div class="info-row"><span class="k">保函期限</span><span class="v">2026-08-01 至 2027-07-31</span></div>
+              <div class="info-row"><span class="k">保函格式</span><span class="v">招标文件指定格式</span></div>
+              <div class="info-row"><span class="k">担保金额（元）</span><span class="v" id="d-amt">5,000,000.00</span></div>
+              <div class="info-row"><span class="k">保函天数（天）</span><span class="v">365</span></div>
+              <div class="info-row"><span class="k">是否要反担保</span><span class="v"><span class="tag tag-wait">是</span></span></div>
+              <div class="info-row" style="align-items:center">
+                <span class="k">保函保单文件</span>
+                <button class="btn btn-ghost btn-sm" onclick="downloadOne('policy',event)" style="margin-left:auto">
+                  <i class="fas fa-file-pdf" style="color:#CF1322"></i> 履约保函保单.pdf
+                </button>
+              </div>
+              <div class="info-row"><span class="k">应缴保费（元）</span><span class="v" style="color:var(--danger);font-weight:700" id="d-fee">12,800.00</span></div>
+              <div class="info-row"><span class="k">订单编号</span><span class="v" id="d-no">LY-20260727-0086</span></div>
+            </div>
+          </div>
+
+          <!-- d) 附件信息 -->
+          <div class="section-label">附件信息</div>
+          <div class="card">
+            <div class="attach-toolbar">
+              <span class="count" id="attachCount">共 5 个文件 · 18.6 MB</span>
+              <button class="btn btn-ghost btn-sm" onclick="toggleSelectAll()">
+                <i class="fas fa-check-double"></i> 全选
+              </button>
+            </div>
+            <div class="attach-list" id="attachList"></div>
+            <div class="attach-batch-bar" id="attachBatchBar">
+              <span id="attachSelectedLabel">已选 0 项</span>
+              <button class="btn" onclick="batchDownload()"><i class="fas fa-file-archive"></i> 打包下载</button>
+            </div>
+            <div class="pack-progress" id="packProgress">
+              <div><i class="fas fa-box-open"></i> <span id="packText">正在打包 ZIP…</span></div>
+              <div class="pack-bar"><i id="packBarFill"></i></div>
+            </div>
+            <button class="btn btn-outline btn-block" style="margin-top:12px" onclick="batchDownload(true)">
+              <i class="fas fa-download"></i> 全部打包下载 ZIP
+            </button>
+          </div>
+
+          <!-- e) 处理进度 -->
+          <div class="section-label">处理进度</div>
+          <div class="card">
+            <div class="timeline" id="detailTimeline"></div>
+          </div>
+        </div>
+        <div class="footer-bar" id="opDetailFooter"></div>
+      </div>
+
+      <!-- ========== 运营：标注材料不足 ========== -->
+      <div class="screen" id="op-materials">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('op-detail')"><i class="fas fa-chevron-left"></i> 返回</span>
+          材料不足
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="mat-alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <div>请勾选缺失或不合格的材料项，确认后订单将变为「材料不足」，并可向客户发起催补。</div>
+          </div>
+          <div class="card" style="margin-top:0;padding:12px 14px">
+            <div class="info-row" style="margin-bottom:0">
+              <span class="k">当前订单</span>
+              <span class="v" id="matOrderTitle" style="font-weight:700">—</span>
+            </div>
+          </div>
+          <div class="section-label">缺失材料</div>
+          <div id="matCheckList"></div>
+          <div class="section-label">补充说明</div>
+          <div class="card">
+            <textarea class="mat-reason" id="matReason" placeholder="请填写具体问题说明，如：营业执照模糊、合同缺盖章页等">营业执照扫描件不清晰，无法核验主体信息；施工合同缺少签章页。</textarea>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-outline" style="flex:1" onclick="showScreen('op-detail')">取消</button>
+          <button class="btn btn-primary" style="flex:1.6;background:var(--danger)" onclick="confirmMaterialsMark()">
+            <i class="fas fa-exclamation-triangle"></i> 确认材料不足
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 运营：催补材料 ========== -->
+      <div class="screen" id="op-urge">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('op-detail')"><i class="fas fa-chevron-left"></i> 返回</span>
+          催补材料
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="mat-alert urge">
+            <i class="fas fa-bell"></i>
+            <div>将向投保企业相关方发送催补提醒，对方可免登录打开订单并上传材料。</div>
+          </div>
+          <div class="section-label">催补内容预览</div>
+          <div class="urge-msg" id="urgeMsgPreview">
+            <div class="um-title">【材料补件提醒】</div>
+            <div id="urgeMsgBody"></div>
+          </div>
+          <div class="section-label">发送方式</div>
+          <div class="pay-method selected" onclick="selectUrgeChannel(this,'wx')">
+            <div class="pm-ico wx"><i class="fab fa-weixin"></i></div>
+            <div><h4>微信群 / 好友</h4><p>一键发送催补卡片</p></div>
+            <div class="pay-radio"></div>
+          </div>
+          <div class="pay-method" onclick="selectUrgeChannel(this,'sms')">
+            <div class="pm-ico bank"><i class="fas fa-sms"></i></div>
+            <div><h4>短信提醒</h4><p>发送至联系人手机</p></div>
+            <div class="pay-radio"></div>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-outline" style="flex:1" onclick="showScreen('op-detail')">取消</button>
+          <button class="btn btn-wechat" style="flex:1.6" onclick="confirmUrgeMaterials()">
+            <i class="fab fa-weixin"></i> 发送催补提醒
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 客户：补充材料 ========== -->
+      <div class="screen" id="c-supplement">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-order')"><i class="fas fa-chevron-left"></i></span>
+          补充材料
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="mat-alert">
+            <i class="fas fa-info-circle"></i>
+            <div id="supAlertText">以下材料经审核需补充，请上传清晰完整文件后提交复审。</div>
+          </div>
+          <div class="card" style="margin-top:0;padding:12px 14px">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">审核意见</span><span class="v" id="supReason" style="text-align:right;max-width:62%;color:var(--danger)">—</span></div>
+            </div>
+          </div>
+          <div class="section-label">待补充材料</div>
+          <div id="supList"></div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-primary btn-block btn-lg" id="btnSupSubmit" disabled onclick="confirmSupplement()">
+            提交补件，等待复审
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 客户：订单详情 ========== -->
+      <div class="screen" id="c-order">
+        <div class="nav-bar">
+          <span class="back" onclick="backFromOrder()"><i class="fas fa-chevron-left"></i> 返回</span>
+          订单详情
+          <span class="nav-action" onclick="openShare()">分享</span>
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="no-login-tip" style="margin:4px auto 12px;display:flex;width:fit-content">
+            <i class="fas fa-shield-alt"></i> 免登录查看 · 链接有效期内可访问
+          </div>
+
+          <!-- a) 项目信息 -->
+          <div class="card" style="margin-top:0">
+            <div class="section-label" style="margin-top:0">项目信息</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px">
+              <h3 style="font-size:15px;font-weight:800;flex:1;line-height:1.4" id="o-title">城南污水管网改造工程</h3>
+              <span class="tag tag-wait" id="o-status" style="flex-shrink:0">等待审核</span>
+            </div>
+            <div class="info-rows">
+              <div class="info-row"><span class="k">项目编号</span><span class="v" id="o-proj-no">XM-CS-2026-0418</span></div>
+              <div class="info-row"><span class="k">项目性质</span><span class="v">市政公用工程</span></div>
+              <div class="info-row"><span class="k">发包人</span><span class="v">城南水务集团有限公司</span></div>
+              <div class="info-row"><span class="k">合同金额（元）</span><span class="v" id="o-contract">50,000,000.00</span></div>
+            </div>
+          </div>
+
+          <!-- b) 企业信息 -->
+          <div class="section-label">企业信息</div>
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">投保企业</span><span class="v">某某建设集团有限公司</span></div>
+              <div class="info-row"><span class="k">统一社会信用代码</span><span class="v">91440300MA5FXXXX1X</span></div>
+              <div class="info-row"><span class="k">法人名称</span><span class="v">王建国</span></div>
+              <div class="info-row"><span class="k">联系人</span><span class="v">张伟 · 138****6621</span></div>
+              <div class="info-row"><span class="k">企业地址</span><span class="v" style="text-align:right;max-width:58%">广东省深圳市南山区科技园南路 88 号</span></div>
+            </div>
+          </div>
+
+          <!-- c) 保函信息 -->
+          <div class="section-label">保函信息</div>
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">保函类型</span><span class="v">履约保函</span></div>
+              <div class="info-row"><span class="k">保函期限</span><span class="v">2026-08-01 至 2027-07-31</span></div>
+              <div class="info-row"><span class="k">保函格式</span><span class="v">招标文件指定格式</span></div>
+              <div class="info-row"><span class="k">担保金额（元）</span><span class="v" id="o-amt">5,000,000.00</span></div>
+              <div class="info-row"><span class="k">保函天数（天）</span><span class="v">365</span></div>
+              <div class="info-row"><span class="k">是否要反担保</span><span class="v"><span class="tag tag-wait">是</span></span></div>
+              <div class="info-row" style="align-items:center">
+                <span class="k">保函保单文件</span>
+                <button class="btn btn-ghost btn-sm" onclick="downloadOne('policy',event)" style="margin-left:auto">
+                  <i class="fas fa-file-pdf" style="color:#CF1322"></i> 履约保函保单.pdf
+                </button>
+              </div>
+              <div class="info-row"><span class="k">应缴保费（元）</span><span class="v" style="color:var(--danger);font-weight:700" id="o-fee">12,800.00</span></div>
+              <div class="info-row"><span class="k">订单编号</span><span class="v" id="o-no">LY-20260727-0086</span></div>
+            </div>
+          </div>
+
+          <!-- d) 附件信息 -->
+          <div class="section-label">附件信息</div>
+          <div class="card">
+            <div class="attach-toolbar">
+              <span class="count">支持单个下载或批量打包</span>
+              <button class="btn btn-ghost btn-sm" onclick="toggleSelectAll('client')">
+                <i class="fas fa-check-double"></i> 全选
+              </button>
+            </div>
+            <div class="attach-list" id="attachListClient"></div>
+            <div class="attach-batch-bar" id="attachBatchBarClient">
+              <span id="attachSelectedLabelClient">已选 0 项</span>
+              <button class="btn" onclick="batchDownload(false,'client')"><i class="fas fa-file-archive"></i> 打包下载</button>
+            </div>
+            <div class="pack-progress" id="packProgressClient">
+              <div><i class="fas fa-box-open"></i> <span id="packTextClient">正在打包 ZIP…</span></div>
+              <div class="pack-bar"><i id="packBarFillClient"></i></div>
+            </div>
+            <button class="btn btn-outline btn-block" style="margin-top:12px" onclick="batchDownload(true,'client')">
+              <i class="fas fa-download"></i> 全部打包下载 ZIP
+            </button>
+          </div>
+
+          <!-- e) 处理进度 -->
+          <div class="section-label">处理进度</div>
+          <div class="card">
+            <div class="timeline" id="orderTimeline"></div>
+          </div>
+        </div>
+        <div class="footer-bar" id="orderFooter"></div>
+      </div>
+
+      <!-- ========== 客户：群聊入口（免登录） ========== -->
+      <div class="screen" id="c-entry">
+        <div class="nav-bar">微信</div>
+        <div class="scroll-content">
+          <div class="wx-entry">
+            <div class="no-login-tip"><i class="fas fa-shield-alt"></i> 微信打开即可办理，无需登录</div>
+            <div class="wx-bubble">
+              <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">保函通运营 · 刚刚</div>
+              <div style="font-size:13px;color:var(--text);line-height:1.6">
+                【履约办理提醒】城南污水管网改造工程履约保函单据已生成，请相关方点击卡片完成告知确认、签单及缴费。项目材料附件可在订单详情中下载。
+              </div>
+              <div class="wx-card-link" onclick="showScreen('c-order')">
+                <div class="ico"><i class="fas fa-file-contract"></i></div>
+                <div>
+                  <h4>履约办理单 · LY-20260727-0086</h4>
+                  <p>保函通小程序 · 点击查看订单</p>
+                </div>
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--text-tertiary)">点击上方卡片进入订单详情</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 客户：履约告知 ========== -->
+      <div class="screen" id="c-notify">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-order')"><i class="fas fa-chevron-left"></i></span>
+          履约告知
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="notice-paper">
+            <h3>履约保函办理告知书</h3>
+            <div class="body">
+              <p>致：<strong>某某建设集团有限公司</strong></p>
+              <p style="margin-top:10px;text-indent:2em">
+                贵司中标项目<strong>「城南污水管网改造工程」</strong>履约保函已进入线上办理流程。保函金额
+                <strong>人民币伍佰万元整</strong>，受益人为<strong>城南水务集团有限公司</strong>，担保机构为某某银行。
+              </p>
+              <p style="margin-top:10px;text-indent:2em">
+                请贵司相关人员于 <strong>2026年7月30日</strong> 前，通过本小程序完成电子签单并缴纳保函费用
+                <strong>¥12,800.00</strong>。缴费完成后，平台将自动生成缴费清单及加盖电子章的缴费凭证。
+              </p>
+              <p style="margin-top:14px;font-size:12px;color:var(--text-tertiary)">
+                告知日期：2026年7月27日<br>出具方：保函通平台 · 某某银行
+              </p>
+            </div>
+          </div>
+          <label class="check-agree">
+            <input type="checkbox" id="agreeNotify" onchange="toggleNotifyBtn()">
+            <span>本人已阅读并知悉上述履约办理事项，确认相关信息无误</span>
+          </label>
+          <button class="btn btn-ghost btn-block" style="margin-top:12px" onclick="fromNotify=true;showScreen('c-order')">
+            <i class="fas fa-folder-open"></i> 查看订单详情与项目材料
+          </button>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-primary btn-block btn-lg" id="btnNotify" disabled onclick="confirmNotify()">
+            确认告知，去签单
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 客户：电子签单 ========== -->
+      <div class="screen" id="c-sign">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-notify')"><i class="fas fa-chevron-left"></i></span>
+          电子签单
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="card">
+            <div class="section-label" style="margin-top:0">合同摘要</div>
+            <div class="info-rows">
+              <div class="info-row"><span class="k">项目名称</span><span class="v">城南污水管网改造工程</span></div>
+              <div class="info-row"><span class="k">保函类型</span><span class="v">履约保函</span></div>
+              <div class="info-row"><span class="k">保证金额</span><span class="v">¥ 5,000,000.00</span></div>
+              <div class="info-row"><span class="k">担保期限</span><span class="v">12 个月</span></div>
+              <div class="info-row"><span class="k">保费</span><span class="v" style="color:var(--danger)">¥ 12,800.00</span></div>
+            </div>
+          </div>
+          <div class="section-label">手写签名确认</div>
+          <div class="sign-pad" id="signPad" onclick="doSign()">
+            <div class="sign-hint">
+              <i class="fas fa-pen-fancy" style="font-size:22px;margin-bottom:6px;display:block"></i>
+              点击此处完成电子签名
+            </div>
+            <div class="sign-preview">张 伟</div>
+          </div>
+          <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px;text-align:center">
+            签名即视为同意《履约保函协议》条款
+          </p>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-outline" style="flex:1" onclick="clearSign()">重签</button>
+          <button class="btn btn-primary" style="flex:2" id="btnSign" disabled onclick="confirmSign()">确认签单，去支付</button>
+        </div>
+      </div>
+
+      <!-- ========== 客户：支付 ========== -->
+      <div class="screen" id="c-pay">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-sign')"><i class="fas fa-chevron-left"></i></span>
+          支付保费
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="card">
+            <div class="pay-amount-block">
+              <div class="label">应缴保函费用</div>
+              <div class="amount"><span>¥</span> 12,800.00</div>
+              <div class="label">单据 LY-20260727-0086</div>
+            </div>
+          </div>
+          <div class="section-label">支付方式</div>
+          <div class="pay-method selected" onclick="selectPay(this)">
+            <div class="pm-ico wx"><i class="fab fa-weixin"></i></div>
+            <div><h4>微信支付</h4><p>推荐 · 即时到账</p></div>
+            <div class="pay-radio"></div>
+          </div>
+          <div class="pay-method" onclick="selectPay(this)">
+            <div class="pm-ico bank"><i class="fas fa-university"></i></div>
+            <div><h4>对公转账</h4><p>转账后需上传凭证</p></div>
+            <div class="pay-radio"></div>
+          </div>
+          <div class="card" style="margin-top:12px;background:var(--primary-light);border-color:transparent">
+            <div style="font-size:12px;color:var(--primary-mid);line-height:1.7">
+              <i class="fas fa-info-circle"></i>
+              支付成功后，平台将<strong>自动生成缴费清单</strong>，并出具<strong>加盖平台电子章</strong>的缴费凭证，可转发至群聊存档。
+            </div>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-primary btn-block btn-lg" onclick="doPay()">
+            确认支付 ¥12,800.00
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 客户：上传凭证（对公） ========== -->
+      <div class="screen" id="c-upload">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-pay')"><i class="fas fa-chevron-left"></i></span>
+          上传付款凭证
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row"><span class="k">收款户名</span><span class="v">某某银行保函专户</span></div>
+              <div class="info-row"><span class="k">收款账号</span><span class="v">6222 **** **** 8891</span></div>
+              <div class="info-row"><span class="k">开户行</span><span class="v">某某银行营业部</span></div>
+              <div class="info-row"><span class="k">转账金额</span><span class="v" style="color:var(--danger);font-weight:700">¥ 12,800.00</span></div>
+            </div>
+          </div>
+          <div class="section-label">付款凭证</div>
+          <div class="upload-zone" id="uploadZone" onclick="doUpload()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h4>点击上传银行回单 / 转账截图</h4>
+            <p>支持 JPG、PNG、PDF，不超过 10MB</p>
+            <div class="file-chip">
+              <i class="fas fa-file-image"></i>
+              <span style="flex:1;text-align:left">转账回单_0727.jpg</span>
+              <i class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-primary btn-block btn-lg" id="btnUpload" disabled onclick="confirmUpload()">
+            提交凭证
+          </button>
+        </div>
+      </div>
+
+      <!-- ========== 缴费清单 ========== -->
+      <div class="screen" id="c-receipt">
+        <div class="nav-bar">
+          缴费清单
+          <span class="nav-action" onclick="showScreen('c-voucher')">凭证</span>
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="success-banner">
+            <div class="icon-circle"><i class="fas fa-check"></i></div>
+            <h3>支付成功</h3>
+            <p>缴费清单已自动生成</p>
+          </div>
+          <div class="receipt-paper">
+            <div class="header-line">
+              <div class="org">保函通平台 · 某某银行</div>
+              <h3>缴费清单</h3>
+            </div>
+            <table class="receipt-table">
+              <tr><th>清单编号</th><td>JF-20260727-0086</td></tr>
+              <tr><th>关联单据</th><td>LY-20260727-0086</td></tr>
+              <tr><th>项目名称</th><td>城南污水管网改造工程</td></tr>
+              <tr><th>缴费单位</th><td>某某建设集团有限公司</td></tr>
+              <tr><th>费用项目</th><td>履约保函保费</td></tr>
+              <tr><th>缴费方式</th><td id="receiptPayMethod">微信支付</td></tr>
+              <tr><th>缴费时间</th><td id="receiptTime">2026-07-27 21:20:36</td></tr>
+            </table>
+            <div class="receipt-total">
+              <span>合计金额（元）</span>
+              <span class="sum">¥ 12,800.00</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-outline" style="flex:1" onclick="toast('已保存到相册')">保存</button>
+          <button class="btn btn-primary" style="flex:2" onclick="showScreen('c-voucher')">查看缴费凭证</button>
+        </div>
+      </div>
+
+      <!-- ========== 带电子章凭证 ========== -->
+      <div class="screen" id="c-voucher">
+        <div class="nav-bar">
+          <span class="back" onclick="showScreen('c-receipt')"><i class="fas fa-chevron-left"></i></span>
+          缴费凭证
+        </div>
+        <div class="scroll-content with-footer">
+          <div class="receipt-paper" style="min-height:420px">
+            <div class="header-line">
+              <div class="org">保函通电子凭证</div>
+              <h3>缴费凭证</h3>
+            </div>
+            <table class="receipt-table">
+              <tr><th>凭证编号</th><td>PZ-20260727-0086</td></tr>
+              <tr><th>收款单位</th><td>某某银行股份有限公司</td></tr>
+              <tr><th>付款单位</th><td>某某建设集团有限公司</td></tr>
+              <tr><th>项目名称</th><td>城南污水管网改造工程</td></tr>
+              <tr><th>费用说明</th><td>履约保函保费</td></tr>
+              <tr><th>实收金额</th><td style="font-weight:800;color:var(--danger)">人民币壹万贰仟捌佰元整</td></tr>
+              <tr><th>大写金额</th><td>¥ 12,800.00</td></tr>
+              <tr><th>开具日期</th><td>2026年7月27日</td></tr>
+            </table>
+            <p style="font-size:10px;color:var(--text-tertiary);margin-top:16px;line-height:1.6">
+              本凭证由保函通平台自动生成并加盖电子印章，与纸质凭证具有同等效力。可通过小程序核验真伪。
+            </p>
+            <div class="e-seal" id="eSeal">
+              <div class="star">★</div>
+              <div class="seal-name">保函通<br>平台专用章</div>
+              <div class="seal-sub">电子章</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <button class="btn btn-wechat" style="flex:1" onclick="shareVoucher()">
+            <i class="fab fa-weixin"></i> 转发群聊
+          </button>
+          <button class="btn btn-primary" style="flex:1" onclick="finishFlow()">完成办理</button>
+        </div>
+      </div>
+
+      <!-- ========== 完成页 ========== -->
+      <div class="screen" id="c-done">
+        <div class="scroll-content" style="display:flex;flex-direction:column;justify-content:center">
+          <div class="success-banner" style="padding:40px 8px">
+            <div class="icon-circle" style="width:72px;height:72px;font-size:32px"><i class="fas fa-check"></i></div>
+            <h3>履约办理已完成</h3>
+            <p>告知、签单、支付均已完成<br>缴费凭证已生成并加盖电子章</p>
+          </div>
+          <div class="card">
+            <div class="timeline" id="doneTimeline"></div>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" style="margin-top:8px" onclick="resetAndBackOp()">
+            返回运营台查看
+          </button>
+          <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="switchRole('client');showScreen('c-voucher')">
+            再次查看缴费凭证
+          </button>
+        </div>
+      </div>
+
+      <!-- 分享面板：图片 / 微信 / 朋友圈 -->
+      <div class="overlay" id="shareOverlay" onclick="closeShare(event)">
+        <div class="sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-back" id="shareBack" onclick="shareShowPanel('channels')">
+            <i class="fas fa-chevron-left"></i> 返回
+          </div>
+          <h3 id="shareTitle">分享订单</h3>
+          <p class="sub" id="shareSub">生成图片、发微信或发朋友圈</p>
+
+          <!-- 渠道选择 -->
+          <div class="share-panel active" id="share-channels">
+            <div class="share-channels">
+              <div class="share-channel" onclick="shareShowPanel('image')">
+                <div class="ch-ico img"><i class="fas fa-image"></i></div>
+                <span>图片分享</span>
+                <p>生成海报<br>保存相册</p>
+              </div>
+              <div class="share-channel" onclick="shareShowPanel('wechat')">
+                <div class="ch-ico wx"><i class="fab fa-weixin"></i></div>
+                <span>微信</span>
+                <p>好友 / 群聊<br>免登办理</p>
+              </div>
+              <div class="share-channel" onclick="shareShowPanel('moment')">
+                <div class="ch-ico moment"><i class="fas fa-globe-asia"></i></div>
+                <span>朋友圈</span>
+                <p>公开动态<br>带办理卡片</p>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-block" onclick="document.getElementById('shareOverlay').classList.remove('show')">取消</button>
+          </div>
+
+          <!-- 图片分享 -->
+          <div class="share-panel" id="share-image">
+            <div class="share-poster" id="sharePoster">
+              <div class="brand">保函通 · 标后履约办理</div>
+              <h4 id="posterTitle">城南污水管网改造工程</h4>
+              <div class="poster-rows">
+                <div><span>订单编号</span>　<strong id="posterNo">LY-20260727-0086</strong></div>
+                <div><span>保函类型</span>　<strong>履约保函</strong></div>
+                <div><span>担保金额</span>　<strong id="posterAmt">5,000,000.00 元</strong></div>
+                <div><span>应缴保费</span>　<strong id="posterFee">12,800.00 元</strong></div>
+                <div><span>投保企业</span>　<strong>某某建设集团</strong></div>
+              </div>
+              <div class="poster-foot">
+                <div class="tip">长按识别小程序码<br>免登录查看订单并办理</div>
+                <div class="qr-fake">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-outline" style="flex:1" onclick="saveShareImage()">
+                <i class="fas fa-download"></i> 保存图片
+              </button>
+              <button class="btn btn-wechat" style="flex:1" onclick="shareImageToWechat()">
+                <i class="fab fa-weixin"></i> 发微信
+              </button>
+            </div>
+          </div>
+
+          <!-- 微信好友/群 -->
+          <div class="share-panel" id="share-wechat">
+            <div class="group-list">
+              <div class="group-item selected" onclick="selectGroup(this)">
+                <div class="group-avatar">城</div>
+                <div class="group-info">
+                  <h4>城南污水·履约协调群</h4>
+                  <p>32 名成员 · 项目经理 / 财务在群</p>
+                </div>
+                <div class="check-box"><i class="fas fa-check"></i></div>
+              </div>
+              <div class="group-item" onclick="selectGroup(this)">
+                <div class="group-avatar" style="background:linear-gradient(135deg,#1677FF,#0958D9)">建</div>
+                <div class="group-info">
+                  <h4>某某建设·保函对接群</h4>
+                  <p>18 名成员</p>
+                </div>
+                <div class="check-box"><i class="fas fa-check"></i></div>
+              </div>
+              <div class="group-item" onclick="selectGroup(this)">
+                <div class="group-avatar" style="background:linear-gradient(135deg,#D48806,#FAAD14)">银</div>
+                <div class="group-info">
+                  <h4>某某银行·标后服务群</h4>
+                  <p>24 名成员</p>
+                </div>
+                <div class="check-box"><i class="fas fa-check"></i></div>
+              </div>
+              <div class="group-item" onclick="selectGroup(this)">
+                <div class="group-avatar" style="background:linear-gradient(135deg,#722ED1,#9254DE)">张</div>
+                <div class="group-info">
+                  <h4>张伟（项目经理）</h4>
+                  <p>微信好友 · 最近联系</p>
+                </div>
+                <div class="check-box"><i class="fas fa-check"></i></div>
+              </div>
+            </div>
+            <button class="btn btn-wechat btn-block btn-lg" onclick="confirmShare('wechat')">
+              <i class="fab fa-weixin"></i> 发送到微信
+            </button>
+          </div>
+
+          <!-- 朋友圈 -->
+          <div class="share-panel" id="share-moment">
+            <div class="moment-preview">
+              <div class="mp-user">
+                <div class="mp-avatar">运</div>
+                <div>
+                  <h5>保函通运营</h5>
+                  <p>朋友圈预览</p>
+                </div>
+              </div>
+              <div class="mp-text" id="momentText">
+                【履约保函办理提醒】城南污水管网改造工程单据已生成，相关方可点击卡片免登录完成告知、签单与缴费。
+              </div>
+              <div class="mp-card">
+                <div class="thumb"><i class="fas fa-file-contract"></i></div>
+                <div>
+                  <h5 id="momentCardTitle">履约办理单 · LY-20260727-0086</h5>
+                  <p>保函通小程序 · 点击办理</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" onclick="confirmShare('moment')" style="background:linear-gradient(135deg,#F5A623,#E67E22);border:none">
+              <i class="fas fa-globe-asia"></i> 发布到朋友圈
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+      <div class="dl-overlay" id="dlOverlay">
+        <div class="dl-card">
+          <div class="spin"></div>
+          <h4 id="dlTitle">正在下载</h4>
+          <p id="dlName">—</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  /* —— 状态 —— */
+  // 演示主单 d1 流程：等待审核 → 等待签章 → 等待支付 → 等待出函 → 出函成功
+  let flowStatus = 'review';
+  let payMethod = 'wx';
+  let signed = false;
+  let uploaded = false;
+  let currentFilter = 'all';
+  let currentDocId = 'd1';
+  let fromNotify = false;
+  let orderBackScreen = 'op-detail';
+  let selectedAttach = new Set();
+  let selectedAttachClient = new Set();
+
+  const STATUS = {
+    review:       { text: '等待审核',   tag: 'tag-pending' },
+    materials:    { text: '材料不足',   tag: 'tag-warn' },
+    sign:         { text: '等待签章',   tag: 'tag-doing' },
+    pay:          { text: '等待支付',   tag: 'tag-pay' },
+    issue:        { text: '等待出函',   tag: 'tag-issue' },
+    success:      { text: '出函成功',   tag: 'tag-done' },
+    closed:       { text: '订单关闭',   tag: 'tag-muted' },
+    cs:           { text: '客服介入',   tag: 'tag-purple' },
+    refund_wait:  { text: '等待退保',   tag: 'tag-refund' },
+    refund_doing: { text: '退保受理中', tag: 'tag-doing' },
+    refund_done:  { text: '退保成功',   tag: 'tag-done' },
+  };
+
+  const FLOW_ORDER = ['review', 'sign', 'pay', 'issue', 'success'];
+
+  const docs = [
+    { id: 'd1',  title: '城南污水管网改造工程', no: 'BH20260727001', type: '履约保函', amt: '5,000,000', fee: '12,800', company: '某某建设集团有限公司', applicant: '某某建设集团有限公司', beneficiary: '城南水务集团有限公司', period: '2026-08-01 ~ 2027-07-31', status: 'review', shared: false },
+    { id: 'd2',  title: '高新区产业园二期施工', no: 'BH20260726002', type: '履约保函', amt: '8,200,000', fee: '18,600', company: '中建某局有限公司', applicant: '中建某局有限公司', beneficiary: '高新区管委会', period: '2026-07-20 ~ 2027-07-19', status: 'sign', shared: true },
+    { id: 'd3',  title: '市政道路大修项目A标', no: 'BH20260725003', type: '履约保函', amt: '3,500,000', fee: '9,200', company: '路桥工程有限公司', applicant: '路桥工程有限公司', beneficiary: '市政工程管理局', period: '2026-07-15 ~ 2027-01-14', status: 'pay', shared: true },
+    { id: 'd4',  title: '智慧停车系统采购', no: 'BH20260724004', type: '履约保函', amt: '1,200,000', fee: '3,600', company: '科创信息有限公司', applicant: '科创信息有限公司', beneficiary: '城投停车公司', period: '2026-07-10 ~ 2027-07-09', status: 'materials', shared: false },
+    { id: 'd5',  title: '滨江污水处理厂扩建', no: 'BH20260723005', type: '履约保函', amt: '4,600,000', fee: '11,200', company: '华润建设有限公司', applicant: '华润建设有限公司', beneficiary: '滨江水务集团', period: '2026-07-01 ~ 2027-06-30', status: 'issue', shared: true },
+    { id: 'd6',  title: '学校改扩建工程', no: 'BH20260720006', type: '履约保函', amt: '6,800,000', fee: '15,400', company: '华建集团有限公司', applicant: '华建集团有限公司', beneficiary: '市教育局', period: '2026-06-01 ~ 2027-05-31', status: 'success', shared: true },
+    { id: 'd7',  title: '老旧小区改造一期', no: 'BH20260718007', type: '履约保函', amt: '2,100,000', fee: '5,800', company: '城投建设有限公司', applicant: '城投建设有限公司', beneficiary: '住建局', period: '2026-05-20 ~ 2027-05-19', status: 'closed', shared: false },
+    { id: 'd8',  title: '智慧园区弱电工程', no: 'BH20260715008', type: '履约保函', amt: '980,000', fee: '2,900', company: '联通工程有限公司', applicant: '联通工程有限公司', beneficiary: '产业园运营公司', period: '2026-05-01 ~ 2027-04-30', status: 'cs', shared: true },
+    { id: 'd9',  title: '地铁配套管廊工程', no: 'BH20260712009', type: '履约保函', amt: '12,000,000', fee: '28,000', company: '中铁某局有限公司', applicant: '中铁某局有限公司', beneficiary: '地铁集团', period: '2026-04-15 ~ 2027-04-14', status: 'refund_wait', shared: true },
+    { id: 'd10', title: '文体中心装修项目', no: 'BH20260708010', type: '履约保函', amt: '3,200,000', fee: '8,400', company: '装饰工程有限公司', applicant: '装饰工程有限公司', beneficiary: '文旅集团', period: '2026-03-01 ~ 2027-02-28', status: 'refund_doing', shared: false },
+    { id: 'd11', title: '园区道路硬化工程', no: 'BH20260701011', type: '履约保函', amt: '1,800,000', fee: '4,500', company: '路桥三公司', applicant: '路桥三公司', beneficiary: '园区管委会', period: '2026-02-01 ~ 2027-01-31', status: 'refund_done', shared: true },
+  ];
+
+  function formatAmtWan(amtStr) {
+    const n = parseInt(String(amtStr).replace(/,/g, ''), 10) || 0;
+    if (n >= 10000) {
+      const wan = n / 10000;
+      const s = Number.isInteger(wan) ? String(wan) : wan.toFixed(1).replace(/\.0$/, '');
+      return '¥' + s + '万';
+    }
+    return '¥' + n.toLocaleString('en-US');
+  }
+
+  const attachments = [
+    { id: 'a1', name: '中标通知书.pdf', size: '1.2 MB', type: 'pdf', date: '2026-07-18' },
+    { id: 'a2', name: '施工合同扫描件.pdf', size: '8.4 MB', type: 'pdf', date: '2026-07-20' },
+    { id: 'a3', name: '保函申请表.docx', size: '256 KB', type: 'doc', date: '2026-07-22' },
+    { id: 'a4', name: '营业执照及法人身份证.zip', size: '3.1 MB', type: 'zip', date: '2026-07-22' },
+    { id: 'a5', name: '项目现场照片.jpg', size: '5.7 MB', type: 'img', date: '2026-07-25' },
+  ];
+
+  const TYPE_ICON = { pdf: 'fa-file-pdf', doc: 'fa-file-word', img: 'fa-file-image', zip: 'fa-file-archive' };
+
+  function getDocStatusKey(d) {
+    return d.id === 'd1' ? flowStatus : d.status;
+  }
+  function getStatusMeta(key) {
+    return STATUS[key] || STATUS.review;
+  }
+  function applyStatusEl(el, key) {
+    const st = getStatusMeta(key);
+    el.className = 'tag ' + st.tag;
+    el.textContent = st.text;
+  }
+  function isTerminal(key) {
+    return ['success', 'closed', 'refund_done'].includes(key);
+  }
+  function isAbnormal(key) {
+    return ['materials', 'cs', 'refund_wait', 'refund_doing', 'closed'].includes(key);
+  }
+
+  /** 按订单状态渲染详情页底部按钮 */
+  function renderDetailActions(scope) {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const key = getDocStatusKey(d);
+    const isOpPreview = scope === 'client' && document.getElementById('role-op').classList.contains('active') && !fromNotify;
+    const footerId = scope === 'op' ? 'opDetailFooter' : 'orderFooter';
+    const footer = document.getElementById(footerId);
+    if (!footer) return;
+
+    if (isOpPreview) {
+      footer.innerHTML = `
+        <button class="btn btn-outline" style="flex:1" onclick="showScreen('op-detail')">返回运营详情</button>
+        <button class="btn btn-primary" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>`;
+      return;
+    }
+
+    const opMap = {
+      review: `
+        <button class="btn btn-outline" style="flex:1" onclick="openMaterialsMark()"><i class="fas fa-exclamation-triangle"></i> 材料不足</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="statusAction('approve')"><i class="fas fa-check"></i> 审核通过</button>`,
+      materials: `
+        <button class="btn btn-outline" style="flex:1" onclick="openUrgeMaterials()"><i class="fas fa-bell"></i> 催补材料</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="statusAction('approve')"><i class="fas fa-redo"></i> 重新审核</button>`,
+      sign: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>`,
+      pay: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>`,
+      issue: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="statusAction('success')"><i class="fas fa-file-signature"></i> 确认出函</button>`,
+      success: `
+        <button class="btn btn-outline" style="flex:1" onclick="downloadOne('policy',event)"><i class="fas fa-download"></i> 下载保函</button>`,
+      closed: `
+        <button class="btn btn-ghost btn-block" onclick="toast('订单已关闭，仅可查看')"><i class="fas fa-eye"></i> 仅可查看</button>`,
+      cs: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4;background:#722ED1" onclick="toast('已进入客服工单处理')"><i class="fas fa-headset"></i> 处理工单</button>`,
+      refund_wait: `
+        <button class="btn btn-outline" style="flex:1" onclick="statusAction('success')"><i class="fas fa-times"></i> 驳回退保</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="statusAction('refund_doing')"><i class="fas fa-check"></i> 受理退保</button>`,
+      refund_doing: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="statusAction('refund_done')"><i class="fas fa-check-circle"></i> 退保完成</button>`,
+      refund_done: `
+        <button class="btn btn-ghost btn-block" onclick="toast('退保已完成')"><i class="fas fa-check"></i> 退保已完成</button>`,
+    };
+
+    const clientMap = {
+      review: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="enterClientFlow()"><i class="fas fa-info-circle"></i> 查看告知</button>`,
+      materials: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="openSupplement()"><i class="fas fa-cloud-upload-alt"></i> 补充材料</button>`,
+      sign: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="showScreen('c-sign')"><i class="fas fa-pen-fancy"></i> 去签章</button>`,
+      pay: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="showScreen('c-pay')"><i class="fas fa-credit-card"></i> 去支付</button>`,
+      issue: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="showScreen('c-receipt')"><i class="fas fa-clock"></i> 查看出函进度</button>`,
+      success: `
+        <button class="btn btn-outline" style="flex:1" onclick="downloadOne('policy',event)"><i class="fas fa-download"></i> 下载保函</button>
+        <button class="btn btn-primary" style="flex:1.4" onclick="showScreen('c-voucher')"><i class="fas fa-file-invoice"></i> 查看凭证</button>`,
+      closed: `
+        <button class="btn btn-ghost btn-block" onclick="toast('订单已关闭')"><i class="fas fa-ban"></i> 订单已关闭</button>`,
+      cs: `
+        <button class="btn btn-outline" style="flex:1" onclick="openShare()"><i class="fas fa-share-alt"></i> 分享</button>
+        <button class="btn btn-primary" style="flex:1.4;background:#722ED1" onclick="toast('已为您接通在线客服')"><i class="fas fa-headset"></i> 联系客服</button>`,
+      refund_wait: `
+        <button class="btn btn-ghost btn-block" onclick="toast('退保申请已提交，等待机构受理')"><i class="fas fa-hourglass-half"></i> 等待退保受理</button>`,
+      refund_doing: `
+        <button class="btn btn-ghost btn-block" onclick="toast('退保受理中，请耐心等待')"><i class="fas fa-spinner"></i> 退保受理中</button>`,
+      refund_done: `
+        <button class="btn btn-primary btn-block" onclick="toast('退保已成功，款项将原路退回')"><i class="fas fa-check-circle"></i> 退保成功</button>`,
+    };
+
+    const html = (scope === 'op' ? opMap : clientMap)[key]
+      || `<button class="btn btn-primary btn-block" onclick="openShare()">分享订单</button>`;
+    footer.innerHTML = html;
+  }
+
+  function setCurrentStatus(key) {
+    const d = docs.find(x => x.id === currentDocId);
+    if (!d) return;
+    if (d.id === 'd1') flowStatus = key;
+    d.status = key;
+    applyStatusEl(document.getElementById('d-status'), key);
+    const oStatus = document.getElementById('o-status');
+    if (oStatus) applyStatusEl(oStatus, key);
+    renderTimeline('detailTimeline');
+    renderTimeline('orderTimeline');
+    renderDocList();
+    renderDetailActions(document.getElementById('op-detail').classList.contains('active') ? 'op' : 'client');
+  }
+
+  function statusAction(action) {
+    const map = {
+      approve: { status: 'sign', msg: '审核通过，进入等待签章' },
+      success: { status: 'success', msg: '已确认出函成功' },
+      refund_wait: { status: 'refund_wait', msg: '已发起退保申请' },
+      refund_doing: { status: 'refund_doing', msg: '退保已受理' },
+      refund_done: { status: 'refund_done', msg: '退保已完成' },
+    };
+    // 驳回退保回到出函成功
+    if (action === 'success' && getDocStatusKey(docs.find(x => x.id === currentDocId) || {}) === 'refund_wait') {
+      setCurrentStatus('success');
+      toast('已驳回退保申请');
+      return;
+    }
+    if (action === 'materials') {
+      openMaterialsMark();
+      return;
+    }
+    const conf = map[action];
+    if (!conf) { toast('操作完成'); return; }
+    setCurrentStatus(conf.status);
+    toast(conf.msg);
+  }
+
+  /* —— 材料不足 / 催补 / 补件 —— */
+  const MAT_CATALOG = [
+    { id: 'm1', name: '营业执照', desc: '需清晰完整，含统一社会信用代码' },
+    { id: 'm2', name: '法人身份证', desc: '正反面彩色扫描件' },
+    { id: 'm3', name: '施工合同', desc: '含签章页的完整合同扫描件' },
+    { id: 'm4', name: '中标通知书', desc: '招标人盖章的中标通知书' },
+    { id: 'm5', name: '保函申请表', desc: '按机构格式填写并盖章' },
+  ];
+  let selectedMissing = new Set(['m1', 'm3']);
+  let uploadedSup = new Set();
+  let urgeChannel = 'wx';
+  const materialsState = {
+    d1: { missing: ['m1', 'm3'], reason: '营业执照扫描件不清晰；施工合同缺少签章页。' },
+    d4: { missing: ['m1', 'm2', 'm3'], reason: '营业执照模糊，法人身份证未上传，施工合同缺盖章页。' },
+  };
+
+  function getMaterialsState(id) {
+    if (!materialsState[id]) {
+      materialsState[id] = { missing: ['m1', 'm3'], reason: '请补充缺失材料后重新提交审核。' };
+    }
+    return materialsState[id];
+  }
+
+  function openMaterialsMark() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const st = getMaterialsState(d.id);
+    selectedMissing = new Set(st.missing);
+    document.getElementById('matOrderTitle').textContent = d.company;
+    document.getElementById('matReason').value = st.reason || '';
+    renderMatCheckList();
+    showScreen('op-materials');
+  }
+
+  function renderMatCheckList() {
+    const list = document.getElementById('matCheckList');
+    list.innerHTML = MAT_CATALOG.map(m => `
+      <div class="mat-check-item ${selectedMissing.has(m.id) ? 'selected' : ''}" onclick="toggleMissing('${m.id}')">
+        <div class="mc-box"><i class="fas fa-check"></i></div>
+        <div>
+          <h4>${m.name}</h4>
+          <p>${m.desc}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleMissing(id) {
+    if (selectedMissing.has(id)) selectedMissing.delete(id);
+    else selectedMissing.add(id);
+    renderMatCheckList();
+  }
+
+  function confirmMaterialsMark() {
+    if (!selectedMissing.size) {
+      toast('请至少勾选一项缺失材料');
+      return;
+    }
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const reason = document.getElementById('matReason').value.trim() || '请补充缺失材料后重新提交审核。';
+    materialsState[d.id] = { missing: [...selectedMissing], reason };
+    setCurrentStatus('materials');
+    toast('已标记材料不足');
+    setTimeout(() => {
+      // 询问是否立即催补
+      showScreen('op-urge');
+      renderUrgePreview();
+    }, 450);
+  }
+
+  function openUrgeMaterials() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    getMaterialsState(d.id);
+    urgeChannel = 'wx';
+    document.querySelectorAll('#op-urge .pay-method').forEach((el, i) => {
+      el.classList.toggle('selected', i === 0);
+    });
+    renderUrgePreview();
+    showScreen('op-urge');
+  }
+
+  function renderUrgePreview() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const st = getMaterialsState(d.id);
+    const names = MAT_CATALOG.filter(m => st.missing.includes(m.id)).map(m => m.name);
+    document.getElementById('urgeMsgBody').innerHTML = `
+      <div>订单 <strong>${d.no}</strong> · ${d.company}</div>
+      <div style="margin-top:6px">贵司申请的<strong>${d.type}</strong>材料审核未通过，请尽快补传以下材料：</div>
+      <ul>${names.map(n => `<li>${n}</li>`).join('')}</ul>
+      <div style="font-size:12px;color:var(--text-secondary)">审核意见：${st.reason}</div>
+      <div style="margin-top:8px;font-size:12px;color:var(--primary-mid)">点击卡片即可免登录上传补件 →</div>
+    `;
+  }
+
+  function selectUrgeChannel(el, ch) {
+    document.querySelectorAll('#op-urge .pay-method').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+    urgeChannel = ch;
+  }
+
+  function confirmUrgeMaterials() {
+    const d = docs.find(x => x.id === currentDocId);
+    if (d) d.shared = true;
+    toast(urgeChannel === 'sms' ? '催补短信已发送' : '催补提醒已发送到微信');
+    setTimeout(() => {
+      document.getElementById('role-op').classList.remove('active');
+      document.getElementById('role-client').classList.add('active');
+      fromNotify = false;
+      showScreen('c-entry');
+      // 更新群卡片文案感
+      renderDocList();
+    }, 700);
+  }
+
+  function openSupplement() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const st = getMaterialsState(d.id);
+    uploadedSup = new Set();
+    document.getElementById('supReason').textContent = st.reason;
+    document.getElementById('supAlertText').textContent =
+      `共需补充 ${st.missing.length} 项材料，请逐项上传清晰完整文件后提交复审。`;
+    renderSupList();
+    document.getElementById('btnSupSubmit').disabled = true;
+    showScreen('c-supplement');
+  }
+
+  function renderSupList() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const st = getMaterialsState(d.id);
+    const list = document.getElementById('supList');
+    list.innerHTML = st.missing.map(id => {
+      const m = MAT_CATALOG.find(x => x.id === id);
+      const done = uploadedSup.has(id);
+      return `
+        <div class="mat-sup-item">
+          <div class="msi-top">
+            <h4>${m.name}</h4>
+            <span class="req">${done ? '已上传' : '必传'}</span>
+          </div>
+          <div class="msi-desc">${m.desc}</div>
+          <div class="mat-upload-btn ${done ? 'done' : ''}" onclick="uploadSupItem('${id}')">
+            <i class="fas ${done ? 'fa-check-circle' : 'fa-cloud-upload-alt'}"></i>
+            ${done ? `${m.name}_补件.pdf` : '点击上传文件'}
+          </div>
+        </div>`;
+    }).join('');
+    const allDone = st.missing.every(id => uploadedSup.has(id));
+    document.getElementById('btnSupSubmit').disabled = !allDone;
+  }
+
+  function uploadSupItem(id) {
+    uploadedSup.add(id);
+    renderSupList();
+    toast('文件已上传');
+  }
+
+  function confirmSupplement() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    setCurrentStatus('review');
+    toast('补件已提交，等待复审');
+    setTimeout(() => {
+      if (document.getElementById('role-op').classList.contains('active')) {
+        showScreen('op-detail');
+      } else {
+        showScreen('c-order');
+      }
+    }, 500);
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    updateStageHint(id);
+    updateGuide(id);
+    if (id === 'op-detail') {
+      renderTimeline('detailTimeline');
+      renderAttachList('op');
+      renderDetailActions('op');
+    }
+    if (id === 'c-order') {
+      syncOrderDetail();
+      renderAttachList('client');
+      renderTimeline('orderTimeline');
+      renderDetailActions('client');
+    }
+    if (id === 'op-materials') renderMatCheckList();
+    if (id === 'op-urge') renderUrgePreview();
+    if (id === 'c-supplement') { /* list rendered by openSupplement */ }
+    if (id === 'c-done') renderTimeline('doneTimeline');
+    if (id === 'c-voucher') {
+      const seal = document.getElementById('eSeal');
+      seal.style.animation = 'none';
+      void seal.offsetWidth;
+      seal.style.animation = 'stamp 0.55s ease forwards';
+    }
+  }
+
+  function backFromOrder() {
+    if (fromNotify) {
+      fromNotify = false;
+      showScreen('c-notify');
+      return;
+    }
+    if (document.getElementById('role-op').classList.contains('active')) {
+      showScreen(orderBackScreen || 'op-detail');
+    } else {
+      showScreen('c-entry');
+    }
+  }
+
+  function syncOrderDetail() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const key = getDocStatusKey(d);
+    document.getElementById('o-title').textContent = d.title;
+    document.getElementById('o-no').textContent = d.no;
+    document.getElementById('o-amt').textContent = d.amt + '.00';
+    document.getElementById('o-fee').textContent = d.fee + '.00';
+    const contractEl = document.getElementById('o-contract');
+    if (contractEl) contractEl.textContent = (parseInt(d.amt.replace(/,/g,''), 10) * 10).toLocaleString('en-US') + '.00';
+    applyStatusEl(document.getElementById('o-status'), key);
+  }
+
+  function getSelectedSet(scope) {
+    return scope === 'client' ? selectedAttachClient : selectedAttach;
+  }
+
+  function renderAttachList(scope) {
+    const listId = scope === 'client' ? 'attachListClient' : 'attachList';
+    const list = document.getElementById(listId);
+    if (!list) return;
+    const selected = getSelectedSet(scope);
+    list.innerHTML = attachments.map(f => `
+      <div class="attach-item ${selected.has(f.id) ? 'selected' : ''}" data-id="${f.id}">
+        <div class="attach-check" onclick="toggleAttach('${f.id}','${scope}',event)"><i class="fas fa-check"></i></div>
+        <div class="attach-ico ${f.type}"><i class="fas ${TYPE_ICON[f.type]}"></i></div>
+        <div class="attach-meta" onclick="toggleAttach('${f.id}','${scope}')">
+          <h4>${f.name}</h4>
+          <p>${f.size} · 上传于 ${f.date}</p>
+        </div>
+        <button class="attach-dl" title="下载" onclick="downloadOne('${f.id}',event)"><i class="fas fa-download"></i></button>
+      </div>
+    `).join('');
+    updateBatchBar(scope);
+  }
+
+  function toggleAttach(id, scope, e) {
+    if (e) e.stopPropagation();
+    const selected = getSelectedSet(scope);
+    if (selected.has(id)) selected.delete(id);
+    else selected.add(id);
+    renderAttachList(scope);
+  }
+
+  function toggleSelectAll(scope = 'op') {
+    const selected = getSelectedSet(scope);
+    if (selected.size === attachments.length) selected.clear();
+    else attachments.forEach(a => selected.add(a.id));
+    renderAttachList(scope);
+  }
+
+  function updateBatchBar(scope) {
+    const selected = getSelectedSet(scope);
+    const bar = document.getElementById(scope === 'client' ? 'attachBatchBarClient' : 'attachBatchBar');
+    const label = document.getElementById(scope === 'client' ? 'attachSelectedLabelClient' : 'attachSelectedLabel');
+    if (!bar || !label) return;
+    if (selected.size > 0) {
+      bar.classList.add('show');
+      label.textContent = `已选 ${selected.size} 项`;
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  function downloadOne(id, e) {
+    if (e) e.stopPropagation();
+    if (id === 'policy') {
+      showDlOverlay('正在下载', '履约保函保单.pdf');
+      setTimeout(() => {
+        hideDlOverlay();
+        toast('已下载：履约保函保单.pdf');
+      }, 900);
+      return;
+    }
+    const f = attachments.find(a => a.id === id);
+    if (!f) return;
+    showDlOverlay('正在下载', f.name);
+    setTimeout(() => {
+      hideDlOverlay();
+      toast(`已下载：${f.name}`);
+    }, 900);
+  }
+
+  function batchDownload(all = false, scope = 'op') {
+    const selected = getSelectedSet(scope);
+    const files = all ? attachments : attachments.filter(a => selected.has(a.id));
+    if (!files.length) {
+      toast('请先勾选要打包的文件');
+      return;
+    }
+    const progress = document.getElementById(scope === 'client' ? 'packProgressClient' : 'packProgress');
+    const fill = document.getElementById(scope === 'client' ? 'packBarFillClient' : 'packBarFill');
+    const text = document.getElementById(scope === 'client' ? 'packTextClient' : 'packText');
+    progress.classList.add('show');
+    fill.style.width = '0%';
+    text.textContent = `正在打包 ${files.length} 个文件…`;
+    let p = 0;
+    const timer = setInterval(() => {
+      p += 22;
+      fill.style.width = Math.min(p, 100) + '%';
+      if (p >= 100) {
+        clearInterval(timer);
+        text.textContent = '打包完成';
+        const zipName = `项目材料_${(docs.find(d=>d.id===currentDocId)||docs[0]).no}.zip`;
+        setTimeout(() => {
+          progress.classList.remove('show');
+          fill.style.width = '0%';
+          showDlOverlay('打包下载完成', zipName);
+          setTimeout(() => {
+            hideDlOverlay();
+            toast(`已下载 ZIP（${files.length} 个文件）`);
+            if (!all) {
+              selected.clear();
+              renderAttachList(scope);
+            }
+          }, 800);
+        }, 350);
+      }
+    }, 180);
+  }
+
+  function showDlOverlay(title, name) {
+    document.getElementById('dlTitle').textContent = title;
+    document.getElementById('dlName').textContent = name;
+    document.getElementById('dlOverlay').classList.add('show');
+  }
+  function hideDlOverlay() {
+    document.getElementById('dlOverlay').classList.remove('show');
+  }
+
+  function switchRole(role) {
+    document.getElementById('role-op').classList.toggle('active', role === 'op');
+    document.getElementById('role-client').classList.toggle('active', role === 'client');
+    fromNotify = false;
+    if (role === 'op') {
+      showScreen('op-list');
+      renderDocList();
+    } else {
+      showScreen('c-entry');
+      const main = docs.find(d => d.id === currentDocId);
+      if (!(main && main.shared)) toast('可先以运营身份分享单据');
+    }
+  }
+
+  function filterDocs(f, el) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderDocList();
+  }
+
+  function renderDocList() {
+    const list = document.getElementById('docList');
+    const empty = document.getElementById('emptyFilter');
+    const main = docs.find(d => d.id === 'd1');
+    if (main) main.status = flowStatus;
+
+    const filtered = docs.filter(d => {
+      const key = getDocStatusKey(d);
+      if (currentFilter === 'all') return true;
+      return key === currentFilter;
+    });
+
+    empty.style.display = filtered.length ? 'none' : 'block';
+    list.innerHTML = filtered.map(d => {
+      const key = getDocStatusKey(d);
+      const st = getStatusMeta(key);
+      return `
+        <div class="order-card" data-status="${key}" data-biz="biaohou" data-page="biaohouDetail" data-bh-id="${d.no}" data-push-stack="1" onclick="openDoc('${d.id}')">
+          <div class="order-card-accent"></div>
+          <div class="order-card-main">
+            <div class="order-card-top">
+              <div class="order-card-title-wrap"><span class="order-card-title">${d.type}</span></div>
+              <span class="tag ${st.tag}">${st.text}</span>
+            </div>
+            <div class="order-card-primary">${d.company}</div>
+            <div class="order-card-meta">申请人（${d.applicant}）<span class="dot">·</span>受益人（${d.beneficiary}）</div>
+            <div class="order-card-bottom">
+              <div class="order-card-amt">${formatAmtWan(d.amt)}<em>担保额</em></div>
+              <div class="order-card-side"><span class="order-id-hint">保期 ${d.period}</span></div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const pending = docs.filter(d => !isTerminal(getDocStatusKey(d)) && !isAbnormal(getDocStatusKey(d))).length;
+    const abnormal = docs.filter(d => isAbnormal(getDocStatusKey(d))).length;
+    const doneCount = docs.filter(d => getDocStatusKey(d) === 'success').length;
+    // stats elements optional (列表页已去掉底部 Tab / 统计条)
+    const elPending = document.getElementById('stat-pending');
+    const elAbnormal = document.getElementById('stat-shared');
+    const elDone = document.getElementById('stat-done');
+    const elBadge = document.getElementById('tabBadge');
+    if (elPending) elPending.textContent = pending;
+    if (elAbnormal) elAbnormal.textContent = abnormal;
+    if (elDone) elDone.textContent = doneCount;
+    if (elBadge) elBadge.textContent = docs.filter(d => !isTerminal(getDocStatusKey(d))).length;
+  }
+
+  function openDoc(id) {
+    currentDocId = id;
+    fromNotify = false;
+    orderBackScreen = 'op-detail';
+    const d = docs.find(x => x.id === id);
+    const key = getDocStatusKey(d);
+    document.getElementById('d-title').textContent = d.title;
+    document.getElementById('d-no').textContent = d.no;
+    document.getElementById('d-amt').textContent = d.amt + '.00';
+    document.getElementById('d-fee').textContent = d.fee + '.00';
+    const contractEl = document.getElementById('d-contract');
+    if (contractEl) contractEl.textContent = (parseInt(d.amt.replace(/,/g,''), 10) * 10).toLocaleString('en-US') + '.00';
+    applyStatusEl(document.getElementById('d-status'), key);
+    selectedAttach.clear();
+    showScreen('op-detail');
+  }
+
+  function renderTimeline(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    const key = getDocStatusKey(d);
+    const items = [
+      { key: 'review', title: '等待审核', desc: '运营审核订单与项目材料' },
+      { key: 'sign', title: '等待签章', desc: '相关方确认并完成电子签章' },
+      { key: 'pay', title: '等待支付', desc: '在线支付或对公转账上传凭证' },
+      { key: 'issue', title: '等待出函', desc: '缴费完成，机构出具保函' },
+      { key: 'success', title: '出函成功', desc: '保函已开立，凭证可查' },
+    ];
+
+    // 异常/退保类：单独展示当前状态节点
+    if (!FLOW_ORDER.includes(key) || ['materials','cs','closed','refund_wait','refund_doing','refund_done'].includes(key)) {
+      const st = getStatusMeta(key);
+      el.innerHTML = `<div class="tl-item current">
+        <div class="tl-dot"><i class="fas fa-exclamation"></i></div>
+        <div class="tl-body"><h4>${st.text}</h4><p>当前订单处于该状态，可在列表中筛选查看同类单据</p></div>
+      </div>` + items.map((it, i) => {
+        return `<div class="tl-item">
+          <div class="tl-dot">${i + 1}</div>
+          <div class="tl-body"><h4>${it.title}</h4><p>${it.desc}</p></div>
+        </div>`;
+      }).join('');
+      return;
+    }
+
+    const idx = FLOW_ORDER.indexOf(key);
+    el.innerHTML = items.map((it, i) => {
+      let cls = '';
+      if (i < idx) cls = 'done';
+      else if (i === idx) cls = 'current';
+      if (key === 'success' && i === items.length - 1) cls = 'done';
+      const icon = (i < idx || (key === 'success' && i === items.length - 1))
+        ? '<i class="fas fa-check"></i>' : (i + 1);
+      return `<div class="tl-item ${cls}">
+        <div class="tl-dot">${icon}</div>
+        <div class="tl-body"><h4>${it.title}</h4><p>${it.desc}</p></div>
+      </div>`;
+    }).join('');
+  }
+
+  function openShare() {
+    syncShareContent();
+    shareShowPanel('channels');
+    document.getElementById('shareOverlay').classList.add('show');
+  }
+  function closeShare(e) {
+    if (e.target === document.getElementById('shareOverlay')) {
+      document.getElementById('shareOverlay').classList.remove('show');
+      shareShowPanel('channels');
+    }
+  }
+  function shareShowPanel(name) {
+    document.querySelectorAll('.share-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('share-' + name);
+    if (panel) panel.classList.add('active');
+    const back = document.getElementById('shareBack');
+    const title = document.getElementById('shareTitle');
+    const sub = document.getElementById('shareSub');
+    if (name === 'channels') {
+      back.classList.remove('show');
+      title.textContent = '分享订单';
+      sub.textContent = '生成图片、发微信或发朋友圈';
+    } else if (name === 'image') {
+      back.classList.add('show');
+      title.textContent = '图片分享';
+      sub.textContent = '生成办理海报，可保存或转发';
+    } else if (name === 'wechat') {
+      back.classList.add('show');
+      title.textContent = '分享到微信';
+      sub.textContent = '选择好友或群聊，对方免登录办理';
+    } else if (name === 'moment') {
+      back.classList.add('show');
+      title.textContent = '分享到朋友圈';
+      sub.textContent = '发布后可通过卡片进入订单';
+    }
+  }
+  function syncShareContent() {
+    const d = docs.find(x => x.id === currentDocId) || docs[0];
+    document.getElementById('posterTitle').textContent = d.title;
+    document.getElementById('posterNo').textContent = d.no;
+    document.getElementById('posterAmt').textContent = d.amt + '.00 元';
+    document.getElementById('posterFee').textContent = d.fee + '.00 元';
+    document.getElementById('momentCardTitle').textContent = '履约办理单 · ' + d.no;
+    document.getElementById('momentText').textContent =
+      `【履约保函办理提醒】${d.title}单据已生成，相关方可点击卡片免登录完成告知、签单与缴费。`;
+  }
+  function selectGroup(el) {
+    document.querySelectorAll('.group-item').forEach(g => g.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function saveShareImage() {
+    showDlOverlay('正在生成图片', '订单分享海报.png');
+    setTimeout(() => {
+      hideDlOverlay();
+      document.getElementById('shareOverlay').classList.remove('show');
+      markShared();
+      toast('海报已保存到相册');
+    }, 900);
+  }
+  function shareImageToWechat() {
+    document.getElementById('shareOverlay').classList.remove('show');
+    markShared();
+    toast('图片已发送到微信');
+    setTimeout(() => {
+      document.getElementById('role-op').classList.remove('active');
+      document.getElementById('role-client').classList.add('active');
+      fromNotify = false;
+      showScreen('c-entry');
+      renderDocList();
+    }, 700);
+  }
+  function markShared() {
+    const d = docs.find(x => x.id === currentDocId);
+    if (d) d.shared = true;
+    renderDocList();
+  }
+  function confirmShare(channel) {
+    document.getElementById('shareOverlay').classList.remove('show');
+    shareShowPanel('channels');
+    markShared();
+    if (channel === 'moment') {
+      toast('已发布到朋友圈');
+      return;
+    }
+    toast('已分享到微信');
+    setTimeout(() => {
+      document.getElementById('role-op').classList.remove('active');
+      document.getElementById('role-client').classList.add('active');
+      fromNotify = false;
+      showScreen('c-entry');
+      renderDocList();
+    }, 700);
+  }
+
+  function enterClientFlow() {
+    fromNotify = false;
+    const key = getDocStatusKey(docs.find(d => d.id === currentDocId) || docs[0]);
+    if (key === 'materials') openSupplement();
+    else if (key === 'review') showScreen('c-notify');
+    else if (key === 'sign') showScreen('c-sign');
+    else if (key === 'pay') showScreen('c-pay');
+    else showScreen('c-voucher');
+  }
+
+  function toggleNotifyBtn() {
+    document.getElementById('btnNotify').disabled = !document.getElementById('agreeNotify').checked;
+  }
+  function confirmNotify() {
+    flowStatus = 'sign';
+    docs.find(d => d.id === 'd1').status = flowStatus;
+    toast('审核确认完成，进入等待签章');
+    setTimeout(() => showScreen('c-sign'), 400);
+  }
+
+  function doSign() {
+    const pad = document.getElementById('signPad');
+    pad.classList.add('signed');
+    signed = true;
+    document.getElementById('btnSign').disabled = false;
+  }
+  function clearSign() {
+    document.getElementById('signPad').classList.remove('signed');
+    signed = false;
+    document.getElementById('btnSign').disabled = true;
+  }
+  function confirmSign() {
+    if (!signed) return;
+    flowStatus = 'pay';
+    docs.find(d => d.id === 'd1').status = flowStatus;
+    toast('签章成功，进入等待支付');
+    setTimeout(() => showScreen('c-pay'), 400);
+  }
+
+  function selectPay(el) {
+    document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+    payMethod = el.querySelector('.pm-ico').classList.contains('wx') ? 'wx' : 'bank';
+  }
+
+  function doPay() {
+    if (payMethod === 'bank') {
+      showScreen('c-upload');
+      return;
+    }
+    completePayment('微信支付');
+  }
+
+  function doUpload() {
+    const zone = document.getElementById('uploadZone');
+    zone.classList.add('done');
+    uploaded = true;
+    document.getElementById('btnUpload').disabled = false;
+  }
+  function confirmUpload() {
+    if (!uploaded) return;
+    completePayment('对公转账');
+  }
+
+  function completePayment(method) {
+    flowStatus = 'issue';
+    docs.find(d => d.id === 'd1').status = flowStatus;
+    document.getElementById('receiptPayMethod').textContent = method;
+    const now = new Date();
+    const t = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    document.getElementById('receiptTime').textContent = t;
+    toast('支付成功，进入等待出函…');
+    setTimeout(() => showScreen('c-receipt'), 600);
+  }
+
+  function shareVoucher() {
+    toast('缴费凭证已转发至群聊');
+  }
+
+  function finishFlow() {
+    flowStatus = 'success';
+    docs.find(d => d.id === 'd1').status = flowStatus;
+    showScreen('c-done');
+    renderDocList();
+  }
+
+  function resetAndBackOp() {
+    document.getElementById('role-client').classList.remove('active');
+    document.getElementById('role-op').classList.add('active');
+    currentFilter = 'success';
+    document.querySelectorAll('.filter-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.filter === 'success');
+    });
+    renderDocList();
+    showScreen('op-list');
+    toast('单据状态：出函成功');
+  }
+
+  function updateStageHint(screenId) {
+    const map = {
+      'op-list': 'list',
+      'op-detail': 'detail',
+      'c-order': 'attach',
+      'c-entry': 'share',
+      'c-notify': 'notify',
+      'c-sign': 'sign',
+      'c-pay': 'pay',
+      'c-upload': 'pay',
+      'c-receipt': 'voucher',
+      'c-voucher': 'voucher',
+      'c-done': 'voucher',
+    };
+    const order = ['list','detail','attach','share','notify','sign','pay','voucher'];
+    const cur = map[screenId] || 'list';
+    const idx = order.indexOf(cur);
+    document.querySelectorAll('.stage-chip').forEach(chip => {
+      const i = order.indexOf(chip.dataset.stage);
+      chip.classList.remove('current', 'done');
+      if (i < idx) chip.classList.add('done');
+      else if (i === idx) chip.classList.add('current');
+    });
+  }
+
+  function updateGuide(screenId) {
+    let g = 1;
+    if (screenId === 'op-detail') g = 2;
+    if (screenId === 'c-order') g = 2;
+    if (['c-entry'].includes(screenId)) g = 3;
+    if (['c-notify','c-sign','c-pay','c-upload'].includes(screenId)) g = 4;
+    if (['c-receipt','c-voucher','c-done'].includes(screenId)) g = 5;
+    document.querySelectorAll('.guide-step').forEach(s => {
+      const n = +s.dataset.guide;
+      s.classList.remove('active', 'done');
+      if (n < g) s.classList.add('done');
+      else if (n === g) s.classList.add('active');
+    });
+  }
+
+  function jumpStage(stage) {
+    const setRole = (role) => {
+      document.getElementById('role-op').classList.toggle('active', role === 'op');
+      document.getElementById('role-client').classList.toggle('active', role === 'client');
+    };
+    fromNotify = false;
+    if (stage === 'list') {
+      setRole('op'); showScreen('op-list'); renderDocList(); return;
+    }
+    if (stage === 'detail') {
+      setRole('op'); openDoc(currentDocId || 'd1'); return;
+    }
+    if (stage === 'attach') {
+      setRole('op');
+      currentDocId = currentDocId || 'd1';
+      showScreen('c-order');
+      return;
+    }
+    if (stage === 'share') { setRole('client'); showScreen('c-entry'); return; }
+    if (stage === 'notify') { setRole('client'); showScreen('c-notify'); return; }
+    if (stage === 'sign') { setRole('client'); showScreen('c-sign'); return; }
+    if (stage === 'pay') { setRole('client'); showScreen('c-pay'); return; }
+    if (stage === 'voucher') {
+      setRole('client');
+      showScreen(flowStatus === 'success' || flowStatus === 'issue' ? 'c-voucher' : 'c-receipt');
+    }
+  }
+
+  // init
+  renderDocList();
+  updateStageHint('op-list');
+</script>
+</body>
+</html>
