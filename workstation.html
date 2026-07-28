@@ -1664,8 +1664,6 @@ const body=`
 </div></div>
 <div class="sp-card-title" style="font-size:12px;margin:4px 0 8px">证据节点核对</div>
 ${renderNodes(orderedNodes)}
-<div class="ev-diag-box ${uiCls}"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>${r.diag}</p>
-</div>
 `;
 return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>证据链诊断`,body,{
 extraClass:`ev-chain-card ui-${uiCls}`,prd:'evidence-chain',
