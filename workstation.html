@@ -225,32 +225,61 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .src-doc-line.hit .src-lt b{color:#92400E;font-weight:800}
 .src-doc-line.blank .src-lt{min-height:1em}
 .src-hit-tip{font-size:11px;color:#B45309;background:#FFF7E6;border-radius:12px;padding:10px 12px;margin:10px 0 0;line-height:1.55;text-align:left}
-/* 证据链诊断 */
+/* 证据链诊断 · 达标(≥60) / 不达标(<60) 两套交互呈现 */
 .ev-chain-card{border:1px solid #D4EDE8;background:linear-gradient(165deg,#F7FBFC 0%,#fff 42%)}
+.ev-chain-card.ui-reach{border-color:#A7F3D0}
+.ev-chain-card.ui-unreach{border-color:#FECACA}
 .ev-chain-type{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#E0F2FE;color:#0369A1}
 .ev-chain-type.loan{background:#FEF3C7;color:#B45309}
 .ev-chain-type.contract{background:#D1FAE5;color:#047857}
 .ev-chain-hint{font-size:11px;color:#6F8FAA;line-height:1.5;margin:-2px 0 12px}
+.ev-ui-banner{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:12px;margin-bottom:12px;line-height:1.55}
+.ev-ui-banner i{margin-top:2px;flex-shrink:0}
+.ev-ui-banner.reach{background:#ECFDF5;border:1px solid #A7F3D0;color:#047857}
+.ev-ui-banner.unreach{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.ev-ui-banner .ev-ui-title{font-size:13px;font-weight:800;letter-spacing:.2px}
+.ev-ui-banner.reach .ev-ui-title{font-size:13px;font-weight:700;color:#047857}
+.ev-ui-banner.unreach .ev-ui-title{font-size:14px;font-weight:800;color:#B91C1C}
+.ev-ui-banner .ev-ui-desc{font-size:11px;font-weight:500;margin-top:2px;opacity:.92}
+.ev-ui-banner.unreach .ev-ui-desc{font-size:12px;font-weight:600}
 .ev-score-row{display:flex;align-items:center;gap:14px;padding:12px;background:#fff;border:1px solid #E8F0F8;border-radius:16px;margin-bottom:12px}
+.ev-score-row.reach{background:#F0FDF4;border-color:#A7F3D0}
+.ev-score-row.unreach{background:#FEF2F2;border-color:#FECACA}
 .ev-score-ring{width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:3px solid #CBD5E1;background:#F8FAFC}
+.ev-score-ring.reach{border-color:#34D399;background:#ECFDF5}
+.ev-score-ring.unreach{border-color:#F87171;background:#FEF2F2;border-width:4px}
 .ev-score-ring.pass{border-color:#34D399;background:#ECFDF5}
 .ev-score-ring.warn{border-color:#FBBF24;background:#FFFBEB}
 .ev-score-ring.fail{border-color:#F87171;background:#FEF2F2}
 .ev-score-ring strong{font-size:20px;font-weight:800;line-height:1;color:#0F4C5C}
+.ev-score-ring.reach strong{font-size:22px;font-weight:700;color:#047857}
+.ev-score-ring.unreach strong{font-size:24px;font-weight:900;color:#B91C1C}
 .ev-score-ring span{font-size:9px;color:#64748B;font-weight:600;margin-top:2px}
+.ev-score-ring.unreach span{font-size:10px;font-weight:700;color:#B91C1C}
 .ev-score-meta{flex:1;min-width:0}
 .ev-score-meta .ev-judge{font-size:13px;font-weight:800;color:#0F4C5C;margin-bottom:4px}
+.ev-score-meta .ev-judge.reach{font-size:14px;font-weight:700;color:#047857}
+.ev-score-meta .ev-judge.unreach{font-size:15px;font-weight:900;color:#B91C1C}
 .ev-score-meta .ev-judge.pass{color:#047857}.ev-score-meta .ev-judge.warn{color:#B45309}.ev-score-meta .ev-judge.fail{color:#B91C1C}
 .ev-score-bar{height:8px;background:#E2E8F0;border-radius:8px;overflow:hidden;margin:6px 0}
-.ev-score-bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#1A6B7C,#2A9B8E)}
+.ev-score-bar.unreach{height:10px}
+.ev-score-bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#1A6B7C,#2A9B8E);transition:width .35s ease}
+.ev-score-bar.reach i{background:linear-gradient(90deg,#059669,#34D399)}
+.ev-score-bar.unreach i{background:linear-gradient(90deg,#DC2626,#F87171)}
 .ev-score-bar.warn i{background:linear-gradient(90deg,#D97706,#FBBF24)}
 .ev-score-bar.fail i{background:linear-gradient(90deg,#DC2626,#F87171)}
 .ev-score-meta p{font-size:11px;color:#64748B;line-height:1.45;margin:0}
+.ev-score-meta .ev-tip.reach{font-size:11px;font-weight:500;color:#047857}
+.ev-score-meta .ev-tip.unreach{font-size:12px;font-weight:700;color:#991B1B}
 .ev-node{padding:10px 12px;border-radius:14px;background:#F8FAFE;border:1px solid #EDF2F9;margin-bottom:8px}
 .ev-node:last-child{margin-bottom:0}
 .ev-node.ok{border-color:#A7F3D0;background:#F0FDF4}
 .ev-node.miss{border-color:#FECACA;background:#FEF2F2}
 .ev-node.weak{border-color:#FDE68A;background:#FFFBEB}
+.ev-chain-card.ui-unreach .ev-node.ok{opacity:.7}
+.ev-chain-card.ui-unreach .ev-node.miss{box-shadow:0 0 0 1px rgba(220,38,38,.2)}
+.ev-chain-card.ui-unreach .ev-node.miss .ev-node-hd{font-size:13px;font-weight:800;color:#991B1B}
+.ev-chain-card.ui-reach .ev-node.ok .ev-node-hd{font-weight:700;color:#065F46}
 .ev-node-hd{display:flex;align-items:flex-start;gap:8px;font-size:12px;font-weight:700;color:#1C2E36;line-height:1.4}
 .ev-node-hd .ev-st{flex-shrink:0;width:18px;height:18px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff;margin-top:1px}
 .ev-node.ok .ev-st{background:#059669}.ev-node.miss .ev-st{background:#DC2626}.ev-node.weak .ev-st{background:#D97706}
@@ -259,9 +288,26 @@ body.prd-mode{background:#0F172A;display:flex;justify-content:center;align-items
 .ev-node.miss .ev-req{background:#FEE2E2;color:#B91C1C}
 .ev-node.weak .ev-req{background:#FEF3C7;color:#B45309}
 .ev-node p{font-size:11px;color:#64748B;line-height:1.5;margin:6px 0 0 26px}
+.ev-chain-card.ui-unreach .ev-node.miss p{font-size:12px;font-weight:600;color:#7F1D1D}
 .ev-diag-box{margin-top:12px;padding:12px;border-radius:14px;background:#EFF8FC;border:1px dashed #B8D4E8}
+.ev-diag-box.reach{background:#ECFDF5;border:1px solid #A7F3D0}
+.ev-diag-box.unreach{background:#FEF2F2;border:1px solid #FECACA}
 .ev-diag-box strong{display:block;font-size:12px;color:#0F4C5C;margin-bottom:6px}
+.ev-diag-box.reach strong{font-size:12px;font-weight:700;color:#047857}
+.ev-diag-box.unreach strong{font-size:13px;font-weight:800;color:#B91C1C}
 .ev-diag-box p{font-size:11px;color:#475569;line-height:1.65;margin:0}
+.ev-diag-box.unreach p{font-size:12px;font-weight:500;color:#7F1D1D;line-height:1.7}
+.ev-calc-steps{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(15,76,92,.15)}
+.ev-calc-steps .ev-calc-hd{font-size:11px;font-weight:800;color:#0F4C5C;margin-bottom:8px}
+.ev-diag-box.unreach .ev-calc-hd{color:#991B1B;font-size:12px}
+.ev-calc-step{display:flex;gap:8px;margin-bottom:8px;font-size:11px;line-height:1.55;color:#334155}
+.ev-calc-step:last-child{margin-bottom:0}
+.ev-calc-step .n{flex-shrink:0;width:18px;height:18px;border-radius:9px;background:#1A6B7C;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.ev-diag-box.reach .ev-calc-step .n{background:#059669}
+.ev-diag-box.unreach .ev-calc-step .n{background:#DC2626}
+.ev-calc-step .body{flex:1;min-width:0}
+.ev-calc-step .body em{font-style:normal;font-weight:700;color:#0F4C5C}
+.ev-calc-formula{margin-top:6px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.75);font-family:ui-monospace,Consolas,monospace;font-size:10px;color:#0F4C5C;line-height:1.5}
 .ev-chain-actions{display:flex;gap:8px;margin-top:12px}
 .ev-chain-actions button{flex:1;margin:0}
 .biz-line-tabs{display:flex;gap:4px;margin-bottom:10px;padding:3px;background:#EEF2F6;border-radius:12px}
@@ -977,9 +1023,11 @@ propertyClue:'工商银行朝阳支行 6222021234567890',
 materials:[
 {name:'起诉状.pdf',originalName:'张三_民事起诉状_扫描件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
 {name:'保全申请书.pdf',originalName:'财产保全申请书_签字版.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'申请人身份证正面.jpg',originalName:'张三_身份证_人像面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
+{name:'申请人身份证反面.jpg',originalName:'张三_身份证_国徽面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
 {name:'买卖合同.pdf',originalName:'购销合同_2024版_双方盖章.pdf',category:'合同协议',icon:'fa-file-contract',color:'#0F766E'},
 {name:'送货验收单.pdf',originalName:'送货单及验收记录合订.pdf',category:'履约证明',icon:'fa-file-alt',color:'#2563EB'},
-{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'发票凭证',icon:'fa-file-invoice',color:'#B45309'},
+{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'其他材料',icon:'fa-file-invoice',color:'#B45309'},
 {name:'营业执照.jpg',originalName:'被申请人营业执照副本.jpg',category:'主体资格',icon:'fa-file-image',color:'#7C3AED'}
 ],
 /* 字段溯源：点击提取值 → 打开原文预览并高亮对应行 */
@@ -1186,7 +1234,7 @@ const matN=(o.materials||[]).length;
 const amt=o.targetAmount?('¥'+Number(o.targetAmount).toLocaleString()+'万'):(o.amount?formatAmtShort(o.amount):'—');
 const ev=analyzeEvidenceChain(o);
 const scorePct=ev.score+'%';
-const scoreTip=ev.judge+' · 完整度 '+ev.score+' 分（按申请材料命中证据节点计算）';
+const scoreTip=ev.judge+' · 完整度 '+ev.score+' 分 · '+(ev.score>=60?'达标':'不达标')+'（阈值60；原始 '+(ev.breakdown&&ev.breakdown.rawScore!=null?ev.breakdown.rawScore:'—')+'/75 → round÷75×100）';
 return`<div class="od-hero">
 <div class="od-hero-top">
 <div><div class="od-hero-id">${o.id||'—'}</div><div class="od-hero-type">${o.type||'保全'}保函 · ${resolvePreserveCategory(o)}</div></div>
@@ -1205,38 +1253,58 @@ return`<div class="od-hero">
 </div>`;
 }
 
-/** 诉讼保 · 按案由识别证据链模板（借贷 / 合同） */
+/**
+ * 证据链诊断 · 材料完整度仅计两区块（原始满分 75），再等比例折合百分制
+ * a) 申请人 20（最低 19）
+ * b) 案件材料 55（最低 30，含起诉状/保全申请书 + 证据线索 35）
+ * 换算：完整度(百分制) = (申请人得分 + 案件材料得分) ÷ 75 × 100
+ */
+const SCORE_RAW_MAX=75;
+const EVIDENCE_IDENTITY_NODES=[
+{id:'id_applicant',title:'申请人身份证明',desc:'自然人：居民身份证（人像面/国徽面）；企业：营业执照 + 法人身份证正反面。姓名/证件号与保全申请书比对一致可判定归属',patterns:['申请人身份证','身份证正面','身份证反面','居民身份证','法人身份证','申请人营业执照'],weight:0,required:true,group:'identity',side:'applicant'}
+];
 const EVIDENCE_CHAIN_TEMPLATES={
 loan:{
 key:'loan',label:'借贷·案件证据链',typeClass:'loan',
-summary:'围绕「借贷合意—协议—资金交付—沟通佐证」核验借贷事实是否可闭环。',
+summary:'【申请人】+【案件材料】借贷类证据线索：核验借贷合意与资金实际交付。证据线索单项为非必填，满足「三者其一」即可提交。',
+clueGateTip:'（借贷合意&转账凭证）/证据材料，（借贷合意）/证据材料，（转账凭证）/证据材料，需满足其一',
 nodes:[
-{id:'loan_intent',title:'证明存在借贷合意',desc:'借条、欠条、口头借贷合意确认、转账备注等可证明双方成立借贷关系',patterns:['借条','欠条','借贷合意','借款确认','借贷'],weight:25,required:true},
-{id:'loan_agreement',title:'借款协议',desc:'书面借款合同/借款协议，载明金额、期限、利率、还款方式',patterns:['借款协议','借款合同','贷款合同','借贷合同'],weight:20,required:true},
-{id:'loan_delivery',title:'证明资金实际交付',desc:'银行转账流水、微信支付、支付宝转账等资金出借凭证',patterns:['转账','银行流水','支付凭证','微信支付','支付宝','资金交付','出借'],weight:25,required:true},
-{id:'loan_chat',title:'微信/支付宝等聊天记录',desc:'催款、确认借款、还款协商等沟通记录，补强合意与交付',patterns:['微信','支付宝','聊天','通话记录','短信'],weight:15,required:false},
-{id:'loan_repay',title:'还款/利息凭证（建议）',desc:'已还部分或利息支付记录，用于核对争议金额',patterns:['还款','利息','收据'],weight:15,required:false}
+{id:'loan_intent',title:'证明存在借贷合意',desc:'借条/借据；借款协议/借贷合同/借款确认书/借款承诺书（含借款人、出借人、金额、期限、签字盖章）',patterns:['借条','借据','借款协议','借款合同','借贷合同','借款确认','借款承诺','借贷合意'],weight:5,required:false,group:'clue',clueKey:'intent'},
+{id:'loan_delivery',title:'证明资金实际交付',desc:'银行流水/银行回单；网银、微信、支付宝转账（转账成功、转出方、收款方、金额）',patterns:['转账','银行流水','银行回单','微信支付','支付宝','资金交付','转款','转账凭证'],weight:5,required:false,group:'clue',clueKey:'delivery'},
+{id:'loan_chat',title:'聊天记录',desc:'微信 UI 聊天记录等沟通佐证，补强合意与交付',patterns:['聊天','微信','支付宝','沟通','催款'],weight:3,required:false,group:'clue'}
 ]},
 contract:{
-key:'contract',label:'合同·案件事实链',typeClass:'contract',
-summary:'围绕「合同关系成立—履约证明—沟通佐证」核验合同纠纷事实是否可闭环。',
+key:'contract',label:'工程/服务合同·案件事实链',typeClass:'contract',
+summary:'【申请人】+【案件材料】工程/服务合同类证据线索：核验合同关系成立与履约证明。证据线索单项为非必填，满足「三者其一」即可提交。',
+clueGateTip:'（合同协议&履约证明）/证据材料，（合同协议）/证据材料，（履约证明）/证据材料，需满足其一',
 nodes:[
-{id:'ctr_establish',title:'证明合同关系成立',desc:'书面合同、订单、确认函等证明双方权利义务关系成立（核心节点）',patterns:['合同','协议','订单确认','确认函','买卖合同','服务合同'],weight:30,required:true},
-{id:'ctr_perform',title:'证明履约证明',desc:'交货、验收、施工、服务完成、发票等履约事实材料',patterns:['履约','交货','送货','验收','发票','施工','完工','对账'],weight:25,required:true},
-{id:'ctr_chat',title:'聊天记录等沟通佐证',desc:'微信/邮件等对合同履行、催款、变更的沟通记录',patterns:['微信','聊天','邮件','沟通','催款'],weight:20,required:false},
-{id:'ctr_pay',title:'付款/结算凭证（建议）',desc:'付款回单、结算单，用于核对应付未付金额',patterns:['付款','结算','回单','转账'],weight:15,required:false},
-{id:'ctr_subject',title:'主体资格证明',desc:'营业执照、身份证等主体适格材料',patterns:['营业执照','主体资格','身份证'],weight:10,required:true}
+{id:'ctr_establish',title:'证明合同关系成立',desc:'合同/协议/服务合同/技术服务合同/工程施工合同/采购合同/买卖合同/合作协议等（含甲乙方、金额、履约期限、付款与验收、签字盖章）',patterns:['合同','协议','买卖合同','服务合同','施工合同','采购合同','合作协议','框架协议','补充协议'],weight:5,required:false,group:'clue',clueKey:'intent'},
+{id:'ctr_perform',title:'证明履约证明',desc:'采购类：验收单/确认单/发货单；工程类：施工记录/施工确认单/工程照片',patterns:['履约','验收','确认单','发货','送货','施工','工程照片','完工','施工记录'],weight:5,required:false,group:'clue',clueKey:'delivery'},
+{id:'ctr_chat',title:'聊天记录',desc:'微信/邮件等对合同履行、催款、变更的沟通记录',patterns:['聊天','微信','邮件','沟通','催款'],weight:3,required:false,group:'clue'}
 ]}
 };
+/** 提交判断（业务门禁）+ 页面交互阈值 SCORE_UI_PASS=60 */
+const SCORE_UI_PASS=60;
 const EVIDENCE_SCORE_RULES=[
-{range:'≥ 80 分',level:'可提交审核',calc:'完整度≥80 且必填节点全部命中',tip:'关键节点齐全，缺项仅为建议项；可进入核保审核'},
-{range:'60 ~ 79 分',level:'建议补材料后提交',calc:'完整度∈[60,79]，或必填缺件≤1 且完整度≥50',tip:'主链基本成立，仍有证明力缺口，建议补件后再审'},
-{range:'< 60 分',level:'材料不足 · 暂缓提交',calc:'完整度<60，或关键必填节点缺失',tip:'证据链无法闭环，应先要求补材料；阻断进入审核'}
+{range:'百分制 ≥ 60',level:'达标（页面）',calc:'score100 ≥ 60 → uiState=reach；绿色呈现、常规字重',tip:'前端按达标态渲染：圆环/判断/诊断均为绿色系；缺件不置顶'},
+{range:'百分制 < 60',level:'不达标（页面）',calc:'score100 < 60 → uiState=unreach；红色呈现、加粗加大强调',tip:'前端按不达标态渲染：分数加粗加大、缺件置顶、诊断区红色'},
+{range:'可继续办理',level:'可提交审核',calc:'申请人≥19 且 案件材料≥30，必填完整，证据线索满足「三者其一」',tip:'业务门禁 pass，可进入核保'},
+{range:'建议补件',level:'建议补材料后提交',calc:'证据线索已满足「三者其一」，但申请人/案件材料未达最低分',tip:'业务门禁 warn'},
+{range:'暂不可继续',level:'暂不可继续办理',calc:'必填缺失或证据线索未满足「三者其一」',tip:'业务门禁 fail，阻断进入审核'}
 ];
+const SCORE_SECTION_META={
+applicant:{label:'申请人',pct:'20/75',max:20,min:19,scaledMax:Math.round(20/75*100)},
+materials:{label:'案件材料',pct:'55/75',max:55,min:30,scaledMax:Math.round(55/75*100)}
+};
+/** 原始分（满分 75）→ 百分制（满分 100）等比例换算 */
+function toPercentScore(raw75){
+const raw=Math.min(SCORE_RAW_MAX,Math.max(0,Number(raw75)||0));
+return Math.round(raw/SCORE_RAW_MAX*100);
+}
 function resolveEvidenceChainType(cause){
 const c=String(cause||'');
 if(/借款|借贷|民间借贷|金融借款|欠款纠纷/.test(c))return EVIDENCE_CHAIN_TEMPLATES.loan;
-if(/合同|买卖|服务|租赁|承揽|建设工程|网络服务/.test(c))return EVIDENCE_CHAIN_TEMPLATES.contract;
+if(/合同|买卖|服务|租赁|承揽|建设工程|工程|网络服务|技术服务|采购/.test(c))return EVIDENCE_CHAIN_TEMPLATES.contract;
 return EVIDENCE_CHAIN_TEMPLATES.contract;
 }
 function matchMaterialsForNode(materials,patterns){
@@ -1246,64 +1314,303 @@ return [m.name,m.originalName,m.category].filter(Boolean).join(' ');
 });
 return names.filter(n=>fileMatchesEvidence(n,patterns));
 }
+function hasMat(materials,patterns){return matchMaterialsForNode(materials,patterns).length>0}
+function isApplicantNatural(o){
+const t=String(o.applicantType||'');
+if(/企业|公司|法人/.test(t))return false;
+if(/自然|个人/.test(t))return true;
+return String(o.applicant||'').length<=4;
+}
+/** 材料完整度：仅申请人(20)+案件材料(55)=原始75，再折合百分制 */
+function scoreMaterialCompleteness(order,tpl){
+const o=order||{};
+const mats=o.materials||[];
+const N=Math.max(1,Number(o.applicantCount)||1);
+const appNat=isApplicantNatural(o);
+let appItems,appIdOk;
+if(appNat){
+const idFront=hasMat(mats,['身份证正面','人像面','申请人身份证'])||hasMat(mats,['身份证'])&&!hasMat(mats,['法人身份证','被申请人身份证']);
+const idBack=hasMat(mats,['身份证反面','国徽面']);
+appIdOk=idFront||hasMat(mats,['身份证','居民身份证']);
+appItems=[
+{ok:!!o.applicantType,pts:1/N,req:true,label:'申请人类型'},
+{ok:!!o.applicant,pts:3/N,req:true,label:'申请人姓名'},
+{ok:!!o.idType,pts:1/N,req:false,label:'证件类型'},
+{ok:!!o.idNo,pts:3/N,req:true,label:'申请人证件号'},
+{ok:!!o.applicantPhone,pts:1/N,req:true,label:'申请人联系电话'},
+{ok:!!o.applicantAddress,pts:1/N,req:true,label:'申请人地址'},
+{ok:idFront||appIdOk,pts:5/N,req:true,label:'身份证正面'},
+{ok:idBack||appIdOk,pts:5/N,req:true,label:'身份证反面'}
+];
+}else{
+const lic=hasMat(mats,['营业执照','信用代码']);
+const lpFront=hasMat(mats,['法人身份证正面','法人身份证','法人身份']);
+const lpBack=hasMat(mats,['法人身份证反面','法人身份证','法人身份']);
+appIdOk=lic;
+appItems=[
+{ok:!!o.applicantType,pts:1/N,req:true,label:'申请人类型'},
+{ok:!!(o.companyName||o.applicant),pts:3/N,req:true,label:'企业名称'},
+{ok:!!o.idType,pts:1/N,req:false,label:'证件类型'},
+{ok:!!(o.creditCode||o.idNo),pts:3/N,req:true,label:'企业信用代码'},
+{ok:!!(o.contactName||o.legalName),pts:1/N,req:true,label:'法人姓名'},
+{ok:!!o.applicantPhone,pts:1/N,req:true,label:'法人手机号'},
+{ok:!!o.applicantAddress,pts:1/N,req:true,label:'企业地址'},
+{ok:lic,pts:3/N,req:true,label:'营业执照'},
+{ok:lpFront,pts:3/N,req:true,label:'法人身份证正面'},
+{ok:lpBack,pts:3/N,req:true,label:'法人身份证反面'}
+];
+}
+const applicantScore=Math.floor(appItems.reduce((s,x)=>s+(x.ok?x.pts:0),0));
+const hasComplaint=hasMat(mats,['起诉状','民事起诉状']);
+const hasPreserve=hasMat(mats,['保全申请书','财产保全申请']);
+const hasIntent=hasMat(mats,tpl.nodes.find(n=>n.clueKey==='intent')?.patterns||[]);
+const hasDelivery=hasMat(mats,tpl.nodes.find(n=>n.clueKey==='delivery')?.patterns||[]);
+const hasChat=hasMat(mats,['聊天','微信','沟通']);
+const hasList=hasMat(mats,['证据清单','案件证据清单']);
+const hasEvidencePack=hasMat(mats,['案件证据材料','证据材料','其他材料','其他附件']);
+const hasAcceptNotice=hasMat(mats,['受理通知书','法院受理']);
+const hasOther=hasMat(mats,['其他材料','其他附件','发票']);
+const clueItems=[
+{ok:hasIntent,pts:5,label:tpl.key==='loan'?'借贷合意':'合同协议'},
+{ok:hasDelivery,pts:5,label:tpl.key==='loan'?'转账凭证':'履约证明'},
+{ok:hasChat,pts:3,label:'聊天记录'},
+{ok:hasList,pts:2,label:'案件证据清单'},
+{ok:hasEvidencePack,pts:10,label:'案件证据材料'},
+{ok:hasAcceptNotice,pts:5,label:'法院受理通知书'},
+{ok:hasOther,pts:5,label:'其他材料'}
+];
+let clueScore=clueItems.reduce((s,x)=>s+(x.ok?x.pts:0),0);
+clueScore=Math.min(35,clueScore);
+const matBaseItems=[
+{ok:hasComplaint,pts:10,req:true,label:'起诉状'},
+{ok:hasPreserve,pts:10,req:true,label:'保全申请书'}
+];
+const matBase=matBaseItems.reduce((s,x)=>s+(x.ok?x.pts:0),0);
+const materialsScore=Math.min(55,matBase+clueScore);
+const rawScore=Math.min(SCORE_RAW_MAX,applicantScore+materialsScore);
+const score=toPercentScore(rawScore);
+const clueGateOk=!!((hasIntent&&hasDelivery)||hasIntent||hasDelivery||hasEvidencePack);
+const sectionOk={
+applicant:applicantScore>=SCORE_SECTION_META.applicant.min,
+materials:materialsScore>=SCORE_SECTION_META.materials.min
+};
+const fieldMiss=appItems.filter(x=>x.req&&!x.ok).map(x=>x.label);
+const matMiss=[];
+if(!hasComplaint)matMiss.push('起诉状');
+if(!hasPreserve)matMiss.push('保全申请书');
+if(!appIdOk)matMiss.push('申请人身份证明');
+return{
+score,rawScore,applicantScore,materialsScore,clueScore,matBase,
+appItems,clueItems,matBaseItems,appNat,N,
+sectionOk,clueGateOk,fieldMiss,matMiss,
+hasIntent,hasDelivery,hasEvidencePack,hasComplaint,hasPreserve,appIdOk
+};
+}
+/**
+ * 前端交互态
+ * 1) 订单状态=材料不足 → 强制 unreach（不达标呈现）
+ * 2) 否则 score ≥ 60 → reach；score < 60 → unreach
+ */
+function resolveEvidenceUiState(score,order){
+const s=Number(score)||0;
+const statusForced=!!(order&&order.status==='insufficient');
+const reach=!statusForced&&s>=SCORE_UI_PASS;
+if(reach)return{
+uiState:'reach',
+uiLabel:'达标',
+title:`材料完整度达标（${s} 分 ≥ ${SCORE_UI_PASS}）`,
+desc:'圆环/进度条绿色；判断文案常规字重；节点按原序；诊断区绿色。可继续核对建议项。',
+judgeText:'完整度达标',
+tipText:`百分制 ${s} ≥ ${SCORE_UI_PASS}，页面按「达标」态呈现。`,
+icon:'fa-check-circle'
+};
+return{
+uiState:'unreach',
+uiLabel:'不达标',
+title:statusForced
+?`订单「材料不足」· 完整度 ${s} 分（按缺件材料计分，页面强制不达标呈现）`
+:`材料完整度不达标（${s} 分 < ${SCORE_UI_PASS}）`,
+desc:statusForced
+?'状态为材料不足时，无论历史完整材料如何，均按不达标交互：红色加粗、缺件置顶、诊断强调待补项。'
+:'圆环加粗红色、分数字号加大加粗；判断文案加粗；缺件节点置顶并加粗标题；诊断区红色强调阻断原因。',
+judgeText:statusForced?'材料不足 · 不达标':'完整度不达标',
+tipText:statusForced
+?`订单状态=insufficient，uiState 强制 unreach；当前计分 ${s}（缺件材料）。`
+:`百分制 ${s} < ${SCORE_UI_PASS}，页面按「不达标」态呈现，请先补材料。`,
+icon:'fa-times-circle',
+statusForced
+};
+}
+function buildEvidenceCalcSteps(o,tpl,sc,level,judge,ui){
+const fmtPts=p=>Number(p%1?Number(p).toFixed(2):p);
+const appHit=sc.appItems.filter(x=>x.ok).map(x=>`${x.label}+${fmtPts(x.pts)}`).join('、')||'无';
+const appMiss=sc.appItems.filter(x=>!x.ok).map(x=>x.label).join('、')||'无';
+const matHit=[...sc.matBaseItems,...sc.clueItems].filter(x=>x.ok).map(x=>`${x.label}+${x.pts}`).join('、')||'无';
+const matMissList=[...sc.matBaseItems,...sc.clueItems].filter(x=>!x.ok).map(x=>x.label).join('、')||'无';
+return[
+{title:'匹配证据链模板',body:`输入 cause=「${o.cause||'—'}」→ 正则命中借贷则 loan，否则 contract → <em>${tpl.key}</em>（${tpl.label}）`},
+{title:'计算申请人原始分 applicantScore（满分 20）',body:`主体=${sc.appNat?'自然人':'企业'}，申请人人数 N=${sc.N}；各项命中得满分否则 0，求和后 Math.floor<br>命中：${appHit}<br>未命中：${appMiss}<br>→ <em>applicantScore = ${sc.applicantScore}</em>`},
+{title:'计算案件材料原始分 materialsScore（满分 55）',body:`matBase = 起诉状(10)+保全申请书(10) = ${sc.matBase}<br>clueScore = Σ证据线索分（封顶35）= ${sc.clueScore}<br>命中：${matHit}<br>未命中：${matMissList}<br>→ <em>materialsScore = min(55, matBase+clueScore) = ${sc.materialsScore}</em>`},
+{title:'折合百分制 score100',body:`rawScore = min(75, applicantScore+materialsScore) = <em>${sc.rawScore}</em><br><span class="ev-calc-formula">score100 = Math.round(rawScore / 75 * 100) = Math.round(${sc.rawScore} / 75 * 100) = <em>${sc.score}</em></span>`},
+{title:'页面交互态 uiState（前端呈现）',body:`规则：① 订单 status=insufficient → 强制 unreach；② 否则 score100 ≥ ${SCORE_UI_PASS} → reach，&lt; ${SCORE_UI_PASS} → unreach<br>本次 status=${o.status||'—'} score100=${sc.score} → <em>uiState=${ui.uiState}</em>（${ui.uiLabel}${ui.statusForced?' · 状态强制':''}）`},
+{title:'证据线索门禁 clueGateOk',body:`clueGateOk = (intent∧delivery) ∨ intent ∨ delivery ∨ evidencePack<br>本次 intent=${sc.hasIntent} delivery=${sc.hasDelivery} evidencePack=${sc.hasEvidencePack} → <em>${sc.clueGateOk}</em><br>文案：${tpl.clueGateTip}`},
+{title:'业务提交判断 level',body:`if clueGateOk && fieldMiss空 && 有起诉状 && 有保全 && applicant≥19 && materials≥30 → pass<br>else if clueGateOk && 有起诉状 && 有保全 → warn<br>else → fail<br>本次 sectionOk={applicant:${sc.sectionOk.applicant}, materials:${sc.sectionOk.materials}} fieldMiss=[${(sc.fieldMiss||[]).join('、')||'无'}] → <em>level=${level}</em> · ${judge}`}
+];
+}
 function analyzeEvidenceChain(order){
 const o=order||ORDER_STATE;
 const tpl=resolveEvidenceChainType(o.cause);
 const materials=o.materials||[];
-const nodes=tpl.nodes.map(n=>{
-const hits=matchMaterialsForNode(materials,n.patterns);
+const mapNode=n=>{
+let pats=n.patterns;
+if(n.id==='id_applicant'){
+pats=isApplicantNatural(o)?['身份证','居民身份证','申请人身份证','人像面','国徽面']:['营业执照','法人身份证','信用代码','申请人'];
+}
+const hits=matchMaterialsForNode(materials,pats);
 const ok=hits.length>0;
 let status='miss';
 if(ok)status='ok';
 else if(!n.required)status='weak';
-return Object.assign({},n,{hits,status,ok});
-});
-const totalW=nodes.reduce((s,n)=>s+n.weight,0)||1;
-const gotW=nodes.filter(n=>n.ok).reduce((s,n)=>s+n.weight,0);
-const score=Math.round(gotW/totalW*100);
-const missRequired=nodes.filter(n=>n.required&&!n.ok);
-const missOptional=nodes.filter(n=>!n.required&&!n.ok);
-let level='fail',judge='材料不足 · 暂缓提交',judgeTip='关键必填节点缺失，证据链无法闭环，建议先要求补材料。';
-if(score>=80&&!missRequired.length){level='pass';judge='可提交审核';judgeTip='关键证据节点齐全，可进入核保审核；建议项可按需补强。'}
-else if(score>=60||(missRequired.length<=1&&score>=50)){level='warn';judge='建议补材料后提交';judgeTip='主链基本成立，但仍有影响证明力的缺口，建议补件后再审。'}
-const diagParts=[];
-diagParts.push(`案由识别为「${o.cause||'—'}」，适用【${tpl.label}】。`);
-diagParts.push(`已匹配 ${nodes.filter(n=>n.ok).length}/${nodes.length} 个证据节点，完整度 ${score} 分。`);
-if(missRequired.length)diagParts.push(`必填缺项：${missRequired.map(n=>n.title).join('、')}。`);
-if(missOptional.length)diagParts.push(`建议补强：${missOptional.map(n=>n.title).join('、')}。`);
-if(!missRequired.length&&!missOptional.length)diagParts.push('证据链闭环完整，未见明显缺件。');
-else if(tpl.key==='loan')diagParts.push('借贷案件需同时覆盖「合意/协议」与「资金实际交付」，缺一则证明力不足。');
-else diagParts.push('合同案件需优先固定「合同关系成立」与「履约证明」，沟通记录用于补强。');
-return{tpl,nodes,score,level,judge,judgeTip,diag:diagParts.join(''),missRequired,missOptional};
-}
-/** 右侧 PRD：评分规则表格（百分制 · 与模板权重同源） */
-function renderEvidenceChainScoreTablesHtml(){
-const formula=`<p class="prd-rule-hint"><strong style="color:#0F4C5C">总分 100 分 · 计算公式</strong><br>
-完整度 = 已命中节点权重之和 ÷ 模板节点总权重 × 100（四舍五入取整）<br>
-① 按案由匹配模板（借贷 / 合同，默认合同）；② 材料文件名命中该节点任一 keywords → 得该节点<strong>全部</strong>权重分；③ 未命中 → 0 分；④ 同一节点多份材料<strong>不重复加分</strong>；⑤ 必填缺件优先补材料，fail 档阻断「进入审核」。</p>`;
-const nodeTable=(tpl)=>{
-const total=tpl.nodes.reduce((s,n)=>s+n.weight,0);
-const rows=tpl.nodes.map((n,i)=>`<tr>
-<td>${i+1}</td>
-<td><strong>${n.title}</strong><br><span style="color:#94A3B8;font-size:10px">${n.desc}</span></td>
-<td class="num">${n.weight}</td>
-<td>${n.required?'<span class="tag-req">必填</span>':'<span class="tag-opt">建议</span>'}</td>
-<td>命中 keywords「${(n.patterns||[]).join(' / ')}」任一 → <strong>+${n.weight} 分</strong>；未命中 → <strong>0 分</strong>；多份命中仍只计一次</td>
-</tr>`).join('');
-return`<div class="prd-section-title" style="margin-top:4px">${tpl.label} · 节点权重（合计 ${total} = 100）</div>
-<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>#</th><th>证据节点</th><th class="num">权重分</th><th>类型</th><th>单项计算规则</th></tr></thead>
-<tbody>${rows}<tr><td colspan="2" style="font-weight:800;color:#0F4C5C">合计</td><td class="num">${total}</td><td colspan="2" style="color:#64748B">该模板满分 100；完整度按上表加权汇总</td></tr></tbody></table></div>`;
+return Object.assign({},n,{patterns:pats,hits,status,ok});
 };
+const identityNodes=EVIDENCE_IDENTITY_NODES.map(mapNode);
+const matBaseNodes=[
+{id:'mat_complaint',title:'起诉状',desc:'民事起诉状扫描件',required:true,group:'material',ok:false,status:'miss',hits:[]},
+{id:'mat_preserve',title:'保全申请书',desc:'财产保全申请书',required:true,group:'material',ok:false,status:'miss',hits:[]}
+].map(n=>{
+const pats=n.id==='mat_complaint'?['起诉状','民事起诉状']:['保全申请书','财产保全申请'];
+const hits=matchMaterialsForNode(materials,pats);
+const ok=hits.length>0;
+return Object.assign({},n,{patterns:pats,hits,ok,status:ok?'ok':'miss'});
+});
+const clueNodes=tpl.nodes.map(mapNode);
+const materialNodes=[...matBaseNodes,...clueNodes];
+const nodes=[...identityNodes,...materialNodes];
+const sc=scoreMaterialCompleteness(o,tpl);
+const score=sc.score;
+const ui=resolveEvidenceUiState(score,o);
+const missRequired=[
+...identityNodes.filter(n=>n.required&&!n.ok),
+...matBaseNodes.filter(n=>!n.ok),
+...sc.fieldMiss.map(label=>({id:'field_'+label,title:label,required:true,ok:false,group:'field'}))
+];
+const missOptional=clueNodes.filter(n=>!n.ok);
+const allSectionOk=sc.sectionOk.applicant&&sc.sectionOk.materials;
+let level='fail',judge='暂不可继续办理',judgeTip='必填项不完整或证据线索未满足「三者其一」，暂不可进入审核。';
+if(sc.clueGateOk&&!sc.fieldMiss.length&&sc.hasComplaint&&sc.hasPreserve&&allSectionOk){
+level='pass';judge='可提交审核';judgeTip='申请人与案件材料达最低分且必填完整，证据线索已满足提交条件，可进入核保审核。';
+}else if(sc.clueGateOk&&sc.hasComplaint&&sc.hasPreserve){
+level='warn';judge='建议补材料后提交';judgeTip='证据线索已满足「三者其一」，但申请人/案件材料仍有缺口，建议补件后再审。';
+}else if(!sc.clueGateOk){
+judgeTip='证据线索未满足：'+tpl.clueGateTip+'；请先要求补材料。';
+}
+const calcSteps=buildEvidenceCalcSteps(o,tpl,sc,level,judge,ui);
+const diagParts=[];
+diagParts.push(`案由「${o.cause||'—'}」→ 模板【${tpl.label}】。`);
+diagParts.push(`原始分 ${sc.rawScore}/75 = 申请人 ${sc.applicantScore}/20 + 案件材料 ${sc.materialsScore}/55。`);
+diagParts.push(`百分制 score100 = round(${sc.rawScore}÷75×100) = ${score} 分。`);
+diagParts.push(`页面交互：status=${o.status||'—'} · score=${score} → ${ui.uiLabel}（uiState=${ui.uiState}${ui.statusForced?' · 材料不足状态强制不达标':''}）。`);
+diagParts.push(`业务门禁：clueGate=${sc.clueGateOk?'通过':'未过'} → level=${level} · ${judge}。`);
+if(missRequired.length)diagParts.push(`必填缺项：${[...new Set(missRequired.map(n=>n.title))].join('、')}。`);
+if(missOptional.length)diagParts.push(`证据线索待补强：${missOptional.map(n=>n.title).join('、')}。`);
+if(level==='pass')diagParts.push('未见阻断性缺件。');
+else if(tpl.key==='loan')diagParts.push('借贷类关键项（非逐项必填）：借贷合意 / 转账凭证 / 案件证据材料，满足三者其一即可。');
+else diagParts.push('合同类关键项（非逐项必填）：合同协议 / 履约证明 / 案件证据材料，满足三者其一即可。');
+return{tpl,nodes,identityNodes,clueNodes,materialNodes,score,level,judge,judgeTip,diag:diagParts.join(''),missRequired,missOptional,breakdown:sc,ui,calcSteps};
+}
+/** 右侧 PRD：评分规则表格（75 原始分 → 100 百分制） */
+function renderEvidenceChainScoreTablesHtml(){
+const formula=`<p class="prd-rule-hint"><strong style="color:#0F4C5C">材料完整度 · 两区块原始分（满分 75）再折合百分制</strong><br>
+<strong>计分范围：</strong>a）申请人 20（最低 19）+ b）案件材料 55（最低 30）= 原始满分 75<br>
+<strong>换算公式：</strong>完整度(百分制) = (申请人得分 + 案件材料得分) ÷ 75 × 100<br>
+例：原始 75 分 → 100 分；原始 60 分 → 80 分；原始 49 分（19+30）→ 65 分<br>
+① 必填项（*）必须完整，否则「暂不可继续办理」；② 多申请人按「已匹配主体数 ÷ 案件主体数」折算向下取整；③ 证据线索单项为<strong>非必填</strong>，需满足「三者其一」；④ 无法识别的证据归类为「案件证据材料」。</p>`;
+const sectionRows=Object.keys(SCORE_SECTION_META).map(k=>{
+const m=SCORE_SECTION_META[k];
+return`<tr><td><strong>${m.label}</strong></td><td class="num">${m.pct}</td><td class="num">${m.max}</td><td class="num">${m.min}</td><td class="num">约 ${m.scaledMax}</td></tr>`;
+}).join('');
+const sectionTable=`<div class="prd-section-title">分值占比与区块最低分（原始 75 → 百分制 100）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>区块</th><th class="num">占比</th><th class="num">原始满分</th><th class="num">最低分</th><th class="num">折合百分制约</th></tr></thead>
+<tbody>${sectionRows}<tr><td style="font-weight:800;color:#0F4C5C">合计</td><td class="num">75/75</td><td class="num">75</td><td style="color:#64748B">各达最低后折合</td><td class="num">100</td></tr></tbody></table></div>
+<p class="prd-rule-hint">换算：百分制分数 = 原始分 ÷ 75 × 100（四舍五入取整）</p>`;
+const identityFeat=`<div class="prd-section-title">a）申请人（20 分，最低 19）· 含身份证明</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>对象</th><th>识别特征</th><th>信息提取</th></tr></thead>
+<tbody>
+<tr><td><strong>申请人身份证明</strong></td><td>居民身份证：出现「中华人民共和国居民身份证/居民身份证」版式；营业执照：出现「营业执照/统一社会信用代码」</td><td>姓名、身份证号（与保全申请书比对，姓名+证件号均一致可判定归属）</td></tr>
+</tbody></table></div>`;
+const loanFeat=`<div class="prd-section-title">b）案件材料 · 借贷类证据线索（计入材料 55 中的 35）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>节点</th><th class="num">分值</th><th>必须识别内容</th><th>关键词/版式</th></tr></thead>
+<tbody>
+<tr><td><strong>证明存在借贷合意</strong></td><td class="num">5</td><td>借条/借据；借款协议/借贷合同/借款确认书/借款承诺书</td><td>*借款人 *出借人 *今借到/*借款金额 *借款期限 *签字/盖章/手印；利息约定（可选）</td></tr>
+<tr><td><strong>证明资金实际交付</strong></td><td class="num">5</td><td>银行流水/回单；网银/微信/支付宝转账</td><td>银行：*银行名称 *交易时间；转账：*转账成功 *转出方 *收款方 *金额 *时间</td></tr>
+<tr><td>聊天记录</td><td class="num">3</td><td>微信 UI 聊天记录</td><td>催款/确认借款等沟通</td></tr>
+<tr><td>案件证据清单</td><td class="num">2</td><td>—</td><td>—</td></tr>
+<tr><td>案件证据材料</td><td class="num">10</td><td>无法识别分类时默认归入</td><td>—</td></tr>
+<tr><td>法院受理通知书</td><td class="num">5</td><td>—</td><td>—</td></tr>
+<tr><td>其他材料</td><td class="num">5</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p class="prd-rule-hint">提交门禁（三者其一）：（借贷合意&amp;转账凭证）/证据材料，（借贷合意）/证据材料，（转账凭证）/证据材料 · 证据线索区块最低 5 分</p>`;
+const contractFeat=`<div class="prd-section-title">b）案件材料 · 工程/服务合同类证据线索（计入材料 55 中的 35）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>节点</th><th class="num">分值</th><th>必须识别内容</th><th>关键词/版式</th></tr></thead>
+<tbody>
+<tr><td><strong>证明合同关系成立</strong></td><td class="num">5</td><td>合同/协议（双方签署）</td><td>标题含合同/协议/服务合同/工程施工合同/采购/买卖/合作/框架/补充协议；*甲方 *乙方 *合同金额 *履约期限 *付款条件 *验收方式 *签字/盖章</td></tr>
+<tr><td><strong>证明履约证明</strong></td><td class="num">5</td><td>采购：验收/确认/发货单；工程：施工记录/确认单/工程照片</td><td>工程名称、施工日期、工程进度、施工单位等</td></tr>
+<tr><td>聊天记录</td><td class="num">3</td><td>—</td><td>—</td></tr>
+<tr><td>案件证据清单</td><td class="num">2</td><td>—</td><td>—</td></tr>
+<tr><td>案件证据材料</td><td class="num">10</td><td>—</td><td>—</td></tr>
+<tr><td>法院受理通知书</td><td class="num">5</td><td>—</td><td>—</td></tr>
+<tr><td>其他材料</td><td class="num">5</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p class="prd-rule-hint">提交门禁（三者其一）：（合同协议&amp;履约证明）/证据材料，（合同协议）/证据材料，（履约证明）/证据材料 · 证据线索区块最低 10 分</p>`;
+const matBase=`<div class="prd-section-title">b）案件材料基础分（55 分结构）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>材料</th><th class="num">分值</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>*起诉状</td><td class="num">10</td><td>必传</td></tr>
+<tr><td>*保全申请书</td><td class="num">10</td><td>必传</td></tr>
+<tr><td>证据线索（按案由）</td><td class="num">35</td><td>见上方借贷 / 合同表</td></tr>
+</tbody></table></div>`;
 const judgeRows=EVIDENCE_SCORE_RULES.map(x=>`<tr>
 <td class="num">${x.range}</td>
 <td><strong>${x.level}</strong></td>
 <td>${x.calc}</td>
 <td>${x.tip}</td>
 </tr>`).join('');
-const judgeTable=`<div class="prd-section-title">提交判断阈值</div>
-<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th class="num">完整度</th><th>判断</th><th>判定规则</th><th>说明</th></tr></thead>
+const judgeTable=`<div class="prd-section-title">提交判断 / 页面交互阈值</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th class="num">档位</th><th>判断</th><th>判定规则</th><th>说明</th></tr></thead>
 <tbody>${judgeRows}</tbody></table></div>`;
-return formula+nodeTable(EVIDENCE_CHAIN_TEMPLATES.loan)+nodeTable(EVIDENCE_CHAIN_TEMPLATES.contract)+judgeTable;
+const uiTable=`<div class="prd-section-title">前端交互呈现规则（结构不变，按 uiState 切换）</div>
+<div class="prd-rule-table-wrap"><table class="prd-rule-table"><thead><tr><th>条件</th><th>uiState</th><th>字体差异</th><th>视觉 / 交互</th></tr></thead>
+<tbody>
+<tr><td class="num">score ≥ 60</td><td><strong>reach 达标</strong></td><td>分数 22px / font-weight 700 绿色；判断 14px / 700；提示 11px / 500</td><td>绿边卡片、绿环、绿进度条；节点原序；诊断区绿色</td></tr>
+<tr><td class="num">score &lt; 60</td><td><strong>unreach 不达标</strong></td><td>分数 24px / font-weight 900 红色；判断 15px / 900；提示 12px / 700；缺件标题 13px / 800</td><td>红边卡片、红粗环、红进度条；缺件置顶；诊断区红色 + 算分明细</td></tr>
+</tbody></table></div>
+<p class="prd-rule-hint"><strong>前端实现要点：</strong>if (status==='insufficient') uiState='unreach'; else uiState = score100 &gt;= 60 ? 'reach' : 'unreach'；根节点 className += ' ui-' + uiState。材料不足订单须绑定缺件材料列表，分数与呈现一致。</p>`;
+const implLogic=`<div class="prd-section-title">开发实现 · 诊断结果如何算出（伪代码）</div>
+<div class="prd-rule-hint" style="font-family:ui-monospace,Consolas,monospace;white-space:pre-wrap;line-height:1.55">
+// —— 1. 分数 ——
+tpl = resolveEvidenceChainType(cause)          // 借贷→loan，否则 contract
+applicantScore = floor(Σ 申请人分项命中分)    // 满分 20，多申请人 /N
+materialsScore = min(55, 起诉状10+保全10+clueScore≤35)
+rawScore = min(75, applicantScore + materialsScore)
+score100 = round(rawScore / 75 * 100)          // 例：raw45→60；raw44→59
+
+// —— 2. 页面交互态（前端呈现）——
+uiState = (status === 'insufficient') ? 'unreach'
+        : (score100 >= 60 ? 'reach' : 'unreach')
+// reach：绿色、常规/中等字重、节点原序
+// unreach：红色、加大加粗、缺件 miss→weak→ok 排序
+// 材料不足订单：加载缺件材料，分数通常 <60，且强制 unreach
+
+// —— 3. 业务门禁 level（进审核）——
+clueGateOk = (intent&amp;&amp;delivery) || intent || delivery || evidencePack
+if (clueGateOk &amp;&amp; !fieldMiss.length &amp;&amp; 起诉状 &amp;&amp; 保全 &amp;&amp; applicant≥19 &amp;&amp; materials≥30) level='pass'
+else if (clueGateOk &amp;&amp; 起诉状 &amp;&amp; 保全) level='warn'
+else level='fail'
+
+// —— 4. 诊断文案 ——
+diag = 模板说明 + 原始分拆解 + 换算式 + uiState + level + 缺项列表
+</div>`;
+return formula+sectionTable+identityFeat+matBase+loanFeat+contractFeat+judgeTable+uiTable+implLogic;
 }
 /** 订单详情 / 案件详情区块折叠态：true=收起 */
 let ORDER_DETAIL_FOLD={case:false,materials:false,evidence:false,audit:true};
@@ -1333,28 +1640,36 @@ return`<div class="${cls.join(' ')}" data-fold="${key}"${opts.prd?` data-prd="${
 }
 function renderEvidenceChainCard(order){
 const r=analyzeEvidenceChain(order);
-const barCls=r.level==='pass'?'':r.level;
-const nodesHtml=r.nodes.map(n=>{
+const ui=r.ui||resolveEvidenceUiState(r.score);
+const uiCls=ui.uiState;
+const renderNodes=(list)=>list.map(n=>{
 const stIcon=n.status==='ok'?'✓':(n.status==='weak'?'!':'×');
-const reqLabel=n.required?(n.ok?'必填·已齐':'必填·缺件'):(n.ok?'建议·已齐':'建议补强');
-const hitText=n.ok?`已匹配：${n.hits.join('、')}`:(n.required?`未检测到：${n.desc}`:`未检测到（可选）：${n.desc}`);
+const reqLabel=n.required?(n.ok?'必填·已齐':'必填·缺件'):(n.ok?'已识别':'待补强');
+const hitText=n.ok?`已匹配：${n.hits.join('、')}`:(n.required?`未检测到：${n.desc}`:`未检测到（非必填）：${n.desc}`);
 return`<div class="ev-node ${n.status}"><div class="ev-node-hd"><span class="ev-st">${stIcon}</span><span>${n.title}</span><span class="ev-req">${reqLabel}</span></div><p>${hitText}</p></div>`;
 }).join('');
-const body=`<p class="ev-chain-hint">${r.tpl.summary}<br>依据案由「${(order||ORDER_STATE).cause||'—'}」与申请材料自动分析</p>
-<div class="ev-score-row">
-<div class="ev-score-ring ${r.level}"><strong>${r.score}</strong><span>完整度</span></div>
+/* 不达标：缺件置顶；达标：原序。结构固定：横幅→分数→节点→诊断 */
+const allNodes=[...(r.identityNodes||[]),...(r.materialNodes||r.clueNodes||[])];
+const orderedNodes=uiCls==='unreach'
+?[...allNodes.filter(n=>n.status==='miss'),...allNodes.filter(n=>n.status==='weak'),...allNodes.filter(n=>n.status==='ok')]
+:allNodes;
+const calcHtml=(r.calcSteps||[]).map((s,i)=>`<div class="ev-calc-step"><span class="n">${i+1}</span><div class="body"><strong>${s.title}</strong><br>${s.body}</div></div>`).join('');
+const body=`
+<div class="ev-score-row ${uiCls}">
+<div class="ev-score-ring ${uiCls}"><strong>${r.score}</strong><span>完整度</span></div>
 <div class="ev-score-meta">
-<div class="ev-judge ${r.level}">${r.judge}</div>
-<div class="ev-score-bar ${barCls}"><i style="width:${r.score}%"></i></div>
-<p>${r.judgeTip}</p>
+<div class="ev-judge ${uiCls}">${ui.judgeText} · ${r.judge}</div>
+<div class="ev-score-bar ${uiCls}"><i style="width:${Math.max(2,Math.min(100,r.score))}%"></i></div>
+
 </div></div>
-<div class="sp-card-title" style="font-size:12px;margin-bottom:8px">证据节点核对</div>
-${nodesHtml}
-<div class="ev-diag-box"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>${r.diag}</p></div>
+<div class="sp-card-title" style="font-size:12px;margin:4px 0 8px">证据节点核对</div>
+${renderNodes(orderedNodes)}
+<div class="ev-diag-box ${uiCls}"><strong><i class="fas fa-stethoscope" style="margin-right:4px"></i>诊断结果分析</strong><p>${r.diag}</p>
+</div>
 `;
 return renderFoldSection('evidence',`<i class="fas fa-project-diagram fold-lead"></i>证据链诊断`,body,{
-extraClass:'ev-chain-card',prd:'evidence-chain',
-tools:`<span class="ev-chain-type ${r.tpl.typeClass}">${r.tpl.label}</span>`
+extraClass:`ev-chain-card ui-${uiCls}`,prd:'evidence-chain',
+tools:``
 });
 }
 function openEvidenceSupplementModal(){
@@ -1363,7 +1678,7 @@ const miss=[...ev.missRequired,...ev.missOptional];
 const checks=miss.length?miss.map((n,i)=>`<div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0;text-align:left"><input type="checkbox" ${n.required||i<2?'checked':''}> <span style="font-size:13px;color:#1C2E36">${n.title}<em style="font-style:normal;font-size:11px;color:${n.required?'#B91C1C':'#94A3B8'};margin-left:6px">${n.required?'必填':'建议'}</em></span></div>`).join(''):`<p style="font-size:12px;color:#059669;text-align:left;line-height:1.55;margin:4px 0 8px">当前证据链无缺项，如仍需补件可手动说明。</p>
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0;text-align:left"><input type="checkbox"> <span style="font-size:13px">其他补充材料</span></div>`;
 const note=miss.length
-?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：合同案件请优先固定「证明合同关系成立」与履约证明；借贷案件请同时提供合意/协议与资金交付凭证。`
+?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：证据线索单项非必填，需满足「三者其一」——${ev.tpl.clueGateTip}；并补齐主体身份证明与起诉状/保全申请书等必填项。`
 :'证据链节点已齐，如有其他材料需补充请在此说明。';
 showModal(`${renderModalHead('<i class="fas fa-folder-plus" style="color:#1A6B7C;margin-right:4px"></i>要求补材料',`已按证据链缺项预填 · 完整度 ${ev.score} 分 · ${ev.judge} · ${ev.tpl.label}`)}
 <div class="sp-card" style="margin:0 0 10px;text-align:left;padding:12px">
@@ -1377,6 +1692,8 @@ const inner=document.getElementById('spModalInner');
 inner?.querySelector('[data-action="ev-supp-send"]')?.addEventListener('click',()=>{
 closeModal();
 ORDER_STATE.status='insufficient';
+ORDER_STATE.materials=resolveOrderDemoMaterials(ORDER_STATE);
+ORDER_STATE.idNo='';ORDER_STATE.applicantPhone='';ORDER_STATE.applicantAddress='';ORDER_STATE.idType='';
 showToast('补材料通知已发送 · 订单进入材料不足');
 });
 }
@@ -1668,18 +1985,28 @@ const DEMO_MATERIALS_BY_CHAIN={
 contract:[
 {name:'起诉状.pdf',originalName:'张正源_民事起诉状_扫描件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
 {name:'保全申请书.pdf',originalName:'财产保全申请书_签字版.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'申请人身份证正面.jpg',originalName:'张三_身份证_人像面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
+{name:'申请人身份证反面.jpg',originalName:'张三_身份证_国徽面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
 {name:'买卖合同.pdf',originalName:'购销合同_2024版_双方盖章.pdf',category:'合同协议',icon:'fa-file-contract',color:'#0F766E'},
 {name:'送货验收单.pdf',originalName:'送货单及验收记录合订.pdf',category:'履约证明',icon:'fa-file-alt',color:'#2563EB'},
-{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'发票凭证',icon:'fa-file-invoice',color:'#B45309'},
+{name:'增值税发票.pdf',originalName:'增值税专用发票_12345678.pdf',category:'其他材料',icon:'fa-file-invoice',color:'#B45309'},
 {name:'营业执照.jpg',originalName:'被申请人营业执照副本.jpg',category:'主体资格',icon:'fa-file-image',color:'#7C3AED'}
 ],
 loan:[
 {name:'起诉状.pdf',originalName:'民间借贷起诉状_原件.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
 {name:'保全申请书.pdf',originalName:'诉前保全申请书.pdf',category:'保全申请书',icon:'fa-file-alt',color:'#2B6CB0'},
+{name:'申请人身份证正面.jpg',originalName:'出借人_身份证_人像面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
+{name:'申请人身份证反面.jpg',originalName:'出借人_身份证_国徽面.jpg',category:'主体身份证明',icon:'fa-id-card',color:'#7C3AED'},
 {name:'借款协议.pdf',originalName:'个人借款协议_双方签字.pdf',category:'借款协议',icon:'fa-file-contract',color:'#0F766E'},
 {name:'借条照片.jpg',originalName:'借条原件照片.jpg',category:'借贷合意',icon:'fa-file-image',color:'#D97706'},
-{name:'银行转账流水.pdf',originalName:'工商银行转账流水_2024.pdf',category:'资金交付',icon:'fa-file-invoice',color:'#2563EB'},
-{name:'微信支付截图.png',originalName:'微信转账聊天记录截图.png',category:'沟通佐证',icon:'fa-file-image',color:'#07C160'}
+{name:'银行转账流水.pdf',originalName:'工商银行转账流水_2024.pdf',category:'转账凭证',icon:'fa-file-invoice',color:'#2563EB'},
+{name:'微信支付截图.png',originalName:'微信转账聊天记录截图.png',category:'聊天记录',icon:'fa-file-image',color:'#07C160'},
+{name:'营业执照.jpg',originalName:'被申请人营业执照副本.jpg',category:'主体资格',icon:'fa-file-image',color:'#7C3AED'}
+],
+/* 材料不足订单专用：缺保全申请书/身份证明/关键证据 → 百分制通常 < 60，触发不达标呈现 */
+insufficient:[
+{name:'起诉状.pdf',originalName:'王某_起诉状_首页.pdf',category:'起诉状',icon:'fa-file-pdf',color:'#E53E3E'},
+{name:'部分聊天记录.png',originalName:'微信沟通截图_不完整.pdf',category:'聊天记录',icon:'fa-file-image',color:'#D97706'}
 ]
 };
 const PRESERVE_CATEGORY_OPTS=['诉前保全','诉讼保全','仲裁保全'];
@@ -1690,18 +2017,30 @@ if(/仲裁/.test(v))return'仲裁保全';
 if(/诉讼|诉中/.test(v))return'诉讼保全';
 return'诉前保全';
 }
+function resolveOrderDemoMaterials(order){
+const o=order||{};
+if(o.status==='insufficient')return(DEMO_MATERIALS_BY_CHAIN.insufficient||[]).slice();
+const chainKey=resolveEvidenceChainType(o.cause).key;
+return(DEMO_MATERIALS_BY_CHAIN[chainKey]||DEMO_MATERIALS_BY_CHAIN.contract).slice();
+}
 function applyLitigationOrderState(orderId){
 const found=ORDER_LIST.find(x=>x.id===orderId);
 if(!found)return;
-const chainKey=resolveEvidenceChainType(found.cause).key;
 ORDER_STATE=Object.assign({},ORDER_STATE,{
 id:found.id,status:found.status,amount:found.amount,premium:Math.round((found.amount||0)*0.00085)||ORDER_STATE.premium,
 applicant:found.applicant,respondent:found.respondent,caseNo:found.caseNo,court:found.court,
 type:found.type,cause:found.cause,targetAmount:found.amount?Math.round(found.amount/10000):ORDER_STATE.targetAmount,
 preserveCategory:resolvePreserveCategory(found),
 guaranteeNo:found.guaranteeNo||'',
-materials:(DEMO_MATERIALS_BY_CHAIN[chainKey]||DEMO_MATERIALS_BY_CHAIN.contract).slice()
+materials:resolveOrderDemoMaterials(found)
 });
+/* 材料不足演示：身份附件缺失时同步清空证件号，避免字段分虚高掩盖缺件 */
+if(found.status==='insufficient'){
+ORDER_STATE.idNo='';
+ORDER_STATE.applicantPhone='';
+ORDER_STATE.applicantAddress='';
+ORDER_STATE.idType='';
+}
 }
 
 /** 订单材料操作：按状态显示打包下载 / 邮件发送 / 投送电脑端 */
@@ -1847,7 +2186,7 @@ return`<div class="od-footer-primary single">
 }
 if(st==='wait_confirm'){
 return`<div class="od-footer-primary single">
-<button type="button" class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'完整度不足'}</button>
+<button type="button" class="sp-btn-primary" data-action="${canEnterReview?'enter-order-review':'ev-chain-block-review'}">${canEnterReview?'进入审核':'暂不可继续'}</button>
 </div>`;
 }
 if(st==='wait_sign'||st==='partial_sign'){
@@ -4146,7 +4485,7 @@ const checks=miss.length?miss.map((n,i)=>`<div class="sp-check-row" style="displ
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 财产线索证明</div>
 <div class="sp-check-row" style="display:flex;gap:8px;padding:8px 0"><input type="checkbox"> 企业营业执照</div>`;
 const note=miss.length
-?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：合同案件请优先固定「证明合同关系成立」与履约证明；借贷案件请同时提供合意/协议与资金交付凭证。`
+?`【证据链诊断 ${ev.score}分 · ${ev.judge}】请补充以下材料以完善${ev.tpl.label}：\n${miss.map((n,i)=>(i+1)+'. '+n.title+'（'+(n.required?'必填':'建议')+'）').join('\n')}\n\n说明：证据线索单项非必填，需满足「三者其一」——${ev.tpl.clueGateTip}；并补齐主体身份证明与起诉状/保全申请书等必填项。`
 :'请补充起诉状首页及最后一页清晰扫描件。';
 return`
 <div class="sp-card"><span class="sp-label">需补充材料（可多选 · 已按证据链缺项预填）</span>
@@ -4739,12 +5078,12 @@ return;
 if(act==='ev-chain-supplement'){openEvidenceSupplementModal();return}
 if(act==='enter-order-review'){
 const ev=analyzeEvidenceChain(ORDER_STATE);
-if(ev.level==='warn')showToast('证据链完整度 '+ev.score+' 分 · 建议补材料，仍可进入审核');
+if(ev.level==='warn')showToast('材料完整度 '+ev.score+' 分 · 建议补材料，仍可进入审核');
 openOrderReviewModal();return;
 }
 if(act==='ev-chain-block-review'){
 const ev=analyzeEvidenceChain(ORDER_STATE);
-showToast('完整度 '+ev.score+' 分，关键节点缺失，请先要求补材料');
+showToast(ev.judge+' · 完整度 '+ev.score+' 分，请先补齐必填项或证据线索');
 return;
 }
 if(act==='reject-order'){ORDER_STATE.status='closed';showToast('订单已关闭，已通知申请人');setTimeout(closeSubPage,800)}
@@ -4756,7 +5095,7 @@ if(act==='xp-accept-cancel'){showToast('退保已受理');XUEPING_STATE.status='
 if(act==='xp-finish-cancel'){showToast('退保成功，保费已退回');XUEPING_STATE.status='cancelled';setTimeout(()=>openSubPage('xuepingDetail',{keepStack:true}),600)}
 if(act==='issue-letter'){showToast('保函已出具并上链存证');ORDER_STATE.status='issued';setTimeout(closeSubPage,1000)}
 if(act==='download-guarantee'){const gno=btn.dataset.gno||btn.dataset.id;showToast('保函 PDF 下载中… '+gno);return}
-if(act==='send-supplement'){ORDER_STATE.status='insufficient';showToast('补材料通知已发送 · 订单进入材料不足');setTimeout(closeSubPage,800)}
+if(act==='send-supplement'){ORDER_STATE.status='insufficient';ORDER_STATE.materials=resolveOrderDemoMaterials(ORDER_STATE);ORDER_STATE.idNo='';ORDER_STATE.applicantPhone='';ORDER_STATE.applicantAddress='';ORDER_STATE.idType='';showToast('补材料通知已发送 · 订单进入材料不足');setTimeout(closeSubPage,800)}
 if(act==='msg-filter'){msgFilter=btn.dataset.filter||'all';openSubPage('messageCenter',{keepStack:true});return}
 if(act==='msg-read-all'){
 const n=MESSAGE_LIST.filter(m=>m.unread).length;
@@ -4927,7 +5266,7 @@ const PRD_SPECS={
 'quick-issue':{title:'业务办理',module:'工作台',page:'工作台',priority:'P0',business:'一键进入诉讼保「等待出函」订单列表，办理审核通过后的出函动作（非审核、非补材料）。',logic:['跳转 orderList filter=wait_issue biz=litigation','自动选中「等待出函」筛选 Tab','与数据看板「等待出函」同一数据源'],acceptance:['点击打开订单列表且仅显示等待出函','入口语义=出函办理'],api:'GET /api/inst/orders?status=wait_issue'},
 'customer-list':{title:'学平业务',module:'工作台',page:'orderList',priority:'P0',business:'工作台快捷入口进入订单中心学平业务线。',logic:['data-biz=xueping','订单中心切换至学平并展示学平状态筛选'],acceptance:['进入订单中心学平 Tab'],api:'GET /api/inst/orders?bizLine=xueping'},
 'order-detail':{title:'订单详情',module:'订单',page:'orderDetail',priority:'P0',business:'顶部订单概要卡（订单号/状态/标的/材料完整度/材料数/法院案由），下接案件信息摘要、申请材料（预览进独立页）、证据链诊断与审核记录。等待出函底部为「出函」「无法承保」。',logic:['顶部材料完整度与证据链同源','申请材料预览 → materialPreview 二级页','等待出函：出函表单（*保单号 *保单附件 保函附件 诉责材料 审核备注 材料处理）/ 无法承保（*审核备注）'],acceptance:['等待出函双按钮','出函必填校验保单号与保单附件','无法承保必填审核备注'],api:'GET /api/inst/order/{id} · POST /api/inst/order/{id}/issue · POST /api/inst/order/{id}/reject-underwrite'},
-'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'从申请材料分析案件证据链，输出诊断分析、材料完整度评分（百分制，总分 100）与提交判断。页内不放「评分规则」按钮；悬停证据链区域 1 秒后，本侧栏以表格展示完整评分规则与单项计算逻辑。',logic:['按案由匹配借贷 / 合同模板','节点权重加权命中计分（满分 100）','必填缺件优先补材料','fail 档阻断进入审核'],scoreTables:true,acceptance:['页内无「评分规则」按钮','悬停 1 秒后右侧 PRD 以表格展示规则','借贷/合同节点权重合计均为 100','每项含 keywords 命中计分说明','分数与节点命中状态一致'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
+'evidence-chain':{title:'证据链诊断 · 评分规则',module:'订单',page:'orderDetail',priority:'P0',business:'百分制完整度：score100=round((申请人+案件材料)/75×100)。页面交互：订单状态「材料不足」强制不达标；否则 ≥60 达标 / <60 不达标（字体色态差异）。材料不足演示订单绑定缺件材料，分数与呈现一致。',logic:['score100=round(raw/75*100)','status=insufficient → 强制 unreach + 缺件材料','否则 uiState: ≥60 reach / <60 unreach','不达标缺件置顶','业务 level 与 uiState 分离'],scoreTables:true,acceptance:['材料不足订单呈不达标红态且分数通常<60','≥60 与 <60 字体色态差异','诊断区逐步计算可读','PRD 含状态强制规则'],api:'POST /api/inst/order/{id}/evidence-chain/analyze'},
 'case-info-detail':{title:'案件详情',module:'订单',page:'caseInfoDetail',priority:'P0',business:'完整展示法院信息、申请人、被申请人及申请材料；提取字段点击可打开原文溯源核对（非跳转材料列表）；案件材料区内按状态显示打包下载、邮件发送、投送电脑端；含证据链诊断与审核记录；底部主操作与订单详情一致（进入审核等，无「要求补材料」）。',logic:['od-page：上滚下固','法院/申请人/被申请人/材料四段信息','OCR 字段可点开 SOURCE_DOCS 原文预览并高亮','材料操作在材料卡片内：驳回仅打包；其余含邮件与投送PC','打包/邮件/投送弹层支持勾选附件','证据链诊断 + 审核记录','底部主操作：renderOrderPrimaryActions','邮件发送弹层无取消按钮，点遮罩或关闭图标退出'],acceptance:['四段信息完整','空字段显示—','溯源弹层可核对原文','材料按钮在材料区内按状态显隐','底部无要求补材料','邮件弹层无取消按钮'],api:'GET /api/inst/order/{id}/case · POST /api/inst/material/push-pc'},
 'order-review':{title:'订单审核',module:'订单',page:'orderReview',priority:'P0',business:'机构核保核心环节：标的金额纯文本只读，填写实际保费自动计算担保费率，录入审核意见；支付为收款账号（银行账号/收款人/开户银行）与二维码支付二选一。',logic:['标的金额无输入框','实际保费→费率‰自动计算','支付方式 Tab 二选一','通过→issueGuarantee'],acceptance:['标的无文本框','账号与二维码互斥','审核通过跳转出函'],api:'POST /api/inst/order/{id}/approve'},
 'issue-guarantee':{title:'出函办理',module:'订单',page:'issueGuarantee',priority:'P0',business:'生成电子保函、同步区块链、推送用户通知，完成业务闭环。',logic:['保函编号自动生成','模板下拉选择','chainCheck 默认勾选','出函后订单状态=出函成功'],acceptance:['出函成功 Toast','链上存证可选'],api:'POST /api/inst/guarantee/issue'},
