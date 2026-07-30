@@ -891,13 +891,13 @@ function renderInstBody(inst) {
 
     <div class="is-panel ${ _instTab === "rate" ? "active" : "" }" data-panel="rate">
       <div class="is-kv"><span class="k">费率</span><span class="v em">${fmtRate(inst.ratePermille)}</span></div>
-      <div class="is-kv"><span class="k">预估保费（示例）</span><span class="v em">¥${fmtMoney(actual)}</span></div>
+      <div class="is-kv"><span class="k">预估保费（示例）</span><span class="v em">${fmtMoney(actual)}</span></div>
       ${inst.minPremium != null && inst.minPremium > 0
-        ? `<div class="is-kv"><span class="k">最低保费</span><span class="v">¥${fmtMoney(inst.minPremium)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">最低保费</span><span class="v">${fmtMoney(inst.minPremium)}</span></div>` : ""}
       ${inst.faceSignFee != null && inst.faceSignFee > 0
-        ? `<div class="is-kv"><span class="k">面签费</span><span class="v">¥${fmtMoney(inst.faceSignFee)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">面签费</span><span class="v">${fmtMoney(inst.faceSignFee)}</span></div>` : ""}
       ${inst.deliveryFee != null && inst.deliveryFee > 0
-        ? `<div class="is-kv"><span class="k">送函费</span><span class="v">¥${fmtMoney(inst.deliveryFee)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">送函费</span><span class="v">${fmtMoney(inst.deliveryFee)}</span></div>` : ""}
       <h4>计费说明</h4>
       <ul>
         <li>预估保费 = 标的金额 × 费率，结果向下取整；</li>
