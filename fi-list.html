@@ -718,7 +718,7 @@ function floorPremium(amount, ratePermille, minPremium) {
 }
 
 function fmtMoney(n) {
-  return Number(n).toFixed(2) + "元";
+  return  "¥" + Number(n).toFixed(2) + "元";
 }
 
 function fieldHtml(label, valueHtml, opts = {}) {
@@ -785,8 +785,8 @@ function renderCard(inst) {
           </div>
         </div>
         <div class="premium-box">
-          <span class="pc-label">实际保费</span>
-          <span class="pc-val">${Number(actual).toFixed(2)}<span class="pc-unit">元</span></span>
+          <span class="pc-label">预估保费</span>
+          <span class="pc-val">¥${Number(actual).toFixed(2)}<span class="pc-unit">元</span></span>
         </div>
       </div>
       <div class="entity-row" data-inst-detail="${inst.id}" role="button" tabindex="0" aria-label="查看机构详情">
@@ -891,20 +891,20 @@ function renderInstBody(inst) {
 
     <div class="is-panel ${ _instTab === "rate" ? "active" : "" }" data-panel="rate">
       <div class="is-kv"><span class="k">费率</span><span class="v em">${fmtRate(inst.ratePermille)}</span></div>
-      <div class="is-kv"><span class="k">实际保费（示例）</span><span class="v em">${fmtMoney(actual)}</span></div>
+      <div class="is-kv"><span class="k">预估保费（示例）</span><span class="v em">¥${fmtMoney(actual)}</span></div>
       ${inst.minPremium != null && inst.minPremium > 0
-        ? `<div class="is-kv"><span class="k">最低保费</span><span class="v">${fmtMoney(inst.minPremium)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">最低保费</span><span class="v">¥${fmtMoney(inst.minPremium)}</span></div>` : ""}
       ${inst.faceSignFee != null && inst.faceSignFee > 0
-        ? `<div class="is-kv"><span class="k">面签费</span><span class="v">${fmtMoney(inst.faceSignFee)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">面签费</span><span class="v">¥${fmtMoney(inst.faceSignFee)}</span></div>` : ""}
       ${inst.deliveryFee != null && inst.deliveryFee > 0
-        ? `<div class="is-kv"><span class="k">送函费</span><span class="v">${fmtMoney(inst.deliveryFee)}</span></div>` : ""}
+        ? `<div class="is-kv"><span class="k">送函费</span><span class="v">¥${fmtMoney(inst.deliveryFee)}</span></div>` : ""}
       <h4>计费说明</h4>
       <ul>
-        <li>实际保费 = 标的金额 × 费率，结果向下取整；</li>
-        <li>若配置了最低保费，则实际保费与最低保费取较高者；</li>
+        <li>预估保费 = 标的金额 × 费率，结果向下取整；</li>
+        <li>若配置了最低保费，则预估保费与最低保费取较高者；</li>
         <li>面签费、送函费为附加费用，不计入保费公式，有则单独收取。</li>
       </ul>
-      <p class="is-note">以上以当前标的金额 ${TARGET_AMOUNT.toLocaleString()} 元试算，下单时以系统实时报价为准。</p>
+      <p class="is-note">以上以当前标的金额 ¥${TARGET_AMOUNT.toLocaleString()} 元试算，下单时以系统实时报价为准。</p>
     </div>
 
     <div class="is-panel ${ _instTab === "terms" ? "active" : "" }" data-panel="terms">
