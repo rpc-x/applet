@@ -192,7 +192,10 @@ body.sheet-open { overflow: hidden; height: 100%; }
   gap: 6px;
   margin-bottom: 10px;
   min-width: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
+.entity-row:active { opacity: 0.75; }
 .type-tag {
   flex-shrink: 0;
   font-size: 11px;
@@ -206,6 +209,7 @@ body.sheet-open { overflow: hidden; height: 100%; }
   min-width: 0;
   font-size: 13px;
   font-weight: 600;
+  color: var(--primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -389,6 +393,114 @@ body.sheet-open { overflow: hidden; height: 100%; }
   background: #F5F1EA; border-radius: 8px;
   font-size: 12px; color: #8A7A66; line-height: 1.65;
 }
+
+/* ===== 机构详情弹层 ===== */
+.inst-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1001;
+  background: #FFF;
+  border-radius: 16px 16px 0 0;
+  max-height: 85vh;
+  display: none;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -8px 28px rgba(0,0,0,.12);
+}
+.inst-sheet.show { display: flex; }
+.is-header {
+  position: relative;
+  flex-shrink: 0;
+  padding: 16px 44px 0;
+  text-align: center;
+  border-bottom: 1px solid #F0F0F0;
+}
+.is-header h3 {
+  font-size: 17px; font-weight: 600;
+  padding-bottom: 12px;
+}
+.is-close {
+  position: absolute; top: 12px; right: 10px;
+  width: 32px; height: 32px;
+  border: none; background: transparent;
+  font-size: 22px; color: #999;
+  display: flex; align-items: center; justify-content: center;
+}
+.is-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 8px;
+}
+.is-tab {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-3);
+  border: none;
+  background: transparent;
+  position: relative;
+  white-space: nowrap;
+}
+.is-tab.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+.is-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px; bottom: 0;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+.is-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  flex: 1;
+  min-height: 0;
+}
+.is-panel { display: none; }
+.is-panel.active { display: block; }
+.is-panel h4 {
+  font-size: 14px; font-weight: 600;
+  margin: 14px 0 8px;
+}
+.is-panel h4:first-child { margin-top: 0; }
+.is-panel p, .is-panel li {
+  font-size: 13px; color: #666; line-height: 1.7;
+}
+.is-panel ul, .is-panel ol { padding-left: 18px; }
+.is-panel li + li { margin-top: 6px; }
+.is-kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F5F5F5;
+  font-size: 13px;
+}
+.is-kv .k { color: var(--text-3); flex-shrink: 0; }
+.is-kv .v { color: var(--text); text-align: right; font-weight: 500; }
+.is-kv .v.em { color: var(--danger); }
+.is-intro-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.is-intro-head .logo {
+  width: 44px; height: 44px; border-radius: 8px; font-size: 13px;
+}
+.is-intro-head .name { font-size: 16px; font-weight: 600; }
+.is-intro-head .meta { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.is-note {
+  margin-top: 14px; padding: 10px 12px;
+  background: #F5F7FA; border-radius: 8px;
+  font-size: 12px; color: #6B7A90; line-height: 1.65;
+}
 </style>
 </head>
 <body>
@@ -428,6 +540,20 @@ body.sheet-open { overflow: hidden; height: 100%; }
     <button type="button" class="gs-close" id="gsClose" aria-label="关闭">×</button>
   </div>
   <div class="gs-body" id="gsBody"></div>
+</div>
+
+<div class="inst-sheet" id="instSheet" role="dialog" aria-labelledby="instTitle">
+  <div class="is-header">
+    <h3 id="instTitle">机构详情</h3>
+    <button type="button" class="is-close" id="instClose" aria-label="关闭">×</button>
+    <div class="is-tabs" id="instTabs">
+      <button type="button" class="is-tab active" data-tab="intro">机构介绍</button>
+      <button type="button" class="is-tab" data-tab="rate">费率</button>
+      <button type="button" class="is-tab" data-tab="terms">条款</button>
+      <button type="button" class="is-tab" data-tab="refund">退款流程</button>
+    </div>
+  </div>
+  <div class="is-body" id="instBody"></div>
 </div>
 
 <script>
@@ -532,10 +658,11 @@ const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.or
 const institutions = [
   {
     id: 1, brand: "大家保险", logoClass: "dj", logoText: "大家", type: "保险",
-    entity: "大家保险股份有限公司湖南分公司",
+    entity: "大家保险股份有限公司",
     badges: [{ text: "NEW", cls: "new" }],
     issueTime: "48小时", ratePermille: 1.0, faceSignFee: 50, deliveryFee: null,
     minPremium: 1000, servicePhone: null, supportRefund7d: true,
+    intro: "大家保险集团是经国务院批准，由中国保险保障基金有限责任公司发起成立的全国性保险集团，为诉讼保全提供电子保函服务。",
     promo: {
       title: "限时优惠",
       items: ["新客首单保费立减 50 元，与最低保费取高后结算", "活动期内出函时效承诺缩短至 24 小时"]
@@ -544,10 +671,11 @@ const institutions = [
   },
   {
     id: 2, brand: "中国大地保险", logoClass: "dd", logoText: "大地", type: "保险",
-    entity: "中国大地财产保险股份有限公司湖南分公司",
+    entity: "中国大地财产保险股份有限公司",
     badges: [{ text: "促销活动中", cls: "promo" }],
     issueTime: "24小时", ratePermille: 1.0, faceSignFee: 50, deliveryFee: 100,
     minPremium: 500, servicePhone: "95590", supportRefund7d: true,
+    intro: "中国大地财产保险股份有限公司是中国再保险（集团）股份有限公司旗下的直接保险成员公司，可为法院诉讼保全业务提供电子保函承保服务。",
     promo: {
       title: "限时优惠",
       items: ["优惠活动描述优惠活动描述优惠活动描述优惠活动", "优惠活动描述优惠活动描述优惠"]
@@ -556,26 +684,29 @@ const institutions = [
   },
   {
     id: 3, brand: "大家保险", logoClass: "dj", logoText: "大家", type: "保险",
-    entity: "大家保险股份有限公司湖南分公司",
+    entity: "大家保险股份有限公司",
     badges: [],
     issueTime: "48小时", ratePermille: 1.5, faceSignFee: null, deliveryFee: null,
     minPremium: null, servicePhone: "400-900-8000", supportRefund7d: true,
+    intro: "大家保险集团是经国务院批准，由中国保险保障基金有限责任公司发起成立的全国性保险集团，为诉讼保全提供电子保函服务。",
     promo: null, status: "online"
   },
   {
     id: 4, brand: "大家保险", logoClass: "dj", logoText: "大家", type: "保险",
-    entity: "大家保险股份有限公司湖南分公司",
+    entity: "大家保险股份有限公司",
     badges: [{ text: "对接中", cls: "connecting" }],
     issueTime: "48小时", ratePermille: 1.0, faceSignFee: null, deliveryFee: null,
     minPremium: 1000, servicePhone: null, supportRefund7d: true,
+    intro: "大家保险集团是经国务院批准，由中国保险保障基金有限责任公司发起成立的全国性保险集团，为诉讼保全提供电子保函服务。",
     promo: null, status: "coming"
   },
   {
     id: 5, brand: "中国工商银行", logoClass: "gs", logoText: "工商", type: "银行",
-    entity: "中国工商银行股份有限公司长沙分行",
+    entity: "中国工商银行股份有限公司",
     badges: [{ text: "业务暂停中", cls: "paused" }],
     issueTime: "48小时", ratePermille: 1.0, faceSignFee: null, deliveryFee: null,
     minPremium: 1000, servicePhone: null, supportRefund7d: true,
+    intro: "中国工商银行是国有大型商业银行，可为符合条件的诉讼保全业务提供银行保函服务。当前业务暂停受理。",
     promo: null, status: "paused"
   }
 ];
@@ -658,7 +789,7 @@ function renderCard(inst) {
           <span class="pc-val">${Number(actual).toFixed(2)}<span class="pc-unit">元</span></span>
         </div>
       </div>
-      <div class="entity-row">
+      <div class="entity-row" data-inst-detail="${inst.id}" role="button" tabindex="0" aria-label="查看机构详情">
         <span class="type-tag">${inst.type}</span>
         <span class="entity-name">${inst.entity}</span>
         <span class="entity-arrow">›</span>
@@ -700,6 +831,14 @@ function render() {
     row.addEventListener("click", open);
   });
 
+  list.querySelectorAll("[data-inst-detail]").forEach(row => {
+    row.addEventListener("click", () => {
+      const id = Number(row.getAttribute("data-inst-detail"));
+      const inst = institutions.find(i => i.id === id);
+      if (inst) openInstSheet(inst);
+    });
+  });
+
   document.getElementById("soonToggle").addEventListener("click", () => {
     const soonList = document.getElementById("soonList");
     const hidden = soonList.classList.toggle("hidden");
@@ -719,6 +858,125 @@ function buildGuaranteeItems(inst) {
 }
 
 let _gsInst = null;
+let _instDetail = null;
+let _instTab = "intro";
+
+function fmtRate(permille) {
+  return Number(permille).toFixed(2) + "‰";
+}
+
+function renderInstBody(inst) {
+  const actual = floorPremium(TARGET_AMOUNT, inst.ratePermille, inst.minPremium);
+  const body = document.getElementById("instBody");
+  body.innerHTML = `
+    <div class="is-panel ${ _instTab === "intro" ? "active" : "" }" data-panel="intro">
+      <div class="is-intro-head">
+        <div class="logo ${inst.logoClass}">${inst.logoText}</div>
+        <div>
+          <div class="name">${inst.entity}</div>
+          <div class="meta">${inst.type} · ${inst.brand}</div>
+        </div>
+      </div>
+      <h4>机构简介</h4>
+      <p>${inst.intro || "暂无机构介绍。"}</p>
+      <h4>服务能力</h4>
+      <ul>
+        <li>出函时效：${inst.issueTime}</li>
+        <li>支持诉讼保全电子保函承保与出函</li>
+        ${inst.supportRefund7d ? "<li>支持 7 天无理由退保</li>" : ""}
+        ${inst.servicePhone ? `<li>客服电话：${inst.servicePhone}</li>` : ""}
+      </ul>
+      <p class="is-note">展示名称为总公司主体；具体承保落地与签章主体以保函文本及机构出函信息为准。</p>
+    </div>
+
+    <div class="is-panel ${ _instTab === "rate" ? "active" : "" }" data-panel="rate">
+      <div class="is-kv"><span class="k">费率</span><span class="v em">${fmtRate(inst.ratePermille)}</span></div>
+      <div class="is-kv"><span class="k">实际保费（示例）</span><span class="v em">${fmtMoney(actual)}</span></div>
+      ${inst.minPremium != null && inst.minPremium > 0
+        ? `<div class="is-kv"><span class="k">最低保费</span><span class="v">${fmtMoney(inst.minPremium)}</span></div>` : ""}
+      ${inst.faceSignFee != null && inst.faceSignFee > 0
+        ? `<div class="is-kv"><span class="k">面签费</span><span class="v">${fmtMoney(inst.faceSignFee)}</span></div>` : ""}
+      ${inst.deliveryFee != null && inst.deliveryFee > 0
+        ? `<div class="is-kv"><span class="k">送函费</span><span class="v">${fmtMoney(inst.deliveryFee)}</span></div>` : ""}
+      <h4>计费说明</h4>
+      <ul>
+        <li>实际保费 = 标的金额 × 费率，结果向下取整；</li>
+        <li>若配置了最低保费，则实际保费与最低保费取较高者；</li>
+        <li>面签费、送函费为附加费用，不计入保费公式，有则单独收取。</li>
+      </ul>
+      <p class="is-note">以上以当前标的金额 ${TARGET_AMOUNT.toLocaleString()} 元试算，下单时以系统实时报价为准。</p>
+    </div>
+
+    <div class="is-panel ${ _instTab === "terms" ? "active" : "" }" data-panel="terms">
+      <h4>承保条款摘要</h4>
+      <ol>
+        <li>投保人应如实填写案件信息与当事人信息，并对材料真实性负责。</li>
+        <li>保函仅用于约定法院、约定案号/案件的诉讼保全用途，不得挪作他用。</li>
+        <li>出函以材料齐全、审核通过且费用支付成功为前提。</li>
+        <li>发生保险责任范围内的赔付时，按保函约定及保险公司理赔规则办理。</li>
+        <li>完整保险条款、特别约定以保函文本及机构提供的条款文件为准。</li>
+      </ol>
+      <h4>使用须知</h4>
+      <ul>
+        <li>请按法院要求提交电子保函或打印件；</li>
+        <li>如法院驳回保全申请，可按退保规则申请退保；</li>
+        <li>因虚假材料导致的损失由投保人自行承担。</li>
+      </ul>
+    </div>
+
+    <div class="is-panel ${ _instTab === "refund" ? "active" : "" }" data-panel="refund">
+      <h4>退款流程</h4>
+      <ol>
+        <li>在订单详情中发起「退保/退款」申请，或联系机构客服协助；</li>
+        <li>提交退保原因及必要材料，等待机构审核；</li>
+        <li>审核通过后，保费按原支付路径退回；</li>
+        <li>到账时间以银行/支付渠道为准，一般 1–3 个工作日。</li>
+      </ol>
+      <h4>可退情形</h4>
+      <ul>
+        <li>支付成功后 7 天内，且保函尚未被法院接收使用（支持 7 天无理由退保）；</li>
+        <li>未出函或法院明确不接收电子保函等符合规则的情形。</li>
+      </ul>
+      <h4>不可退/部分退情形</h4>
+      <ul>
+        <li>保函已送达法院并被接收使用；</li>
+        <li>超过冷静期且不符合退保条件；</li>
+        <li>面签费、送函费等已实际发生的附加费用，按实际发生情况扣除或不予退还。</li>
+      </ul>
+      <p class="is-note">具体以机构审核结果及保函约定为准；如有争议可拨打客服${inst.servicePhone ? " " + inst.servicePhone : ""}咨询。</p>
+    </div>
+  `;
+}
+
+function setInstTab(tab) {
+  _instTab = tab;
+  document.querySelectorAll("#instTabs .is-tab").forEach(el => {
+    el.classList.toggle("active", el.getAttribute("data-tab") === tab);
+  });
+  if (_instDetail) renderInstBody(_instDetail);
+  document.getElementById("instBody").scrollTop = 0;
+}
+
+function openInstSheet(inst) {
+  closeGuaranteeSheet(false);
+  _instDetail = inst;
+  _instTab = "intro";
+  document.getElementById("instTitle").textContent = inst.brand;
+  document.querySelectorAll("#instTabs .is-tab").forEach(el => {
+    el.classList.toggle("active", el.getAttribute("data-tab") === "intro");
+  });
+  renderInstBody(inst);
+  document.getElementById("gsMask").classList.add("show");
+  document.getElementById("instSheet").classList.add("show");
+  document.body.classList.add("sheet-open");
+}
+
+function closeInstSheet() {
+  document.getElementById("instSheet").classList.remove("show");
+  document.getElementById("gsMask").classList.remove("show");
+  document.body.classList.remove("sheet-open");
+  _instDetail = null;
+}
 
 function renderGuaranteeList() {
   const sheet = document.getElementById("gsSheet");
@@ -754,6 +1012,7 @@ function openGuaranteeDetail(itemId) {
 }
 
 function openGuaranteeSheet(inst) {
+  closeInstSheetKeepMask();
   _gsInst = inst;
   renderGuaranteeList();
   document.getElementById("gsMask").classList.add("show");
@@ -761,18 +1020,34 @@ function openGuaranteeSheet(inst) {
   document.body.classList.add("sheet-open");
 }
 
-function closeGuaranteeSheet() {
-  document.getElementById("gsMask").classList.remove("show");
-  document.getElementById("gsSheet").classList.remove("show");
-  document.getElementById("gsSheet").classList.remove("is-detail");
-  document.body.classList.remove("sheet-open");
-  _gsInst = null;
+function closeInstSheetKeepMask() {
+  document.getElementById("instSheet").classList.remove("show");
+  _instDetail = null;
 }
 
-document.getElementById("gsMask").addEventListener("click", closeGuaranteeSheet);
-document.getElementById("gsClose").addEventListener("click", closeGuaranteeSheet);
+function closeGuaranteeSheet(hideMask = true) {
+  document.getElementById("gsSheet").classList.remove("show");
+  document.getElementById("gsSheet").classList.remove("is-detail");
+  _gsInst = null;
+  if (hideMask) {
+    document.getElementById("gsMask").classList.remove("show");
+    document.body.classList.remove("sheet-open");
+  }
+}
+
+function closeAllSheets() {
+  closeGuaranteeSheet(false);
+  closeInstSheet();
+}
+
+document.getElementById("gsMask").addEventListener("click", closeAllSheets);
+document.getElementById("gsClose").addEventListener("click", () => closeGuaranteeSheet(true));
 document.getElementById("gsBack").addEventListener("click", () => {
   if (_gsInst) renderGuaranteeList();
+});
+document.getElementById("instClose").addEventListener("click", closeInstSheet);
+document.querySelectorAll("#instTabs .is-tab").forEach(tab => {
+  tab.addEventListener("click", () => setInstTab(tab.getAttribute("data-tab")));
 });
 
 render();
