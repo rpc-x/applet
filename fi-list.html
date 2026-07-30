@@ -213,19 +213,23 @@ body.sheet-open { overflow: hidden; height: 100%; }
 .entity-arrow { color: var(--primary); flex-shrink: 0; }
 
 .fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
   margin-bottom: 8px;
   font-size: 12px;
   color: var(--text-2);
-}
-.field {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  padding: 2px 0;
   line-height: 1.5;
 }
+.field {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
 .field .label { flex-shrink: 0; }
-.field .val { color: var(--danger); font-weight: 500; word-break: break-all; }
+.field .val { color: var(--danger); font-weight: 500; }
 .field .val.phone { color: var(--primary); }
 
 .tag-row {
