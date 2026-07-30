@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>选择金融机构</title>
+<style>
+  :root {
+    --primary: #2F7CF6;
+    --primary-dark: #1E6AE0;
+    --primary-soft: #E8F1FE;
+    --danger: #E54D42;
+    --text: #1A1A1A;
+    --text-2: #666666;
+    --text-3: #999999;
+    --border: #EEEEEE;
+    --bg: #F5F6F8;
+    --white: #FFFFFF;
+    --promo: #FF8A1A;
+    --new: #2F7CF6;
+    --connecting: #19B36B;
+    --paused: #A0A5B0;
+    --card-radius: 10px;
+    --phone-w: 375px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    background: #DCE3EC;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 12px 40px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone {
+    width: var(--phone-w);
+    max-width: 100%;
+    background: var(--bg);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(30, 50, 80, 0.22);
+    position: relative;
+  }
+
+  /* Status / nav */
+  .status-bar {
+    height: 44px;
+    background: var(--white);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 18px 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .status-bar .icons { display: flex; gap: 5px; align-items: center; font-size: 12px; }
+
+  .nav {
+    height: 44px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px 0 10px;
+    border-bottom: 1px solid #F0F0F0;
+  }
+  .nav-back {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: #333; font-size: 20px; cursor: pointer;
+  }
+  .nav-title { font-size: 17px; font-weight: 600; letter-spacing: 0.2px; }
+  .nav-capsule {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid #E5E5E5; border-radius: 16px;
+    height: 30px; overflow: hidden; background: #FAFAFA;
+  }
+  .nav-capsule span {
+    width: 40px; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #333;
+  }
+  .nav-capsule span + span { border-left: 1px solid #E5E5E5; }
+
+  /* Stepper */
+  .stepper {
+    background: var(--white);
+    padding: 14px 10px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 6px;
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: calc(50% + 14px);
+    right: calc(-50% + 14px);
+    height: 2px;
+    background: #D9E2F0;
+  }
+  .step.done:not(:last-child)::after,
+  .step.active:not(:last-child)::after { background: var(--primary); }
+  .step-dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; z-index: 1;
+    background: #E8EDF5; color: #9AA4B5;
+  }
+  .step.done .step-dot,
+  .step.active .step-dot {
+    background: var(--primary); color: #fff;
+  }
+  .step-label {
+    font-size: 12px; color: var(--text-3); white-space: nowrap;
+  }
+  .step.done .step-label,
+  .step.active .step-label { color: var(--primary); font-weight: 500; }
+
+  /* List */
+  .list {
+    padding: 10px 10px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    padding: 14px 12px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    position: relative;
+  }
+  .card.is-disabled { opacity: 0.92; }
+
+  .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-right: 88px; /* 为右上角实际保费留位 */
+  }
+  .logo {
+    width: 28px; height: 28px; border-radius: 6px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+  }
+  .logo.dj { background: linear-gradient(135deg, #5B8DEF, #3A6FD8); }
+  .logo.dd { background: linear-gradient(135deg, #E85D4A, #C94432); }
+  .logo.gs { background: linear-gradient(135deg, #C8102E, #8B0A1E); font-size: 9px; }
+  .brand-wrap {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 6px;
+  }
+  .brand {
+    font-size: 16px; font-weight: 600; color: var(--text);
+    line-height: 1.2;
+  }
+  .badges { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    font-size: 10px; line-height: 1;
+    padding: 3px 5px; border-radius: 3px;
+    font-weight: 600; color: #fff;
+  }
+  .badge.new { background: var(--new); }
+  .badge.promo { background: var(--promo); }
+  .badge.connecting { background: var(--connecting); }
+  .badge.paused { background: var(--paused); }
+
+  /* 实际保费：固定卡片右上角 */
+  .premium-corner {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    text-align: right;
+    line-height: 1.2;
+    z-index: 1;
+  }
+  .premium-corner .pc-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-3);
+    margin-bottom: 2px;
+  }
+  .premium-corner .pc-val {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--danger);
+    white-space: nowrap;
+  }
+  .premium-corner .pc-unit {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .entity-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .type-tag {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 2px 6px;
+    border-radius: 3px;
+    line-height: 1.4;
+  }
+  .entity-name {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entity-arrow {
+    color: var(--primary);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* Fields */
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .field {
+    width: 50%;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    padding-right: 4px;
+  }
+  .field.full { width: 100%; }
+  .field .label { color: var(--text-2); white-space: nowrap; }
+  .field .val { color: var(--danger); font-weight: 500; }
+  .field .val.plain { color: var(--text-2); font-weight: 400; }
+  .field .val.phone { color: var(--primary); font-weight: 500; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    user-select: none;
+    padding: 2px 0;
+  }
+  .tag-row:active { opacity: 0.75; }
+  .tag-row .tag-more {
+    margin-left: auto;
+    color: #C0C4CC;
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .info-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #1A8F5C;
+    background: #E8F8F0;
+    border: 1px solid #B8E6CF;
+    border-radius: 4px;
+    padding: 3px 8px;
+    line-height: 1.3;
+  }
+  .info-tag::before {
+    content: "✓";
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* 安心保障弹层（京东购物页风格） */
+  .sheet-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s, visibility .25s;
+  }
+  .sheet-mask.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .guarantee-sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 101;
+    background: #FAFAF8;
+    border-radius: 16px 16px 0 0;
+    max-height: 78%;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform .28s cubic-bezier(.22, .9, .32, 1);
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.12);
+  }
+  .guarantee-sheet.show { transform: translateY(0); }
+  .gs-header {
+    position: relative;
+    flex-shrink: 0;
+    text-align: center;
+    padding: 18px 44px 12px;
+    background: linear-gradient(180deg, #F7F3EC 0%, #FAFAF8 100%);
+    border-radius: 16px 16px 0 0;
+  }
+  .gs-header h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+  .gs-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px; height: 28px;
+    border: none;
+    background: transparent;
+    color: #999;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gs-back {
+    position: absolute;
+    top: 14px;
+    left: 8px;
+    width: 32px; height: 28px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .guarantee-sheet.is-detail .gs-back { display: flex; }
+  .gs-body {
+    overflow-y: auto;
+    padding: 4px 16px 28px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gs-item {
+    display: flex;
+    gap: 10px;
+    padding: 14px 0;
+  }
+  .gs-item + .gs-item {
+    border-top: 1px solid #F0EEEA;
+  }
+  .gs-icon {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    margin-top: 1px;
+  }
+  .gs-icon svg { display: block; width: 100%; height: 100%; }
+  .gs-content { flex: 1; min-width: 0; }
+  .gs-title-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .gs-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1A1A1A;
+    line-height: 1.3;
+  }
+  .gs-chev {
+    margin-left: auto;
+    color: #C8C8C8;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .gs-desc {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #8C8C8C;
+    line-height: 1.65;
+  }
+  .gs-item.clickable { cursor: pointer; }
+  .gs-item.clickable:active { background: rgba(0,0,0,0.03); margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+  .gs-item.clickable:active .gs-title { color: var(--primary); }
+
+  .gs-detail {
+    padding: 4px 0 8px;
+  }
+  .gs-detail .gd-lead {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .gs-detail .gd-section {
+    margin-bottom: 14px;
+  }
+  .gs-detail .gd-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: 8px;
+  }
+  .gs-detail .gd-section p,
+  .gs-detail .gd-section li {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+  }
+  .gs-detail .gd-section ul,
+  .gs-detail .gd-section ol {
+    padding-left: 18px;
+  }
+  .gs-detail .gd-section li + li { margin-top: 6px; }
+  .gs-detail .gd-note {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: #F5F1EA;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #8A7A66;
+    line-height: 1.65;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 2px;
+  }
+  .btn-promo {
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--primary);
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn-promo .chev {
+    font-size: 10px;
+    transition: transform .2s;
+  }
+  .btn-promo.open .chev { transform: rotate(180deg); }
+  .btn-primary {
+    height: 32px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 4px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .btn-primary:active { background: var(--primary-dark); }
+  .actions.no-promo .btn-primary { margin-left: auto; }
+
+  .promo-detail {
+    display: none;
+    margin-top: 10px;
+    background: #F3F8FF;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .promo-detail.show { display: block; }
+  .promo-detail h4 {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .promo-detail h4::before {
+    content: "";
+    width: 3px; height: 12px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+  .promo-detail ol {
+    padding-left: 18px;
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  /* Section divider */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 0 2px;
+    color: var(--text-3);
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-divider .line {
+    flex: 1; height: 1px; background: #E0E3E8;
+  }
+  .section-divider .arrow {
+    font-size: 10px;
+    transition: transform .2s;
+  }
+  .section-divider.collapsed .arrow { transform: rotate(180deg); }
+
+  .coming-soon { display: flex; flex-direction: column; gap: 10px; }
+  .coming-soon.hidden { display: none; }
+
+  .hint {
+    margin: 4px 10px 0;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #6B7A90;
+    background: #EEF3F9;
+    border-radius: 6px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 420px) {
+    body { padding: 0; background: var(--bg); }
+    .phone { border-radius: 0; box-shadow: none; min-height: 100vh; width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="icons">
+        <span>●●●</span>
+        <span>WiFi</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="nav-back" title="返回">‹</div>
+      <div class="nav-title">选择金融机构</div>
+      <div class="nav-capsule">
+        <span>···</span>
+        <span>○</span>
+      </div>
+    </div>
+
+    <div class="stepper">
+      <div class="step done">
+        <div class="step-dot">⋯</div>
+        <div class="step-label">上传材料</div>
+      </div>
+      <div class="step active">
+        <div class="step-dot">4</div>
+        <div class="step-label">选机构</div>
+      </div>
+      <div class="step">
+        <div class="step-dot">5</div>
+        <div class="step-label">确认</div>
+      </div>
+      <div class="step">
+        <div class="step-dot">6</div>
+        <div class="step-label">签章支付</div>
+      </div>
+    </div>
+
+
+    <div class="list" id="instList"></div>
+
+    <!-- 安心保障弹层 -->
+    <div class="sheet-mask" id="gsMask"></div>
+    <div class="guarantee-sheet" id="gsSheet" role="dialog" aria-labelledby="gsTitle">
+      <div class="gs-header">
+        <button type="button" class="gs-back" id="gsBack" aria-label="返回">‹</button>
+        <h3 id="gsTitle">安心保障</h3>
+        <button type="button" class="gs-close" id="gsClose" aria-label="关闭">×</button>
+      </div>
+      <div class="gs-body" id="gsBody"></div>
+    </div>
+  </div>
+
+<script>
+/**
+ * 卡片展示字段
+ * 实际保费     必填，固定右上角（内部仍按 标的×费率↓取整，再与最低保费取 max）
+ * 出函时效 / 7天无理由退保  安心保障标签，点击整行弹出说明层
+ * 面签费 / 送函费 / 客服电话  无则隐藏
+ * 费率、最低保费 不在卡片中展示
+ */
+const TARGET_AMOUNT = 530000; // 标的金额（元）
+
+/** 安心保障项（可扩展：闪电退款、极速审核等） */
+const GUARANTEE_CATALOG = {
+  issueTime: {
+    id: "issueTime",
+    title: "出函时效",
+    hasDetail: true,
+    descTpl: (inst) =>
+      `本机构承诺出函时效为「${inst.issueTime}」。时效自支付成功且材料齐全起算；若机构仅工作日受理，非工作时间下单将顺延至下一工作日 9:00 起算。可点击“>”了解详细规则`,
+    detailTpl: (inst) => `
+      <div class="gs-detail">
+        <p class="gd-lead">本机构承诺出函时效为 <b>${inst.issueTime}</b>，具体规则如下。</p>
+        <div class="gd-section">
+          <h4>1. 时效起算点</h4>
+          <p>以「支付成功且投保材料齐全」的时刻起算。仅支付成功但材料不齐的，自材料补齐之日起算。</p>
+        </div>
+        <div class="gd-section">
+          <h4>2. 工作日与节假日</h4>
+          <ul>
+            <li>若机构仅工作日受理：非工作时间（含法定节假日、周末）下单，时效顺延至下一工作日 9:00 起算。</li>
+            <li>支持 24 小时出函的机构：按自然时起算，不受工作日限制（以机构配置为准）。</li>
+          </ul>
+        </div>
+        <div class="gd-section">
+          <h4>3. 超时处理</h4>
+          <p>超出承诺时效仍未出函的，可联系客服催办；因用户材料问题、法院系统异常等非机构原因导致的延误，不计入承诺时效。</p>
+        </div>
+        <p class="gd-note">说明：卡片展示的出函时效文案用于说明承诺时长；实际排序与受理能力以平台规则及机构配置为准。</p>
+      </div>`
+  },
+  refund7d: {
+    id: "refund7d",
+    title: "7天无理由退保",
+    hasDetail: true,
+    descTpl: () =>
+      "支持投保后 7 天内无理由退保。未出函或符合退保条件的订单，保费按规则原路退回；已出函且产生法院使用的情形除外，可点击“>”了解详细规则",
+    detailTpl: () => `
+      <div class="gs-detail">
+        <p class="gd-lead">本产品支持投保后 <b>7 天内无理由退保</b>，规则如下。</p>
+        <div class="gd-section">
+          <h4>1. 适用条件</h4>
+          <ul>
+            <li>自支付成功之日起 7 个自然日内提出退保申请；</li>
+            <li>保函尚未被法院接收/使用，或尚未进入不可撤销阶段；</li>
+            <li>订单状态允许发起退保（未出函、已出函未使用等，以页面可操作状态为准）。</li>
+          </ul>
+        </div>
+        <div class="gd-section">
+          <h4>2. 退款说明</h4>
+          <ul>
+            <li>符合条件的保费按原支付路径退回；</li>
+            <li>面签费、送函费等已实际发生的附加费用，按实际发生情况扣除或不予退还；</li>
+            <li>退款到账时间以支付渠道为准，一般 1–3 个工作日。</li>
+          </ul>
+        </div>
+        <div class="gd-section">
+          <h4>3. 不适用情形</h4>
+          <ul>
+            <li>保函已送达法院并被接收使用；</li>
+            <li>超过 7 天冷静期；</li>
+            <li>存在欺诈、虚假材料等违规情形。</li>
+          </ul>
+        </div>
+        <p class="gd-note">如需退保，请在订单详情中发起申请，或联系机构客服协助处理。</p>
+      </div>`
+  },
+  flashRefund: {
+    id: "flashRefund",
+    title: "闪电退款",
+    hasDetail: true,
+    descTpl: () =>
+      "符合条件的退保申请提交后，系统将优先处理并快速完成退款到账。可点击“>”了解详细规则",
+    detailTpl: () => `
+      <div class="gs-detail">
+        <p class="gd-lead">闪电退款为符合条件用户提供的优先退款通道。</p>
+        <div class="gd-section">
+          <h4>服务说明</h4>
+          <ul>
+            <li>退保申请审核通过后，系统优先发起退款；</li>
+            <li>到账时间仍受银行/支付渠道影响，通常快于普通退款。</li>
+          </ul>
+        </div>
+      </div>`
+  },
+  quickAudit: {
+    id: "quickAudit",
+    title: "极速审核",
+    hasDetail: false,
+    descTpl: () =>
+      "优质用户提交退保/售后申请时，满足相关条件可享极速审核通道"
+  }
+};
+
+/** 当前对用户展示的安心保障清单（后续直接往里加 key 即可） */
+const GUARANTEE_DISPLAY_KEYS = ["issueTime", "refund7d"];
+// 演示扩展时可改为：["issueTime", "refund7d", "flashRefund", "quickAudit"]
+
+const SHIELD_SVG = `
+<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M10 1.5L3.5 4.2v5.1c0 4.1 2.8 7.9 6.5 8.9 3.7-1 6.5-4.8 6.5-8.9V4.2L10 1.5z" fill="#C87941"/>
+  <path d="M8.1 10.6l-1.6-1.6-.9.9 2.5 2.5 4.4-4.4-.9-.9-3.5 3.5z" fill="#fff"/>
+</svg>`;
+
+const institutions = [
+  {
+    id: 1,
+    brand: "大家保险",
+    logoClass: "dj",
+    logoText: "大家",
+    type: "保险",
+    entity: "大家保险股份有限公司湖南分公司",
+    badges: [{ text: "NEW", cls: "new" }],
+    issueTime: "48小时",
+    ratePermille: 1.0,          // ‰
+    faceSignFee: 50,            // 面签费
+    deliveryFee: null,          // 无送函费 → 隐藏
+    minPremium: 1000,
+    servicePhone: null,         // 无电话 → 隐藏
+    supportRefund7d: true,
+    promo: {
+      title: "限时优惠",
+      items: [
+        "新客首单保费立减 50 元，与最低保费取高后结算",
+        "活动期内出函时效承诺缩短至 24 小时"
+      ]
+    },
+    status: "online",
+    promoOpen: false
+  },
+  {
+    id: 2,
+    brand: "中国大地保险",
+    logoClass: "dd",
+    logoText: "大地",
+    type: "保险",
+    entity: "中国大地财产保险股份有限公司湖南分公司",
+    badges: [{ text: "促销活动中", cls: "promo" }],
+    issueTime: "24小时",
+    ratePermille: 1.0,
+    faceSignFee: 50,
+    deliveryFee: 100,
+    minPremium: 500,
+    servicePhone: "95590",
+    supportRefund7d: true,
+    promo: {
+      title: "限时优惠",
+      items: [
+        "优惠活动描述优惠活动描述优惠活动描述优惠活动",
+        "优惠活动描述优惠活动描述优惠"
+      ]
+    },
+    status: "online",
+    promoOpen: true
+  },
+  {
+    id: 3,
+    brand: "大家保险",
+    logoClass: "dj",
+    logoText: "大家",
+    type: "保险",
+    entity: "大家保险股份有限公司湖南分公司",
+    badges: [],
+    issueTime: "48小时",
+    ratePermille: 1.5,
+    faceSignFee: null,
+    deliveryFee: null,
+    minPremium: null,           // 无最低保费 → 隐藏
+    servicePhone: "400-900-8000",
+    supportRefund7d: true,
+    promo: null,
+    status: "online"
+  },
+  {
+    id: 4,
+    brand: "大家保险",
+    logoClass: "dj",
+    logoText: "大家",
+    type: "保险",
+    entity: "大家保险股份有限公司湖南分公司",
+    badges: [{ text: "对接中", cls: "connecting" }],
+    issueTime: "48小时",
+    ratePermille: 1.0,
+    faceSignFee: null,
+    deliveryFee: null,
+    minPremium: 1000,
+    servicePhone: null,
+    supportRefund7d: true,
+    promo: null,
+    status: "coming"            // 即将上线
+  },
+  {
+    id: 5,
+    brand: "中国工商银行",
+    logoClass: "gs",
+    logoText: "工商",
+    type: "银行",
+    entity: "中国工商银行股份有限公司长沙分行",
+    badges: [{ text: "业务暂停中", cls: "paused" }],
+    issueTime: "48小时",
+    ratePermille: 1.0,
+    faceSignFee: null,
+    deliveryFee: null,
+    minPremium: 1000,
+    servicePhone: null,
+    supportRefund7d: true,
+    promo: null,
+    status: "paused"
+  }
+];
+
+function floorPremium(amount, ratePermille, minPremium) {
+  // 实际保费 = 标的 × 费率‰ / 1000，向下取整，再与最低保费取 max
+  const raw = Math.floor(amount * ratePermille / 1000);
+  if (minPremium != null && minPremium > 0) return Math.max(raw, minPremium);
+  return raw;
+}
+
+function fmtMoney(n) {
+  return Number(n).toFixed(2) + "元";
+}
+
+function fieldHtml(label, valueHtml, opts = {}) {
+  if (opts.hide) return "";
+  const cls = opts.full ? "field full" : "field";
+  return `<div class="${cls}"><span class="label">${label}</span><span class="val ${opts.valClass || ""}">${valueHtml}</span></div>`;
+}
+
+function renderCard(inst) {
+  const actual = floorPremium(TARGET_AMOUNT, inst.ratePermille, inst.minPremium);
+  const disabled = inst.status !== "online";
+  const badges = (inst.badges || [])
+    .map(b => `<span class="badge ${b.cls}">${b.text}</span>`)
+    .join("");
+
+  // 条件展示：面签费、送函费、客服电话；费率/最低保费不展示；实际保费右上角
+  // 出函时效、7天无理由：标签样式
+  const fields = [
+    fieldHtml("面签费", fmtMoney(inst.faceSignFee), {
+      hide: !(inst.faceSignFee != null && inst.faceSignFee > 0)
+    }),
+    fieldHtml("送函费", fmtMoney(inst.deliveryFee), {
+      hide: !(inst.deliveryFee != null && inst.deliveryFee > 0)
+    }),
+    fieldHtml("客服电话", inst.servicePhone || "", {
+      hide: !inst.servicePhone,
+      valClass: "phone",
+      full: true
+    })
+  ].join("");
+
+  const tags = [
+    `<span class="info-tag">出函时效 ${inst.issueTime}</span>`,
+    inst.supportRefund7d ? `<span class="info-tag">支持7天无理由退保</span>` : ""
+  ].filter(Boolean).join("");
+  const tagRow = tags
+    ? `<div class="tag-row" data-guarantee="${inst.id}" role="button" tabindex="0" aria-label="查看安心保障">
+         ${tags}<span class="tag-more">›</span>
+       </div>`
+    : "";
+
+  let actions = "";
+  if (!disabled) {
+    const promoBtn = inst.promo
+      ? `<button type="button" class="btn-promo ${inst.promoOpen ? "open" : ""}" data-promo="${inst.id}">
+           限时优惠 <span class="chev">▾</span>
+         </button>`
+      : "";
+    actions = `
+      <div class="actions ${inst.promo ? "" : "no-promo"}">
+        ${promoBtn}
+        <button type="button" class="btn-primary">立即办理</button>
+      </div>`;
+  }
+
+  const promoDetail = inst.promo
+    ? `<div class="promo-detail ${inst.promoOpen ? "show" : ""}" id="promo-${inst.id}">
+         <h4>优惠详情</h4>
+         <ol>${inst.promo.items.map(t => `<li>${t}</li>`).join("")}</ol>
+       </div>`
+    : "";
+
+  return `
+    <article class="card ${disabled ? "is-disabled" : ""}" data-id="${inst.id}">
+      <div class="premium-corner">
+        <span class="pc-label">实际保费</span>
+        <span class="pc-val">${Number(actual).toFixed(2)}<span class="pc-unit">元</span></span>
+      </div>
+      <div class="card-head">
+        <div class="logo ${inst.logoClass}">${inst.logoText}</div>
+        <div class="brand-wrap">
+          <span class="brand">${inst.brand}</span>
+          <div class="badges">${badges}</div>
+        </div>
+      </div>
+      <div class="entity-row">
+        <span class="type-tag">${inst.type}</span>
+        <span class="entity-name">${inst.entity}</span>
+        <span class="entity-arrow">›</span>
+      </div>
+      ${fields ? `<div class="fields">${fields}</div>` : ""}
+      ${tagRow}
+      ${actions}
+      ${promoDetail}
+    </article>`;
+}
+
+function render() {
+  const online = institutions.filter(i => i.status === "online");
+  const soon = institutions.filter(i => i.status !== "online");
+
+  const list = document.getElementById("instList");
+  list.innerHTML =
+    online.map(renderCard).join("") +
+    `<div class="section-divider" id="soonToggle">
+       <span class="line"></span>
+       <span>即将上线机构</span>
+       <span class="arrow">▴</span>
+       <span class="line"></span>
+     </div>
+     <div class="coming-soon" id="soonList">
+       ${soon.map(renderCard).join("")}
+     </div>`;
+
+  // 限时优惠展开/收起
+  list.querySelectorAll("[data-promo]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-promo");
+      const panel = document.getElementById("promo-" + id);
+      const open = panel.classList.toggle("show");
+      btn.classList.toggle("open", open);
+    });
+  });
+
+  // 安心保障：点击标签行弹出说明层
+  list.querySelectorAll("[data-guarantee]").forEach(row => {
+    const open = () => {
+      const id = Number(row.getAttribute("data-guarantee"));
+      const inst = institutions.find(i => i.id === id);
+      if (inst) openGuaranteeSheet(inst);
+    };
+    row.addEventListener("click", open);
+    row.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
+  });
+
+  // 即将上线折叠
+  const toggle = document.getElementById("soonToggle");
+  const soonList = document.getElementById("soonList");
+  toggle.addEventListener("click", () => {
+    const hidden = soonList.classList.toggle("hidden");
+    toggle.classList.toggle("collapsed", hidden);
+  });
+}
+
+function buildGuaranteeItems(inst) {
+  return GUARANTEE_DISPLAY_KEYS
+    .map(key => GUARANTEE_CATALOG[key])
+    .filter(Boolean)
+    .filter(item => {
+      if (item.id === "refund7d") return !!inst.supportRefund7d;
+      if (item.id === "issueTime") return !!inst.issueTime;
+      return true;
+    })
+    .map(item => ({
+      ...item,
+      title: item.title,
+      desc: item.descTpl(inst),
+      detailHtml: typeof item.detailTpl === "function" ? item.detailTpl(inst) : ""
+    }));
+}
+
+let _gsInst = null;
+
+function renderGuaranteeList() {
+  const sheet = document.getElementById("gsSheet");
+  const body = document.getElementById("gsBody");
+  const title = document.getElementById("gsTitle");
+  sheet.classList.remove("is-detail");
+  title.textContent = "安心保障";
+  const items = buildGuaranteeItems(_gsInst);
+  body.innerHTML = items.map(item => `
+    <div class="gs-item ${item.hasDetail ? "clickable" : ""}" data-gitem="${item.id}" ${item.hasDetail ? 'role="button" tabindex="0"' : ""}>
+      <div class="gs-icon">${SHIELD_SVG}</div>
+      <div class="gs-content">
+        <div class="gs-title-row">
+          <span class="gs-title">${item.title}${item.id === "issueTime" ? " " + _gsInst.issueTime : ""}</span>
+          ${item.hasDetail ? `<span class="gs-chev">›</span>` : ""}
+        </div>
+        <p class="gs-desc">${item.desc}</p>
+      </div>
+    </div>
+  `).join("");
+
+  body.querySelectorAll(".gs-item.clickable").forEach(el => {
+    const go = () => openGuaranteeDetail(el.getAttribute("data-gitem"));
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+    });
+  });
+}
+
+function openGuaranteeDetail(itemId) {
+  const catalog = GUARANTEE_CATALOG[itemId];
+  if (!catalog || !catalog.hasDetail) return;
+  const sheet = document.getElementById("gsSheet");
+  const body = document.getElementById("gsBody");
+  const title = document.getElementById("gsTitle");
+  sheet.classList.add("is-detail");
+  title.textContent = catalog.title;
+  body.innerHTML = typeof catalog.detailTpl === "function"
+    ? catalog.detailTpl(_gsInst)
+    : "<p class='gs-desc'>暂无详细规则</p>";
+  body.scrollTop = 0;
+}
+
+function openGuaranteeSheet(inst) {
+  _gsInst = inst;
+  renderGuaranteeList();
+  document.getElementById("gsMask").classList.add("show");
+  document.getElementById("gsSheet").classList.add("show");
+}
+
+function closeGuaranteeSheet() {
+  document.getElementById("gsMask").classList.remove("show");
+  document.getElementById("gsSheet").classList.remove("show");
+  document.getElementById("gsSheet").classList.remove("is-detail");
+  _gsInst = null;
+}
+
+document.getElementById("gsMask").addEventListener("click", closeGuaranteeSheet);
+document.getElementById("gsClose").addEventListener("click", closeGuaranteeSheet);
+document.getElementById("gsBack").addEventListener("click", () => {
+  if (_gsInst) renderGuaranteeList();
+});
+
+render();
+</script>
+</body>
+</html>
