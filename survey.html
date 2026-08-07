@@ -537,12 +537,12 @@
       color: #94a3b8;
     }
 
-    /* —— 提交成功 · 朋友圈可转发海报 —— */
+    /* —— 提交成功 · 朋友圈海报（封面冲击力 / 真实表述） —— */
     .success-view {
       display: none;
       min-height: 100vh;
       padding: 16px 14px 40px;
-      background: #e8eef5;
+      background: #dce5f0;
     }
 
     .success-view.show { display: block; }
@@ -550,216 +550,311 @@
     .page.hidden { display: none; }
 
     .success-shell {
-      max-width: 400px;
+      max-width: 390px;
       margin: 0 auto;
     }
 
     .share-hint {
       text-align: center;
       font-size: 0.8rem;
-      color: #475569;
+      color: #334155;
       margin-bottom: 12px;
       line-height: 1.5;
     }
 
-    .share-hint b { color: var(--brand); font-weight: 600; }
-
-    /* 海报本体：适合截图发朋友圈 */
+    /* 海报：竖版封面，适合朋友圈首图 */
     .share-poster {
-      background: #fff;
-      border-radius: 16px;
+      background: #0b1b36;
+      border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
-      border: 1px solid #dbe3ee;
-    }
-
-    .poster-head {
-      padding: 22px 20px 18px;
-      background: linear-gradient(145deg, #1e3a8a 0%, #1e40af 55%, #0f766e 100%);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22);
       color: #f8fafc;
-      text-align: center;
     }
 
-    .poster-brand {
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      opacity: 0.8;
-      font-weight: 600;
+    .poster-cover {
+      position: relative;
+      padding: 28px 22px 26px;
+      background:
+        radial-gradient(ellipse 80% 70% at 100% 0%, rgba(15, 118, 110, 0.45), transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, rgba(30, 58, 138, 0.55), transparent 50%),
+        linear-gradient(165deg, #0b1b36 0%, #12305f 48%, #0d3d3a 100%);
+      overflow: hidden;
     }
 
-    .poster-head h2 {
-      margin-top: 8px;
-      font-size: 1.4rem;
-      font-weight: 700;
+    .poster-cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+      pointer-events: none;
     }
 
-    .poster-head p {
-      margin-top: 8px;
-      font-size: 0.84rem;
-      opacity: 0.85;
-      line-height: 1.55;
+    .poster-cover::after {
+      content: "诉";
+      position: absolute;
+      right: -8px;
+      bottom: -28px;
+      font-size: 9.5rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.04);
+      line-height: 1;
+      pointer-events: none;
     }
 
-    .poster-body {
-      padding: 20px 18px 8px;
-      text-align: center;
+    .poster-brand-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
-    .poster-status {
+    .poster-brand-row .logo {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      background: #ecfdf5;
-      color: #047857;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .poster-status i {
-      font-style: normal;
+      gap: 8px;
+      font-size: 0.82rem;
       font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
-    .poster-quote {
-      margin: 14px 0 0;
-      font-size: 0.95rem;
+    .poster-brand-row .logo img {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #fff;
+    }
+
+    .poster-badge {
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(248,250,252,0.9);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .poster-kicker {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      font-size: 0.78rem;
+      color: #99f6e4;
       font-weight: 600;
-      color: var(--ink);
-      line-height: 1.55;
+      letter-spacing: 0.06em;
     }
 
-    .poster-desc {
+    .poster-title {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .poster-title em {
+      font-style: normal;
+      color: #5eead4;
+    }
+
+    .poster-sub {
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: rgba(248, 250, 252, 0.78);
+      line-height: 1.6;
+      max-width: 16em;
+    }
+
+    .poster-tags {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .poster-tags span {
+      font-size: 0.72rem;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(248,250,252,0.9);
+    }
+
+    .poster-panel {
+      background: #fff;
+      color: var(--ink);
+      padding: 18px 18px 16px;
+    }
+
+    .poster-social {
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+
+    .poster-social-desc {
       margin-top: 6px;
       font-size: 0.78rem;
-      color: var(--muted);
+      color: #64748b;
       line-height: 1.55;
     }
 
     .poster-voucher {
-      margin: 18px 0 0;
-      padding: 14px 12px;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
     }
 
     .poster-voucher .label {
-      font-size: 0.7rem;
-      color: var(--muted);
+      font-size: 0.68rem;
+      color: #64748b;
     }
 
     .poster-voucher .code {
-      margin-top: 6px;
+      margin-top: 2px;
       font-family: "SF Mono", "Cascadia Mono", "Consolas", monospace;
-      font-size: 1.02rem;
+      font-size: 0.88rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
       color: var(--brand);
+      letter-spacing: 0.03em;
       word-break: break-all;
     }
 
     .poster-voucher .meta {
-      margin-top: 8px;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: #94a3b8;
+      text-align: right;
+      white-space: nowrap;
     }
 
-    .poster-qr-row {
-      margin-top: 18px;
+    .poster-qr-block {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       gap: 14px;
-      text-align: left;
-      padding: 0 4px 4px;
+      background: #fafbfc;
     }
 
     .qr-wrap {
       flex-shrink: 0;
-      width: 108px;
-      height: 108px;
+      width: 112px;
+      height: 112px;
       padding: 6px;
       background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      position: relative;
     }
 
-    .qr-wrap canvas,
     .qr-wrap img {
       width: 100%;
       height: 100%;
       display: block;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    .qr-fallback {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #eff6ff;
+      border-radius: 4px;
+      padding: 6px;
+    }
+
+    .qr-fallback.show { display: flex; }
+
+    .qr-fallback b {
+      font-size: 0.78rem;
+      color: var(--brand);
+    }
+
+    .qr-fallback span {
+      margin-top: 4px;
+      font-size: 0.62rem;
+      color: #64748b;
+      line-height: 1.35;
     }
 
     .poster-qr-text strong {
       display: block;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--ink);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
     }
 
     .poster-qr-text span {
       display: block;
       margin-top: 6px;
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.74rem;
+      color: #64748b;
       line-height: 1.55;
     }
 
+    .poster-qr-text .hint {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: #b45309;
+      font-weight: 600;
+    }
+
     .poster-foot {
-      margin-top: 16px;
-      padding: 12px 18px 16px;
+      padding: 11px 18px 14px;
+      background: #fff;
       border-top: 1px solid #eef2f7;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      font-size: 0.72rem;
-      color: var(--muted);
+      font-size: 0.7rem;
+      color: #94a3b8;
     }
 
     .poster-foot .gift {
-      color: #b45309;
-      font-weight: 600;
+      color: #c2410c;
+      font-weight: 700;
     }
 
-    /* 操作区：不在海报内，避免截图杂乱 */
-    .success-ops {
+    /* 成功页底部按钮（不在海报内，避免截图进朋友圈） */
+    .success-bottom {
       margin-top: 14px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-    }
-
-    .success-ops .ops-title {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .success-actions {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.2fr 1fr;
       gap: 8px;
     }
 
-    .success-actions button {
+    .success-bottom button {
       appearance: none;
       border: none;
       cursor: pointer;
       font: inherit;
-      font-size: 0.84rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      padding: 11px 10px;
-      border-radius: 10px;
-    }
-
-    .success-actions .full {
-      grid-column: 1 / -1;
+      padding: 13px 12px;
+      border-radius: 12px;
     }
 
     .btn-primary {
@@ -768,26 +863,10 @@
     }
 
     .btn-soft {
-      background: var(--soft);
-      color: var(--brand);
-    }
-
-    .btn-ghost {
       background: #fff;
-      color: #475569;
-      border: 1px solid var(--line) !important;
+      color: var(--brand);
+      border: 1px solid #bfdbfe !important;
     }
-
-    .claim-mini {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-      font-size: 0.75rem;
-      color: #64748b;
-      line-height: 1.65;
-    }
-
-    .claim-mini b { color: #334155; }
 
     .success-note {
       margin-top: 12px;
@@ -827,7 +906,6 @@
       margin: 6px 0 0 1.1em;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 </head>
 <body>
   <div class="tip-mask" id="entryTip" role="dialog" aria-modal="true" aria-labelledby="tipTitle">
@@ -1014,72 +1092,79 @@
     </form>
   </div>
 
-  <!-- 提交成功 · 可转发朋友圈海报 -->
+  <!-- 提交成功 · 朋友圈海报封面 -->
   <div class="success-view" id="successView" aria-live="polite">
     <div class="success-shell">
-      <p class="share-hint">提交成功！截图下方卡片，可发朋友圈邀请同行一起参与</p>
+      <p class="share-hint">提交成功！截图下方海报发朋友圈，扫码直达「诉讼保」小程序</p>
 
-      <!-- 仅截图这一块即可发朋友圈 -->
+      <!-- 截图这一块发朋友圈即可 -->
       <article class="share-poster" id="sharePoster">
-        <header class="poster-head">
-          <div class="poster-brand">诉讼保 · 用户体验调研</div>
-          <h2>调研已完成</h2>
-          <p>用几分钟反馈，助力诉讼保全服务更好用</p>
-        </header>
+        <div class="poster-cover">
+          <div class="poster-brand-row">
+            <div class="logo">
+              <img src="assets/logo/hxt-logo-v3-seal-bao.svg" alt="诉讼保" />
+              诉讼保
+            </div>
+            <span class="poster-badge">用户调研</span>
+          </div>
+          <div class="poster-kicker">财产保全 · 电子保函</div>
+          <h2 class="poster-title">保全担保 <em>少跑一趟</em></h2>
+          <p class="poster-sub">线上提交材料、选机构出函。<br />真实用户反馈，帮我们把流程做得更顺。</p>
+          <div class="poster-tags">
+            <span>材料上传</span>
+            <span>AI 辅助填单</span>
+            <span>电子保函</span>
+          </div>
+        </div>
 
-        <div class="poster-body">
-          <div class="poster-status"><i>✓</i> 问卷已提交</div>
-          <p class="poster-quote">我刚完成了诉讼保小程序用户调研</p>
-          <p class="poster-desc">财产保全 · 电子保函 · 智能填单<br />欢迎扫码参与，同样可领红包</p>
+        <div class="poster-panel">
+          <p class="poster-social">我刚填完诉讼保用户调研</p>
+          <p class="poster-social-desc">做保全的朋友可以扫码进小程序看看；参与调研并截图找客服，可领感谢红包。</p>
 
           <div class="poster-voucher">
-            <div class="label">我的调研凭证号</div>
-            <div class="code" id="voucherCode">—</div>
-            <div class="meta"><span id="voucherTime">—</span> · <span id="voucherSerial">—</span></div>
+            <div>
+              <div class="label">调研凭证号（领奖核验用）</div>
+              <div class="code" id="voucherCode">—</div>
+            </div>
+            <div class="meta">
+              <div id="voucherSerial">—</div>
+              <div id="voucherTime">—</div>
+            </div>
           </div>
 
-          <div class="poster-qr-row">
-            <div class="qr-wrap" id="qrBox" aria-label="分享二维码"></div>
+          <div class="poster-qr-block">
+            <div class="qr-wrap" id="qrBox" aria-label="诉讼保小程序码">
+              <!-- 正式环境：把微信后台下载的「诉讼保」小程序码覆盖为 assets/miniprogram-qr.png，并把下方 src 改为该 png -->
+              <img id="mpQrImg" src="assets/miniprogram-qr.png" alt="诉讼保小程序码" data-fallback="assets/miniprogram-qr.svg" />
+              <div class="qr-fallback" id="qrFallback">
+                <b>诉讼保</b>
+                <span>微信搜索小程序<br />「诉讼保」</span>
+              </div>
+            </div>
             <div class="poster-qr-text">
-              <strong>扫码参与调研</strong>
-              <span>截图发给客服可核验领奖；也可转发朋友圈，邀请同事/同行一起填写。</span>
+              <strong>扫码打开小程序</strong>
+              <span>微信识别进入「诉讼保」；办理保全担保，或参与调研反馈体验。</span>
+              <div class="hint">填写有礼 · 10–20 元红包<br />（截图凭证找客服领取）</div>
             </div>
           </div>
         </div>
 
         <footer class="poster-foot">
-          <span>诉讼保小程序</span>
-          <span class="gift">填写有礼 · 10–20 元红包</span>
+          <span>微信小程序 · 诉讼保</span>
+          <span class="gift">真实调研 · 感谢红包</span>
         </footer>
       </article>
 
-      <div class="success-ops">
-        <div class="ops-title">下一步操作</div>
-        <div class="success-actions">
-          <button type="button" class="btn-primary full" id="shareMomentsBtn">分享到朋友圈</button>
-          <button type="button" class="btn-soft" id="copyShareBtn">复制分享文案</button>
-          <button type="button" class="btn-soft" id="copyCodeBtn">复制凭证号</button>
-          <button type="button" class="btn-ghost full" id="backSurveyBtn">返回问卷首页</button>
-        </div>
-
-        <div class="moments-guide" id="momentsGuide">
-          <b>微信里这样发朋友圈：</b>
-          <ol>
-            <li>长按或截图上方海报卡片</li>
-            <li>打开微信 → 发现 → 朋友圈</li>
-            <li>选择图片发布，粘贴分享文案即可</li>
-          </ol>
-          若在微信内打开本页，也可点右上角「···」→ 分享到朋友圈。
-        </div>
-
-        <div class="copy-tip" id="copyTip">已复制</div>
-
-        <div class="claim-mini">
-          <b>领红包：</b>截图海报（含凭证号）→ 打开诉讼保小程序联系客服 → 发送截图领取 10–20 元红包。
-        </div>
+      <div class="success-bottom">
+        <button type="button" class="btn-primary" id="shareMomentsBtn">分享到朋友圈</button>
+        <button type="button" class="btn-soft" id="copyCodeBtn">复制凭证号</button>
       </div>
 
-      <p class="success-note">每位用户限领一次 · 活动最终解释权归诉讼保所有</p>
+      <div class="moments-guide" id="momentsGuide">
+        <b>发朋友圈：</b>截图上方海报 → 微信朋友圈发图 → 可粘贴已复制的文案。
+      </div>
+      <div class="copy-tip" id="copyTip">已复制</div>
+      <p class="success-note">截图凭证找客服领 10–20 元红包 · 每位限领一次</p>
     </div>
   </div>
 
@@ -1095,7 +1180,6 @@
       const voucherCodeEl = document.getElementById("voucherCode");
       const voucherTimeEl = document.getElementById("voucherTime");
       const voucherSerialEl = document.getElementById("voucherSerial");
-      const qrBox = document.getElementById("qrBox");
       const copyTip = document.getElementById("copyTip");
       const momentsGuide = document.getElementById("momentsGuide");
       let lastVoucher = null;
@@ -1129,12 +1213,11 @@
       }
 
       function buildShareText(code) {
-        const link = location.href.split("#")[0];
         return (
-          "我刚完成了「诉讼保」小程序用户调研，顺便领了红包～\n" +
-          "财产保全 / 电子保函相关的朋友也可以填一下，一起让服务更好用。\n" +
-          "我的凭证号：" + code + "\n" +
-          "问卷入口：" + link
+          "刚用完「诉讼保」办保全担保相关事，顺手填了个用户调研。\n" +
+          "财产保全 / 电子保函，线上传材料、AI 辅助填单，少跑一趟。\n" +
+          "扫海报里的小程序码就能进；参与调研截图找客服，可领 10–20 元感谢红包（以客服核验为准）。\n" +
+          "我的凭证号：" + code
         );
       }
 
@@ -1211,31 +1294,35 @@
         };
       }
 
-      function renderQr(payload) {
-        qrBox.innerHTML = "";
-        if (typeof QRCode !== "undefined" && QRCode.toCanvas) {
-          const canvas = document.createElement("canvas");
-          qrBox.appendChild(canvas);
-          QRCode.toCanvas(canvas, payload, {
-            width: 96,
-            margin: 1,
-            color: { dark: "#0f172a", light: "#ffffff" },
-            errorCorrectionLevel: "M",
-          }, (err) => {
-            if (err) renderQrFallback(payload);
-          });
-          return;
-        }
-        renderQrFallback(payload);
-      }
+      function bindMiniProgramQr() {
+        const img = document.getElementById("mpQrImg");
+        const fallback = document.getElementById("qrFallback");
+        if (!img || !fallback) return;
 
-      function renderQrFallback(payload) {
-        qrBox.innerHTML = "";
-        const img = document.createElement("img");
-        img.alt = "分享二维码";
-        img.src = "https://api.qrserver.com/v1/create-qr-code/?size=96x96&margin=6&data="
-          + encodeURIComponent(payload);
-        qrBox.appendChild(img);
+        const showTextFallback = () => {
+          img.style.display = "none";
+          fallback.classList.add("show");
+        };
+
+        const showImg = () => {
+          img.style.display = "block";
+          fallback.classList.remove("show");
+        };
+
+        img.onload = showImg;
+        img.onerror = () => {
+          const alt = img.getAttribute("data-fallback");
+          if (alt && !img.dataset.triedFallback) {
+            img.dataset.triedFallback = "1";
+            img.src = alt;
+            return;
+          }
+          showTextFallback();
+        };
+
+        // 优先官方 png；没有则回退 svg 占位，再没有则显示「微信搜索诉讼保」
+        img.dataset.triedFallback = "";
+        img.src = "assets/miniprogram-qr.png";
       }
 
       function showSuccess(voucher) {
@@ -1243,9 +1330,7 @@
         voucherCodeEl.textContent = voucher.code;
         voucherTimeEl.textContent = voucher.timeText;
         voucherSerialEl.textContent = voucher.serial;
-        // 二维码指向问卷页，方便朋友圈扫码参与；同时带上凭证便于核验
-        const qrPayload = location.href.split("#")[0] + "?from=moments&v=" + encodeURIComponent(voucher.code);
-        renderQr(qrPayload);
+        bindMiniProgramQr();
         momentsGuide.classList.remove("show");
 
         tip.classList.add("hidden");
@@ -1269,18 +1354,11 @@
         copyText(voucherCodeEl.textContent, "凭证号已复制");
       });
 
-      document.getElementById("copyShareBtn").addEventListener("click", () => {
-        const code = (lastVoucher && lastVoucher.code) || voucherCodeEl.textContent;
-        copyText(buildShareText(code), "分享文案已复制，可粘贴到朋友圈");
-        momentsGuide.classList.add("show");
-      });
-
       document.getElementById("shareMomentsBtn").addEventListener("click", async () => {
         const code = (lastVoucher && lastVoucher.code) || voucherCodeEl.textContent;
         const shareText = buildShareText(code);
         momentsGuide.classList.add("show");
 
-        // 尽量唤起系统分享；微信内通常需用户手动发朋友圈
         if (navigator.share) {
           try {
             await navigator.share({
@@ -1295,14 +1373,7 @@
           }
         }
 
-        await copyText(shareText, "文案已复制，请按下方步骤发朋友圈");
-        document.getElementById("sharePoster").scrollIntoView({ behavior: "smooth", block: "center" });
-      });
-
-      document.getElementById("backSurveyBtn").addEventListener("click", () => {
-        successView.classList.remove("show");
-        surveyPage.classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        await copyText(shareText, "文案已复制，请截图海报发朋友圈");
       });
 
       form.addEventListener("submit", (e) => {
