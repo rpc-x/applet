@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>诉讼保 · 用户体验问卷调查</title>
+  <style>
+    :root {
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --brand: #1e3a8a;
+      --brand-2: #0f766e;
+      --accent: #c2410c;
+      --soft: #eff6ff;
+      --ok: #059669;
+      --radius: 14px;
+      --shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+        -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(30, 58, 138, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(15, 118, 110, 0.1), transparent),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px 14px 48px;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #0f766e 100%);
+      color: #f8fafc;
+      border-radius: 20px;
+      padding: 28px 24px 26px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+
+    .brand {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      margin-top: 8px;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      font-size: 0.875rem;
+      color: rgba(248, 250, 252, 0.82);
+      max-width: 36em;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .progress-wrap {
+      margin: 18px 0 8px;
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar > i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    form { margin-top: 6px; }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 18px 18px;
+      margin-top: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--brand);
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .section-head h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .section-head p {
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .q {
+      margin-top: 16px;
+    }
+
+    .q:first-of-type { margin-top: 0; }
+
+    .q-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .q-title .req {
+      color: var(--accent);
+      margin-left: 2px;
+    }
+
+    .q-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .options.cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 520px) {
+      .options.cols-2 { grid-template-columns: 1fr; }
+    }
+
+    label.opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fafbfc;
+      transition: border-color 0.15s, background 0.15s;
+      font-size: 0.875rem;
+    }
+
+    label.opt:hover {
+      border-color: #93c5fd;
+      background: #f8fbff;
+    }
+
+    label.opt:has(input:checked) {
+      border-color: var(--brand);
+      background: var(--soft);
+    }
+
+    label.opt input {
+      margin-top: 3px;
+      accent-color: var(--brand);
+      flex-shrink: 0;
+    }
+
+    .with-other {
+      display: grid;
+      gap: 8px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+      font-size: 0.875rem;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .scale label {
+      text-align: center;
+      padding: 10px 4px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fafbfc;
+      font-size: 0.8rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .scale label:has(input:checked) {
+      border-color: var(--brand);
+      background: var(--soft);
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .scale input { display: none; }
+
+    .scale-ends {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .nps {
+      display: grid;
+      grid-template-columns: repeat(11, 1fr);
+      gap: 4px;
+    }
+
+    .nps label {
+      text-align: center;
+      padding: 8px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      background: #fafbfc;
+    }
+
+    .nps label:has(input:checked) {
+      border-color: var(--brand-2);
+      background: #ecfdf5;
+      font-weight: 700;
+      color: var(--brand-2);
+    }
+
+    .nps input { display: none; }
+
+    @media (max-width: 560px) {
+      .nps {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    .matrix {
+      overflow-x: auto;
+    }
+
+    .matrix table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 480px;
+    }
+
+    .matrix th,
+    .matrix td {
+      padding: 10px 6px;
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .matrix th:first-child,
+    .matrix td:first-child {
+      text-align: left;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .matrix thead th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.72rem;
+    }
+
+    .matrix input { accent-color: var(--brand); }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button[type="submit"] {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #1e3a8a, #0f766e);
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(30, 58, 138, 0.28);
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    button[type="submit"]:hover { filter: brightness(1.05); }
+    button[type="submit"]:active { transform: scale(0.99); }
+
+    .privacy {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .toast {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .toast.show { display: block; }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="brand">诉讼保 · 用户调研</div>
+      <h1>诉讼保 · 小程序问卷调查</h1>
+      <p>为持续优化诉讼保全担保服务体验，诚邀您用 3–5 分钟填写本问卷。您的反馈将直接影响产品迭代与服务改进。</p>
+      <div class="meta">
+        <span class="chip">约 3–5 分钟</span>
+        <span class="chip">匿名可选</span>
+        <span class="chip">数据仅用于产品优化</span>
+      </div>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>填写进度</span>
+        <span id="progressText">0%</span>
+      </div>
+      <div class="bar"><i id="progressBar"></i></div>
+    </div>
+
+    <form id="surveyForm" novalidate>
+      <!-- 1. 基本画像 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">1</span>
+          <div>
+            <h2>您是谁 · 使用场景</h2>
+            <p>帮助我们了解核心用户画像与业务场景</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">1.1 您的身份是？<span class="req">*</span></div>
+          <div class="options cols-2">
+            <label class="opt"><input type="radio" name="role" value="律师" required /> 执业律师 / 律师助理</label>
+            <label class="opt"><input type="radio" name="role" value="当事人" /> 案件当事人（原告/申请人）</label>
+            <label class="opt"><input type="radio" name="role" value="法务" /> 企业法务</label>
+            <label class="opt"><input type="radio" name="role" value="代理人" /> 诉讼代理人 / 律所行政</label>
+            <label class="opt"><input type="radio" name="role" value="法院相关" /> 法院相关工作人员</label>
+            <label class="opt"><input type="radio" name="role" value="其他" /> 其他</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">1.2 您主要办理的保全类型？<span class="req">*</span> <span class="q-hint">可多选</span></div>
+          <div class="options cols-2">
+            <label class="opt"><input type="checkbox" name="caseType" value="财产保全" /> 财产保全</label>
+            <label class="opt"><input type="checkbox" name="caseType" value="行为保全" /> 行为保全</label>
+            <label class="opt"><input type="checkbox" name="caseType" value="证据保全" /> 证据保全</label>
+            <label class="opt"><input type="checkbox" name="caseType" value="诉前保全" /> 诉前保全</label>
+            <label class="opt"><input type="checkbox" name="caseType" value="诉中保全" /> 诉中保全</label>
+            <label class="opt"><input type="checkbox" name="caseType" value="执行保全" /> 执行阶段相关</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">1.3 近一年您大概办理过多少次保全担保？<span class="req">*</span></div>
+          <div class="options">
+            <label class="opt"><input type="radio" name="freq" value="首次" required /> 首次接触 / 尚未正式办理</label>
+            <label class="opt"><input type="radio" name="freq" value="1-3次" /> 1–3 次</label>
+            <label class="opt"><input type="radio" name="freq" value="4-10次" /> 4–10 次</label>
+            <label class="opt"><input type="radio" name="freq" value="10次以上" /> 10 次以上（高频用户）</label>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 2. 获客渠道 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">2</span>
+          <div>
+            <h2>您如何知道「诉讼保」小程序</h2>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">2.1 您最初是从哪里了解到我们的？<span class="req">*</span> <span class="q-hint">可多选</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="channel" value="微信搜索" /> 微信搜一搜 / 小程序搜索</label>
+            <label class="opt"><input type="checkbox" name="channel" value="朋友推荐" /> 同事 / 同行 / 朋友推荐</label>
+            <label class="opt"><input type="checkbox" name="channel" value="律所内部" /> 律所 / 公司法务内部推荐</label>
+            <label class="opt"><input type="checkbox" name="channel" value="法院指引" /> 法院工作人员 / 立案窗口指引</label>
+            <label class="opt"><input type="checkbox" name="channel" value="公众号" /> 微信公众号 / 服务号文章</label>
+            <label class="opt"><input type="checkbox" name="channel" value="短视频" /> 抖音 / 视频号 / 小红书等短视频</label>
+            <label class="opt"><input type="checkbox" name="channel" value="搜索引擎" /> 百度 / 必应等搜索引擎</label>
+            <label class="opt"><input type="checkbox" name="channel" value="广告" /> 信息流 / 朋友圈广告</label>
+            <label class="opt"><input type="checkbox" name="channel" value="其他平台跳转" /> 其他平台 / App 跳转进入</label>
+          </div>
+          <div class="with-other" style="margin-top:8px">
+            <input type="text" name="channelOther" placeholder="其他渠道，请补充说明" />
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">2.2 若通过搜索找到我们，您一般用哪些关键词？<span class="req">*</span> <span class="q-hint">可多选</span></div>
+          <div class="options cols-2">
+            <label class="opt"><input type="checkbox" name="keyword" value="财产保全" /> 财产保全</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保全" /> 诉讼保全</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="保全担保" /> 保全担保</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保函" /> 诉讼保函 / 电子保函</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="诉前保全担保" /> 诉前保全担保</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="保险公司保函" /> 保险公司保函</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="担保公司" /> 担保公司 / 担保保函</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="冻结账户" /> 冻结账户 / 查封冻结</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保" /> 诉讼保（品牌名）</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="未搜索" /> 没有搜索过，是别人推荐的</label>
+          </div>
+          <div class="with-other" style="margin-top:8px">
+            <input type="text" name="keywordOther" placeholder="还有其他搜索词？请写下原话，便于我们优化搜索排名" />
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">2.3 您是否对比过其他同类产品/机构？</div>
+          <div class="options">
+            <label class="opt"><input type="radio" name="compare" value="只知道诉讼保" /> 目前只知道 / 只用过诉讼保</label>
+            <label class="opt"><input type="radio" name="compare" value="对比过1-2家" /> 对比过 1–2 家</label>
+            <label class="opt"><input type="radio" name="compare" value="对比过多家" /> 对比过 3 家及以上</label>
+          </div>
+          <div class="with-other" style="margin-top:8px">
+            <input type="text" name="compareNames" placeholder="若方便，可写下您对比过的平台或机构名称（选填）" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. AI 使用习惯 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">3</span>
+          <div>
+            <h2>AI 使用习惯与接受度</h2>
+            <p>评估小程序 AI 解析、辅助填单等能力的价值</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">3.1 小程序中的「AI 文书生成 / 智能填单」，您用过吗？<span class="req">*</span></div>
+          <div class="options">
+            <label class="opt"><input type="radio" name="aiFeature" value="用过且满意" required /> 用过，整体满意</label>
+            <label class="opt"><input type="radio" name="aiFeature" value="用过但一般" /> 用过，准确度一般 / 需大量修改</label>
+            <label class="opt"><input type="radio" name="aiFeature" value="知道但没用" /> 知道有，但没怎么用</label>
+            <label class="opt"><input type="radio" name="aiFeature" value="不知道" /> 不知道有这个功能</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">3.2 您最希望 AI 帮您解决什么？ <span class="q-hint">可多选</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="aiExpect" value="自动识别材料" /> 自动识别起诉状 / 裁定书等材料字段</label>
+            <label class="opt"><input type="checkbox" name="aiExpect" value="材料清单检查" /> 提交前材料完整性检查与缺件提醒</label>
+            <label class="opt"><input type="checkbox" name="aiExpect" value="费率测算" /> 保费 / 费率智能测算与比价</label>
+            <label class="opt"><input type="checkbox" name="aiExpect" value="流程问答" /> 保全流程与法院要求智能问答</label>
+            <label class="opt"><input type="checkbox" name="aiExpect" value="进度预测" /> 出函时效预测与进度提醒</label>
+            <label class="opt"><input type="checkbox" name="aiExpect" value="风险提示" /> 案件风险点 / 拒保风险提示</label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 产品体验 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">4</span>
+          <div>
+            <h2>产品使用体验评价</h2>
+            <p>平台核心关心：转化、效率、信任与续用</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">4.1 您在小程序中完成到哪一步？<span class="req">*</span></div>
+          <div class="options">
+            <label class="opt"><input type="radio" name="funnel" value="仅浏览" required /> 仅浏览了解，未申请</label>
+            <label class="opt"><input type="radio" name="funnel" value="上传材料" /> 上传了材料 / 试填过</label>
+            <label class="opt"><input type="radio" name="funnel" value="提交申请" /> 已提交申请</label>
+            <label class="opt"><input type="radio" name="funnel" value="已出函" /> 已成功出函</label>
+            <label class="opt"><input type="radio" name="funnel" value="多次出函" /> 多次成功出函（复购用户）</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">4.2 若未完成申请或曾中途放弃，主要原因是？ <span class="q-hint">可多选</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="dropReason" value="不会操作" /> 不知道怎么操作 / 引导不清</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="材料复杂" /> 材料要求复杂、准备麻烦</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="价格偏高" /> 保费 / 费率偏高</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="出函太慢" /> 担心出函太慢</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="信任不足" /> 对平台或机构信任不足</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="法院不认可" /> 不确定法院是否认可电子保函</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="客服难联" /> 客服联系不上 / 响应慢</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="已完成" /> 我已顺利完成，无放弃</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">4.3 办理保全担保时，您最看重什么？<span class="req">*</span> <span class="q-hint">最多选 3 项</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="priority" value="出函快" class="priority-cb" /> 出函速度快</label>
+            <label class="opt"><input type="checkbox" name="priority" value="费率低" class="priority-cb" /> 费率 / 保费更低</label>
+            <label class="opt"><input type="checkbox" name="priority" value="法院认可" class="priority-cb" /> 法院接受度高、不出问题</label>
+            <label class="opt"><input type="checkbox" name="priority" value="操作简单" class="priority-cb" /> 操作简单、省时间</label>
+            <label class="opt"><input type="checkbox" name="priority" value="大机构" class="priority-cb" /> 承保机构品牌 / 资质可靠</label>
+            <label class="opt"><input type="checkbox" name="priority" value="售后" class="priority-cb" /> 理赔 / 售后响应有保障</label>
+            <label class="opt"><input type="checkbox" name="priority" value="专人对接" class="priority-cb" /> 有专人一对一对接</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">4.4 您期望的「提交到出函」时效是？</div>
+          <div class="options cols-2">
+            <label class="opt"><input type="radio" name="eta" value="1小时内" /> 1 小时内</label>
+            <label class="opt"><input type="radio" name="eta" value="当天" /> 当天（工作时间内）</label>
+            <label class="opt"><input type="radio" name="eta" value="1个工作日" /> 1 个工作日</label>
+            <label class="opt"><input type="radio" name="eta" value="2-3工作日" /> 2–3 个工作日可接受</label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 问题与建议 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">5</span>
+          <div>
+            <h2>问题 · 建议 · 优化点</h2>
+            <p>开放反馈，直接驱动迭代排期</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">5.1 您在使用中遇到过哪些问题？ <span class="q-hint">可多选</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="issue" value="卡顿闪退" /> 小程序卡顿 / 闪退 / 加载慢</label>
+            <label class="opt"><input type="checkbox" name="issue" value="上传失败" /> 文件上传失败或格式不支持</label>
+            <label class="opt"><input type="checkbox" name="issue" value="字段错误" /> AI / 表单字段识别不准</label>
+            <label class="opt"><input type="checkbox" name="issue" value="状态不清" /> 订单状态看不懂 / 进度不透明</label>
+            <label class="opt"><input type="checkbox" name="issue" value="支付问题" /> 支付 / 签章 / 开票问题</label>
+            <label class="opt"><input type="checkbox" name="issue" value="机构拒保" /> 机构拒保或反复退回补件</label>
+            <label class="opt"><input type="checkbox" name="issue" value="通知缺失" /> 微信消息 / 提醒不到位</label>
+            <label class="opt"><input type="checkbox" name="issue" value="暂无问题" /> 暂无明显问题</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">5.2 您最希望我们优先优化什么？ <span class="q-hint">可多选</span></div>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="optimize" value="流程简化" /> 进一步简化申请流程</label>
+            <label class="opt"><input type="checkbox" name="optimize" value="AI准确" /> 提升 AI 识别准确率</label>
+            <label class="opt"><input type="checkbox" name="optimize" value="出函加速" /> 加快出函与审核速度</label>
+            <label class="opt"><input type="checkbox" name="optimize" value="费率透明" /> 费率更透明、支持多机构比价</label>
+            <label class="opt"><input type="checkbox" name="optimize" value="进度可视" /> 进度可视化与节点提醒</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">5.3 还有哪些问题、建议或想吐槽的点？</div>
+          <textarea name="feedback" required placeholder="例如：某一步卡住了、某功能找不到、希望增加某某能力……写得越具体越有帮助"></textarea>
+        </div>
+
+      </section>
+
+      <!-- 6. 联系与回访 -->
+      <section class="section" data-section>
+        <div class="section-head">
+          <span class="num">6</span>
+          <div>
+            <h2>回访与激励</h2>
+            <p>便于深度访谈与问题跟进（可不填）</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">6.1 遇到问题时，您更希望如何获得帮助？</div>
+          <div class="options cols-2">
+            <label class="opt"><input type="checkbox" name="support" value="在线客服" /> 小程序内在线客服</label>
+            <label class="opt"><input type="checkbox" name="support" value="电话" /> 电话专席</label>
+            <label class="opt"><input type="checkbox" name="support" value="企微" /> 企业微信 / 微信一对一</label>
+            <label class="opt"><input type="checkbox" name="support" value="自助FAQ" /> 自助帮助中心 / FAQ</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">6.2 是否愿意接受 10–15 分钟电话/微信访谈？</div>
+          <div class="options">
+            <label class="opt"><input type="radio" name="interview" value="愿意" /> 愿意，希望帮助产品变得更好</label>
+            <label class="opt"><input type="radio" name="interview" value="看情况" /> 看时间，可以再说</label>
+            <label class="opt"><input type="radio" name="interview" value="不愿意" /> 暂不方便</label>
+          </div>
+        </div>
+
+        <div class="q">
+          <div class="q-title">6.3 联系方式（选填）</div>
+          <div class="options" style="gap:8px">
+            <input type="text" name="contactName" placeholder="称呼（如：王律师）" />
+            <input type="tel" name="contactPhone" placeholder="手机号 / 微信号" />
+          </div>
+        </div>
+		</br>
+		<p class="privacy">提交即表示您同意我们将反馈用于产品优化；联系方式仅用于回访，不会对外公开或用于营销骚扰。</p>
+
+      </section>
+
+      <div class="actions">
+        <button type="submit">提交问卷</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("surveyForm");
+      const bar = document.getElementById("progressBar");
+      const text = document.getElementById("progressText");
+      const toast = document.getElementById("toast");
+
+      const trackedSelectors = [
+        'input[name="role"]',
+        'input[name="caseType"]',
+        'input[name="freq"]',
+        'input[name="channel"]',
+        'input[name="keyword"]',
+        'input[name="aiFreq"]',
+        'input[name="aiFeature"]',
+        'input[name="funnel"]',
+        'input[name="priority"]',
+        'textarea[name="feedback"]',
+      ];
+
+      function answered(sel) {
+        const nodes = form.querySelectorAll(sel);
+        if (!nodes.length) return false;
+        const type = nodes[0].type;
+        if (type === "radio" || type === "checkbox") {
+          return Array.from(nodes).some((n) => n.checked);
+        }
+        return String(nodes[0].value || "").trim().length > 0;
+      }
+
+      function updateProgress() {
+        const total = trackedSelectors.length;
+        const done = trackedSelectors.filter(answered).length;
+        const pct = Math.round((done / total) * 100);
+        bar.style.width = pct + "%";
+        text.textContent = pct + "%";
+      }
+
+      form.addEventListener("input", updateProgress);
+      form.addEventListener("change", updateProgress);
+      updateProgress();
+
+      // 最多选 3 项
+      form.querySelectorAll(".priority-cb").forEach((cb) => {
+        cb.addEventListener("change", () => {
+          const checked = form.querySelectorAll(".priority-cb:checked");
+          if (checked.length > 3) {
+            cb.checked = false;
+            alert("最多选择 3 项最看重的因素");
+          }
+        });
+      });
+
+      function collect() {
+        const data = {};
+        const fd = new FormData(form);
+        for (const [k, v] of fd.entries()) {
+          if (data[k] === undefined) data[k] = v;
+          else if (Array.isArray(data[k])) data[k].push(v);
+          else data[k] = [data[k], v];
+        }
+        data._submittedAt = new Date().toISOString();
+        return data;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const channelOk = form.querySelectorAll('input[name="channel"]:checked').length > 0
+          || String(form.channelOther.value || "").trim();
+        const keywordOk = form.querySelectorAll('input[name="keyword"]:checked').length > 0
+          || String(form.keywordOther.value || "").trim();
+
+        if (!channelOk) {
+          alert("请至少选择一项获知渠道，或填写其他说明");
+          return;
+        }
+        if (!keywordOk) {
+          alert("请至少选择一项搜索关键词，或填写其他说明");
+          return;
+        }
+
+        const payload = collect();
+        try {
+          const key = "ssb_survey_responses";
+          const list = JSON.parse(localStorage.getItem(key) || "[]");
+          list.push(payload);
+          localStorage.setItem(key, JSON.stringify(list));
+          localStorage.setItem("ssb_survey_last", JSON.stringify(payload));
+        } catch (err) {
+          console.warn("localStorage unavailable", err);
+        }
+
+        toast.classList.add("show");
+        toast.scrollIntoView({ behavior: "smooth", block: "center" });
+        console.log("[诉讼保问卷]", payload);
+      });
+    })();
+  </script>
+</body>
+</html>
