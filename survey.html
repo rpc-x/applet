@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>诉讼保 · 用户体验问卷调查</title>
+  <meta name="description" content="诉讼保小程序用户调研：填写有礼，截图领 10–20 元红包。欢迎转发朋友圈一起参与。" />
+  <meta property="og:title" content="诉讼保 · 用户调研（填写有礼）" />
+  <meta property="og:description" content="用 3–5 分钟反馈诉讼保全服务体验，提交后可领红包。" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
   <style>
     :root {
       --bg: #f0f4f8;
@@ -98,6 +103,124 @@
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .chip.hot {
+      background: rgba(251, 146, 60, 0.28);
+      border-color: rgba(251, 146, 60, 0.45);
+      color: #ffedd5;
+      font-weight: 700;
+    }
+
+    .reward-banner {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(251, 146, 60, 0.22), rgba(234, 88, 12, 0.18));
+      border: 1px solid rgba(251, 146, 60, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .reward-banner strong {
+      display: block;
+      font-size: 0.9rem;
+      color: #ffedd5;
+      font-weight: 800;
+    }
+
+    .reward-banner span {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: rgba(255, 237, 213, 0.9);
+      line-height: 1.55;
+    }
+
+    .reward-card {
+      margin: 14px 0 0;
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      color: #9a3412;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    .reward-card b { color: #c2410c; }
+
+    .tip-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .tip-mask.hidden { display: none; }
+
+    .tip-box {
+      width: 100%;
+      max-width: 360px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 24px 20px 18px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+      text-align: center;
+    }
+
+    .tip-box .emoji {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 12px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #fb923c, #ea580c);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(234, 88, 12, 0.35);
+    }
+
+    .tip-box h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .tip-box p {
+      margin-top: 10px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+      text-align: left;
+    }
+
+    .tip-box p em {
+      font-style: normal;
+      color: #c2410c;
+      font-weight: 700;
+    }
+
+    .tip-box button {
+      margin-top: 18px;
+      width: 100%;
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: #fff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 12px;
     }
 
     .progress-wrap {
@@ -407,31 +530,320 @@
       line-height: 1.7;
     }
 
-    .toast {
-      display: none;
-      margin-top: 14px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .toast.show { display: block; }
-
     .footer-note {
       margin-top: 18px;
       text-align: center;
       font-size: 0.7rem;
       color: #94a3b8;
     }
+
+    /* —— 提交成功 · 朋友圈可转发海报 —— */
+    .success-view {
+      display: none;
+      min-height: 100vh;
+      padding: 16px 14px 40px;
+      background: #e8eef5;
+    }
+
+    .success-view.show { display: block; }
+
+    .page.hidden { display: none; }
+
+    .success-shell {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .share-hint {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #475569;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .share-hint b { color: var(--brand); font-weight: 600; }
+
+    /* 海报本体：适合截图发朋友圈 */
+    .share-poster {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      border: 1px solid #dbe3ee;
+    }
+
+    .poster-head {
+      padding: 22px 20px 18px;
+      background: linear-gradient(145deg, #1e3a8a 0%, #1e40af 55%, #0f766e 100%);
+      color: #f8fafc;
+      text-align: center;
+    }
+
+    .poster-brand {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      opacity: 0.8;
+      font-weight: 600;
+    }
+
+    .poster-head h2 {
+      margin-top: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .poster-head p {
+      margin-top: 8px;
+      font-size: 0.84rem;
+      opacity: 0.85;
+      line-height: 1.55;
+    }
+
+    .poster-body {
+      padding: 20px 18px 8px;
+      text-align: center;
+    }
+
+    .poster-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #047857;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .poster-status i {
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .poster-quote {
+      margin: 14px 0 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    .poster-desc {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .poster-voucher {
+      margin: 18px 0 0;
+      padding: 14px 12px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+    }
+
+    .poster-voucher .label {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .poster-voucher .code {
+      margin-top: 6px;
+      font-family: "SF Mono", "Cascadia Mono", "Consolas", monospace;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--brand);
+      word-break: break-all;
+    }
+
+    .poster-voucher .meta {
+      margin-top: 8px;
+      font-size: 0.68rem;
+      color: #94a3b8;
+    }
+
+    .poster-qr-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      padding: 0 4px 4px;
+    }
+
+    .qr-wrap {
+      flex-shrink: 0;
+      width: 108px;
+      height: 108px;
+      padding: 6px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .qr-wrap canvas,
+    .qr-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .poster-qr-text strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .poster-qr-text span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .poster-foot {
+      margin-top: 16px;
+      padding: 12px 18px 16px;
+      border-top: 1px solid #eef2f7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .poster-foot .gift {
+      color: #b45309;
+      font-weight: 600;
+    }
+
+    /* 操作区：不在海报内，避免截图杂乱 */
+    .success-ops {
+      margin-top: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .success-ops .ops-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .success-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .success-actions button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 11px 10px;
+      border-radius: 10px;
+    }
+
+    .success-actions .full {
+      grid-column: 1 / -1;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn-soft {
+      background: var(--soft);
+      color: var(--brand);
+    }
+
+    .btn-ghost {
+      background: #fff;
+      color: #475569;
+      border: 1px solid var(--line) !important;
+    }
+
+    .claim-mini {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-size: 0.75rem;
+      color: #64748b;
+      line-height: 1.65;
+    }
+
+    .claim-mini b { color: #334155; }
+
+    .success-note {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.68rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .copy-tip {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--ok);
+      min-height: 1.2em;
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .copy-tip.show { opacity: 1; }
+
+    .moments-guide {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      color: #92400e;
+      line-height: 1.65;
+    }
+
+    .moments-guide.show { display: block; }
+
+    .moments-guide ol {
+      margin: 6px 0 0 1.1em;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 </head>
 <body>
-  <div class="page">
+  <div class="tip-mask" id="entryTip" role="dialog" aria-modal="true" aria-labelledby="tipTitle">
+    <div class="tip-box">
+      <div class="emoji">红</div>
+      <h3 id="tipTitle">填写有礼 · 红包奖励</h3>
+      <p>
+        感谢参与诉讼保用户调研！完整填写并提交后，请
+        <em>截图提交成功页面</em>（含唯一凭证号），联系小程序客服即可领取
+        <em>10–20 元微信红包</em>。数量有限，先到先得～
+      </p>
+      <button type="button" id="tipClose">知道了，开始填写</button>
+    </div>
+  </div>
+
+  <div class="page" id="surveyPage">
     <header class="hero">
       <div class="brand">诉讼保 · 用户调研</div>
       <h1>诉讼保 · 小程序问卷调查</h1>
@@ -443,6 +855,10 @@
       </div>
     </header>
 
+    <div class="reward-card">
+      <b>领奖方式：</b>提交问卷 → 截图成功提示 → 联系小程序客服发送截图 → 领取 10–20 元红包。
+    </div>
+
     <div class="progress-wrap">
       <div class="progress-label">
         <span>填写进度</span>
@@ -452,73 +868,22 @@
     </div>
 
     <form id="surveyForm" novalidate>
-      <!-- 1. 基本画像 -->
+      <!-- 1. 获客渠道 -->
       <section class="section" data-section>
         <div class="section-head">
           <span class="num">1</span>
-          <div>
-            <h2>您是谁 · 使用场景</h2>
-            <p>帮助我们了解核心用户画像与业务场景</p>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">1.1 您的身份是？<span class="req">*</span></div>
-          <div class="options cols-2">
-            <label class="opt"><input type="radio" name="role" value="律师" required /> 执业律师 / 律师助理</label>
-            <label class="opt"><input type="radio" name="role" value="当事人" /> 案件当事人（原告/申请人）</label>
-            <label class="opt"><input type="radio" name="role" value="法务" /> 企业法务</label>
-            <label class="opt"><input type="radio" name="role" value="代理人" /> 诉讼代理人 / 律所行政</label>
-            <label class="opt"><input type="radio" name="role" value="法院相关" /> 法院相关工作人员</label>
-            <label class="opt"><input type="radio" name="role" value="其他" /> 其他</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">1.2 您主要办理的保全类型？<span class="req">*</span> <span class="q-hint">可多选</span></div>
-          <div class="options cols-2">
-            <label class="opt"><input type="checkbox" name="caseType" value="财产保全" /> 财产保全</label>
-            <label class="opt"><input type="checkbox" name="caseType" value="行为保全" /> 行为保全</label>
-            <label class="opt"><input type="checkbox" name="caseType" value="证据保全" /> 证据保全</label>
-            <label class="opt"><input type="checkbox" name="caseType" value="诉前保全" /> 诉前保全</label>
-            <label class="opt"><input type="checkbox" name="caseType" value="诉中保全" /> 诉中保全</label>
-            <label class="opt"><input type="checkbox" name="caseType" value="执行保全" /> 执行阶段相关</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">1.3 近一年您大概办理过多少次保全担保？<span class="req">*</span></div>
-          <div class="options">
-            <label class="opt"><input type="radio" name="freq" value="首次" required /> 首次接触 / 尚未正式办理</label>
-            <label class="opt"><input type="radio" name="freq" value="1-3次" /> 1–3 次</label>
-            <label class="opt"><input type="radio" name="freq" value="4-10次" /> 4–10 次</label>
-            <label class="opt"><input type="radio" name="freq" value="10次以上" /> 10 次以上（高频用户）</label>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- 2. 获客渠道 -->
-      <section class="section" data-section>
-        <div class="section-head">
-          <span class="num">2</span>
           <div>
             <h2>您如何知道「诉讼保」小程序</h2>
           </div>
         </div>
 
         <div class="q">
-          <div class="q-title">2.1 您最初是从哪里了解到我们的？<span class="req">*</span> <span class="q-hint">可多选</span></div>
+          <div class="q-title">1.1 您最初是从哪里了解到我们的？<span class="req">*</span> <span class="q-hint">可多选</span></div>
           <div class="options">
-            <label class="opt"><input type="checkbox" name="channel" value="微信搜索" /> 微信搜一搜 / 小程序搜索</label>
+            <label class="opt"><input type="checkbox" name="channel" value="微信搜索" /> 微信搜一搜 / 公众号 / 服务号文章 / 小程序搜索</label>
 			<label class="opt"><input type="checkbox" name="channel" value="AI" /> 豆包 / DeepSeek / 腾讯元宝 / Kimi / 千问等</label>
-            <label class="opt"><input type="checkbox" name="channel" value="朋友推荐" /> 同事 / 同行 / 朋友推荐</label>
-            <label class="opt"><input type="checkbox" name="channel" value="律所内部" /> 律所 / 公司法务内部推荐</label>
-            <label class="opt"><input type="checkbox" name="channel" value="法院指引" /> 法院工作人员 / 立案窗口指引</label>
-            <label class="opt"><input type="checkbox" name="channel" value="公众号" /> 微信公众号 / 服务号文章</label>
             <label class="opt"><input type="checkbox" name="channel" value="短视频" /> 抖音 / 快手 / 视频号 / 小红书等短视频</label>
             <label class="opt"><input type="checkbox" name="channel" value="搜索引擎" /> 今日头条 / 百度 / 必应等搜索引擎</label>
-            <label class="opt"><input type="checkbox" name="channel" value="广告" /> 信息流 / 朋友圈广告</label>
             <label class="opt"><input type="checkbox" name="channel" value="其他平台跳转" /> 其他平台 / App 跳转进入</label>
           </div>
           <div class="with-other" style="margin-top:8px">
@@ -527,17 +892,11 @@
         </div>
 
         <div class="q">
-          <div class="q-title">2.2 若通过搜索找到我们，您一般用哪些关键词？<span class="req">*</span> <span class="q-hint">可多选</span></div>
+          <div class="q-title">1.2 若通过搜索找到我们，您一般用哪些关键词？<span class="req">*</span> <span class="q-hint">可多选</span></div>
           <div class="options cols-2">
-            <label class="opt"><input type="checkbox" name="keyword" value="财产保全" /> 财产保全</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保全" /> 诉讼保全</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="保全担保" /> 保全担保</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保函" /> 诉讼保函 / 电子保函</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="诉前保全担保" /> 诉前保全担保</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="保险公司保函" /> 保险公司保函</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="担保公司" /> 担保公司 / 担保保函</label>
+		    <label class="opt"><input type="checkbox" name="keyword" value="诉讼保" /> 诉讼保（品牌名）</label>
+            <label class="opt"><input type="checkbox" name="keyword" value="财产保全" /> 财产保全 / 诉讼保全 / 诉讼保函 / 电子保函</label>
             <label class="opt"><input type="checkbox" name="keyword" value="冻结账户" /> 冻结账户 / 查封冻结</label>
-            <label class="opt"><input type="checkbox" name="keyword" value="诉讼保" /> 诉讼保（品牌名）</label>
             <label class="opt"><input type="checkbox" name="keyword" value="未搜索" /> 没有搜索过，是别人推荐的</label>
           </div>
           <div class="with-other" style="margin-top:8px">
@@ -546,7 +905,7 @@
         </div>
 
         <div class="q">
-          <div class="q-title">2.3 您是否对比过其他同类产品/机构？</div>
+          <div class="q-title">1.3 您是否对比过其他同类产品/机构？</div>
           <div class="options">
             <label class="opt"><input type="radio" name="compare" value="只知道诉讼保" /> 目前只知道 / 只用过诉讼保</label>
             <label class="opt"><input type="radio" name="compare" value="对比过1-2家" /> 对比过 1–2 家</label>
@@ -558,10 +917,10 @@
         </div>
       </section>
 
-      <!-- 3. AI 使用习惯 -->
+      <!-- 2. AI 使用习惯 -->
       <section class="section" data-section>
         <div class="section-head">
-          <span class="num">3</span>
+          <span class="num">2</span>
           <div>
             <h2>AI 使用习惯与接受度</h2>
             <p>评估小程序 AI 解析、辅助填单等能力的价值</p>
@@ -569,7 +928,7 @@
         </div>
 
         <div class="q">
-          <div class="q-title">3.1 小程序中的「AI 文书生成 / 智能填单」，您用过吗？<span class="req">*</span></div>
+          <div class="q-title">2.1 小程序中的「AI 文书生成 / 智能填单」，您用过吗？<span class="req">*</span></div>
           <div class="options">
             <label class="opt"><input type="radio" name="aiFeature" value="用过且满意" required /> 用过，整体满意</label>
             <label class="opt"><input type="radio" name="aiFeature" value="用过但一般" /> 用过，准确度一般 / 需大量修改</label>
@@ -579,7 +938,7 @@
         </div>
 
         <div class="q">
-          <div class="q-title">3.2 您最希望 AI 帮您解决什么？ <span class="q-hint">可多选</span></div>
+          <div class="q-title">2.2 您最希望 AI 帮您解决什么？ <span class="q-hint">可多选</span></div>
           <div class="options">
             <label class="opt"><input type="checkbox" name="aiExpect" value="自动识别材料" /> 自动识别起诉状 / 裁定书等材料字段</label>
             <label class="opt"><input type="checkbox" name="aiExpect" value="材料清单检查" /> 提交前材料完整性检查与缺件提醒</label>
@@ -591,10 +950,10 @@
         </div>
       </section>
 
-      <!-- 4. 产品体验 -->
+      <!-- 3. 产品体验 -->
       <section class="section" data-section>
         <div class="section-head">
-          <span class="num">4</span>
+          <span class="num">3</span>
           <div>
             <h2>产品使用体验评价</h2>
             <p>平台核心关心：转化、效率、信任与续用</p>
@@ -602,7 +961,7 @@
         </div>
 
         <div class="q">
-          <div class="q-title">4.1 您在小程序中完成到哪一步？<span class="req">*</span></div>
+          <div class="q-title">3.1 您在小程序中完成到哪一步？<span class="req">*</span></div>
           <div class="options">
             <label class="opt"><input type="radio" name="funnel" value="仅浏览" required /> 仅浏览了解，未申请</label>
             <label class="opt"><input type="radio" name="funnel" value="上传材料" /> 上传了材料 / 试填过</label>
@@ -613,21 +972,18 @@
         </div>
 
         <div class="q">
-          <div class="q-title">4.2 若未完成申请或曾中途放弃，主要原因是？ <span class="q-hint">可多选</span></div>
+          <div class="q-title">3.2 若未完成申请或曾中途放弃，主要原因是？ <span class="q-hint">可多选</span></div>
           <div class="options">
             <label class="opt"><input type="checkbox" name="dropReason" value="不会操作" /> 不知道怎么操作 / 引导不清</label>
             <label class="opt"><input type="checkbox" name="dropReason" value="材料复杂" /> 材料要求复杂、准备麻烦</label>
-            <label class="opt"><input type="checkbox" name="dropReason" value="价格偏高" /> 保费 / 费率偏高</label>
-            <label class="opt"><input type="checkbox" name="dropReason" value="出函太慢" /> 担心出函太慢</label>
-            <label class="opt"><input type="checkbox" name="dropReason" value="信任不足" /> 对平台或机构信任不足</label>
-            <label class="opt"><input type="checkbox" name="dropReason" value="法院不认可" /> 不确定法院是否认可电子保函</label>
-            <label class="opt"><input type="checkbox" name="dropReason" value="客服难联" /> 客服联系不上 / 响应慢</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="价格偏高" /> 保费 / 费率偏高 / 担心出函太慢</label>
+            <label class="opt"><input type="checkbox" name="dropReason" value="信任不足" /> 不确定法院是否,对平台或机构信任不足</label>
             <label class="opt"><input type="checkbox" name="dropReason" value="已完成" /> 我已顺利完成，无放弃</label>
           </div>
         </div>
 
         <div class="q">
-          <div class="q-title">4.3 办理保全担保时，您最看重什么？<span class="req">*</span> <span class="q-hint">最多选 3 项</span></div>
+          <div class="q-title">3.3 办理保全担保时，您最看重什么？<span class="req">*</span> <span class="q-hint">最多选 3 项</span></div>
           <div class="options">
             <label class="opt"><input type="checkbox" name="priority" value="出函快" class="priority-cb" /> 出函速度快</label>
             <label class="opt"><input type="checkbox" name="priority" value="费率低" class="priority-cb" /> 费率 / 保费更低</label>
@@ -635,12 +991,11 @@
             <label class="opt"><input type="checkbox" name="priority" value="操作简单" class="priority-cb" /> 操作简单、省时间</label>
             <label class="opt"><input type="checkbox" name="priority" value="大机构" class="priority-cb" /> 承保机构品牌 / 资质可靠</label>
             <label class="opt"><input type="checkbox" name="priority" value="售后" class="priority-cb" /> 理赔 / 售后响应有保障</label>
-            <label class="opt"><input type="checkbox" name="priority" value="专人对接" class="priority-cb" /> 有专人一对一对接</label>
           </div>
         </div>
 
         <div class="q">
-          <div class="q-title">4.4 您期望的「提交到出函」时效是？</div>
+          <div class="q-title">3.4 您期望的「提交到出函」时效是？</div>
           <div class="options cols-2">
             <label class="opt"><input type="radio" name="eta" value="1小时内" /> 1 小时内</label>
             <label class="opt"><input type="radio" name="eta" value="当天" /> 当天（工作时间内）</label>
@@ -648,96 +1003,84 @@
             <label class="opt"><input type="radio" name="eta" value="2-3工作日" /> 2–3 个工作日可接受</label>
           </div>
         </div>
-      </section>
-
-      <!-- 5. 问题与建议 -->
-      <section class="section" data-section>
-        <div class="section-head">
-          <span class="num">5</span>
-          <div>
-            <h2>问题 · 建议 · 优化点</h2>
-            <p>开放反馈，直接驱动迭代排期</p>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">5.1 您在使用中遇到过哪些问题？ <span class="q-hint">可多选</span></div>
-          <div class="options">
-            <label class="opt"><input type="checkbox" name="issue" value="卡顿闪退" /> 小程序卡顿 / 闪退 / 加载慢</label>
-            <label class="opt"><input type="checkbox" name="issue" value="上传失败" /> 文件上传失败或格式不支持</label>
-            <label class="opt"><input type="checkbox" name="issue" value="字段错误" /> AI / 表单字段识别不准</label>
-            <label class="opt"><input type="checkbox" name="issue" value="状态不清" /> 订单状态看不懂 / 进度不透明</label>
-            <label class="opt"><input type="checkbox" name="issue" value="支付问题" /> 支付 / 签章 / 开票问题</label>
-            <label class="opt"><input type="checkbox" name="issue" value="机构拒保" /> 机构拒保或反复退回补件</label>
-            <label class="opt"><input type="checkbox" name="issue" value="通知缺失" /> 微信消息 / 提醒不到位</label>
-            <label class="opt"><input type="checkbox" name="issue" value="暂无问题" /> 暂无明显问题</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">5.2 您最希望我们优先优化什么？ <span class="q-hint">可多选</span></div>
-          <div class="options">
-            <label class="opt"><input type="checkbox" name="optimize" value="流程简化" /> 进一步简化申请流程</label>
-            <label class="opt"><input type="checkbox" name="optimize" value="AI准确" /> 提升 AI 识别准确率</label>
-            <label class="opt"><input type="checkbox" name="optimize" value="出函加速" /> 加快出函与审核速度</label>
-            <label class="opt"><input type="checkbox" name="optimize" value="费率透明" /> 费率更透明、支持多机构比价</label>
-            <label class="opt"><input type="checkbox" name="optimize" value="进度可视" /> 进度可视化与节点提醒</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">5.3 还有哪些问题、建议或想吐槽的点？</div>
-          <textarea name="feedback" required placeholder="例如：某一步卡住了、某功能找不到、希望增加某某能力……写得越具体越有帮助"></textarea>
-        </div>
-
-      </section>
-
-      <!-- 6. 联系与回访 -->
-      <section class="section" data-section>
-        <div class="section-head">
-          <span class="num">6</span>
-          <div>
-            <h2>回访与激励</h2>
-            <p>便于深度访谈与问题跟进（可不填）</p>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">6.1 遇到问题时，您更希望如何获得帮助？</div>
-          <div class="options cols-2">
-            <label class="opt"><input type="checkbox" name="support" value="在线客服" /> 小程序内在线客服</label>
-            <label class="opt"><input type="checkbox" name="support" value="电话" /> 电话专席</label>
-            <label class="opt"><input type="checkbox" name="support" value="企微" /> 企业微信 / 微信一对一</label>
-            <label class="opt"><input type="checkbox" name="support" value="自助FAQ" /> 自助帮助中心 / FAQ</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">6.2 是否愿意接受 10–15 分钟电话/微信访谈？</div>
-          <div class="options">
-            <label class="opt"><input type="radio" name="interview" value="愿意" /> 愿意，希望帮助产品变得更好</label>
-            <label class="opt"><input type="radio" name="interview" value="看情况" /> 看时间，可以再说</label>
-            <label class="opt"><input type="radio" name="interview" value="不愿意" /> 暂不方便</label>
-          </div>
-        </div>
-
-        <div class="q">
-          <div class="q-title">6.3 联系方式（选填）</div>
-          <div class="options" style="gap:8px">
-            <input type="text" name="contactName" placeholder="称呼（如：王律师）" />
-            <input type="tel" name="contactPhone" placeholder="手机号 / 微信号" />
-          </div>
-        </div>
-		</br>
-		<p class="privacy">提交即表示您同意我们将反馈用于产品优化；联系方式仅用于回访，不会对外公开或用于营销骚扰。</p>
+		
+		<p class="privacy" style="margin-top:14px">提交即表示您同意我们将反馈用于产品优化；联系方式仅用于回访，不会对外公开或用于营销骚扰。</p>
 
       </section>
 
       <div class="actions">
-        <button type="submit">提交问卷</button>
+        <button type="submit">提交问卷并截图领红包</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 提交成功 · 可转发朋友圈海报 -->
+  <div class="success-view" id="successView" aria-live="polite">
+    <div class="success-shell">
+      <p class="share-hint">提交成功！截图下方卡片，可发朋友圈邀请同行一起参与</p>
+
+      <!-- 仅截图这一块即可发朋友圈 -->
+      <article class="share-poster" id="sharePoster">
+        <header class="poster-head">
+          <div class="poster-brand">诉讼保 · 用户体验调研</div>
+          <h2>调研已完成</h2>
+          <p>用几分钟反馈，助力诉讼保全服务更好用</p>
+        </header>
+
+        <div class="poster-body">
+          <div class="poster-status"><i>✓</i> 问卷已提交</div>
+          <p class="poster-quote">我刚完成了诉讼保小程序用户调研</p>
+          <p class="poster-desc">财产保全 · 电子保函 · 智能填单<br />欢迎扫码参与，同样可领红包</p>
+
+          <div class="poster-voucher">
+            <div class="label">我的调研凭证号</div>
+            <div class="code" id="voucherCode">—</div>
+            <div class="meta"><span id="voucherTime">—</span> · <span id="voucherSerial">—</span></div>
+          </div>
+
+          <div class="poster-qr-row">
+            <div class="qr-wrap" id="qrBox" aria-label="分享二维码"></div>
+            <div class="poster-qr-text">
+              <strong>扫码参与调研</strong>
+              <span>截图发给客服可核验领奖；也可转发朋友圈，邀请同事/同行一起填写。</span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="poster-foot">
+          <span>诉讼保小程序</span>
+          <span class="gift">填写有礼 · 10–20 元红包</span>
+        </footer>
+      </article>
+
+      <div class="success-ops">
+        <div class="ops-title">下一步操作</div>
+        <div class="success-actions">
+          <button type="button" class="btn-primary full" id="shareMomentsBtn">分享到朋友圈</button>
+          <button type="button" class="btn-soft" id="copyShareBtn">复制分享文案</button>
+          <button type="button" class="btn-soft" id="copyCodeBtn">复制凭证号</button>
+          <button type="button" class="btn-ghost full" id="backSurveyBtn">返回问卷首页</button>
+        </div>
+
+        <div class="moments-guide" id="momentsGuide">
+          <b>微信里这样发朋友圈：</b>
+          <ol>
+            <li>长按或截图上方海报卡片</li>
+            <li>打开微信 → 发现 → 朋友圈</li>
+            <li>选择图片发布，粘贴分享文案即可</li>
+          </ol>
+          若在微信内打开本页，也可点右上角「···」→ 分享到朋友圈。
+        </div>
+
+        <div class="copy-tip" id="copyTip">已复制</div>
+
+        <div class="claim-mini">
+          <b>领红包：</b>截图海报（含凭证号）→ 打开诉讼保小程序联系客服 → 发送截图领取 10–20 元红包。
+        </div>
       </div>
 
-    </form>
+      <p class="success-note">每位用户限领一次 · 活动最终解释权归诉讼保所有</p>
+    </div>
   </div>
 
   <script>
@@ -745,19 +1088,62 @@
       const form = document.getElementById("surveyForm");
       const bar = document.getElementById("progressBar");
       const text = document.getElementById("progressText");
-      const toast = document.getElementById("toast");
+      const tip = document.getElementById("entryTip");
+      const tipClose = document.getElementById("tipClose");
+      const surveyPage = document.getElementById("surveyPage");
+      const successView = document.getElementById("successView");
+      const voucherCodeEl = document.getElementById("voucherCode");
+      const voucherTimeEl = document.getElementById("voucherTime");
+      const voucherSerialEl = document.getElementById("voucherSerial");
+      const qrBox = document.getElementById("qrBox");
+      const copyTip = document.getElementById("copyTip");
+      const momentsGuide = document.getElementById("momentsGuide");
+      let lastVoucher = null;
+
+      tipClose.addEventListener("click", () => tip.classList.add("hidden"));
+
+      function flashTip(msg) {
+        copyTip.textContent = msg;
+        copyTip.classList.add("show");
+        setTimeout(() => copyTip.classList.remove("show"), 2000);
+      }
+
+      async function copyText(text, okMsg) {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+          }
+          flashTip(okMsg || "已复制");
+          return true;
+        } catch (err) {
+          alert(text);
+          return false;
+        }
+      }
+
+      function buildShareText(code) {
+        const link = location.href.split("#")[0];
+        return (
+          "我刚完成了「诉讼保」小程序用户调研，顺便领了红包～\n" +
+          "财产保全 / 电子保函相关的朋友也可以填一下，一起让服务更好用。\n" +
+          "我的凭证号：" + code + "\n" +
+          "问卷入口：" + link
+        );
+      }
 
       const trackedSelectors = [
-        'input[name="role"]',
-        'input[name="caseType"]',
-        'input[name="freq"]',
         'input[name="channel"]',
         'input[name="keyword"]',
-        'input[name="aiFreq"]',
         'input[name="aiFeature"]',
         'input[name="funnel"]',
         'input[name="priority"]',
-        'textarea[name="feedback"]',
       ];
 
       function answered(sel) {
@@ -782,7 +1168,6 @@
       form.addEventListener("change", updateProgress);
       updateProgress();
 
-      // 最多选 3 项
       form.querySelectorAll(".priority-cb").forEach((cb) => {
         cb.addEventListener("change", () => {
           const checked = form.querySelectorAll(".priority-cb:checked");
@@ -793,6 +1178,82 @@
         });
       });
 
+      function pad(n) { return String(n).padStart(2, "0"); }
+
+      function formatStamp(d) {
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate())
+          + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+      }
+
+      function randChunk(len) {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        const arr = new Uint8Array(len);
+        (crypto.getRandomValues ? crypto.getRandomValues(arr) : arr.fill(Math.random() * 256));
+        let s = "";
+        for (let i = 0; i < len; i++) {
+          s += chars[(arr[i] || Math.floor(Math.random() * 256)) % chars.length];
+        }
+        return s;
+      }
+
+      function makeVoucher() {
+        const now = new Date();
+        const ymd = String(now.getFullYear()).slice(2) + pad(now.getMonth() + 1) + pad(now.getDate());
+        const part = randChunk(6);
+        const code = "SSB-" + ymd + "-" + part;
+        const verify = code + "|" + now.getTime() + "|" + randChunk(4);
+        return {
+          code: code,
+          verify: verify,
+          timeText: formatStamp(now),
+          serial: "NO." + ymd + part.slice(0, 3),
+          iso: now.toISOString(),
+        };
+      }
+
+      function renderQr(payload) {
+        qrBox.innerHTML = "";
+        if (typeof QRCode !== "undefined" && QRCode.toCanvas) {
+          const canvas = document.createElement("canvas");
+          qrBox.appendChild(canvas);
+          QRCode.toCanvas(canvas, payload, {
+            width: 96,
+            margin: 1,
+            color: { dark: "#0f172a", light: "#ffffff" },
+            errorCorrectionLevel: "M",
+          }, (err) => {
+            if (err) renderQrFallback(payload);
+          });
+          return;
+        }
+        renderQrFallback(payload);
+      }
+
+      function renderQrFallback(payload) {
+        qrBox.innerHTML = "";
+        const img = document.createElement("img");
+        img.alt = "分享二维码";
+        img.src = "https://api.qrserver.com/v1/create-qr-code/?size=96x96&margin=6&data="
+          + encodeURIComponent(payload);
+        qrBox.appendChild(img);
+      }
+
+      function showSuccess(voucher) {
+        lastVoucher = voucher;
+        voucherCodeEl.textContent = voucher.code;
+        voucherTimeEl.textContent = voucher.timeText;
+        voucherSerialEl.textContent = voucher.serial;
+        // 二维码指向问卷页，方便朋友圈扫码参与；同时带上凭证便于核验
+        const qrPayload = location.href.split("#")[0] + "?from=moments&v=" + encodeURIComponent(voucher.code);
+        renderQr(qrPayload);
+        momentsGuide.classList.remove("show");
+
+        tip.classList.add("hidden");
+        surveyPage.classList.add("hidden");
+        successView.classList.add("show");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
       function collect() {
         const data = {};
         const fd = new FormData(form);
@@ -801,9 +1262,48 @@
           else if (Array.isArray(data[k])) data[k].push(v);
           else data[k] = [data[k], v];
         }
-        data._submittedAt = new Date().toISOString();
         return data;
       }
+
+      document.getElementById("copyCodeBtn").addEventListener("click", () => {
+        copyText(voucherCodeEl.textContent, "凭证号已复制");
+      });
+
+      document.getElementById("copyShareBtn").addEventListener("click", () => {
+        const code = (lastVoucher && lastVoucher.code) || voucherCodeEl.textContent;
+        copyText(buildShareText(code), "分享文案已复制，可粘贴到朋友圈");
+        momentsGuide.classList.add("show");
+      });
+
+      document.getElementById("shareMomentsBtn").addEventListener("click", async () => {
+        const code = (lastVoucher && lastVoucher.code) || voucherCodeEl.textContent;
+        const shareText = buildShareText(code);
+        momentsGuide.classList.add("show");
+
+        // 尽量唤起系统分享；微信内通常需用户手动发朋友圈
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "诉讼保用户调研",
+              text: shareText,
+              url: location.href.split("#")[0],
+            });
+            flashTip("已唤起分享");
+            return;
+          } catch (err) {
+            /* 用户取消或环境不支持，继续引导 */
+          }
+        }
+
+        await copyText(shareText, "文案已复制，请按下方步骤发朋友圈");
+        document.getElementById("sharePoster").scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      document.getElementById("backSurveyBtn").addEventListener("click", () => {
+        successView.classList.remove("show");
+        surveyPage.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -826,7 +1326,12 @@
           return;
         }
 
+        const voucher = makeVoucher();
         const payload = collect();
+        payload._voucher = voucher.code;
+        payload._verify = voucher.verify;
+        payload._submittedAt = voucher.iso;
+
         try {
           const key = "ssb_survey_responses";
           const list = JSON.parse(localStorage.getItem(key) || "[]");
@@ -837,8 +1342,7 @@
           console.warn("localStorage unavailable", err);
         }
 
-        toast.classList.add("show");
-        toast.scrollIntoView({ behavior: "smooth", block: "center" });
+        showSuccess(voucher);
         console.log("[诉讼保问卷]", payload);
       });
     })();
