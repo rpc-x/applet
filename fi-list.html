@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>选择金融机构</title>
+<title>诉讼保-金融机构列表</title>
 <style>
 :root {
   --primary: #2F7CF6;
@@ -141,6 +141,18 @@ body.sheet-open { overflow: hidden; height: 100%; }
   min-width: 0;
   flex: 1;
 }
+.premium-box {
+  flex-shrink: 0;
+  text-align: right;
+  padding-left: 4px;
+}
+.premium-box .pc-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+}
+.premium-box .pc-unit { font-size: 11px; font-weight: 500; }
 .logo {
   width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -166,25 +178,6 @@ body.sheet-open { overflow: hidden; height: 100%; }
 .badge.promo { background: var(--promo); }
 .badge.connecting { background: var(--connecting); }
 .badge.paused { background: var(--paused); }
-
-.premium-box {
-  flex-shrink: 0;
-  text-align: right;
-  padding-left: 4px;
-}
-.premium-box .pc-label {
-  display: block;
-  font-size: 11px;
-  color: var(--text-3);
-  margin-bottom: 2px;
-}
-.premium-box .pc-val {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--danger);
-  white-space: nowrap;
-}
-.premium-box .pc-unit { font-size: 11px; font-weight: 500; }
 
 .entity-row {
   display: flex;
@@ -501,13 +494,60 @@ body.sheet-open { overflow: hidden; height: 100%; }
   background: #F5F7FA; border-radius: 8px;
   font-size: 12px; color: #6B7A90; line-height: 1.65;
 }
+
+/* ===== 非工作日提醒 ===== */
+.offhours-mask {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+}
+.offhours-mask.show { display: flex; }
+.offhours-dialog {
+  width: 100%;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 20px 20px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18);
+}
+.offhours-dialog .oh-icon {
+  width: 48px; height: 48px; margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #FFF4E5;
+  color: #FF8A1A;
+  display: flex; align-items: center; justify-content: center;
+}
+.offhours-dialog .oh-icon svg { width: 24px; height: 24px; display: block; }
+.offhours-dialog h3 {
+  font-size: 17px; font-weight: 600; margin-bottom: 10px;
+}
+.offhours-dialog p {
+  font-size: 14px; color: var(--text-2); line-height: 1.7;
+  text-align: left;
+}
+.offhours-dialog .oh-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 44px;
+  border: none; border-radius: 8px;
+  background: var(--primary); color: #fff;
+  font-size: 16px; font-weight: 500;
+}
+.offhours-dialog .oh-btn:active { background: var(--primary-dark); }
 </style>
 </head>
 <body>
 
 <header class="nav">
   <div class="nav-back" title="返回">‹</div>
-  <div class="nav-title">选择金融机构</div>
+  <div class="nav-title">诉讼保-金融机构列表</div>
   <div class="nav-capsule"><span>···</span><span>○</span></div>
 </header>
 
@@ -554,6 +594,20 @@ body.sheet-open { overflow: hidden; height: 100%; }
     </div>
   </div>
   <div class="is-body" id="instBody"></div>
+</div>
+
+<div class="offhours-mask" id="offhoursMask" role="dialog" aria-modal="true" aria-labelledby="ohTitle">
+  <div class="offhours-dialog">
+    <div class="oh-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 id="ohTitle">非工作时间提醒</h3>
+    <p>当前为非工作时间（工作日 18:00–次日 8:30、周末及法定节假日），部分机构的出函时效可能会顺延，平台会尽最大努力协助处理。</p>
+    <button type="button" class="oh-btn" id="ohAckBtn">我已知晓</button>
+  </div>
 </div>
 
 <script>
@@ -747,8 +801,8 @@ function renderCard(inst) {
   ].join("");
 
   const tags = [
-    `<span class="info-tag">出函时效 ${inst.issueTime}</span>`,
-    inst.supportRefund7d ? `<span class="info-tag">支持7天无理由退保</span>` : ""
+    inst.issueTime ? `<span class="info-tag">${inst.issueTime}内出函</span>` : "",
+    inst.supportRefund7d ? `<span class="info-tag">7天无理由退保</span>` : ""
   ].filter(Boolean).join("");
 
   const tagRow = tags
@@ -785,7 +839,6 @@ function renderCard(inst) {
           </div>
         </div>
         <div class="premium-box">
-          <span class="pc-label">预估保费</span>
           <span class="pc-val">¥${Number(actual).toFixed(2)}<span class="pc-unit">元</span></span>
         </div>
       </div>
@@ -1050,7 +1103,79 @@ document.querySelectorAll("#instTabs .is-tab").forEach(tab => {
   tab.addEventListener("click", () => setInstTab(tab.getAttribute("data-tab")));
 });
 
+/* ===== 非工作时间判断与提醒 =====
+ * 非工作时间：工作日 18:00–次日 8:30、周末、法定节假日
+ * 调休上班日按工作日处理
+ */
+const LEGAL_HOLIDAYS = new Set([
+  // 2025
+  "2025-01-01",
+  "2025-01-28", "2025-01-29", "2025-01-30", "2025-01-31",
+  "2025-02-01", "2025-02-02", "2025-02-03", "2025-02-04",
+  "2025-04-04", "2025-04-05", "2025-04-06",
+  "2025-05-01", "2025-05-02", "2025-05-03", "2025-05-04", "2025-05-05",
+  "2025-05-31", "2025-06-01", "2025-06-02",
+  "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-04",
+  "2025-10-05", "2025-10-06", "2025-10-07", "2025-10-08",
+  // 2026
+  "2026-01-01", "2026-01-02", "2026-01-03",
+  "2026-02-15", "2026-02-16", "2026-02-17", "2026-02-18",
+  "2026-02-19", "2026-02-20", "2026-02-21", "2026-02-22", "2026-02-23",
+  "2026-04-04", "2026-04-05", "2026-04-06",
+  "2026-05-01", "2026-05-02", "2026-05-03", "2026-05-04", "2026-05-05",
+  "2026-06-19", "2026-06-20", "2026-06-21",
+  "2026-09-25", "2026-09-26", "2026-09-27",
+  "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04",
+  "2026-10-05", "2026-10-06", "2026-10-07"
+]);
+
+const MAKEUP_WORKDAYS = new Set([
+  // 2025 调休上班
+  "2025-01-26", "2025-02-08", "2025-04-27", "2025-09-28", "2025-10-11",
+  // 2026 调休上班（以当年国务院安排为准，可按需更新）
+  "2026-01-04", "2026-02-14", "2026-02-28", "2026-05-09", "2026-09-20", "2026-10-10"
+]);
+
+function pad2(n) { return String(n).padStart(2, "0"); }
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+function isOffHours(now = new Date()) {
+  const key = dateKey(now);
+  const day = now.getDay(); // 0=日, 6=六
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const workStart = 8 * 60 + 30; // 08:30
+  const workEnd = 18 * 60;       // 18:00
+
+  if (LEGAL_HOLIDAYS.has(key)) return true;
+
+  const isWeekend = day === 0 || day === 6;
+  const isWorkday = MAKEUP_WORKDAYS.has(key) || !isWeekend;
+  if (!isWorkday) return true;
+
+  return mins < workStart || mins >= workEnd;
+}
+
+function showOffHoursNotice() {
+  const mask = document.getElementById("offhoursMask");
+  mask.classList.add("show");
+  document.body.classList.add("sheet-open");
+}
+
+function hideOffHoursNotice() {
+  document.getElementById("offhoursMask").classList.remove("show");
+  document.body.classList.remove("sheet-open");
+}
+
+document.getElementById("ohAckBtn").addEventListener("click", hideOffHoursNotice);
+
 render();
+
+if (isOffHours()) {
+  showOffHoursNotice();
+}
 </script>
 </body>
 </html>
