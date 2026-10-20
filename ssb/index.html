@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <title>诉讼保 - 登录</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="stage">
+    <div class="device" id="device">
+      <header class="status">
+        <span class="time" id="clock">9:41</span>
+        <span class="status-icons" aria-hidden="true">
+          <svg viewBox="0 0 17 12" width="17" height="12"><rect x="0" y="7" width="3" height="5" rx="0.6" fill="#111"/><rect x="4.5" y="5" width="3" height="7" rx="0.6" fill="#111"/><rect x="9" y="2.5" width="3" height="9.5" rx="0.6" fill="#111"/><rect x="13.5" y="0" width="3" height="12" rx="0.6" fill="#111"/></svg>
+          <svg viewBox="0 0 16 12" width="16" height="12"><path d="M8 3.2c1.7 0 3.2.7 4.3 1.8l1.1-1.2C12 2.3 10.1 1.4 8 1.4S4 2.3 2.6 3.8l1.1 1.2C4.8 3.9 6.3 3.2 8 3.2z" fill="#111"/><path d="M8 6.2c1 0 1.9.4 2.5 1.1l1.1-1.2C10.6 5 9.4 4.4 8 4.4S5.4 5 4.4 6.1l1.1 1.2C6.1 6.6 7 6.2 8 6.2z" fill="#111"/><circle cx="8" cy="9.6" r="1.5" fill="#111"/></svg>
+          <svg viewBox="0 0 25 12" width="25" height="12"><rect x="0.5" y="0.5" width="21" height="11" rx="2.2" stroke="#111" fill="none"/><rect x="2" y="2" width="16" height="8" rx="1" fill="#111"/><rect x="22.2" y="3.6" width="1.6" height="4.8" rx="0.6" fill="#111"/></svg>
+        </span>
+      </header>
+
+      <nav class="nav">
+        <button class="back" type="button" data-act="back" aria-label="返回">
+          <svg viewBox="0 0 12 20" width="10" height="18"><path d="M10 1.5L2 10l8 8.5" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <h1 class="nav-title" id="navTitle"></h1>
+        <div class="capsule" aria-hidden="true">
+          <span class="capsule-dots">
+            <i></i><i></i><i></i>
+          </span>
+          <i class="capsule-line"></i>
+          <span class="capsule-ring"><i></i></span>
+        </div>
+      </nav>
+
+      <main id="pages"></main>
+
+      <div class="indicator" aria-hidden="true"></div>
+
+      <div class="toast" id="toast" hidden></div>
+
+      <div class="mask" id="mask" hidden>
+        <section class="captcha" role="dialog" aria-modal="true" aria-labelledby="captchaTitle">
+          <header class="captcha-head">
+            <h2 id="captchaTitle">安全验证</h2>
+            <button class="captcha-close" type="button" data-act="close-captcha" aria-label="关闭">×</button>
+          </header>
+          <p class="captcha-sub">拖动滑块，使拼图与缺口重合</p>
+          <div class="puzzle" id="puzzle">
+            <canvas id="scene"></canvas>
+            <canvas id="piece"></canvas>
+          </div>
+          <div class="slider" id="slider">
+            <div class="slider-track" id="sliderTrack">
+              <span class="slider-tip" id="sliderTip">向右拖动滑块</span>
+              <button class="slider-handle" id="sliderHandle" type="button" aria-label="拖动滑块">
+                <svg viewBox="0 0 22 16" width="20" height="14"><path d="M3 2.5l6 5.5-6 5.5M13 2.5l6 5.5-6 5.5" fill="none" stroke="#2a6efa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="refresh" type="button" data-act="refresh-captcha">
+            <svg viewBox="0 0 16 16" width="14" height="14"><path d="M13.5 8a5.5 5.5 0 1 1-1.4-3.6" fill="none" stroke="#909399" stroke-width="1.4" stroke-linecap="round"/><path d="M13.6 1.8v3.2H10.4" fill="none" stroke="#909399" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            换一张
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script src="js/flow.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
