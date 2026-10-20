@@ -658,7 +658,9 @@ button, input { font-family: inherit; font-weight: 400; }
   overflow-y: auto;
   background: #f1f6fc;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.home-page::-webkit-scrollbar { width: 0; height: 0; }
 
 .home-hero { width: 375px; height: 265px; display: block; object-fit: cover; object-position: center top; }
 
@@ -701,8 +703,15 @@ button, input { font-family: inherit; font-weight: 400; }
   font-size: 16px;
 }
 
+.apply-card {
+  margin: 12px 12px 0;
+  padding: 12px 12px 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 -2px 20px rgba(35, 65, 252, 0.06);
+}
 .apply-head {
-  margin: 20px 24px 9px;
+  margin: 0 0 6px;
   height: 32px;
   display: flex;
   align-items: center;
@@ -732,7 +741,7 @@ button, input { font-family: inherit; font-weight: 400; }
 }
 
 .shortcut-grid {
-  margin: 0 24px;
+  margin: 0;
   display: grid;
   grid-template-columns: 158px 158px;
   gap: 11px;
@@ -752,10 +761,10 @@ button, input { font-family: inherit; font-weight: 400; }
 .shortcut b { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex: none; }
 .shortcut span { font-size: 14px; font-weight: 500; line-height: 22px; color: #303133; }
 
-.home-banner { display: block; width: 351px; height: 80px; margin: 27px auto 0; border-radius: 8px; object-fit: cover; }
+.home-banner { display: block; width: calc(100% - 24px); height: 80px; margin: 12px 12px 0; border-radius: 8px; object-fit: cover; }
 
 .news-card {
-  margin: 11px 12px 0;
+  margin: 12px 12px 0;
   background: #fff;
   border-radius: 12px;
   padding: 16px 12px 12px;
