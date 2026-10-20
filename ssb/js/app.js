@@ -133,15 +133,17 @@
         <p class="tip">请及时核对保单及保函相关信息。如需打印使用，保单、保函及诉讼责任..</p>
         <button class="chev" type="button" data-act="order">›</button>
       </article>
-      <div class="apply-head">
-        <h2>快捷申请 <i>?</i></h2>
-        <button class="ai-entry" type="button" data-act="go-ai">✦ AI智能申请 ›</button>
-      </div>
-      <div class="shortcut-grid">
-        ${cards.map(function (card) {
-          return `<button class="shortcut" type="button" data-act="product" data-name="${card[0]}"><b style="background:linear-gradient(180deg,${card[1]},${card[2]})">${card[3]}</b><span>${card[0]}</span></button>`;
-        }).join("")}
-      </div>
+      <section class="apply-card">
+        <div class="apply-head">
+          <h2>快捷申请 <i>?</i></h2>
+          <button class="ai-entry" type="button" data-act="go-ai">✦ AI智能申请 ›</button>
+        </div>
+        <div class="shortcut-grid">
+          ${cards.map(function (card) {
+            return `<button class="shortcut" type="button" data-act="product" data-name="${card[0]}"><b style="background:linear-gradient(180deg,${card[1]},${card[2]})">${card[3]}</b><span>${card[0]}</span></button>`;
+          }).join("")}
+        </div>
+      </section>
       <img class="home-banner" src="assets/home-banner.png" alt="文书助手">
       <section class="news-card">
         <div class="news-head"><h2>诉讼指南专区</h2><button type="button" data-act="more">更多 ›</button></div>
